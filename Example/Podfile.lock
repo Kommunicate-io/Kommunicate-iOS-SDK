@@ -1,0 +1,23 @@
+PODS:
+  - FBSnapshotTestCase (2.1.4):
+    - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
+  - FBSnapshotTestCase/Core (2.1.4)
+  - FBSnapshotTestCase/SwiftSupport (2.1.4):
+    - FBSnapshotTestCase/Core
+  - Kommunicate (0.1.0)
+
+DEPENDENCIES:
+  - FBSnapshotTestCase (~> 2.1.4)
+  - Kommunicate (from `../`)
+
+EXTERNAL SOURCES:
+  Kommunicate:
+    :path: ../
+
+SPEC CHECKSUMS:
+  FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
+  Kommunicate: d3495ad7a7b359c2518ca65b6968159e767e35b4
+
+PODFILE CHECKSUM: 55fde873efff6617908e9886882205e1d35ff7c0
+
+COCOAPODS: 1.3.1
