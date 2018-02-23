@@ -1,6 +1,6 @@
 import UIKit
 import XCTest
-import Kommunicate
+
 
 class Tests: XCTestCase {
     
