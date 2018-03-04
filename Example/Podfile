@@ -2,7 +2,6 @@ use_frameworks!
 
 target 'Kommunicate_Example' do
   pod 'Kommunicate', :path => '../'
-  pod 'ApplozicSwift'
 
   target 'Kommunicate_Tests' do
     inherit! :search_paths
