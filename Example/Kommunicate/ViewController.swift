@@ -18,7 +18,10 @@ class ViewController: UIViewController {
         let botId = "bot"
         let service = KMConversationService()
         if ALUserDefaultsHandler.isLoggedIn() {
-            service.createConversation(userId: ALUserDefaultsHandler.getUserId(), agentId: agentId, botIds: [botId])
+            service.createConversation(userId: ALUserDefaultsHandler.getUserId(), agentId: agentId, botIds: [botId], completion: {
+                response in
+                print(response)
+            })
         } else {
             let chatManager = KMChatManager(applicationKey: KMChatManager.applicationId as NSString)
             let kmUser = ALUser()
@@ -27,7 +30,10 @@ class ViewController: UIViewController {
 
             chatManager.registerUser(kmUser, completion: {
                 response, error in
-                service.createConversation(userId: kmUser.userId, agentId: agentId, botIds: [botId])
+                service.createConversation(userId: kmUser.userId, agentId: agentId, botIds: [botId], completion: {
+                    response in
+                    print(response)
+                })
             })
         }
     }
