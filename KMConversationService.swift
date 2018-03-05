@@ -24,7 +24,17 @@ public class KMConversationService: KMConservationServiceable {
         var channelKey: Int? = nil
         var error: Error? = nil
     }
-    
+
+
+    /**
+     Creates a new conversation with the details passed.
+
+     - Parameters:
+        - userId: User id of the participant.
+        - agentId: User id of the agent.
+
+     - Returns: Response object.
+    */
     public func createConversation(userId: String, agentId: String, botIds: [String]?, completion:@escaping (Response) -> ()) {
 
         let groupName = "Support"
@@ -53,7 +63,7 @@ public class KMConversationService: KMConservationServiceable {
                     completion(response)
                     return
                 }
-                response.success = self.isGroupCreateSuccess(for: conversationResponse)
+                response.success = self.isConversationCreatedSuccessfully(for: conversationResponse)
                 response.channelKey = channel.key as? Int
                 completion(response)
             })
@@ -102,7 +112,8 @@ public class KMConversationService: KMConservationServiceable {
         return userIds.map {createBotUserFrom(userId: $0)}
     }
 
-    private func isGroupCreateSuccess(for response: Any?) -> Bool {
+    /// Checks if API response returns success
+    private func isConversationCreatedSuccessfully(for response: Any?) -> Bool {
         guard let response = response, let responseDict = response as? Dictionary<String, Any> else {
             return false
         }
