@@ -28,6 +28,7 @@ public class KMConversationService: KMConservationServiceable {
         }
         let alChannelService = ALChannelService()
         let membersList = NSMutableArray()
+        membersList.add(userId)
         alChannelService.createChannel("hello", orClientChannelKey: nil, andMembersList: membersList, andImageLink: nil, channelType: 10, andMetaData: nil, adminUser: agentId, withGroupUsers: members as? NSMutableArray, withCompletion: {
             channel, error in
             guard error == nil else {return}
