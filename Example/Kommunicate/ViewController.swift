@@ -8,7 +8,6 @@
 
 import UIKit
 import Kommunicate
-import Applozic
 
 class ViewController: UIViewController {
 
@@ -17,14 +16,14 @@ class ViewController: UIViewController {
         let agentId = "suraj@kommunicate.io"
         let botId = "bot"
         let service = KMConversationService()
-        if ALUserDefaultsHandler.isLoggedIn() {
-            service.createConversation(userId: ALUserDefaultsHandler.getUserId(), agentId: agentId, botIds: [botId], completion: {
+        if KMUserDefaultHandler.isLoggedIn() {
+            service.createConversation(userId: KMUserDefaultHandler.getUserId(), agentId: agentId, botIds: [botId], completion: {
                 response in
                 print(response)
             })
         } else {
             let chatManager = KMChatManager(applicationKey: KMChatManager.applicationId as NSString)
-            let kmUser = ALUser()
+            let kmUser = KMUser()
             kmUser.userId = "testabcd"
             kmUser.applicationId = KMChatManager.applicationId
 

@@ -19,6 +19,9 @@ var TYPE_FACEBOOK : Int16 = 2
 var APNS_TYPE_DEVELOPMENT : Int16 = 0
 var APNS_TYPE_DISTRIBUTION : Int16 = 1
 
+public typealias KMUser = ALUser
+public typealias KMUserDefaultHandler = ALUserDefaultsHandler
+
 class KMChatManager: NSObject {
 
     static let applicationId = "2a4647fd52360a256f98a9822b18ba656"
@@ -65,7 +68,7 @@ class KMChatManager: NSObject {
     // This will register your User at applozic server.
     //----------------------
 
-    func registerUser(_ alUser: ALUser, completion : @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
+    func registerUser(_ alUser: KMUser, completion : @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
         let alChatLauncher: ALChatLauncher = ALChatLauncher(applicationId: getApplicationKey() as String)
 
         let registerUserClientService: ALRegisterUserClientService = ALRegisterUserClientService()
