@@ -54,6 +54,13 @@ public protocol KMGroupUserType {
 }
 
 public class KMGroupUser: ALGroupUser, KMGroupUserType, Encodable {
+
+    public enum RoleType: Int {
+        case agent = 1
+        case bot = 2
+        case user = 3
+    }
+
     public var id: String {
         return userId ?? ""
     }
@@ -66,6 +73,12 @@ public class KMGroupUser: ALGroupUser, KMGroupUserType, Encodable {
     enum CodingKeys: String, CodingKey {
         case id = "id"
         case role = "roleType"
+    }
+
+    public convenience init(groupRole: RoleType, userId: String) {
+        self.init()
+        self.groupRole = groupRole.rawValue as NSNumber
+        self.userId = userId
     }
 
     public func encode(to encoder: Encoder) throws {

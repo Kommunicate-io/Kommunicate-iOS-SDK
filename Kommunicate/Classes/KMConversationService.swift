@@ -147,18 +147,3 @@ public class KMConversationService: KMConservationServiceable {
         return true
     }
 }
-
-extension KMGroupUser {
-    public enum RoleType: Int {
-        case agent = 1
-        case bot = 2
-        case user = 3
-    }
-
-    public convenience init(groupRole: RoleType, userId: String) {
-        self.init()
-        self.groupRole = groupRole.rawValue as NSNumber
-        self.userId = userId
-
-    }
-}
