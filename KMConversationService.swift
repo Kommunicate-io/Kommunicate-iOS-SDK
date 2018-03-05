@@ -7,6 +7,7 @@
 
 import Foundation
 import Applozic
+import ApplozicSwift
 
 public protocol KMConservationServiceable {
     associatedtype Response
@@ -16,8 +17,6 @@ public protocol KMConservationServiceable {
 
 public class KMConversationService: KMConservationServiceable {
 
-    public init() {}
-
     /// Conversation API response
     public struct Response {
         var success: Bool = false
@@ -25,6 +24,11 @@ public class KMConversationService: KMConservationServiceable {
         var error: Error? = nil
     }
 
+    //MARK: - Initialization
+
+    public init() {}
+
+    //MARK: - Public methods
 
     /**
      Creates a new conversation with the details passed.
@@ -69,6 +73,27 @@ public class KMConversationService: KMConservationServiceable {
             })
         })
     }
+
+    public func launchChatList(from viewController: UIViewController) {
+        let conversationVC = ALKConversationListViewController()
+        let navVC = ALKBaseNavigationViewController(rootViewController: conversationVC)
+        viewController.present(navVC, animated: false, completion: nil)
+    }
+
+    public func launchGroupWith(groupId: Int, from viewController: UIViewController) {
+        let alChannelService = ALChannelService()
+        alChannelService.getChannelInformation(groupId as NSNumber, orClientChannelKey: nil) { (channel) in
+            guard let channel = channel, let key = channel.key else {return}
+            let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: key)
+            let conversationViewController = ALKConversationViewController()
+            conversationViewController.title = channel.name
+            conversationViewController.viewModel = convViewModel
+            viewController.navigationController?
+                .pushViewController(conversationViewController, animated: false)
+        }
+    }
+
+    //MARK: - Private methods
 
     private func createNewConversation(groupId: Int, userId: String, agentId: String, completion: @escaping (_ response: Any?, _ error: Error?)->()) {
         let user = KMGroupUser(groupRole: .user, userId: userId)
