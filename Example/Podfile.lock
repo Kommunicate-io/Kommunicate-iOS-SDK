@@ -1,8 +1,8 @@
 PODS:
-  - Applozic (5.0.0):
+  - Applozic (5.2.0):
     - SDWebImage (~> 4.2.2)
-  - ApplozicSwift (0.6.0):
-    - Applozic (~> 5.0.0)
+  - ApplozicSwift (0.7.0):
+    - Applozic (~> 5.2.0)
     - Kingfisher (~> 3.13.1)
     - MGSwipeTableCell (~> 1.5.6)
   - FBSnapshotTestCase (2.1.4):
@@ -12,7 +12,7 @@ PODS:
     - FBSnapshotTestCase/Core
   - Kingfisher (3.13.1)
   - Kommunicate (0.1.0):
-    - ApplozicSwift
+    - ApplozicSwift (~> 0.7.0)
   - MGSwipeTableCell (1.5.6)
   - SDWebImage (4.2.3):
     - SDWebImage/Core (= 4.2.3)
@@ -27,11 +27,11 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  Applozic: 2996a4d2ecc96f0e9e7432a0249360a5651a76d9
-  ApplozicSwift: cf420e891c908ac490f9157d0b498bd0fe725ad8
+  Applozic: 0d3027cc9974cf0aaa950b271195a981f1a09c4c
+  ApplozicSwift: 7d89725cb0a452ccc89d122ba3afde837e35c691
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   Kingfisher: ed9707a409cc47fddafbcd12a43a9757e3600af5
-  Kommunicate: 6d8050e8e34861e78c7c3717f5340f3075a6bfad
+  Kommunicate: 000b1612e22f87f32169acccf6a3dc4cd9092fb8
   MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
   SDWebImage: 791bb72962b3492327ddcac4b1880bd1b5458431
 
