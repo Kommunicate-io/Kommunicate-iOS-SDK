@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.version          = '0.1.0'
   s.summary          = 'Kommunicate iOS SDK for customer support.'
   s.homepage         = 'https://github.com/Kommunicate-io/Kommunicate-iOS-SDK'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
+  s.license          = { :type => 'BSD-3-Clause', :file => 'LICENSE' }
   s.author           = { 'Mukesh Thawani' => 'mukesh@applozic.com' }
   s.source           = { :git => 'https://github.com/Kommunicate-io/Kommunicate-iOS-SDK.git', :tag => s.version }
 
