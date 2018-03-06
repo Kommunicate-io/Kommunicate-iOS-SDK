@@ -74,12 +74,25 @@ public class KMConversationService: KMConservationServiceable {
         })
     }
 
+    /**
+     Launch chat list from a ViewController.
+
+     - Parameters:
+     - viewController: ViewController from which the chat list will be launched.
+     */
     public func launchChatList(from viewController: UIViewController) {
         let conversationVC = ALKConversationListViewController()
         let navVC = ALKBaseNavigationViewController(rootViewController: conversationVC)
         viewController.present(navVC, animated: false, completion: nil)
     }
 
+    /**
+     Launch group chat from a ViewController
+
+     - Parameters:
+     - groupId: groupId of the Group.
+     - viewController: ViewController from which the group chat will be launched.
+     */
     public func launchGroupWith(groupId: Int, from viewController: UIViewController) {
         let alChannelService = ALChannelService()
         alChannelService.getChannelInformation(groupId as NSNumber, orClientChannelKey: nil) { (channel) in
