@@ -19,6 +19,7 @@ class ViewController: UIViewController {
         if KMUserDefaultHandler.isLoggedIn() {
             service.createConversation(userId: KMUserDefaultHandler.getUserId(), agentId: agentId, botIds: [botId], completion: {
                 response in
+                service.launchGroupWith(groupId: response.channelKey!, from: self)
                 print(response)
             })
         } else {
@@ -37,4 +38,3 @@ class ViewController: UIViewController {
         }
     }
 }
-

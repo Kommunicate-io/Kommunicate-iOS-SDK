@@ -19,9 +19,9 @@ public class KMConversationService: KMConservationServiceable {
 
     /// Conversation API response
     public struct Response {
-        var success: Bool = false
-        var channelKey: Int? = nil
-        var error: Error? = nil
+        public var success: Bool = false
+        public var channelKey: Int? = nil
+        public var error: Error? = nil
     }
 
     //MARK: - Initialization
