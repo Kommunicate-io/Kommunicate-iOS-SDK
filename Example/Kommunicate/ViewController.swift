@@ -13,7 +13,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let agentId = "suraj@kommunicate.io"
+        let agentId = ""
         let botId = "bot"
         let service = KMConversationService()
         if KMUserDefaultHandler.isLoggedIn() {
@@ -25,7 +25,7 @@ class ViewController: UIViewController {
         } else {
             let chatManager = KMChatManager(applicationKey: KMChatManager.applicationId as NSString)
             let kmUser = KMUser()
-            kmUser.userId = "testabcd"
+            kmUser.userId = ""
             kmUser.applicationId = KMChatManager.applicationId
 
             chatManager.registerUser(kmUser, completion: {
