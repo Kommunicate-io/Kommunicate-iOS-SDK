@@ -139,39 +139,4 @@ class KMChatManager: NSObject {
         ALApplozicSettings.setFilterContactsStatus(true)
         ALUserDefaultsHandler.setDebugLogsRequire(true)
     }
-
-    func launchChatList(from viewController: UIViewController) {
-        let conversationVC = ALKConversationListViewController()
-        let navVC = ALKBaseNavigationViewController(rootViewController: conversationVC)
-        viewController.present(navVC, animated: false, completion: nil)
-    }
-
-    func launchChatWith(contactId: String, from viewController: UIViewController) {
-        let alContactDbService = ALContactDBService()
-        var title = ""
-        if let alContact = alContactDbService.loadContact(byKey: "userId", value: contactId), let name = alContact.getDisplayName() {
-            title = name
-        }
-        title = title.isEmpty ? "No name":title
-        let convViewModel = ALKConversationViewModel(contactId: contactId, channelKey: nil)
-        let conversationViewController = ALKConversationViewController()
-        conversationViewController.title = title
-        conversationViewController.viewModel = convViewModel
-        viewController.navigationController?.pushViewController(conversationViewController, animated: false)
-    }
-
-    func launchGroupWith(clientGroupId: String, from viewController: UIViewController) {
-        let alChannelService = ALChannelService()
-        alChannelService.getChannelInformation(nil, orClientChannelKey: clientGroupId) { (channel) in
-            guard let channel = channel, let key = channel.key else {return}
-            let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: key)
-            let conversationViewController = ALKConversationViewController()
-            conversationViewController.title = channel.name
-            conversationViewController.viewModel = convViewModel
-            viewController.navigationController?.pushViewController(conversationViewController, animated: false)
-        }
-    }
-
 }
-
-
