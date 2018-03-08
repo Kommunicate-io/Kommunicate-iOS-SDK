@@ -32,6 +32,8 @@
 	<string>$(PRODUCT_NAME) request audio use</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) photo use</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Allow write access</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
