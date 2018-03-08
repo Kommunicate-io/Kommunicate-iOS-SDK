@@ -19,6 +19,10 @@ var APNS_TYPE_DISTRIBUTION : Int16 = 1
 
 public typealias KMUser = ALUser
 public typealias KMUserDefaultHandler = ALUserDefaultsHandler
+public typealias KMPushNotificationService = ALPushNotificationService
+public typealias KMAppLocalNotification = ALAppLocalNotifications
+public typealias KMDbHandler = ALDBHandler
+public typealias KMRegisterUserClientService = ALRegisterUserClientService
 
 @objc
 open class Kommunicate: NSObject {
