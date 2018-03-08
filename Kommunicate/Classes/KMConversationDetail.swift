@@ -47,7 +47,6 @@ open class KMConversationDetail: KMConversationDetailType, Encodable {
     }
 }
 
-
 public protocol KMGroupUserType {
     var id: String {get}
     var role: KMGroupUser.RoleType {get}
@@ -71,8 +70,8 @@ public class KMGroupUser: ALGroupUser, KMGroupUserType, Encodable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case id = "id"
-        case role = "roleType"
+        case id = "userId"
+        case role = "groupRole"
     }
 
     public convenience init(groupRole: RoleType, userId: String) {
@@ -85,5 +84,12 @@ public class KMGroupUser: ALGroupUser, KMGroupUserType, Encodable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
         try container.encode(role.rawValue, forKey: .role)
+    }
+
+    public func toDict() -> Dictionary<String, Any> {
+        var dict = Dictionary<String, Any>()
+        dict[CodingKeys.id.rawValue] = self.id
+        dict[CodingKeys.role.rawValue] = self.role.rawValue
+        return dict
     }
 }

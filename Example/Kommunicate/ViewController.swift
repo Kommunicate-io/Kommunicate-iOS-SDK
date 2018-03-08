@@ -15,24 +15,33 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         let agentId = ""
         let botId = "bot"
-        let service = KMConversationService()
+        let userId = "testabc"
+        let applicationKey = ""
+        Kommunicate.setup(applicationId: applicationKey)
         if KMUserDefaultHandler.isLoggedIn() {
-            service.createConversation(userId: KMUserDefaultHandler.getUserId(), agentId: agentId, botIds: [botId], completion: {
-                response in
-                service.launchGroupWith(groupId: response.channelKey!, from: self)
-                print(response)
-            })
+            Kommunicate.createConversation(
+                userId: userId,
+                agentId: agentId,
+                botIds: [botId],
+                completion: { response in
+                    guard !response.isEmpty else {return}
+                    Kommunicate.showConversationWith(groupId: response, from: self)
+                })
         } else {
-            let chatManager = KMChatManager(applicationKey: KMChatManager.applicationId as NSString)
             let kmUser = KMUser()
-            kmUser.userId = ""
-            kmUser.applicationId = KMChatManager.applicationId
+            kmUser.userId = userId
+            kmUser.applicationId = applicationKey
 
-            chatManager.registerUser(kmUser, completion: {
+            Kommunicate.registerUser(kmUser, completion: {
                 response, error in
-                service.createConversation(userId: kmUser.userId, agentId: agentId, botIds: [botId], completion: {
-                    response in
-                    print(response)
+                guard error == nil else {return}
+                Kommunicate.createConversation(
+                    userId: kmUser.userId,
+                    agentId: agentId,
+                    botIds: [botId], completion: { response in
+                    guard !response.isEmpty else {return}
+                    Kommunicate.showConversationWith(groupId: response, from: self)
+
                 })
             })
         }

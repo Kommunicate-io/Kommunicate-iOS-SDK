@@ -20,7 +20,7 @@ public class KMConversationService: KMConservationServiceable {
     /// Conversation API response
     public struct Response {
         public var success: Bool = false
-        public var channelKey: Int? = nil
+        public var clientChannelKey: String? = nil
         public var error: Error? = nil
     }
 
@@ -44,15 +44,13 @@ public class KMConversationService: KMConservationServiceable {
         let groupName = "Support"
         var members: [KMGroupUser] = []
         members.append(KMGroupUser(groupRole: .user, userId: userId))
-        members.append(KMGroupUser(groupRole: .agent, userId: agentId))
-
+        let membersList = NSMutableArray()
         if let botUsers = getBotGroupUser(userIds: botIds) {
             members.append(contentsOf: botUsers)
         }
         let alChannelService = ALChannelService()
-        let membersList = NSMutableArray()
-        membersList.add(userId)
-        alChannelService.createChannel(groupName, orClientChannelKey: nil, andMembersList: membersList, andImageLink: nil, channelType: 10, andMetaData: nil, adminUser: agentId, withGroupUsers: members as? NSMutableArray, withCompletion: {
+        let groupUsers = members.map{$0.toDict()}
+        alChannelService.createChannel(groupName, orClientChannelKey: nil, andMembersList: membersList, andImageLink: nil, channelType: 10, andMetaData: nil, adminUser: agentId, withGroupUsers: NSMutableArray(array:groupUsers), withCompletion: {
             channel, error in
             guard error == nil else {return}
             guard let channel = channel, let key = channel.key as? Int else {
@@ -68,42 +66,10 @@ public class KMConversationService: KMConservationServiceable {
                     return
                 }
                 response.success = self.isConversationCreatedSuccessfully(for: conversationResponse)
-                response.channelKey = channel.key as? Int
+                response.clientChannelKey = channel.clientChannelKey
                 completion(response)
             })
         })
-    }
-
-    /**
-     Launch chat list from a ViewController.
-
-     - Parameters:
-     - viewController: ViewController from which the chat list will be launched.
-     */
-    public func launchChatList(from viewController: UIViewController) {
-        let conversationVC = ALKConversationListViewController()
-        let navVC = ALKBaseNavigationViewController(rootViewController: conversationVC)
-        viewController.present(navVC, animated: false, completion: nil)
-    }
-
-    /**
-     Launch group chat from a ViewController
-
-     - Parameters:
-     - groupId: groupId of the Group.
-     - viewController: ViewController from which the group chat will be launched.
-     */
-    public func launchGroupWith(groupId: Int, from viewController: UIViewController) {
-        let alChannelService = ALChannelService()
-        alChannelService.getChannelInformation(groupId as NSNumber, orClientChannelKey: nil) { (channel) in
-            guard let channel = channel, let key = channel.key else {return}
-            let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: key)
-            let conversationViewController = ALKConversationViewController()
-            conversationViewController.title = channel.name
-            conversationViewController.viewModel = convViewModel
-            viewController.navigationController?
-                .pushViewController(conversationViewController, animated: false)
-        }
     }
 
     //MARK: - Private methods
