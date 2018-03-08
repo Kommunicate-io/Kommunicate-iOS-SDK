@@ -18,7 +18,7 @@ class ViewController: UIViewController {
         let userId = "testabc"
         let applicationKey = ""
         Kommunicate.setup(applicationId: applicationKey)
-        if KMUserDefaultHandler.isLoggedIn() {
+        if Kommunicate.isLoggedIn {
             Kommunicate.createConversation(
                 userId: userId,
                 agentId: agentId,

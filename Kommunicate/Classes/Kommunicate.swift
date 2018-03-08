@@ -23,7 +23,16 @@ public typealias KMUserDefaultHandler = ALUserDefaultsHandler
 @objc
 open class Kommunicate: NSObject {
 
-    static var applicationId = ""
+    //MARK: - Public properties
+
+    /// Returns true if user is already logged in.
+    @objc open static var isLoggedIn: Bool {
+        return KMUserDefaultHandler.isLoggedIn()
+    }
+
+    //MARK: - Private properties
+
+    private static var applicationId = ""
 
     private var pushNotificationTokenData: Data? {
         didSet {
@@ -35,7 +44,7 @@ open class Kommunicate: NSObject {
 
 
     /**
-     Setup a application id which will be used for all the requests
+     Setup a application id which will be used for all the requests.
 
      - Parameters:
         - applicationId: Application id that needs to be set up.
