@@ -12,7 +12,7 @@ import ApplozicSwift
 public protocol KMConservationServiceable {
     associatedtype Response
     func createConversation(userId: String, agentId: String, botIds: [String]?,
-                            completion: @escaping (Response) -> ())
+        completion: @escaping (Response) -> ())
 }
 
 public class KMConversationService: KMConservationServiceable {
@@ -26,7 +26,7 @@ public class KMConversationService: KMConservationServiceable {
 
     //MARK: - Initialization
 
-    public init() {}
+    public init() { }
 
     //MARK: - Public methods
 
@@ -39,7 +39,7 @@ public class KMConversationService: KMConservationServiceable {
 
      - Returns: Response object.
     */
-    public func createConversation(userId: String, agentId: String, botIds: [String]?, completion:@escaping (Response) -> ()) {
+    public func createConversation(userId: String, agentId: String, botIds: [String]?, completion: @escaping (Response) -> ()) {
 
         let groupName = "Support"
         var members: [KMGroupUser] = []
@@ -49,32 +49,43 @@ public class KMConversationService: KMConservationServiceable {
             members.append(contentsOf: botUsers)
         }
         let alChannelService = ALChannelService()
-        let groupUsers = members.map{$0.toDict()}
-        alChannelService.createChannel(groupName, orClientChannelKey: nil, andMembersList: membersList, andImageLink: nil, channelType: 10, andMetaData: nil, adminUser: agentId, withGroupUsers: NSMutableArray(array:groupUsers), withCompletion: {
-            channel, error in
-            guard error == nil else {return}
-            guard let channel = channel, let key = channel.key as? Int else {
-                completion(Response())
-                return
-            }
-            self.createNewConversation(groupId: key, userId: userId, agentId: agentId, completion:{
-                conversationResponse, error in
-                var response = Response()
-                guard conversationResponse != nil && error == nil else {
-                    response.error = error
-                    completion(response)
+        let groupUsers = members.map { $0.toDict() }
+        let metadata = getGroupMetadata()
+
+        alChannelService.createChannel(
+            groupName,
+            orClientChannelKey: nil,
+            andMembersList: membersList,
+            andImageLink: nil,
+            channelType: 10,
+            andMetaData: metadata,
+            adminUser: agentId,
+            withGroupUsers: NSMutableArray(array: groupUsers),
+            withCompletion: {
+                channel, error in
+                guard error == nil else { return }
+                guard let channel = channel, let key = channel.key as? Int else {
+                    completion(Response())
                     return
                 }
-                response.success = self.isConversationCreatedSuccessfully(for: conversationResponse)
-                response.clientChannelKey = channel.clientChannelKey
-                completion(response)
+                self.createNewConversation(groupId: key, userId: userId, agentId: agentId, completion: {
+                    conversationResponse, error in
+                    var response = Response()
+                    guard conversationResponse != nil && error == nil else {
+                        response.error = error
+                        completion(response)
+                        return
+                    }
+                    response.success = self.isConversationCreatedSuccessfully(for: conversationResponse)
+                    response.clientChannelKey = channel.clientChannelKey
+                    completion(response)
+                })
             })
-        })
     }
 
     //MARK: - Private methods
 
-    private func createNewConversation(groupId: Int, userId: String, agentId: String, completion: @escaping (_ response: Any?, _ error: Error?)->()) {
+    private func createNewConversation(groupId: Int, userId: String, agentId: String, completion: @escaping (_ response: Any?, _ error: Error?) -> ()) {
         let user = KMGroupUser(groupRole: .user, userId: userId)
         let agent = KMGroupUser(groupRole: .agent, userId: agentId)
         guard let applicationKey = ALUserDefaultsHandler.getApplicationKey(),
@@ -85,12 +96,12 @@ public class KMConversationService: KMConservationServiceable {
         let detail = KMConversationDetail(
             groupId: groupId,
             user: user.id,
-            agent:agent.id,
+            agent: agent.id,
             applicationKey: applicationKey,
             createdBy: LoggedInUser)
         let api = "https://api.kommunicate.io/conversations"
         guard
-            let paramData =  try? JSONEncoder().encode(detail),
+            let paramData = try? JSONEncoder().encode(detail),
             let paramString = String(data: paramData, encoding: .utf8)
             else {
                 completion(nil, nil)
@@ -113,7 +124,7 @@ public class KMConversationService: KMConservationServiceable {
     /// the userIds passed with role type set as bot.
     private func getBotGroupUser(userIds: [String]?) -> [KMGroupUser]? {
         guard let userIds = userIds else { return nil }
-        return userIds.map {createBotUserFrom(userId: $0)}
+        return userIds.map { createBotUserFrom(userId: $0) }
     }
 
     /// Checks if API response returns success
@@ -124,5 +135,20 @@ public class KMConversationService: KMConservationServiceable {
         guard let code = responseDict["code"] as? String,
             code == "SUCCESS" else { return false }
         return true
+    }
+
+    private func getGroupMetadata() -> NSMutableDictionary {
+        let metadata = NSMutableDictionary()
+        metadata.setValue("", forKey: AL_CREATE_GROUP_MESSAGE)
+        metadata.setValue("", forKey: AL_REMOVE_MEMBER_MESSAGE)
+        metadata.setValue("", forKey: AL_ADD_MEMBER_MESSAGE)
+        metadata.setValue("", forKey: AL_JOIN_MEMBER_MESSAGE)
+        metadata.setValue("", forKey: AL_GROUP_NAME_CHANGE_MESSAGE)
+        metadata.setValue("", forKey: AL_GROUP_ICON_CHANGE_MESSAGE)
+        metadata.setValue("", forKey: AL_GROUP_LEFT_MESSAGE)
+        metadata.setValue("", forKey: AL_DELETED_GROUP_MESSAGE)
+        metadata.setValue("true", forKey: "HIDE")
+        metadata.setValue("false", forKey: "ALERT")
+        return metadata
     }
 }
