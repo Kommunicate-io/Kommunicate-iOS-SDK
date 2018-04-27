@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'Kommunicate'
-  s.version          = '0.2.0'
+  s.version          = '0.3.0'
   s.summary          = 'Kommunicate iOS SDK for customer support.'
   s.homepage         = 'https://github.com/Kommunicate-io/Kommunicate-iOS-SDK'
   s.license          = { :type => 'BSD-3-Clause', :file => 'LICENSE' }
@@ -11,5 +11,5 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '9.0'
   s.source_files = 'Kommunicate/Classes/**/*.{swift}'
   # s.resources = 'Kommunicate/Assets/**/*{lproj,storyboard,xib,xcassets,json}'
-  s.dependency 'ApplozicSwift', '~> 0.7.0'
+  s.dependency 'ApplozicSwift', '~> 0.9.0'
 end
