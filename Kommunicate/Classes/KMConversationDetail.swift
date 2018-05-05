@@ -40,7 +40,7 @@ open class KMConversationDetail: KMConversationDetailType, Encodable {
 
     enum CodingKeys: String, CodingKey {
         case groupId = "groupId"
-        case user = "participentUserId"
+        case user = "participantUserId"
         case agent = "defaultAgentId"
         case applicationKey = "applicationKey"
         case createdBy = "createdBy"
