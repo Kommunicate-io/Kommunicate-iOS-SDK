@@ -23,6 +23,7 @@ class ViewController: UIViewController {
                 userId: userId,
                 agentId: agentId,
                 botIds: [botId],
+                useLastConversation: true,
                 completion: { response in
                     guard !response.isEmpty else {return}
                     Kommunicate.showConversationWith(groupId: response, from: self)
