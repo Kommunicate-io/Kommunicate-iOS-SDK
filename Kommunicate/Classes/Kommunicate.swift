@@ -117,6 +117,7 @@ open class Kommunicate: NSObject {
         - userId: User id of the participant.
         - agentId: User id of the agent.
         - botIds: A list of bot ids to be added in the conversation.
+        - useLastConversation: If there is a conversation already present then that will be returned.
 
      - Returns: Group id if successful otherwise nil.
      */
@@ -124,11 +125,16 @@ open class Kommunicate: NSObject {
         userId: String,
         agentId: String,
         botIds: [String]?,
+        useLastConversation: Bool = false,
         completion:@escaping (_ clientGroupId: String) -> ()) {
         let service = KMConversationService()
         if KMUserDefaultHandler.isLoggedIn() {
-            service.createConversation(userId: KMUserDefaultHandler.getUserId(), agentId: agentId, botIds: botIds, completion: {
-                response in
+            service.createConversation(
+                userId: KMUserDefaultHandler.getUserId(),
+                agentId: agentId,
+                botIds: botIds,
+                useLastConversation: useLastConversation,
+                completion: { response in
                 completion(response.clientChannelKey ?? "")
             })
         }

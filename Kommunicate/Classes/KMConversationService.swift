@@ -11,7 +11,11 @@ import ApplozicSwift
 
 public protocol KMConservationServiceable {
     associatedtype Response
-    func createConversation(userId: String, agentId: String, botIds: [String]?,
+    func createConversation(
+        userId: String,
+        agentId: String,
+        botIds: [String]?,
+        useLastConversation: Bool,
         completion: @escaping (Response) -> ())
 }
 
@@ -36,51 +40,43 @@ public class KMConversationService: KMConservationServiceable {
      - Parameters:
         - userId: User id of the participant.
         - agentId: User id of the agent.
+        - botIds: A list of bot ids to be added in the conversation.
+        - useLastConversation: If there is a conversation already present then that will be returned.
 
      - Returns: Response object.
     */
-    public func createConversation(userId: String, agentId: String, botIds: [String]?, completion: @escaping (Response) -> ()) {
+    public func createConversation(
+        userId: String,
+        agentId: String,
+        botIds: [String]?,
+        useLastConversation: Bool,
+        completion: @escaping (Response) -> ()) {
 
-        let groupName = "Support"
-        var members: [KMGroupUser] = []
-        members.append(KMGroupUser(groupRole: .user, userId: userId))
-        let membersList = NSMutableArray()
-        if let botUsers = getBotGroupUser(userIds: botIds) {
-            members.append(contentsOf: botUsers)
-        }
-        let alChannelService = ALChannelService()
-        let groupUsers = members.map { $0.toDict() }
-        let metadata = getGroupMetadata()
-
-        alChannelService.createChannel(
-            groupName,
-            orClientChannelKey: nil,
-            andMembersList: membersList,
-            andImageLink: nil,
-            channelType: 10,
-            andMetaData: metadata,
-            adminUser: agentId,
-            withGroupUsers: NSMutableArray(array: groupUsers),
-            withCompletion: {
-                channel, error in
-                guard error == nil else { return }
-                guard let channel = channel, let key = channel.key as? Int else {
-                    completion(Response())
-                    return
-                }
-                self.createNewConversation(groupId: key, userId: userId, agentId: agentId, completion: {
-                    conversationResponse, error in
-                    var response = Response()
-                    guard conversationResponse != nil && error == nil else {
-                        response.error = error
-                        completion(response)
-                        return
-                    }
-                    response.success = self.isConversationCreatedSuccessfully(for: conversationResponse)
-                    response.clientChannelKey = channel.clientChannelKey
+        var clientId: String? = nil
+        if useLastConversation {
+            var newClientId = "\(agentId)_\(userId)"
+            if let botIds = botIds {
+                newClientId = newClientId + botIds.reduce("", {$0+"_"+$1})
+            }
+            clientId = newClientId
+            isGroupPresent(clientId: newClientId, completion: {
+                present in
+                if present {
+                    let response = Response(success: true, clientChannelKey: newClientId, error: nil)
                     completion(response)
-                })
+                } else {
+                    self.createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentId: agentId, botIds: botIds, completion: {
+                        response in
+                        completion(response)
+                    })
+                }
             })
+        } else {
+            createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentId: agentId, botIds: botIds, completion: {
+                response in
+                completion(response)
+            })
+        }
     }
 
     //MARK: - Private methods
@@ -150,5 +146,68 @@ public class KMConversationService: KMConservationServiceable {
         metadata.setValue("true", forKey: "HIDE")
         metadata.setValue("false", forKey: "ALERT")
         return metadata
+    }
+
+    private func isGroupPresent(clientId: String, completion:@escaping (_ isPresent: Bool)->()){
+        let client = ALChannelService()
+        client.getChannelInformation(byResponse: nil, orClientChannelKey: clientId, withCompletion: {
+            error, channel, response in
+            guard channel != nil else {
+                completion(false)
+                return
+            }
+            completion(true)
+        })
+    }
+
+    private func createNewChannelAndConversation(
+        clientChannelKey: String?,
+        userId: String,
+        agentId: String,
+        botIds: [String]?,
+        completion: @escaping (Response) -> ()) {
+        let groupName = "Support"
+        var members: [KMGroupUser] = []
+        members.append(KMGroupUser(groupRole: .user, userId: userId))
+        let membersList = NSMutableArray()
+        if let botUsers = getBotGroupUser(userIds: botIds) {
+            members.append(contentsOf: botUsers)
+        }
+        let alChannelService = ALChannelService()
+        let groupUsers = members.map { $0.toDict() }
+        let metadata = getGroupMetadata()
+
+        alChannelService.createChannel(
+            groupName,
+            orClientChannelKey: clientChannelKey,
+            andMembersList: membersList,
+            andImageLink: nil,
+            channelType: 10,
+            andMetaData: metadata,
+            adminUser: agentId,
+            withGroupUsers: NSMutableArray(array: groupUsers),
+            withCompletion: {
+                channel, error in
+                guard error == nil else {
+                    completion(Response(success: false, clientChannelKey: nil, error: error))
+                    return
+                }
+                guard let channel = channel, let key = channel.key as? Int else {
+                    completion(Response(success: false, clientChannelKey: nil, error: nil))
+                    return
+                }
+                self.createNewConversation(groupId: key, userId: userId, agentId: agentId, completion: {
+                    conversationResponse, error in
+                    var response = Response()
+                    guard conversationResponse != nil && error == nil else {
+                        response.error = error
+                        completion(response)
+                        return
+                    }
+                    response.success = self.isConversationCreatedSuccessfully(for: conversationResponse)
+                    response.clientChannelKey = channel.clientChannelKey
+                    completion(response)
+                })
+        })
     }
 }
