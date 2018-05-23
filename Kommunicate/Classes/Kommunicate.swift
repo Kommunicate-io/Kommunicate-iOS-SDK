@@ -23,6 +23,7 @@ public typealias KMPushNotificationService = ALPushNotificationService
 public typealias KMAppLocalNotification = ALAppLocalNotifications
 public typealias KMDbHandler = ALDBHandler
 public typealias KMRegisterUserClientService = ALRegisterUserClientService
+public typealias KMPushNotificationHandler = ALKPushNotificationHandler
 
 @objc
 open class Kommunicate: NSObject {
@@ -210,5 +211,6 @@ open class Kommunicate: NSObject {
         ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), ALKConversationViewController.description()])
         ALApplozicSettings.setFilterContactsStatus(true)
         ALUserDefaultsHandler.setDebugLogsRequire(true)
+        ALApplozicSettings.setSwiftFramework(true)
     }
 }

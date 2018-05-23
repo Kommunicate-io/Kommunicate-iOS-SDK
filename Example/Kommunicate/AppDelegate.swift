@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import UserNotifications
+import Kommunicate
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,8 +17,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+
+        registerForNotification()
+
+        KMPushNotificationHandler.shared.dataConnectionNotificationHandler()
+        let kmApplocalNotificationHandler : KMAppLocalNotification =  KMAppLocalNotification.appLocalNotificationHandler()
+        kmApplocalNotificationHandler.dataConnectionNotificationHandler()
+
+        if (launchOptions != nil)
+        {
+            let dictionary = launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as? NSDictionary
+
+            if (dictionary != nil)
+            {
+                print("launched from push notification")
+                let kmPushNotificationService: KMPushNotificationService = KMPushNotificationService()
+
+                let appState: NSNumber = NSNumber(value: 0 as Int32)
+                let _ = kmPushNotificationService.processPushNotification(launchOptions,updateUI:appState)
+            }
+        }
         return true
+    }
+
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any])
+    {
+        print("Received notification :: \(userInfo.description)")
+        let kmPushNotificationService: KMPushNotificationService = KMPushNotificationService()
+        kmPushNotificationService.notificationArrived(to: application, with: userInfo)
+    }
+
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler
+        completionHandler: @escaping (UIBackgroundFetchResult) -> Void)
+    {
+        print("Received notification With Completion :: \(userInfo.description)")
+        let kmPushNotificationService: KMPushNotificationService = KMPushNotificationService()
+        kmPushNotificationService.notificationArrived(to: application, with: userInfo)
+        completionHandler(UIBackgroundFetchResult.newData)
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -25,12 +62,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        print("APP_ENTER_IN_BACKGROUND")
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "APP_ENTER_IN_BACKGROUND"), object: nil)
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        KMPushNotificationService.applicationEntersForeground()
+        print("APP_ENTER_IN_FOREGROUND")
+
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "APP_ENTER_IN_FOREGROUND"), object: nil)
+        UIApplication.shared.applicationIconBadgeNumber = 0
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -38,9 +79,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        KMDbHandler.sharedInstance().saveContext()
     }
 
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data)
+    {
 
+        print("DEVICE_TOKEN_DATA :: \(deviceToken.description)")  // (SWIFT = 3) : TOKEN PARSING
+
+        var deviceTokenString: String = ""
+        for i in 0..<deviceToken.count
+        {
+            deviceTokenString += String(format: "%02.2hhx", deviceToken[i] as CVarArg)
+        }
+        print("DEVICE_TOKEN_STRING :: \(deviceTokenString)")
+
+        if (KMUserDefaultHandler.getApnDeviceToken() != deviceTokenString)
+        {
+            let kmRegisterUserClientService: KMRegisterUserClientService = KMRegisterUserClientService()
+            kmRegisterUserClientService.updateApnDeviceToken(withCompletion: deviceTokenString, withCompletion: { (response, error) in
+                print ("REGISTRATION_RESPONSE :: \(String(describing: response))")
+            })
+        }
+    }
+
+    func registerForNotification() {
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
+
+                if granted {
+                    DispatchQueue.main.async {
+                        UIApplication.shared.registerForRemoteNotifications()
+                    }
+                }
+            }
+        } else {
+            // Fallback on earlier versions
+            let settings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            UIApplication.shared.registerUserNotificationSettings(settings)
+            UIApplication.shared.registerForRemoteNotifications()
+
+        }
+    }
 }
-
