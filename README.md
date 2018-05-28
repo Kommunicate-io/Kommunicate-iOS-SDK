@@ -4,7 +4,15 @@
 [![License](https://img.shields.io/cocoapods/l/Kommunicate.svg?style=flat)](http://cocoapods.org/pods/Kommunicate)
 [![Platform](https://img.shields.io/cocoapods/p/Kommunicate.svg?style=flat)](http://cocoapods.org/pods/Kommunicate)
 
-Kommunicate iOS SDK for customer support https://www.kommunicate.io/
+
+### Kommunicate iOS Chat SDK for Customer Support https://www.kommunicate.io/
+
+Open Source iOS Live Chat SDK for Customer Support
+
+# Overview
+Kommunicate provides open source live chat sdk in iOS. Kommunicate lets you add real time live chat and in-app messaging in your mobile (android, iOS) applications and website for customer support.
+
+Signup at [https://dashboard.kommunicate.io/signup](https://dashboard.kommunicate.io/signup?utm_source=github&utm_medium=readme&utm_campaign=ios) to get the Application ID.
 
 ------------------------
 
