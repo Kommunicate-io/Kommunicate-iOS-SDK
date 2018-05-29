@@ -16,6 +16,8 @@ Signup at [https://dashboard.kommunicate.io/signup](https://dashboard.kommunicat
 
 ------------------------
 
+![Screenshot0][img0] &nbsp;&nbsp; ![Screenshot1][img1] &nbsp;&nbsp;
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
@@ -47,3 +49,6 @@ Please checkout [Documentation](https://docs.kommunicate.io/docs/ios-authenticat
 ## License
 
 Kommunicate is available under the BSD-3-Clause license. See the [LICENSE](LICENSE) file for more info.
+
+[img0]:https://raw.githubusercontent.com/Applozic/ApplozicSwift/master/Screenshots/screenshot0.png
+[img1]:https://raw.githubusercontent.com/Applozic/ApplozicSwift/master/Screenshots/screenshot1.png
