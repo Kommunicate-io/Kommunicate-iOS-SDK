@@ -81,37 +81,6 @@ public class KMConversationService: KMConservationServiceable {
 
     //MARK: - Private methods
 
-    private func createNewConversation(groupId: Int, userId: String, agentId: String, completion: @escaping (_ response: Any?, _ error: Error?) -> ()) {
-        let user = KMGroupUser(groupRole: .user, userId: userId)
-        let agent = KMGroupUser(groupRole: .agent, userId: agentId)
-        guard let applicationKey = ALUserDefaultsHandler.getApplicationKey(),
-            let LoggedInUser = ALUserDefaultsHandler.getUserId() else {
-                completion(nil, nil)
-                return
-        }
-        let detail = KMConversationDetail(
-            groupId: groupId,
-            user: user.id,
-            agent: agent.id,
-            applicationKey: applicationKey,
-            createdBy: LoggedInUser)
-        let api = "https://api.kommunicate.io/conversations"
-        guard
-            let paramData = try? JSONEncoder().encode(detail),
-            let paramString = String(data: paramData, encoding: .utf8)
-            else {
-                completion(nil, nil)
-                return
-        }
-
-        let request = ALRequestHandler.createPOSTRequest(withUrlString: api, paramString: paramString)
-        ALResponseHandler.processRequest(request, andTag: "ConversationCreate", withCompletionHandler: {
-            jsonResponse, error in
-            completion(jsonResponse, error)
-        })
-
-    }
-
     private func createBotUserFrom(userId: String) -> KMGroupUser {
         return KMGroupUser(groupRole: .bot, userId: userId)
     }
@@ -121,16 +90,6 @@ public class KMConversationService: KMConservationServiceable {
     private func getBotGroupUser(userIds: [String]?) -> [KMGroupUser]? {
         guard let userIds = userIds else { return nil }
         return userIds.map { createBotUserFrom(userId: $0) }
-    }
-
-    /// Checks if API response returns success
-    private func isConversationCreatedSuccessfully(for response: Any?) -> Bool {
-        guard let response = response, let responseDict = response as? Dictionary<String, Any> else {
-            return false
-        }
-        guard let code = responseDict["code"] as? String,
-            code == "SUCCESS" else { return false }
-        return true
     }
 
     private func getGroupMetadata() -> NSMutableDictionary {
@@ -192,22 +151,13 @@ public class KMConversationService: KMConservationServiceable {
                     completion(Response(success: false, clientChannelKey: nil, error: error))
                     return
                 }
-                guard let channel = channel, let key = channel.key as? Int else {
+                guard let channel = channel, let _ = channel.key as? Int else {
                     completion(Response(success: false, clientChannelKey: nil, error: nil))
                     return
                 }
-                self.createNewConversation(groupId: key, userId: userId, agentId: agentId, completion: {
-                    conversationResponse, error in
-                    var response = Response()
-                    guard conversationResponse != nil && error == nil else {
-                        response.error = error
-                        completion(response)
-                        return
-                    }
-                    response.success = self.isConversationCreatedSuccessfully(for: conversationResponse)
-                    response.clientChannelKey = channel.clientChannelKey
-                    completion(response)
-                })
+                var response = Response()
+                response.clientChannelKey = channel.clientChannelKey
+                completion(response)
         })
     }
 }
