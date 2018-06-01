@@ -11,7 +11,7 @@ PODS:
   - FBSnapshotTestCase/SwiftSupport (2.1.4):
     - FBSnapshotTestCase/Core
   - Kingfisher (4.7.0)
-  - Kommunicate (0.4.0):
+  - Kommunicate (0.5.0):
     - ApplozicSwift (~> 0.11.0)
   - MGSwipeTableCell (1.5.6)
   - SDWebImage (4.2.3):
@@ -31,7 +31,7 @@ SPEC CHECKSUMS:
   ApplozicSwift: 089a1da60f6bfeedf2d00190e5d8d46017ff2502
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   Kingfisher: da6b005aa96d37698e3e4f1ccfe96a5b9bbf27d6
-  Kommunicate: f5fe6530d7717681ee77ff849eb578edb466fc37
+  Kommunicate: 78569154d5ab0a692c130f1b89baaedc5839dc54
   MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
   SDWebImage: 791bb72962b3492327ddcac4b1880bd1b5458431
 
