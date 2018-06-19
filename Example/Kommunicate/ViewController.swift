@@ -26,7 +26,9 @@ class ViewController: UIViewController {
                 useLastConversation: true,
                 completion: { response in
                     guard !response.isEmpty else {return}
-                    Kommunicate.showConversationWith(groupId: response, from: self)
+                    Kommunicate.showConversationWith(groupId: response, from: self, completionHandler: { success in
+                        print("conversation was shown")
+                    })
                 })
         } else {
             let kmUser = KMUser()
@@ -41,8 +43,9 @@ class ViewController: UIViewController {
                     agentId: agentId,
                     botIds: [botId], completion: { response in
                     guard !response.isEmpty else {return}
-                    Kommunicate.showConversationWith(groupId: response, from: self)
-
+                        Kommunicate.showConversationWith(groupId: response, from: self, completionHandler: { success in
+                            print("conversation was shown")
+                        })
                 })
             })
         }
