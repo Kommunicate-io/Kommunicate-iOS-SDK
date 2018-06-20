@@ -159,17 +159,24 @@ open class Kommunicate: NSObject {
      - Parameters:
         - clientGroupId: clientChannelKey of the Group.
         - viewController: ViewController from which the group chat will be launched.
+        - completionHandler: Called with the information whether the conversation was
+                            shown or not.
+
      */
-    static public func showConversationWith(groupId clientGroupId: String, from viewController: UIViewController) {
+    @objc open class func showConversationWith(groupId clientGroupId: String, from viewController: UIViewController, completionHandler: @escaping (Bool) -> Void) {
         let alChannelService = ALChannelService()
         alChannelService.getChannelInformation(nil, orClientChannelKey: clientGroupId) { (channel) in
-            guard let channel = channel, let key = channel.key else {return}
+            guard let channel = channel, let key = channel.key else {
+                completionHandler(false)
+                return
+            }
             let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: key)
             let conversationViewController = ALKConversationViewController()
             conversationViewController.title = channel.name
             conversationViewController.viewModel = convViewModel
             viewController.navigationController?
                 .pushViewController(conversationViewController, animated: false)
+            completionHandler(true)
         }
     }
 
