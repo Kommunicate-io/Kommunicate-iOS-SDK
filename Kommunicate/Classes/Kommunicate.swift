@@ -180,6 +180,17 @@ open class Kommunicate: NSObject {
         }
     }
 
+    /**
+     Generates a random id that can be used as an `userId`
+     when you don't have any user information that can be used as an
+     userId.
+
+     - Returns: A random alphanumeric string of length 32.
+    */
+    @objc open class func randomId() -> String {
+        return String.random(length: 32)
+    }
+
 
     //MARK: - Private methods
 
