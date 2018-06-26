@@ -24,6 +24,7 @@ public typealias KMAppLocalNotification = ALAppLocalNotifications
 public typealias KMDbHandler = ALDBHandler
 public typealias KMRegisterUserClientService = ALRegisterUserClientService
 public typealias KMPushNotificationHandler = ALKPushNotificationHandler
+public typealias KMConfiguration = ALKConfiguration
 
 @objc
 open class Kommunicate: NSObject {
@@ -34,6 +35,23 @@ open class Kommunicate: NSObject {
     @objc open static var isLoggedIn: Bool {
         return KMUserDefaultHandler.isLoggedIn()
     }
+
+    /**
+     Default configuration which defines the behaviour of UI components.
+     It's used while initializing any UI component or in
+     `KMPushNotificationHandler`.
+     - Note: This can be changed from outside if you want to enable or
+            disable some features but avoid initializing a new `KMConfiguration`
+            object as we have set some properties in the default configuration object
+            which shouldn't be disabled. So use the `defaultConfiguration` and change
+            it accordingly.
+    */
+    open static var defaultConfiguration: KMConfiguration = {
+        var config = KMConfiguration()
+        config.isTapOnNavigationBarEnabled = false
+        config.isProfileTapActionEnabled = false
+        return config
+    }()
 
     //MARK: - Private properties
 
@@ -148,7 +166,7 @@ open class Kommunicate: NSObject {
         - viewController: ViewController from which the chat list will be launched.
      */
     @objc open class func showConversations(from viewController: UIViewController) {
-        let conversationVC = ALKConversationListViewController()
+        let conversationVC = ALKConversationListViewController(configuration: Kommunicate.defaultConfiguration)
         let navVC = ALKBaseNavigationViewController(rootViewController: conversationVC)
         viewController.present(navVC, animated: false, completion: nil)
     }
@@ -171,7 +189,7 @@ open class Kommunicate: NSObject {
                 return
             }
             let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: key)
-            let conversationViewController = ALKConversationViewController()
+            let conversationViewController = ALKConversationViewController(configuration: Kommunicate.defaultConfiguration)
             conversationViewController.title = channel.name
             conversationViewController.viewModel = convViewModel
             viewController.navigationController?
