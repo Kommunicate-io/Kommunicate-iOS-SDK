@@ -42,6 +42,9 @@ class KMPreChatUserFormView: UIView {
 
     func commonInit() {
         Bundle.kommunicate.loadNibNamed("KMPreChatUserFormView", owner: self, options: nil)
+        guard let contentView = contentView else {
+            return
+        }
         addSubview(contentView)
         contentView.frame = self.bounds
         contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]

@@ -9,6 +9,7 @@ import UIKit
 
 public protocol KMPreChatFormViewControllerDelegate: class {
     func userSubmittedResponse(name: String, email: String, phoneNumber: String)
+    func closeButtonTapped()
 }
 
 open class KMPreChatFormViewController: UIViewController {
@@ -50,9 +51,19 @@ open class KMPreChatFormViewController: UIViewController {
         setupViews()
     }
 
+    required public init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
     func setupViews() {
-        formView = KMPreChatUserFormView(frame: CGRect(x: 0, y: 50, width: view.frame.width, height: view.frame.height-50))
+        formView = KMPreChatUserFormView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
+        let closeButton = closeButtonOf(frame: CGRect(x: 20, y: 20, width: 30, height: 30))
         view.addSubview(formView)
+        view.addSubview(closeButton)
         formView.sendInstructionsButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
         [formView.emailTitleLabel, formView.nameTitleLabel, formView.phoneNumberTitle].hideViews()
         formView.setPlaceHolder(for: formView.emailTextField, withText: Placeholder.email)
@@ -116,6 +127,10 @@ open class KMPreChatFormViewController: UIViewController {
         }
     }
 
+    @objc func closeButtonAction(_ button: UIButton) {
+        delegate.closeButtonTapped()
+    }
+
     func validate(emailTextField: UITextField, phoneNumberTextField: UITextField, nameTextField: UITextField) -> Result<TextFieldValidationError>{
         // Return error if both email and phone number fields are empty.
         guard let emailText = emailTextField.text,
@@ -144,6 +159,16 @@ open class KMPreChatFormViewController: UIViewController {
     private func setPlaceHolder(for textField: UITextField, withText text: String, andShowLabel label: UILabel) {
         formView.setPlaceHolder(for: textField, withText: text)
         label.hide()
+    }
+
+    private func closeButtonOf(frame: CGRect) -> UIButton {
+        let button = UIButton(type: .system)
+        button.frame = frame
+        button.addTarget(self, action: #selector(closeButtonAction(_:)), for: .touchUpInside)
+        let closeImage = UIImage(named: "closeIcon", in: Bundle.kommunicate, compatibleWith: nil)
+        button.setImage(closeImage, for: .normal)
+        button.tintColor = UIColor.black
+        return button
     }
 }
 
