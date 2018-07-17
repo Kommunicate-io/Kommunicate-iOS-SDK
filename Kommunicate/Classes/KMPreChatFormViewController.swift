@@ -145,7 +145,7 @@ open class KMPreChatFormViewController: UIViewController {
         }
 
         // Return invalidPhoneNumber error if phone number is present and not valid
-        if !phoneNumberText.isEmpty, phoneNumberText.isValidPhoneNumber {
+        if !phoneNumberText.isEmpty, !phoneNumberText.isValidPhoneNumber {
             return Result.failure(TextFieldValidationError.invalidPhoneNumber)
         }
         return Result.success
