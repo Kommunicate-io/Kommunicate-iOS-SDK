@@ -19,4 +19,25 @@ extension String {
         }
         return randomString
     }
+
+    var isValidPhoneNumber: Bool {
+        do {
+            let detector = try NSDataDetector(types: NSTextCheckingResult.CheckingType.phoneNumber.rawValue)
+            let matches = detector.matches(in: self, options: [], range: NSMakeRange(0, self.count))
+            if let result = matches.first {
+                return result.resultType == .phoneNumber && result.range.location == 0 && result.range.length == self.count
+            } else {
+                return false
+            }
+        } catch {
+            return false
+        }
+    }
+
+    /// Checks if email is in this format: xyz@abc.de
+    var isValidEmail: Bool {
+        let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
+        return emailPredicate.evaluate(with: self)
+    }
 }

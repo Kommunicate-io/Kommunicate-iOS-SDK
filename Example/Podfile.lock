@@ -1,5 +1,5 @@
 PODS:
-  - Applozic (5.9.0):
+  - Applozic (5.9.1):
     - SDWebImage (~> 4.4)
   - ApplozicSwift (0.13.0):
     - Applozic (~> 5.9.0)
@@ -27,11 +27,11 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  Applozic: 0217c29a0877b34aaed0d55570ef5f07c9410fae
+  Applozic: 3bda5c948c85e3daada3ee0aa728f4f3bc236b83
   ApplozicSwift: 38c8721be0e115df9a44a1ccc8152369ccd9d89b
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   Kingfisher: da6b005aa96d37698e3e4f1ccfe96a5b9bbf27d6
-  Kommunicate: 68535b353764505c5cc346fa0b5f6e9cba8ec6f1
+  Kommunicate: cd7279772b873023141d1c05b8abfc6f69dad58a
   MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
   SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
 
