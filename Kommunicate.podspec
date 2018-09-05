@@ -9,6 +9,7 @@ Pod::Spec.new do |s|
 
   s.social_media_url = 'https://twitter.com/kommunicateio'
   s.ios.deployment_target = '9.0'
+  s.swift_version = '4.1'
   s.source_files = 'Kommunicate/Classes/**/*.{swift}'
   s.resources = 'Kommunicate/Assets/**/*{lproj,storyboard,xib,xcassets,json}'
   s.dependency 'ApplozicSwift', '~> 1.0.0'
