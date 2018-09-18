@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         if Kommunicate.isLoggedIn {
             Kommunicate.createConversation(
                 userId: userId,
-                agentId: agentId,
+                agentIds: [agentId],
                 botIds: [botId],
                 useLastConversation: true,
                 completion: { response in
@@ -40,7 +40,7 @@ class ViewController: UIViewController {
                 guard error == nil else {return}
                 Kommunicate.createConversation(
                     userId: kmUser.userId,
-                    agentId: agentId,
+                    agentIds: [agentId],
                     botIds: [botId], completion: { response in
                     guard !response.isEmpty else {return}
                         Kommunicate.showConversationWith(groupId: response, from: self, completionHandler: { success in

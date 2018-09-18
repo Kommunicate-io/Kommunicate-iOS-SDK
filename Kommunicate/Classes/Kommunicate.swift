@@ -142,7 +142,7 @@ open class Kommunicate: NSObject {
      */
     @objc open class func createConversation(
         userId: String,
-        agentId: String,
+        agentIds: [String],
         botIds: [String]?,
         useLastConversation: Bool = false,
         completion:@escaping (_ clientGroupId: String) -> ()) {
@@ -150,7 +150,7 @@ open class Kommunicate: NSObject {
         if KMUserDefaultHandler.isLoggedIn() {
             service.createConversation(
                 userId: KMUserDefaultHandler.getUserId(),
-                agentId: agentId,
+                agentIds: agentIds,
                 botIds: botIds,
                 useLastConversation: useLastConversation,
                 completion: { response in

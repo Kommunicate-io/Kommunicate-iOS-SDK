@@ -13,7 +13,7 @@ public protocol KMConservationServiceable {
     associatedtype Response
     func createConversation(
         userId: String,
-        agentId: String,
+        agentIds: [String],
         botIds: [String]?,
         useLastConversation: Bool,
         completion: @escaping (Response) -> ())
@@ -47,14 +47,13 @@ public class KMConversationService: KMConservationServiceable {
     */
     public func createConversation(
         userId: String,
-        agentId: String,
+        agentIds: [String],
         botIds: [String]?,
         useLastConversation: Bool,
         completion: @escaping (Response) -> ()) {
-
         var clientId: String? = nil
         if useLastConversation {
-            var newClientId = "\(agentId)_\(userId)"
+            var newClientId = "\(String(describing: agentIds.first))_\(userId)"
             if let botIds = botIds {
                 newClientId = newClientId + botIds.reduce("", {$0+"_"+$1})
             }
@@ -65,14 +64,14 @@ public class KMConversationService: KMConservationServiceable {
                     let response = Response(success: true, clientChannelKey: newClientId, error: nil)
                     completion(response)
                 } else {
-                    self.createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentId: agentId, botIds: botIds, completion: {
+                    self.createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentIds: agentIds, botIds: botIds, completion: {
                         response in
                         completion(response)
                     })
                 }
             })
         } else {
-            createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentId: agentId, botIds: botIds, completion: {
+            createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentIds: agentIds, botIds: botIds, completion: {
                 response in
                 completion(response)
             })
@@ -85,11 +84,20 @@ public class KMConversationService: KMConservationServiceable {
         return KMGroupUser(groupRole: .bot, userId: userId)
     }
 
+    private func createAgentGroupUserFrom(agentId: String) -> KMGroupUser {
+        return KMGroupUser(groupRole: .agent, userId: agentId)
+    }
+
     /// Returns a list of KMGroupUser objects created from
     /// the userIds passed with role type set as bot.
     private func getBotGroupUser(userIds: [String]?) -> [KMGroupUser]? {
         guard let userIds = userIds else { return nil }
         return userIds.map { createBotUserFrom(userId: $0) }
+    }
+
+    private func agentGroupUsersFor(agentIds: [String]?) -> [KMGroupUser]? {
+        guard let agentIds = agentIds else { return nil }
+        return agentIds.map { createAgentGroupUserFrom(agentId: $0) }
     }
 
     private func getGroupMetadata() -> NSMutableDictionary {
@@ -122,7 +130,7 @@ public class KMConversationService: KMConservationServiceable {
     private func createNewChannelAndConversation(
         clientChannelKey: String?,
         userId: String,
-        agentId: String,
+        agentIds: [String],
         botIds: [String]?,
         completion: @escaping (Response) -> ()) {
         let groupName = "Support"
@@ -131,6 +139,9 @@ public class KMConversationService: KMConservationServiceable {
         let membersList = NSMutableArray()
         if let botUsers = getBotGroupUser(userIds: botIds) {
             members.append(contentsOf: botUsers)
+        }
+        if let agentUsers = agentGroupUsersFor(agentIds: agentIds) {
+            members.append(contentsOf: agentUsers)
         }
         let alChannelService = ALChannelService()
         let groupUsers = members.map { $0.toDict() }
@@ -143,7 +154,7 @@ public class KMConversationService: KMConservationServiceable {
             andImageLink: nil,
             channelType: 10,
             andMetaData: metadata,
-            adminUser: agentId,
+            adminUser: agentIds.first,
             withGroupUsers: NSMutableArray(array: groupUsers),
             withCompletion: {
                 channel, error in
