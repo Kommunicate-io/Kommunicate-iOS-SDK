@@ -53,9 +53,9 @@ public class KMConversationService: KMConservationServiceable {
         completion: @escaping (Response) -> ()) {
         var clientId: String? = nil
         if useLastConversation {
-            var newClientId = "\(String(describing: agentIds.first))_\(userId)"
+            var newClientId = agentIds.sorted(by: <).reduce("", {$0+$1+"_"}) + userId
             if let botIds = botIds {
-                newClientId = newClientId + botIds.reduce("", {$0+"_"+$1})
+                newClientId = newClientId + botIds.sorted(by: <).reduce("", {$0+"_"+$1})
             }
             clientId = newClientId
             isGroupPresent(clientId: newClientId, completion: {
