@@ -22,9 +22,18 @@ DEPENDENCIES:
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Applozic
+    - ApplozicSwift
+    - FBSnapshotTestCase
+    - Kingfisher
+    - MGSwipeTableCell
+    - SDWebImage
+
 EXTERNAL SOURCES:
   Kommunicate:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
   Applozic: c54fe6937209685fc551080aef6d702bc1c444ae
@@ -37,4 +46,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 74782f3a264a4834f08e7773e262e63c6d5328e9
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.3
