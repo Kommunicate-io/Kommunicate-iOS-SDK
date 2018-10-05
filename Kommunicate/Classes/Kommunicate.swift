@@ -46,10 +46,11 @@ open class Kommunicate: NSObject {
             which shouldn't be disabled. So use the `defaultConfiguration` and change
             it accordingly.
     */
-    open static var defaultConfiguration: KMConfiguration = {
+    public static var defaultConfiguration: KMConfiguration = {
         var config = KMConfiguration()
         config.isTapOnNavigationBarEnabled = false
         config.isProfileTapActionEnabled = false
+        config.hideStartChatButton = true
         return config
     }()
 
