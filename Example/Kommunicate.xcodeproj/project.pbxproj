@@ -173,7 +173,6 @@
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
 				52DC48737DF0C9245D05BDDD /* [CP] Embed Pods Frameworks */,
-				4372FF472A2462388AC39FD9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -193,7 +192,6 @@
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
 				AAA14A45B9B9AD80681F8AD6 /* [CP] Embed Pods Frameworks */,
-				36826C2209BE067455056E41 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -275,36 +273,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		36826C2209BE067455056E41 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Kommunicate_Tests/Pods-Kommunicate_Tests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		4372FF472A2462388AC39FD9 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Kommunicate_Example/Pods-Kommunicate_Example-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		52DC48737DF0C9245D05BDDD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
