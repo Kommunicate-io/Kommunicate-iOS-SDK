@@ -52,10 +52,20 @@ public class KMConversationService: KMConservationServiceable {
         useLastConversation: Bool,
         completion: @escaping (Response) -> ()) {
         var clientId: String? = nil
+        var allBotIds = ["bot"] // Default bot that should be added everytime.
+        if let botIds = botIds {allBotIds.append(contentsOf: botIds)}
         if useLastConversation {
-            var newClientId = agentIds.sorted(by: <).reduce("", {$0+$1+"_"}) + userId
-            if let botIds = botIds {
-                newClientId = newClientId + botIds.sorted(by: <).reduce("", {$0+"_"+$1})
+            // Sort and combine agent ids.
+            var newClientId = Set(agentIds)
+                .sorted(by: <)
+                .reduce("", {$0+$1.lowercased()+"_"}) + userId.lowercased()
+
+            // Sort and combine bot ids other than the default bot id.
+            if let botIds = removeDefaultBotIdFrom(botIds: botIds) {
+                newClientId =
+                    newClientId + Set(botIds)
+                    .sorted(by: <)
+                    .reduce("", {$0+"_"+$1.lowercased()})
             }
             clientId = newClientId
             isGroupPresent(clientId: newClientId, completion: {
@@ -64,14 +74,14 @@ public class KMConversationService: KMConservationServiceable {
                     let response = Response(success: true, clientChannelKey: newClientId, error: nil)
                     completion(response)
                 } else {
-                    self.createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentIds: agentIds, botIds: botIds, completion: {
+                    self.createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentIds: agentIds, botIds: allBotIds, completion: {
                         response in
                         completion(response)
                     })
                 }
             })
         } else {
-            createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentIds: agentIds, botIds: botIds, completion: {
+            createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentIds: agentIds, botIds: allBotIds, completion: {
                 response in
                 completion(response)
             })
@@ -170,5 +180,13 @@ public class KMConversationService: KMConservationServiceable {
                 response.clientChannelKey = channel.clientChannelKey
                 completion(response)
         })
+    }
+
+    private func removeDefaultBotIdFrom(botIds: [String]?) -> [String]?{
+        guard var allBotIds = botIds else {return nil}
+        allBotIds.removeAll { (id) -> Bool in
+            return id == "bot"
+        }
+        return allBotIds
     }
 }
