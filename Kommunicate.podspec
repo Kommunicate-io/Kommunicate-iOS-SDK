@@ -12,5 +12,5 @@ Pod::Spec.new do |s|
   s.swift_version = '4.1'
   s.source_files = 'Kommunicate/Classes/**/*.{swift}'
   s.resources = 'Kommunicate/Assets/**/*{lproj,storyboard,xib,xcassets,json}'
-  s.dependency 'ApplozicSwift', '~> 1.0.0'
+  s.dependency 'ApplozicSwift', '~> 1.1.0'
 end
