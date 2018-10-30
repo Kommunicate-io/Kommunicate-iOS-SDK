@@ -110,10 +110,6 @@ open class Kommunicate: NSObject {
             else
             {
                 print("registered")
-                if(Kommunicate.isNilOrEmpty(ALUserDefaultsHandler.getApnDeviceToken() as NSString?))
-                {
-                    alChatLauncher.registerForNotification()
-                }
                 completion(response , error as NSError?)
             }
         })
@@ -189,7 +185,7 @@ open class Kommunicate: NSObject {
                 completionHandler(false)
                 return
             }
-            let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: key)
+            let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: key, localizedStringFileName: defaultConfiguration.localizedStringFileName)
             let conversationViewController = ALKConversationViewController(configuration: Kommunicate.defaultConfiguration)
             conversationViewController.title = channel.name
             conversationViewController.viewModel = convViewModel
