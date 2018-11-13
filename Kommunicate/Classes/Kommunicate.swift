@@ -196,6 +196,34 @@ open class Kommunicate: NSObject {
     }
 
     /**
+     Creates and launches the conversation. In case multiple conversations
+     are present then the conversation list will be presented. If a single
+     conversation is present then that will be launched.
+
+     - Parameters:
+        - viewController: ViewController from which the group chat will be launched.
+     */
+
+    @objc open class func createAndShowConversation(from viewController: UIViewController) {
+        guard ALUserDefaultsHandler.isLoggedIn() else {
+            fatalError("Please login/register before launching a conversation")
+        }
+
+        let applozicClient = ApplozicClient(applicationKey: ALUserDefaultsHandler.getApplicationKey())
+        applozicClient?.getLatestMessages(false, withCompletionHandler: {
+            messageList, error in
+            print("Kommunicate: message list received")
+
+            // If more than 1 thread is present then the list will be shown
+            if let messages = messageList, messages.count > 1, error == nil {
+                showConversations(from: viewController)
+            } else {
+                createAConversationAndLaunch(from: viewController)
+            }
+        })
+    }
+
+    /**
      Generates a random id that can be used as an `userId`
      when you don't have any user information that can be used as an
      userId.
@@ -237,6 +265,21 @@ open class Kommunicate: NSObject {
         default:return true
 
         }
+    }
+
+    private class func createAConversationAndLaunch(from viewController: UIViewController) {
+        let userId = ALUserDefaultsHandler.getUserId() ?? Kommunicate.randomId()
+        Kommunicate.createConversation(
+            userId: userId,
+            agentIds: [],
+            botIds: nil,
+            useLastConversation: true,
+            completion: { response in
+                guard !response.isEmpty else {return}
+                Kommunicate.showConversationWith(groupId: response, from: viewController, completionHandler: { success in
+                    print("conversation was shown")
+                })
+        })
     }
 
     static private func defaultChatViewSettings() {
