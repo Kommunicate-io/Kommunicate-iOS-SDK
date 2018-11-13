@@ -32,7 +32,7 @@ open class Kommunicate: NSObject {
     //MARK: - Public properties
 
     /// Returns true if user is already logged in.
-    @objc open static var isLoggedIn: Bool {
+    @objc open class var isLoggedIn: Bool {
         return KMUserDefaultHandler.isLoggedIn()
     }
 
@@ -54,6 +54,12 @@ open class Kommunicate: NSObject {
         return config
     }()
 
+    public enum KommunicateError: Error {
+        case notLoggedIn
+        case conversationNotPresent
+        case conversationCreateFailed
+    }
+
     //MARK: - Private properties
 
     private static var applicationId = ""
@@ -63,6 +69,8 @@ open class Kommunicate: NSObject {
             updateToken()
         }
     }
+
+    static var applozicClientType: ApplozicClient.Type = ApplozicClient.self
 
     //MARK: - Public methods
 
@@ -204,12 +212,15 @@ open class Kommunicate: NSObject {
         - viewController: ViewController from which the group chat will be launched.
      */
 
-    @objc open class func createAndShowConversation(from viewController: UIViewController) {
-        guard ALUserDefaultsHandler.isLoggedIn() else {
-            fatalError("Please login/register before launching a conversation")
+    open class func createAndShowConversation(
+        from viewController: UIViewController,
+        completion:@escaping (_ error: KommunicateError?) -> ()){
+        guard isLoggedIn else {
+            completion(KommunicateError.notLoggedIn)
+            return
         }
 
-        let applozicClient = ApplozicClient(applicationKey: ALUserDefaultsHandler.getApplicationKey())
+        let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
         applozicClient?.getLatestMessages(false, withCompletionHandler: {
             messageList, error in
             print("Kommunicate: message list received")
@@ -217,8 +228,12 @@ open class Kommunicate: NSObject {
             // If more than 1 thread is present then the list will be shown
             if let messages = messageList, messages.count > 1, error == nil {
                 showConversations(from: viewController)
+                completion(nil)
             } else {
-                createAConversationAndLaunch(from: viewController)
+                createAConversationAndLaunch(from: viewController, completion: {
+                    conversationError in
+                    completion(conversationError)
+                })
             }
         })
     }
@@ -267,17 +282,27 @@ open class Kommunicate: NSObject {
         }
     }
 
-    private class func createAConversationAndLaunch(from viewController: UIViewController) {
+    private class func createAConversationAndLaunch(
+        from viewController: UIViewController,
+        completion:@escaping (_ error: KommunicateError?) -> ()) {
         let userId = ALUserDefaultsHandler.getUserId() ?? Kommunicate.randomId()
-        Kommunicate.createConversation(
+        createConversation(
             userId: userId,
             agentIds: [],
             botIds: nil,
             useLastConversation: true,
             completion: { response in
-                guard !response.isEmpty else {return}
-                Kommunicate.showConversationWith(groupId: response, from: viewController, completionHandler: { success in
-                    print("conversation was shown")
+                guard !response.isEmpty else {
+                    completion(KommunicateError.conversationCreateFailed)
+                    return
+                }
+                showConversationWith(groupId: response, from: viewController, completionHandler: { success in
+                    guard success else {
+                        completion(KommunicateError.conversationNotPresent)
+                        return
+                    }
+                    print("Kommunicate: conversation was shown")
+                    completion(nil)
                 })
         })
     }
