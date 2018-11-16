@@ -51,6 +51,7 @@ open class Kommunicate: NSObject {
         config.isTapOnNavigationBarEnabled = false
         config.isProfileTapActionEnabled = false
         config.hideStartChatButton = true
+        config.hideRightNavBarButtonForConversationView = true
         return config
     }()
 
@@ -172,6 +173,7 @@ open class Kommunicate: NSObject {
      */
     @objc open class func showConversations(from viewController: UIViewController) {
         let conversationVC = ALKConversationListViewController(configuration: Kommunicate.defaultConfiguration)
+        conversationVC.conversationViewControllerType = KMConversationViewController.self
         let navVC = ALKBaseNavigationViewController(rootViewController: conversationVC)
         viewController.present(navVC, animated: false, completion: nil)
     }
@@ -194,7 +196,7 @@ open class Kommunicate: NSObject {
                 return
             }
             let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: key, localizedStringFileName: defaultConfiguration.localizedStringFileName)
-            let conversationViewController = ALKConversationViewController(configuration: Kommunicate.defaultConfiguration)
+            let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
             conversationViewController.title = channel.name
             conversationViewController.viewModel = convViewModel
             viewController.navigationController?
