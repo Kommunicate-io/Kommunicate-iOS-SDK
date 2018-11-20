@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		116B2EDBA3CA2CA1D24E7738 /* Pods_Kommunicate_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7759584F7BFF803E88885385 /* Pods_Kommunicate_Tests.framework */; };
+		1AFB913121A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB913021A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
@@ -29,6 +30,7 @@
 
 /* Begin PBXFileReference section */
 		014ADF38FC616ADFAEC50D9A /* Pods-Kommunicate_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kommunicate_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Kommunicate_Example/Pods-Kommunicate_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		1AFB913021A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationVCNavBarSnapshotTests.swift; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* Kommunicate_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kommunicate_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 			children = (
 				607FACEB1AFB9204008FA782 /* KommunicateTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
+				1AFB913021A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -327,10 +330,17 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Kommunicate_Tests/Pods-Kommunicate_Tests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/FBSnapshotTestCase/FBSnapshotTestCase.framework",
+				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
+				"${BUILT_PRODUCTS_DIR}/Nimble-Snapshots/Nimble_Snapshots.framework",
+				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
+				"${BUILT_PRODUCTS_DIR}/iOSSnapshotTestCase/FBSnapshotTestCase.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSnapshotTestCase.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble_Snapshots.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -372,6 +382,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACEC1AFB9204008FA782 /* KommunicateTests.swift in Sources */,
+				1AFB913121A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

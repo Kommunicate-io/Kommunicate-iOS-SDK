@@ -8,5 +8,8 @@ target 'Kommunicate_Example' do
     inherit! :search_paths
 
     pod 'FBSnapshotTestCase' , '~> 2.1.4'
+    pod 'Nimble'
+    pod 'Quick'
+    pod 'Nimble-Snapshots'
   end
 end
