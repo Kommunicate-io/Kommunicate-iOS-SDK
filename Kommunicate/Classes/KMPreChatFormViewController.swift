@@ -49,6 +49,9 @@ open class KMPreChatFormViewController: UIViewController {
         super.viewDidLoad()
 
         setupViews()
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 
     required public init() {
@@ -70,6 +73,11 @@ open class KMPreChatFormViewController: UIViewController {
         formView.setPlaceHolder(for: formView.nameTextField, withText: Placeholder.name)
         formView.setPlaceHolder(for: formView.phoneNumberTextField, withText: Placeholder.phoneNumber)
         setDelegateToSelf(for: [formView.emailTextField, formView.nameTextField, formView.phoneNumberTextField])
+
+        // Dismiss keyboard when tapped outside
+        let tapper = UITapGestureRecognizer(target: self.view, action:#selector(self.view.endEditing(_:)))
+        tapper.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapper)
     }
 
     func updateTextFieldWhenbeginEditing(textField: UITextField) {
@@ -151,6 +159,23 @@ open class KMPreChatFormViewController: UIViewController {
         return Result.success
     }
 
+    @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {
+        formView.emailTextField.resignFirstResponder()
+    }
+
+    @objc func keyboardWillHide() {
+        self.view.frame.origin.y = 0
+    }
+
+    @objc func keyboardWillChange(notification: NSNotification) {
+
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if formView.emailTextField.isFirstResponder || formView.nameTextField.isFirstResponder || formView.phoneNumberTextField.isFirstResponder  {
+                self.view.frame.origin.y = -keyboardSize.height
+            }
+        }
+    }
+
     private func setEmptyPlaceholder(for textField: UITextField, andHideLabel label: UILabel) {
         textField.attributedPlaceholder = nil
         label.show()
@@ -179,6 +204,21 @@ extension KMPreChatFormViewController: UITextFieldDelegate {
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
         updateTextFieldWhenFinishedEditing(textField: textField)
+    }
+
+    //MARK: - Controlling the Keyboard
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+
+        if textField == formView.emailTextField {
+            textField.resignFirstResponder()
+            formView.nameTextField.becomeFirstResponder()
+        } else if textField == formView.nameTextField {
+            textField.resignFirstResponder()
+            formView.phoneNumberTextField.becomeFirstResponder()
+        } else if textField == formView.phoneNumberTextField {
+            textField.resignFirstResponder()
+        }
+        return true
     }
 }
 
