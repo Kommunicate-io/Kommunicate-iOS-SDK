@@ -164,14 +164,21 @@ open class KMPreChatFormViewController: UIViewController {
     }
 
     @objc func keyboardWillHide() {
-        self.view.frame.origin.y = 0
+        let defaultTopPadding = CGFloat(86)
+        formView.topConstraint.constant = defaultTopPadding
     }
 
     @objc func keyboardWillChange(notification: NSNotification) {
 
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if formView.emailTextField.isFirstResponder || formView.nameTextField.isFirstResponder || formView.phoneNumberTextField.isFirstResponder  {
-                self.view.frame.origin.y = -keyboardSize.height
+
+                let defaultTopPadding = CGFloat(86)
+                let bottomPadding = self.view.frame.height - defaultTopPadding - formView.topStackView.frame.height
+
+                let updatedTopPadding = -1*(keyboardSize.height - bottomPadding)
+                if formView.topConstraint.constant == updatedTopPadding { return }
+                formView.topConstraint.constant = updatedTopPadding
             }
         }
     }

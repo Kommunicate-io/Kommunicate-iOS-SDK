@@ -13,7 +13,9 @@ class CircleView: UIView {
         guard let context = UIGraphicsGetCurrentContext() else {return}
 
         context.addEllipse(in: rect)
-        context.setFillColor(UIColor.gray.cgColor)
+        var backgroundColor = UIColor(netHex: 0x5C5AA7)
+        backgroundColor = backgroundColor.withAlphaComponent(0.2)
+        context.setFillColor(backgroundColor.cgColor)
         context.fillPath()
     }
 }
@@ -30,6 +32,10 @@ class KMPreChatUserFormView: UIView {
     @IBOutlet weak var sendInstructionsButton: UIButton!
 
     @IBOutlet weak var errorMessageLabel: UILabel!
+
+    @IBOutlet weak var topStackView: UIStackView!
+
+    @IBOutlet weak var topConstraint: NSLayoutConstraint!
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
