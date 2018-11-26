@@ -66,7 +66,22 @@ open class KMPreChatFormViewController: UIViewController {
         formView = KMPreChatUserFormView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
         let closeButton = closeButtonOf(frame: CGRect(x: 20, y: 20, width: 30, height: 30))
         view.addSubview(formView)
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(closeButton)
+
+        // Constraints
+        var topAnchor = view.topAnchor
+        if #available(iOS 11, *) {
+            topAnchor = view.safeAreaLayoutGuide.topAnchor
+        }
+        NSLayoutConstraint.activate(
+            [closeButton.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+             closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+             closeButton.heightAnchor.constraint(equalToConstant: 30),
+             closeButton.widthAnchor.constraint(equalToConstant: 30)
+            ]
+        )
+
         formView.sendInstructionsButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
         [formView.emailTitleLabel, formView.nameTitleLabel, formView.phoneNumberTitle].hideViews()
         formView.setPlaceHolder(for: formView.emailTextField, withText: Placeholder.email)
