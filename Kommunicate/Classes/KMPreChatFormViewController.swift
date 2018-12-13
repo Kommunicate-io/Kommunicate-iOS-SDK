@@ -49,17 +49,20 @@ open class KMPreChatFormViewController: UIViewController {
         super.viewDidLoad()
 
         setupViews()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
-
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 
     required public init() {
         super.init(nibName: nil, bundle: nil)
+        addObservers()
     }
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        addObservers()
+    }
+
+    deinit {
+        removeObservers()
     }
 
     func setupViews() {
@@ -196,6 +199,17 @@ open class KMPreChatFormViewController: UIViewController {
                 formView.topConstraint.constant = updatedTopPadding
             }
         }
+    }
+
+    private func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+
+    private func removeObservers() {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 
     private func setEmptyPlaceholder(for textField: UITextField, andHideLabel label: UILabel) {
