@@ -53,23 +53,49 @@ open class KMPreChatFormViewController: UIViewController {
 
     required public init() {
         super.init(nibName: nil, bundle: nil)
+        addObservers()
     }
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        addObservers()
+    }
+
+    deinit {
+        removeObservers()
     }
 
     func setupViews() {
         formView = KMPreChatUserFormView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
         let closeButton = closeButtonOf(frame: CGRect(x: 20, y: 20, width: 30, height: 30))
         view.addSubview(formView)
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(closeButton)
+
+        // Constraints
+        var topAnchor = view.topAnchor
+        if #available(iOS 11, *) {
+            topAnchor = view.safeAreaLayoutGuide.topAnchor
+        }
+        NSLayoutConstraint.activate(
+            [closeButton.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+             closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+             closeButton.heightAnchor.constraint(equalToConstant: 30),
+             closeButton.widthAnchor.constraint(equalToConstant: 30)
+            ]
+        )
+
         formView.sendInstructionsButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
         [formView.emailTitleLabel, formView.nameTitleLabel, formView.phoneNumberTitle].hideViews()
         formView.setPlaceHolder(for: formView.emailTextField, withText: Placeholder.email)
         formView.setPlaceHolder(for: formView.nameTextField, withText: Placeholder.name)
         formView.setPlaceHolder(for: formView.phoneNumberTextField, withText: Placeholder.phoneNumber)
         setDelegateToSelf(for: [formView.emailTextField, formView.nameTextField, formView.phoneNumberTextField])
+
+        // Dismiss keyboard when tapped outside
+        let tapper = UITapGestureRecognizer(target: self.view, action:#selector(self.view.endEditing(_:)))
+        tapper.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapper)
     }
 
     func updateTextFieldWhenbeginEditing(textField: UITextField) {
@@ -151,6 +177,41 @@ open class KMPreChatFormViewController: UIViewController {
         return Result.success
     }
 
+    @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {
+        formView.emailTextField.resignFirstResponder()
+    }
+
+    @objc func keyboardWillHide() {
+        let defaultTopPadding = CGFloat(86)
+        formView.topConstraint.constant = defaultTopPadding
+    }
+
+    @objc func keyboardWillChange(notification: NSNotification) {
+
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if formView.emailTextField.isFirstResponder || formView.nameTextField.isFirstResponder || formView.phoneNumberTextField.isFirstResponder  {
+
+                let defaultTopPadding = CGFloat(86)
+                let bottomPadding = self.view.frame.height - defaultTopPadding - formView.topStackView.frame.height
+
+                let updatedTopPadding = -1*(keyboardSize.height - bottomPadding)
+                if formView.topConstraint.constant == updatedTopPadding { return }
+                formView.topConstraint.constant = updatedTopPadding
+            }
+        }
+    }
+
+    private func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+
+    private func removeObservers() {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+
     private func setEmptyPlaceholder(for textField: UITextField, andHideLabel label: UILabel) {
         textField.attributedPlaceholder = nil
         label.show()
@@ -179,6 +240,21 @@ extension KMPreChatFormViewController: UITextFieldDelegate {
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
         updateTextFieldWhenFinishedEditing(textField: textField)
+    }
+
+    //MARK: - Controlling the Keyboard
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+
+        if textField == formView.emailTextField {
+            textField.resignFirstResponder()
+            formView.nameTextField.becomeFirstResponder()
+        } else if textField == formView.nameTextField {
+            textField.resignFirstResponder()
+            formView.phoneNumberTextField.becomeFirstResponder()
+        } else if textField == formView.phoneNumberTextField {
+            textField.resignFirstResponder()
+        }
+        return true
     }
 }
 
