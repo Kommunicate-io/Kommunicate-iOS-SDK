@@ -16,7 +16,7 @@ protocol NavigationBarCallbacks {
 class ConversationVCNavBar: UIView {
     
     var navigationBarBackgroundColor: UIColor
-    
+    var configuration: KMConversationViewConfiguration!
     var delegate: NavigationBarCallbacks!
     
     let backButton: UIButton = {
@@ -69,12 +69,32 @@ class ConversationVCNavBar: UIView {
         return stackView
     }()
     
+    required init(navigationBarBackgroundColor: UIColor, delegate: NavigationBarCallbacks,
+                  configuration: KMConversationViewConfiguration) {
+        self.navigationBarBackgroundColor = navigationBarBackgroundColor
+        self.configuration = configuration
+        self.delegate = delegate
+        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 44))
+        setupConstraints()
+        configureBackButton()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func updateView(assignee: ALContact?) {
+        guard let contact = assignee else {
+            return
+        }
+        setupProfileImage(contact)
+        setupOnlineStatus(contact)
+    }
     
     @objc func backButtonClicked(_ sender: UIButton) {
         delegate.backButtonPressed()
     }
 
-    
     private func setupConstraints() {
         self.addViewsForAutolayout(views: [backButton, profileImage, statusIconBackgroundColor, onlineStatusIcon, profileView])
         
@@ -114,6 +134,16 @@ class ConversationVCNavBar: UIView {
         backButton.addTarget(self, action: #selector(backButtonClicked(_:)), for: .touchUpInside)
     }
     
+    private func configureBackButton() {
+        if configuration.hideBackButton {
+            backButton.isHidden = true
+        }
+        guard let image = configuration.imageForBackButton else {
+            return
+        }
+        backButton.setImage(image, for: .normal)
+    }
+    
     private func setupProfileImage(_ contact: ALContact) {
         let placeHolder = UIImage(named: "placeholder", in: Bundle.kommunicate, compatibleWith: nil)
         var url: URL?
@@ -137,25 +167,6 @@ class ConversationVCNavBar: UIView {
             onlineStatusText.text = "Offline"
             onlineStatusIcon.backgroundColor = UIColor(165, green: 170, blue: 165)
         }
-    }
-    
-    required init(navigationBarBackgroundColor: UIColor, delegate: NavigationBarCallbacks) {
-        self.navigationBarBackgroundColor = navigationBarBackgroundColor
-        self.delegate = delegate
-        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 44))
-        setupConstraints()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func updateView(assignee: ALContact?) {
-        guard let contact = assignee else {
-            return
-        }
-        setupProfileImage(contact)
-        setupOnlineStatus(contact)
     }
     
 }

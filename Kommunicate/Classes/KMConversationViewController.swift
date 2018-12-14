@@ -12,7 +12,10 @@ import ApplozicSwift
 /// navigationItem.backBarButtonItem = UIBarButtonItem(customView: UIView())
 open class KMConversationViewController: ALKConversationViewController {
     
-    lazy var customNavigationView = ConversationVCNavBar(navigationBarBackgroundColor: self.configuration.navigationBarBackgroundColor, delegate: self)
+    public var kmConversationViewConfiguration: KMConversationViewConfiguration!
+    
+    lazy var customNavigationView = ConversationVCNavBar(navigationBarBackgroundColor: self.configuration.navigationBarBackgroundColor, delegate: self, configuration: kmConversationViewConfiguration)
+    
     lazy var channelKey = self.viewModel.channelKey
     
     override open func viewWillAppear(_ animated: Bool) {
@@ -46,6 +49,10 @@ open class KMConversationViewController: ALKConversationViewController {
 
 extension KMConversationViewController: NavigationBarCallbacks {
     func backButtonPressed() {
+        NotificationCenter.default.post(
+            name: NSNotification.Name(kmConversationViewConfiguration.nsNotificationNameForBackButtonAction),
+            object: self
+        )
         self.navigationController?.popViewController(animated: true)
     }
 }

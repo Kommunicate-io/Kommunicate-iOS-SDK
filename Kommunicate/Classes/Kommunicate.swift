@@ -54,6 +54,9 @@ open class Kommunicate: NSObject {
         config.hideRightNavBarButtonForConversationView = true
         return config
     }()
+    
+    /// Configuration which defines the behavior of ConversationView components.
+    public static var kmConversationViewConfiguration = KMConversationViewConfiguration()
 
     public enum KommunicateError: Error {
         case notLoggedIn
@@ -173,7 +176,9 @@ open class Kommunicate: NSObject {
      */
     @objc open class func showConversations(from viewController: UIViewController) {
         let conversationVC = ALKConversationListViewController(configuration: Kommunicate.defaultConfiguration)
-        conversationVC.conversationViewControllerType = KMConversationViewController.self
+        let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
+        conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
+        conversationVC.conversationViewController = conversationViewController
         let navVC = ALKBaseNavigationViewController(rootViewController: conversationVC)
         viewController.present(navVC, animated: false, completion: nil)
     }
@@ -199,6 +204,7 @@ open class Kommunicate: NSObject {
             let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
             conversationViewController.title = channel.name
             conversationViewController.viewModel = convViewModel
+            conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
             viewController.navigationController?
                 .pushViewController(conversationViewController, animated: false)
             completionHandler(true)
