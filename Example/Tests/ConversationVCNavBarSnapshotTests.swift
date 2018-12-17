@@ -31,7 +31,7 @@ class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
             var viewController: UIViewController!
             
             beforeEach {
-                customNavigationView = ConversationVCNavBar(navigationBarBackgroundColor: UIColor.navigationOceanBlue(), delegate: self, configuration: KMConversationViewConfiguration())
+                customNavigationView = ConversationVCNavBar(navigationBarBackgroundColor: UIColor(236, green: 239, blue: 241), delegate: self, configuration: KMConversationViewConfiguration())
                 viewController = UIViewController(nibName: nil, bundle: nil)
                 viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
                 navigationController = UINavigationController(rootViewController: viewController)

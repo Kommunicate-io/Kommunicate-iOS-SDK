@@ -36,7 +36,7 @@ class ConversationVCNavBar: UIView {
         let label = UILabel()
         label.text = "No Name"
         label.font = UIFont(name: "HelveticaNeue", size: 16) ?? UIFont.systemFont(ofSize: 16)
-        label.textColor = UIColor(red: 96, green: 94, blue: 94)
+        label.textColor = UIColor(96, green: 94, blue: 94)
         return label
     }()
     
@@ -56,7 +56,7 @@ class ConversationVCNavBar: UIView {
         let label = UILabel()
         label.text = "Offline"
         label.font = UIFont(name: "HelveticaNeue", size: 12) ?? UIFont.systemFont(ofSize: 12)
-        label.textColor = UIColor(red: 113, green: 110, blue: 110)
+        label.textColor = UIColor(113, green: 110, blue: 110)
         return label
     }()
     
