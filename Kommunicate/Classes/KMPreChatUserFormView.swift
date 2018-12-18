@@ -13,7 +13,7 @@ class CircleView: UIView {
         guard let context = UIGraphicsGetCurrentContext() else {return}
 
         context.addEllipse(in: rect)
-        var backgroundColor = UIColor(netHex: 0x5C5AA7)
+        var backgroundColor = UIColor(red: 92/255, green: 90/255, blue: 167/255, alpha: 1)
         backgroundColor = backgroundColor.withAlphaComponent(0.2)
         context.setFillColor(backgroundColor.cgColor)
         context.fillPath()
