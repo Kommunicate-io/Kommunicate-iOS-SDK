@@ -22,7 +22,7 @@ extension ALKConversationViewModel {
         let channel = channelService.getChannelByKey(channelKey)
         let metadata = channel?.metadata
         // Check if metadata contains assignee details
-        guard let assigneeId = metadata?[MetadataKeys.CONVERSATION_ASSIGNEE] as? String else {
+        guard let assigneeId = metadata?[ChannelMetadataKeys.conversationAssignee] as? String else {
             return nil
         }
         

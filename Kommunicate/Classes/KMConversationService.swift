@@ -9,8 +9,8 @@ import Foundation
 import Applozic
 import ApplozicSwift
 
-public struct MetadataKeys {
-    static let CONVERSATION_ASSIGNEE = "CONVERSATION_ASSIGNEE"
+public struct ChannelMetadataKeys {
+    static let conversationAssignee = "CONVERSATION_ASSIGNEE"
 }
 
 public protocol KMConservationServiceable {

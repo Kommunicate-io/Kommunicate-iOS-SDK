@@ -10,9 +10,7 @@ import Foundation
 public struct KMConversationViewConfiguration {
     
     public var hideBackButton: Bool = false
-    
     public var imageForBackButton: UIImage?
-    
     public var nsNotificationNameForBackButtonAction: String = "BackButtonAction"
     
     public init() { }

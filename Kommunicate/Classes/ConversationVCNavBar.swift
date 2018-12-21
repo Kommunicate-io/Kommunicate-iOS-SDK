@@ -29,12 +29,14 @@ class ConversationVCNavBar: UIView {
     var profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "placeholder", in: Bundle.kommunicate, compatibleWith: nil)
+        imageView.layer.cornerRadius = 18
+        imageView.clipsToBounds = true
         return imageView
     }()
     
     var profileName: UILabel = {
         let label = UILabel()
-        label.text = "No Name"
+        label.text = Constants.Strings.noName
         label.font = UIFont(name: "HelveticaNeue", size: 16) ?? UIFont.systemFont(ofSize: 16)
         label.textColor = UIColor(96, green: 94, blue: 94)
         return label
@@ -43,18 +45,22 @@ class ConversationVCNavBar: UIView {
     lazy var statusIconBackgroundColor: UIView = {
         let view = UIView()
         view.backgroundColor = self.navigationBarBackgroundColor
+        view.layer.cornerRadius = 6
+        view.clipsToBounds = true
         return view
     }()
     
     var onlineStatusIcon: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(165, green: 170, blue: 165)
+        view.layer.cornerRadius = 5
+        view.clipsToBounds = true
         return view
     }()
     
     var onlineStatusText: UILabel = {
         let label = UILabel()
-        label.text = "Offline"
+        label.text = Constants.Strings.offline
         label.font = UIFont(name: "HelveticaNeue", size: 12) ?? UIFont.systemFont(ofSize: 12)
         label.textColor = UIColor(113, green: 110, blue: 110)
         return label
@@ -76,6 +82,7 @@ class ConversationVCNavBar: UIView {
         self.delegate = delegate
         super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 44))
         setupConstraints()
+        setupActions()
         configureBackButton()
     }
     
@@ -97,7 +104,7 @@ class ConversationVCNavBar: UIView {
 
     private func setupConstraints() {
         self.addViewsForAutolayout(views: [backButton, profileImage, statusIconBackgroundColor, onlineStatusIcon, profileView])
-        
+
         //Setup constraints
         backButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
         backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
@@ -108,29 +115,24 @@ class ConversationVCNavBar: UIView {
         profileImage.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
         profileImage.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
         profileImage.widthAnchor.constraint(equalToConstant: 35).isActive = true
-        profileImage.layer.cornerRadius = 18
-        profileImage.clipsToBounds = true
         
         statusIconBackgroundColor.bottomAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 0).isActive = true
         statusIconBackgroundColor.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: -10).isActive = true
         statusIconBackgroundColor.widthAnchor.constraint(equalToConstant: 12).isActive = true
         statusIconBackgroundColor.heightAnchor.constraint(equalToConstant: 12).isActive = true
-        statusIconBackgroundColor.layer.cornerRadius = 6
-        statusIconBackgroundColor.clipsToBounds = true
         
         onlineStatusIcon.centerXAnchor.constraint(equalTo: statusIconBackgroundColor.centerXAnchor).isActive = true
         onlineStatusIcon.centerYAnchor.constraint(equalTo: statusIconBackgroundColor.centerYAnchor).isActive = true
         onlineStatusIcon.widthAnchor.constraint(equalToConstant: 10).isActive = true
         onlineStatusIcon.heightAnchor.constraint(equalToConstant: 10).isActive = true
-        onlineStatusIcon.layer.cornerRadius = 5
-        onlineStatusIcon.clipsToBounds = true
         
         profileView.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 5).isActive = true
         profileView.topAnchor.constraint(equalTo: profileImage.topAnchor).isActive = true
         profileView.bottomAnchor.constraint(equalTo: profileImage.bottomAnchor).isActive = true
         profileView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        
-        // Add target to back button.
+    }
+
+    private func setupActions() {
         backButton.addTarget(self, action: #selector(backButtonClicked(_:)), for: .touchUpInside)
     }
     
@@ -161,10 +163,10 @@ class ConversationVCNavBar: UIView {
     
     private func setupOnlineStatus(_ contact: ALContact) {
         if contact.connected {
-            onlineStatusText.text = "Online"
+            onlineStatusText.text = Constants.Strings.online
             onlineStatusIcon.backgroundColor = UIColor(28, green: 222, blue: 20)
         } else {
-            onlineStatusText.text = "Offline"
+            onlineStatusText.text = Constants.Strings.offline
             onlineStatusIcon.backgroundColor = UIColor(165, green: 170, blue: 165)
         }
     }
