@@ -13,7 +13,7 @@ class CircleView: UIView {
         guard let context = UIGraphicsGetCurrentContext() else {return}
 
         context.addEllipse(in: rect)
-        var backgroundColor = UIColor(netHex: 0x5C5AA7)
+        var backgroundColor = UIColor(red: 92/255, green: 90/255, blue: 167/255, alpha: 1)
         backgroundColor = backgroundColor.withAlphaComponent(0.2)
         context.setFillColor(backgroundColor.cgColor)
         context.fillPath()
@@ -69,7 +69,7 @@ class KMPreChatUserFormView: UIView {
 
     private func placeholderWith(text: String) -> NSAttributedString {
         return NSAttributedString(string: text, attributes: [
-            .foregroundColor: UIColor(netHex: 0xADA8A8),
+            .foregroundColor: UIColor(173, green: 168, blue: 168),
             .font: UIFont(name: "HelveticaNeue-Medium", size: 16.0) ?? UIFont.systemFont(ofSize: 16.0)
             ])
     }
