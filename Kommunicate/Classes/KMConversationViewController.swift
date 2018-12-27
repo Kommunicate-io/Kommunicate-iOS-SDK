@@ -53,12 +53,12 @@ open class KMConversationViewController: ALKConversationViewController {
         let deadlineTime = DispatchTime.now() + .seconds(3)
         DispatchQueue.main.asyncAfter(deadline: deadlineTime, execute: {
 
-            //TODO: Change message
             self.present(accountVC, animated: false, completion: nil)
             accountVC.closePressed = {[weak self] in
+                accountVC.dismiss(animated: true, completion: nil)
                 let popVC = self?.navigationController?.popViewController(animated: true)
                 if popVC == nil {
-                    self?.navigationController?.dismiss(animated: true, completion: nil)
+                    self?.dismiss(animated: true, completion: nil)
                 }
             }
         })
@@ -73,20 +73,5 @@ extension KMConversationViewController: NavigationBarCallbacks {
             object: self
         )
         self.navigationController?.popViewController(animated: true)
-    }
-}
-
-struct PricingPlan {
-
-    static let shared = PricingPlan()
-
-    let startupPlan = 101
-
-    func showSuspensionScreen() -> Bool {
-        let isReleaseBuild = ALUtilityClass.isThisDebugBuild()
-        let isFreePlan = ALUserDefaultsHandler.getUserPricingPackage() == startupPlan
-        let isNotAgent = ALUserDefaultsHandler.getUserRoleType() != Int16(APPLICATION_WEB_ADMIN.rawValue)
-        guard isReleaseBuild && isNotAgent && isFreePlan else { return true }
-        return true
     }
 }
