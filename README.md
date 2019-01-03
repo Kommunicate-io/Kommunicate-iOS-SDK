@@ -7,7 +7,7 @@
 
 ### [Kommunicate](https://www.kommunicate.io/?utm_source=github&utm_medium=readme&utm_campaign=ios) iOS Chat SDK for Customer Support
 
-An Open Source iOS Live Chat SDK for Customer Support
+An Open Source iOS Live Chat SDK for Customer Support.
 
 # Overview
 
