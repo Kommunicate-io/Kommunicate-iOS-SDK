@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Applozic
 import ApplozicSwift
 
 /// Before pushing this view Controller. Use this
@@ -28,8 +29,9 @@ open class KMConversationViewController: ALKConversationViewController {
     
     open override func viewDidLoad() {
         super.viewDidLoad()
+        checkPlanAndShowSuspensionScreen()
     }
-    
+
     private func updateAssigneeDetails() {
         viewModel.updateAssigneeDetails(groupId: channelKey) {
             self.customNavigationView.updateView(assignee: self.viewModel.conversationAssignee(groupId: self.channelKey))
@@ -43,6 +45,23 @@ open class KMConversationViewController: ALKConversationViewController {
         // Create custom navigation view.
         customNavigationView.updateView(assignee: viewModel.conversationAssignee(groupId: viewModel.channelKey))
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
+    }
+
+    private func checkPlanAndShowSuspensionScreen() {
+        let accountVC = ALKAccountSuspensionController()
+        guard PricingPlan.shared.showSuspensionScreen() else { return }
+        let deadlineTime = DispatchTime.now() + .seconds(3)
+        DispatchQueue.main.asyncAfter(deadline: deadlineTime, execute: {
+
+            self.present(accountVC, animated: false, completion: nil)
+            accountVC.closePressed = {[weak self] in
+                accountVC.dismiss(animated: true, completion: nil)
+                let popVC = self?.navigationController?.popViewController(animated: true)
+                if popVC == nil {
+                    self?.dismiss(animated: true, completion: nil)
+                }
+            }
+        })
     }
     
 }
