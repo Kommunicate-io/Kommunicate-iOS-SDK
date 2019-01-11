@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  AwayMessageView.swift
 //  Kommunicate
 //
 //  Created by Mukesh on 08/01/19.
@@ -10,7 +10,20 @@ import ApplozicSwift
 
 class AwayMessageView: UIView {
 
-    let messageLabel: UILabel = {
+    struct Padding {
+        struct dottedLineView {
+            static let leading: CGFloat = 12.0
+            static let trailing: CGFloat = 23.0
+        }
+
+        struct messageLabel {
+            static let top: CGFloat = 5.0
+            static let leading: CGFloat  = 20.0
+            static let trailing: CGFloat = 20.0
+        }
+    }
+
+    private let messageLabel: UILabel = {
         let label = UILabel(frame: CGRect.zero)
         label.font = UIFont(name: "HelveticaNeue-Light", size: 14)
         label.contentMode = .center
@@ -20,11 +33,11 @@ class AwayMessageView: UIView {
         return label
     }()
 
-    let dottedLineView: UIView = {
+    private let dottedLineView: UIView = {
         return UIView(frame: CGRect.zero)
     }()
 
-    let dottedLayer: CAShapeLayer = {
+    private let dottedLayer: CAShapeLayer = {
         let shapeLayer = CAShapeLayer()
         shapeLayer.strokeColor =  UIColor(netHex: 0xbebbbb).cgColor
         shapeLayer.lineWidth = 1
@@ -32,8 +45,8 @@ class AwayMessageView: UIView {
         shapeLayer.path = CGMutablePath()
         return shapeLayer
     }()
-
-    lazy var dottedLineHeightAnchor = dottedLineView.heightAnchor.constraint(equalToConstant: 0)
+    private let dottedLineViewHeight: CGFloat = 1.0
+    lazy private var dottedLineHeightAnchor = dottedLineView.heightAnchor.constraint(equalToConstant: dottedLineViewHeight)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,15 +62,15 @@ class AwayMessageView: UIView {
         dottedLineHeightAnchor.isActive = true
         dottedLineView.layout {
             $0.top == topAnchor
-            $0.leading == leadingAnchor + 12
-            $0.trailing == trailingAnchor - 23
+            $0.leading == leadingAnchor + Padding.dottedLineView.leading
+            $0.trailing == trailingAnchor - Padding.dottedLineView.trailing
         }
 
         messageLabel.layout {
             $0.bottom == bottomAnchor
-            $0.top == dottedLineView.bottomAnchor + 5
-            $0.leading == leadingAnchor + 20
-            $0.trailing == trailingAnchor - 20
+            $0.top == dottedLineView.bottomAnchor + Padding.messageLabel.top
+            $0.leading == leadingAnchor + Padding.messageLabel.leading
+            $0.trailing == trailingAnchor - Padding.messageLabel.trailing
         }
         dottedLineView.layer.addSublayer(dottedLayer)
     }
@@ -76,7 +89,7 @@ class AwayMessageView: UIView {
     }
 
     func showMessage(_ flag: Bool) {
-        dottedLineHeightAnchor.constant = flag ? 1:0
-        dottedLayer.lineWidth = flag ? 1:0
+        dottedLineHeightAnchor.constant = flag ? dottedLineViewHeight:0
+        dottedLayer.lineWidth = flag ? dottedLineViewHeight:0
     }
 }

@@ -20,6 +20,7 @@ open class KMConversationViewController: ALKConversationViewController {
     let awayMessageView = AwayMessageView(frame: CGRect.zero)
 
     lazy var channelKey = self.viewModel.channelKey
+    private let awayMessageheight = 80.0
 
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -32,10 +33,10 @@ open class KMConversationViewController: ALKConversationViewController {
 
     open override func viewDidLoad() {
         super.viewDidLoad()
-        chatBar.headerViewHeight = 0
 
         checkPlanAndShowSuspensionScreen()
         addAwayMessageConstraints()
+        showAwayMessage(false)
     }
 
     open override func viewDidLayoutSubviews() {
@@ -103,7 +104,7 @@ open class KMConversationViewController: ALKConversationViewController {
     }
 
     private func showAwayMessage(_ flag: Bool) {
-        chatBar.headerViewHeight = flag ? 80:0
+        chatBar.headerViewHeight = flag ? awayMessageheight:0
         awayMessageView.showMessage(flag)
     }
 }
