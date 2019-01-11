@@ -92,6 +92,12 @@ public class KMConversationService: KMConservationServiceable {
         }
     }
 
+    public func statusForUser(_ groupId: NSNumber, completion: @escaping (String?) -> ()) {
+        awayMessageFor(applicationKey: ALUserDefaultsHandler.getApplicationKey(), groupId: groupId, completion: { message in
+            completion(message)
+        })
+    }
+
     //MARK: - Private methods
 
     private func createBotUserFrom(userId: String) -> KMGroupUser {
@@ -193,4 +199,57 @@ public class KMConversationService: KMConservationServiceable {
         }
         return allBotIds
     }
+}
+
+func awayMessageFor(applicationKey: String, groupId: NSNumber, completion: @escaping (String?)->()) {
+    // Set up the URL request
+    let todoEndpoint: String = "https://api.kommunicate.io/applications/\(applicationKey)/awaymessage?conversationId=\(groupId)"
+    guard let url = URL(string: todoEndpoint) else {
+        print("Error: cannot create URL")
+        return
+    }
+    let urlRequest = URLRequest(url: url)
+
+    // set up the session
+    let config = URLSessionConfiguration.default
+    let session = URLSession(configuration: config)
+
+    // make the request
+    let task = session.dataTask(with: urlRequest) {
+        (data, response, error) in
+
+        guard error == nil else {
+            print("error calling GET on /awaymessage")
+            print(error!)
+            return
+        }
+        guard let responseData = data else {
+            print("Error: did not receive data")
+            return
+        }
+        do {
+            guard let awayMessageJson = try JSONSerialization.jsonObject(with: responseData, options: [])
+                as? [String: Any] else {
+                    print("error trying to convert data to JSON")
+                    return
+            }
+            let awayMessage = makeAwayMessageFrom(json: awayMessageJson)
+            print("Away Message:\(String(describing: awayMessage))")
+            completion(awayMessage)
+        } catch  {
+            print("error trying to convert data to JSON")
+            return
+        }
+    }
+    task.resume()
+}
+
+func makeAwayMessageFrom(json: [String: Any]) -> String? {
+    guard
+        let data = json["data"] as? [String: Any],
+        let messageList = data["messageList"] as? [Any],
+        let firstMessage = messageList.first as? [String: Any],
+        let message = firstMessage["message"] as? String
+        else { return nil }
+    return message
 }
