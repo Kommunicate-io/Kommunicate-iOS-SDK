@@ -18,6 +18,7 @@ open class KMConversationViewController: ALKConversationViewController {
     lazy var customNavigationView = ConversationVCNavBar(navigationBarBackgroundColor: self.configuration.navigationBarBackgroundColor, delegate: self, configuration: kmConversationViewConfiguration)
 
     let awayMessageView = AwayMessageView(frame: CGRect.zero)
+    var conversationService = KMConversationService()
 
     lazy var channelKey = self.viewModel.channelKey
     private let awayMessageheight = 80.0
@@ -47,6 +48,7 @@ open class KMConversationViewController: ALKConversationViewController {
     override open func newMessagesAdded() {
         super.newMessagesAdded()
 
+        // Hide away message view whenever a new message comes.
         showAwayMessage(false)
     }
 
@@ -62,11 +64,18 @@ open class KMConversationViewController: ALKConversationViewController {
 
     func messageStatus() {
         guard let channelKey = viewModel.channelKey else { return }
-        KMConversationService().statusForUser(channelKey, completion: { message in
+        conversationService.awayMessageFor(groupId: channelKey, completion: {
+            result in
             DispatchQueue.main.async {
-                guard let message = message, !message.isEmpty else { return }
-                self.showAwayMessage(true)
-                self.awayMessageView.set(message: message)
+                switch result {
+                case .success(let message):
+                    guard !message.isEmpty else { return }
+                    self.showAwayMessage(true)
+                    self.awayMessageView.set(message: message)
+                case .failure(let error):
+                    print("Message status error: \(error)")
+                    return
+                }
             }
         })
     }

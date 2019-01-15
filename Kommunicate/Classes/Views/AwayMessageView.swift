@@ -8,15 +8,16 @@
 import Foundation
 import ApplozicSwift
 
+/// A view to show away message. It has message label and dotted line view.
 class AwayMessageView: UIView {
 
     struct Padding {
-        struct dottedLineView {
+        struct DottedLineView {
             static let leading: CGFloat = 12.0
             static let trailing: CGFloat = 23.0
         }
 
-        struct messageLabel {
+        struct MessageLabel {
             static let top: CGFloat = 5.0
             static let leading: CGFloat  = 20.0
             static let trailing: CGFloat = 20.0
@@ -33,9 +34,7 @@ class AwayMessageView: UIView {
         return label
     }()
 
-    private let dottedLineView: UIView = {
-        return UIView(frame: CGRect.zero)
-    }()
+    private let dottedLineView = UIView(frame: CGRect.zero)
 
     private let dottedLayer: CAShapeLayer = {
         let shapeLayer = CAShapeLayer()
@@ -50,28 +49,15 @@ class AwayMessageView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        commonInit()
+        setupViews()
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
-    func commonInit() {
-        addViewsForAutolayout(views: [dottedLineView, messageLabel])
-        dottedLineHeightAnchor.isActive = true
-        dottedLineView.layout {
-            $0.top == topAnchor
-            $0.leading == leadingAnchor + Padding.dottedLineView.leading
-            $0.trailing == trailingAnchor - Padding.dottedLineView.trailing
-        }
-
-        messageLabel.layout {
-            $0.bottom == bottomAnchor
-            $0.top == dottedLineView.bottomAnchor + Padding.messageLabel.top
-            $0.leading == leadingAnchor + Padding.messageLabel.leading
-            $0.trailing == trailingAnchor - Padding.messageLabel.trailing
-        }
+    func setupViews() {
+        addConstraints()
         dottedLineView.layer.addSublayer(dottedLayer)
     }
 
@@ -91,5 +77,22 @@ class AwayMessageView: UIView {
     func showMessage(_ flag: Bool) {
         dottedLineHeightAnchor.constant = flag ? dottedLineViewHeight:0
         dottedLayer.lineWidth = flag ? dottedLineViewHeight:0
+    }
+
+    private func addConstraints() {
+        addViewsForAutolayout(views: [dottedLineView, messageLabel])
+        dottedLineHeightAnchor.isActive = true
+        dottedLineView.layout {
+            $0.top == topAnchor
+            $0.leading == leadingAnchor + Padding.DottedLineView.leading
+            $0.trailing == trailingAnchor - Padding.DottedLineView.trailing
+        }
+
+        messageLabel.layout {
+            $0.bottom == bottomAnchor
+            $0.top == dottedLineView.bottomAnchor + Padding.MessageLabel.top
+            $0.leading == leadingAnchor + Padding.MessageLabel.leading
+            $0.trailing == trailingAnchor - Padding.MessageLabel.trailing
+        }
     }
 }
