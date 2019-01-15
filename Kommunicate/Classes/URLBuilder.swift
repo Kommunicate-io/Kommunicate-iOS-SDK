@@ -49,11 +49,3 @@ final class URLBuilder {
         return self
     }
 }
-
-extension URLBuilder {
-    static func awayMessageFor(applicationKey: String, groupId: String) -> URLBuilder {
-        let url = URLBuilder.kommunicateApi.add(paths: ["applications", applicationKey, "awaymessage"])
-        url.add(item: "conversationId", value: groupId)
-        return url
-    }
-}
