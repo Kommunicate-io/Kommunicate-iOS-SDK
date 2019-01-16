@@ -13,6 +13,11 @@ public struct ChannelMetadataKeys {
     static let conversationAssignee = "CONVERSATION_ASSIGNEE"
 }
 
+public enum Result<Value> {
+    case success(Value)
+    case failure(Error)
+}
+
 public protocol KMConservationServiceable {
     associatedtype Response
     func createConversation(
@@ -30,6 +35,12 @@ public class KMConversationService: KMConservationServiceable {
         public var success: Bool = false
         public var clientChannelKey: String? = nil
         public var error: Error? = nil
+    }
+
+    public enum APIError: Error {
+        case urlBuilding
+        case jsonConversion
+        case messageNotPresent
     }
 
     //MARK: - Initialization
@@ -90,6 +101,60 @@ public class KMConversationService: KMConservationServiceable {
                 completion(response)
             })
         }
+    }
+
+    /// Fetches away message for the given group id.
+    public func awayMessageFor(
+        applicationKey: String = ALUserDefaultsHandler.getApplicationKey(),
+        groupId: NSNumber,
+        completion: @escaping (Result<String>)->()) {
+
+
+        // Set up the URL request
+        guard let url = URLBuilder.awayMessageFor(applicationKey: applicationKey, groupId: String(describing: groupId)).url else {
+
+            completion(.failure(APIError.urlBuilding))
+            return
+        }
+        DataLoader.request(url: url, completion: {
+            result in
+
+            switch result {
+            case .success(let data):
+                do {
+                    guard
+                        let awayMessageJson = try JSONSerialization.jsonObject(with: data, options: [])
+                        as? [String: Any]
+                        else {
+                            print("error trying to convert data to JSON")
+                            completion(.failure(APIError.jsonConversion))
+                            return
+                    }
+                    completion(self.makeAwayMessageFrom(json: awayMessageJson))
+                } catch(let error) {
+                    print("error trying to convert data to JSON")
+                    completion(.failure(error))
+                    return
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        })
+    }
+
+    func makeAwayMessageFrom(json: [String: Any]) -> Result<String> {
+        guard
+            let data = json["data"] as? [String: Any],
+            let messageList = data["messageList"] as? [Any] else {
+                return .failure(APIError.jsonConversion)
+        }
+        // When the agent is online or away message is not set
+        // then the messageList will be empty.
+        guard let firstMessage = messageList.first as? [String: Any],
+            let message = firstMessage["message"] as? String else {
+                return .failure(APIError.messageNotPresent)
+        }
+        return .success(message)
     }
 
     //MARK: - Private methods
