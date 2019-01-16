@@ -151,7 +151,7 @@ open class Kommunicate: NSObject {
      */
     @objc open class func createConversation(
         userId: String,
-        agentIds: [String],
+        agentIds: [String] = [],
         botIds: [String]?,
         useLastConversation: Bool = false,
         completion:@escaping (_ clientGroupId: String) -> ()) {
@@ -296,7 +296,6 @@ open class Kommunicate: NSObject {
         let userId = ALUserDefaultsHandler.getUserId() ?? Kommunicate.randomId()
         createConversation(
             userId: userId,
-            agentIds: [],
             botIds: nil,
             useLastConversation: true,
             completion: { response in
@@ -304,14 +303,16 @@ open class Kommunicate: NSObject {
                     completion(KommunicateError.conversationCreateFailed)
                     return
                 }
-                showConversationWith(groupId: response, from: viewController, completionHandler: { success in
-                    guard success else {
-                        completion(KommunicateError.conversationNotPresent)
-                        return
-                    }
-                    print("Kommunicate: conversation was shown")
-                    completion(nil)
-                })
+                DispatchQueue.main.async {
+                    showConversationWith(groupId: response, from: viewController, completionHandler: { success in
+                        guard success else {
+                            completion(KommunicateError.conversationNotPresent)
+                            return
+                        }
+                        print("Kommunicate: conversation was shown")
+                        completion(nil)
+                    })
+                }
         })
     }
 

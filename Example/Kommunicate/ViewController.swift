@@ -13,22 +13,21 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let agentId = ""
-        let botId = "bot"
         let userId = "testabc"
-        let applicationKey = ""
+        let applicationKey = "<Pass your application key>"
         Kommunicate.setup(applicationId: applicationKey)
         if Kommunicate.isLoggedIn {
             Kommunicate.createConversation(
                 userId: userId,
-                agentIds: [agentId],
-                botIds: [botId],
+                botIds: nil,
                 useLastConversation: true,
                 completion: { response in
                     guard !response.isEmpty else {return}
-                    Kommunicate.showConversationWith(groupId: response, from: self, completionHandler: { success in
-                        print("conversation was shown")
-                    })
+                    DispatchQueue.main.async {
+                        Kommunicate.showConversationWith(groupId: response, from: self, completionHandler: { success in
+                            print("conversation was shown")
+                        })
+                    }
                 })
         } else {
             let kmUser = KMUser()
@@ -40,12 +39,15 @@ class ViewController: UIViewController {
                 guard error == nil else {return}
                 Kommunicate.createConversation(
                     userId: kmUser.userId,
-                    agentIds: [agentId],
-                    botIds: [botId], completion: { response in
+                    botIds: nil,
+                    useLastConversation: true,
+                    completion: { response in
                     guard !response.isEmpty else {return}
-                        Kommunicate.showConversationWith(groupId: response, from: self, completionHandler: { success in
-                            print("conversation was shown")
-                        })
+                        DispatchQueue.main.async {
+                            Kommunicate.showConversationWith(groupId: response, from: self, completionHandler: { success in
+                                print("conversation was shown")
+                            })
+                        }
                 })
             })
         }

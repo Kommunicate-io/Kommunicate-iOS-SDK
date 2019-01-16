@@ -67,43 +67,64 @@ public class KMConversationService: KMConservationServiceable {
         useLastConversation: Bool,
         completion: @escaping (Response) -> ()) {
         var clientId: String? = nil
+        var allAgentIds = agentIds
         var allBotIds = ["bot"] // Default bot that should be added everytime.
         if let botIds = botIds {allBotIds.append(contentsOf: botIds)}
-        if useLastConversation {
-            // Sort and combine agent ids.
-            var newClientId = Set(agentIds)
-                .sorted(by: <)
-                .reduce("", {$0+$1.lowercased()+"_"}) + userId.lowercased()
-
-            // Sort and combine bot ids other than the default bot id.
-            if let botIds = removeDefaultBotIdFrom(botIds: botIds) {
-                newClientId =
-                    newClientId + Set(botIds)
-                    .sorted(by: <)
-                    .reduce("", {$0+"_"+$1.lowercased()})
+        defaultAgentFor(completion: {
+            result in
+            switch result {
+            case .success(let agentId):
+                allAgentIds.append(agentId)
+            case .failure(let error):
+                print("Error while fetching agents id: \(error)")
             }
-            clientId = newClientId
-            isGroupPresent(clientId: newClientId, completion: {
-                present in
-                if present {
-                    let response = Response(success: true, clientChannelKey: newClientId, error: nil)
-                    completion(response)
-                } else {
-                    self.createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentIds: agentIds, botIds: allBotIds, completion: {
-                        response in
-                        completion(response)
-                    })
+            allAgentIds = allAgentIds.uniqueElements
+            if useLastConversation {
+                // Sort and combine agent ids.
+                var newClientId = allAgentIds
+                    .sorted(by: <)
+                    .reduce("", {$0+$1.lowercased()+"_"}) + userId.lowercased()
+
+                // Sort and combine bot ids other than the default bot id.
+                if let botIds = self.removeDefaultBotIdFrom(botIds: botIds) {
+                    newClientId =
+                        newClientId + Set(botIds)
+                            .sorted(by: <)
+                            .reduce("", {$0+"_"+$1.lowercased()})
                 }
-            })
-        } else {
-            createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentIds: agentIds, botIds: allBotIds, completion: {
-                response in
-                completion(response)
-            })
-        }
+                clientId = newClientId
+                self.isGroupPresent(clientId: newClientId, completion: {
+                    present in
+                    if present {
+                        let response = Response(success: true, clientChannelKey: newClientId, error: nil)
+                        completion(response)
+                    } else {
+                        self.createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentIds: allAgentIds, botIds: allBotIds, completion: {
+                            response in
+                            completion(response)
+                        })
+                    }
+                })
+            } else {
+                self.createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentIds: allAgentIds, botIds: allBotIds, completion: {
+                    response in
+                    completion(response)
+                })
+            }
+        })
+
     }
 
-    /// Fetches away message for the given group id.
+    /**
+     Fetches away message for the given group id.
+
+     - Parameters:
+        - applicationkey: Application key for which away message has been set.
+        - groupId: Group id for which away message has to be shown.
+
+     - Returns: A Result of type `String`.
+
+    **/
     public func awayMessageFor(
         applicationKey: String = ALUserDefaultsHandler.getApplicationKey(),
         groupId: NSNumber,
@@ -111,7 +132,7 @@ public class KMConversationService: KMConservationServiceable {
 
 
         // Set up the URL request
-        guard let url = URLBuilder.awayMessageFor(applicationKey: applicationKey, groupId: String(describing: groupId)).url else {
+        guard let url = URLBuilder.awayMessageURLFor(applicationKey: applicationKey, groupId: String(describing: groupId)).url else {
 
             completion(.failure(APIError.urlBuilding))
             return
@@ -134,7 +155,47 @@ public class KMConversationService: KMConservationServiceable {
                 } catch(let error) {
                     print("error trying to convert data to JSON")
                     completion(.failure(error))
-                    return
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        })
+    }
+
+    /**
+     Fetches and returns the default agent id.
+
+     - Parameters:
+        - applicationkey: Application key for which a default agent has been set.
+
+     - Returns: A Result of type `String`.
+
+     **/
+    public func defaultAgentFor(
+        applicationKey: String = ALUserDefaultsHandler.getApplicationKey(),
+        completion: @escaping (Result<String>)->()) {
+        // Set up the URL request
+        guard let url = URLBuilder.agentsURLFor(applicationKey: applicationKey).url
+            else {
+                completion(.failure(APIError.urlBuilding))
+                return
+        }
+        DataLoader.request(url: url, completion: {
+            result in
+
+            switch result {
+            case .success(let data):
+                do {
+                    guard let agentsJson = try JSONSerialization.jsonObject(with: data, options: [])
+                        as? [String: Any] else {
+                            print("error trying to convert data to JSON")
+                            completion(.failure(APIError.jsonConversion))
+                            return
+                    }
+                    completion(self.agentIdFrom(json: agentsJson))
+                } catch  {
+                    print("error trying to convert data to JSON")
+                    completion(.failure(error))
                 }
             case .failure(let error):
                 completion(.failure(error))
@@ -155,6 +216,15 @@ public class KMConversationService: KMConservationServiceable {
                 return .failure(APIError.messageNotPresent)
         }
         return .success(message)
+    }
+
+    func agentIdFrom(json: [String: Any]) -> Result<String> {
+        guard let response = json["response"] as? [String: Any],
+            let agentId = response["agentId"] as? String
+            else {
+                return .failure(APIError.jsonConversion)
+        }
+        return .success(agentId)
     }
 
     //MARK: - Private methods
