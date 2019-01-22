@@ -38,6 +38,8 @@ open class KMConversationViewController: ALKConversationViewController {
         checkPlanAndShowSuspensionScreen()
         addAwayMessageConstraints()
         showAwayMessage(false)
+        guard let channelId = viewModel.channelKey else { return }
+        sendConversationOpenNotification(channelId: String(describing: channelId))
     }
 
     open override func viewDidLayoutSubviews() {
@@ -80,6 +82,26 @@ open class KMConversationViewController: ALKConversationViewController {
         })
     }
 
+    func sendConversationOpenNotification(channelId: String) {
+        let info: [String: Any] = ["ConversationId": channelId]
+        let launchNotificationName = kmConversationViewConfiguration.conversationLaunchNotificationName
+        let notification = Notification(
+            name: Notification.Name(rawValue: launchNotificationName),
+            object: nil,
+            userInfo: info)
+        NotificationCenter.default.post(notification)
+    }
+
+    func sendConversationCloseNotification(channelId: String) {
+        let info: [String: Any] = ["ConversationId": channelId]
+        let backbuttonNotificationName = kmConversationViewConfiguration.backButtonNotificationName
+        let notification = Notification(
+            name: Notification.Name(rawValue: backbuttonNotificationName),
+            object: nil,
+            userInfo: info)
+        NotificationCenter.default.post(notification)
+    }
+
     private func updateAssigneeDetails() {
         viewModel.updateAssigneeDetails(groupId: channelKey) {
             self.customNavigationView.updateView(assignee: self.viewModel.conversationAssignee(groupId: self.channelKey))
@@ -120,10 +142,8 @@ open class KMConversationViewController: ALKConversationViewController {
 
 extension KMConversationViewController: NavigationBarCallbacks {
     func backButtonPressed() {
-        NotificationCenter.default.post(
-            name: NSNotification.Name(kmConversationViewConfiguration.nsNotificationNameForBackButtonAction),
-            object: self
-        )
+        guard let channelId = viewModel.channelKey else { return }
+        sendConversationCloseNotification(channelId: String(describing: channelId))
         self.navigationController?.popViewController(animated: true)
     }
 }
