@@ -15,28 +15,39 @@ public protocol KMPreChatFormViewControllerDelegate: class {
 open class KMPreChatFormViewController: UIViewController {
 
     public weak var delegate: KMPreChatFormViewControllerDelegate!
+
+    //TODO: Add this in init
+    public var localizationFileName: String = "Localizable"
+
     var formView: KMPreChatUserFormView!
     var sendInstructionsTapped:(()->())?
 
-    enum Placeholder {
-        static let email = "Email"
-        static let name = "Name"
-        static let phoneNumber = "Phone number"
-    }
+    struct LocalizationKey {
 
-    enum TextFieldValidationError: Error {
+        struct Placeholder {
+            private static let prefix = "PreChatView"
+            private static let suffix = "Placeholder"
+            static let name = prefix + "Name" + suffix
+            static let email = prefix + "Email" + suffix
+            static let phoneNumber = prefix + "PhoneNumber" + suffix
+        }
+}
+
+    enum TextFieldValidationError: Error, Localizable {
         case emailAndPhoneNumberEmpty
         case invalidEmailAddress
         case invalidPhoneNumber
 
-        var description: String {
+        // NOTE: If any key-value pairs are not present in the given fileName
+        // then it will be fetched from the default file.
+        func localizationDescription(fromFileName fileName: String) -> String {
             switch self {
             case .emailAndPhoneNumberEmpty:
-                return "Please fill email or the phone number"
+                return localizedString(forKey: "PreChatViewEmailAndPhoneNumberEmptyError", fileName: fileName)
             case .invalidEmailAddress:
-                return "Please enter correct email address"
+                return localizedString(forKey: "PreChatViewEmailInvalidError", fileName: fileName)
             case .invalidPhoneNumber:
-                return "Please enter correct phone number"
+                return localizedString(forKey: "PreChatViewPhoneNumberInvalidError", fileName: fileName)
             }
         }
     }
@@ -66,7 +77,9 @@ open class KMPreChatFormViewController: UIViewController {
     }
 
     func setupViews() {
-        formView = KMPreChatUserFormView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
+        formView = KMPreChatUserFormView(
+            frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height),
+            localizationFileName: localizationFileName)
         let closeButton = closeButtonOf(frame: CGRect(x: 20, y: 20, width: 30, height: 30))
         view.addSubview(formView)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
@@ -87,9 +100,16 @@ open class KMPreChatFormViewController: UIViewController {
 
         formView.sendInstructionsButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
         [formView.emailTitleLabel, formView.nameTitleLabel, formView.phoneNumberTitle].hideViews()
-        formView.setPlaceHolder(for: formView.emailTextField, withText: Placeholder.email)
-        formView.setPlaceHolder(for: formView.nameTextField, withText: Placeholder.name)
-        formView.setPlaceHolder(for: formView.phoneNumberTextField, withText: Placeholder.phoneNumber)
+
+        formView.setPlaceHolder(
+            for: formView.emailTextField,
+            valueFromKey: LocalizationKey.Placeholder.email)
+        formView.setPlaceHolder(
+            for: formView.nameTextField,
+            valueFromKey: LocalizationKey.Placeholder.name)
+        formView.setPlaceHolder(
+            for: formView.phoneNumberTextField,
+            valueFromKey: LocalizationKey.Placeholder.phoneNumber)
         setDelegateToSelf(for: [formView.emailTextField, formView.nameTextField, formView.phoneNumberTextField])
 
         // Dismiss keyboard when tapped outside
@@ -119,13 +139,22 @@ open class KMPreChatFormViewController: UIViewController {
         switch textField.tag {
         case 1: // email
             if textField.text == "" {
-                setPlaceHolder(for: textField, withText: Placeholder.email, andShowLabel: formView.emailTitleLabel)}
+                setPlaceHolder(
+                    for: textField,
+                    valueFromKey: LocalizationKey.Placeholder.email,
+                    andShowLabel: formView.emailTitleLabel)}
         case 2: // Name
             if textField.text == "" {
-                setPlaceHolder(for: textField, withText: Placeholder.name, andShowLabel: formView.nameTitleLabel)}
+                setPlaceHolder(
+                    for: textField,
+                    valueFromKey: LocalizationKey.Placeholder.name,
+                    andShowLabel: formView.nameTitleLabel)}
         case 3: // Phone number
             if textField.text == "" {
-                setPlaceHolder(for: textField, withText: Placeholder.phoneNumber, andShowLabel: formView.phoneNumberTitle)}
+                setPlaceHolder(
+                    for: textField,
+                    valueFromKey: LocalizationKey.Placeholder.phoneNumber,
+                    andShowLabel: formView.phoneNumberTitle)}
         default:
             print("Field not implemented yet")
         }
@@ -144,7 +173,7 @@ open class KMPreChatFormViewController: UIViewController {
         switch validation {
         case .failure(let error):
             // Display error message
-            formView.showErrorLabelWith(message: error.description)
+            formView.showErrorLabelWith(message: error.localizationDescription(fromFileName: localizationFileName))
         case .success:
             delegate.userSubmittedResponse(
                 name: formView.nameTextField.text ?? "",
@@ -217,8 +246,11 @@ open class KMPreChatFormViewController: UIViewController {
         label.show()
     }
 
-    private func setPlaceHolder(for textField: UITextField, withText text: String, andShowLabel label: UILabel) {
-        formView.setPlaceHolder(for: textField, withText: text)
+    private func setPlaceHolder(
+        for textField: UITextField,
+        valueFromKey key: String,
+        andShowLabel label: UILabel) {
+        formView.setPlaceHolder(for: textField, valueFromKey: key)
         label.hide()
     }
 
