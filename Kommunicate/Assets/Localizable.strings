@@ -32,4 +32,4 @@ online = "Online";
 offline = "Offline";
 
 /* Will be shown when the user's display name is not set */
-noName = "No Name"
+noName = "No Name";
