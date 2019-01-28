@@ -16,6 +16,7 @@
                 <outlet property="emailTextField" destination="xcQ-oy-Jwa" id="Brf-Be-KOA"/>
                 <outlet property="emailTitleLabel" destination="ULe-o9-1SU" id="s74-lv-IMG"/>
                 <outlet property="errorMessageLabel" destination="WpO-nN-HX8" id="nwZ-Vv-pBl"/>
+                <outlet property="getStartedDescriptionLabel" destination="Ijs-Lv-CvG" id="gaB-MX-3SP"/>
                 <outlet property="nameTextField" destination="gfW-Jp-MRP" id="7Sf-OE-rsN"/>
                 <outlet property="nameTitleLabel" destination="mWE-0n-IEe" id="HWI-NL-cBX"/>
                 <outlet property="phoneNumberTextField" destination="V4C-hM-4bB" id="AZ6-oX-xHt"/>

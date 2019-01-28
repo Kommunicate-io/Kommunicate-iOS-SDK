@@ -16,9 +16,7 @@ open class KMPreChatFormViewController: UIViewController {
 
     public weak var delegate: KMPreChatFormViewControllerDelegate!
 
-    //TODO: Add this in init
-    public var localizationFileName: String = "Localizable"
-
+    var configuration: KMConfiguration!
     var formView: KMPreChatUserFormView!
     var sendInstructionsTapped:(()->())?
 
@@ -62,9 +60,10 @@ open class KMPreChatFormViewController: UIViewController {
         setupViews()
     }
 
-    required public init() {
+    required public init(configuration: KMConfiguration) {
+        self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
-        addObservers()
+        self.addObservers()
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -79,7 +78,7 @@ open class KMPreChatFormViewController: UIViewController {
     func setupViews() {
         formView = KMPreChatUserFormView(
             frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height),
-            localizationFileName: localizationFileName)
+            localizationFileName: configuration.localizedStringFileName)
         let closeButton = closeButtonOf(frame: CGRect(x: 20, y: 20, width: 30, height: 30))
         view.addSubview(formView)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
@@ -173,7 +172,7 @@ open class KMPreChatFormViewController: UIViewController {
         switch validation {
         case .failure(let error):
             // Display error message
-            formView.showErrorLabelWith(message: error.localizationDescription(fromFileName: localizationFileName))
+            formView.showErrorLabelWith(message: error.localizationDescription(fromFileName: configuration.localizedStringFileName))
         case .success:
             delegate.userSubmittedResponse(
                 name: formView.nameTextField.text ?? "",

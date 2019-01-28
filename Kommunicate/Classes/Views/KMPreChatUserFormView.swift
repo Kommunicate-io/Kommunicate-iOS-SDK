@@ -33,6 +33,7 @@ class KMPreChatUserFormView: UIView, Localizable {
     @IBOutlet weak var phoneNumberTitle: UILabel!
     @IBOutlet weak var sendInstructionsButton: UIButton!
 
+    @IBOutlet weak var getStartedDescriptionLabel: UILabel!
     @IBOutlet weak var errorMessageLabel: UILabel!
 
     @IBOutlet weak var topStackView: UIStackView!
@@ -42,9 +43,11 @@ class KMPreChatUserFormView: UIView, Localizable {
     struct LocalizationKey {
         private static let prefix = "PreChatView"
         private static let suffix = "Title"
+        static let getStarted = prefix + "GetStartedDescription"
         static let nameTitle = prefix + "Name" + suffix
         static let emailTitle = prefix + "Email" + suffix
         static let phoneNumberTitle = prefix + "PhoneNumber" + suffix
+        static let sendInstructionsButtonTitle = prefix + "SendInstructionsButton" + suffix
     }
 
     required init(frame: CGRect, localizationFileName: String) {
@@ -89,11 +92,16 @@ class KMPreChatUserFormView: UIView, Localizable {
     }
 
     private func setupLocalizedLabelTexts() {
+        getStartedDescriptionLabel.text =
+            localizedString(forKey: LocalizationKey.getStarted, fileName: localizationFileName)
         nameTitleLabel.text =
             localizedString(forKey: LocalizationKey.nameTitle, fileName: localizationFileName)
         emailTitleLabel.text =
             localizedString(forKey: LocalizationKey.emailTitle, fileName: localizationFileName)
         phoneNumberTitle.text =
             localizedString(forKey: LocalizationKey.phoneNumberTitle, fileName: localizationFileName)
+        let buttonTitle =
+            localizedString(forKey: LocalizationKey.sendInstructionsButtonTitle, fileName: localizationFileName)
+        sendInstructionsButton.setTitle(buttonTitle, for: .normal)
     }
 }

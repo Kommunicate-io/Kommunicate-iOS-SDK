@@ -8,26 +8,30 @@
 
 /* PreChatView */
 
-/* Name textfield title label*/
-PreChatViewNameTitle = "Name New";
-/* Name textfield title label*/
+/* Name textfield's title label*/
+PreChatViewNameTitle = "Name";
+/* Email textfield's title label*/
 PreChatViewEmailTitle = "Email";
-/* Name textfield title label*/
+/* Phone number textfield's title label*/
 PreChatViewPhoneNumberTitle = "Phone number";
-/* Name textfield placeholder*/
+/* Name textfield's placeholder*/
 PreChatViewNamePlaceholder = "Name";
-/* Name textfield placeholder*/
+/* Email textfield's placeholder*/
 PreChatViewEmailPlaceholder = "Email";
-/* Name textfield title placeholder*/
+/* Phone number textfield title placeholder*/
 PreChatViewPhoneNumberPlaceholder = "Phone number";
 /* Email and Phone number empty error message */
-PreChatViewEmailAndPhoneNumberEmptyError = "🎉 Please fill email or the phone number";
+PreChatViewEmailAndPhoneNumberEmptyError = "Please fill email or the phone number";
 /* Invalid Email error message */
 PreChatViewEmailInvalidError = "Please enter correct email address";
 /* Invalid Phone number error message */
 PreChatViewPhoneNumberInvalidError = "Please enter correct phone number";
+/* Send instructions button title */
+PreChatViewSendInstructionsButtonTitle = "SUBMIT";
+/* Get Started description on top */
+PreChatViewGetStartedDescription = "We just need a few details to help you get started";
 
-/* User connection status */
+/* User's connection status */
 online = "Online";
 offline = "Offline";
 
