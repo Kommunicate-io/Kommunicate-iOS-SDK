@@ -13,11 +13,12 @@ protocol NavigationBarCallbacks {
     func backButtonPressed()
 }
 
-class ConversationVCNavBar: UIView {
+class ConversationVCNavBar: UIView, Localizable {
     
     var navigationBarBackgroundColor: UIColor
     var configuration: KMConversationViewConfiguration!
     var delegate: NavigationBarCallbacks!
+    var localizationFileName: String!
     
     let backButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -36,7 +37,6 @@ class ConversationVCNavBar: UIView {
     
     var profileName: UILabel = {
         let label = UILabel()
-        label.text = Constants.Strings.noName
         label.font = UIFont(name: "HelveticaNeue", size: 16) ?? UIFont.systemFont(ofSize: 16)
         label.textColor = UIColor(96, green: 94, blue: 94)
         return label
@@ -60,7 +60,6 @@ class ConversationVCNavBar: UIView {
     
     var onlineStatusText: UILabel = {
         let label = UILabel()
-        label.text = Constants.Strings.offline
         label.font = UIFont(name: "HelveticaNeue", size: 12) ?? UIFont.systemFont(ofSize: 12)
         label.textColor = UIColor(113, green: 110, blue: 110)
         return label
@@ -74,13 +73,26 @@ class ConversationVCNavBar: UIView {
         stackView.spacing = 2
         return stackView
     }()
+
+    struct LocalizationKey {
+
+        static let online = "online"
+        static let offline = "offline"
+        static let noName = "noName"
+    }
     
-    required init(navigationBarBackgroundColor: UIColor, delegate: NavigationBarCallbacks,
-                  configuration: KMConversationViewConfiguration) {
+    required init(
+        navigationBarBackgroundColor: UIColor,
+        delegate: NavigationBarCallbacks,
+        localizationFileName: String,
+        configuration: KMConversationViewConfiguration) {
         self.navigationBarBackgroundColor = navigationBarBackgroundColor
         self.configuration = configuration
         self.delegate = delegate
+        self.localizationFileName = localizationFileName
         super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 44))
+
+        setupLocalizedLabelTexts()
         setupConstraints()
         setupActions()
         configureBackButton()
@@ -163,12 +175,25 @@ class ConversationVCNavBar: UIView {
     
     private func setupOnlineStatus(_ contact: ALContact) {
         if contact.connected {
-            onlineStatusText.text = Constants.Strings.online
+            onlineStatusText.text = localizedString(
+                forKey: LocalizationKey.online,
+                fileName: localizationFileName)
             onlineStatusIcon.backgroundColor = UIColor(28, green: 222, blue: 20)
         } else {
-            onlineStatusText.text = Constants.Strings.offline
+            onlineStatusText.text = localizedString(
+                forKey: LocalizationKey.offline,
+                fileName: localizationFileName)
             onlineStatusIcon.backgroundColor = UIColor(165, green: 170, blue: 165)
         }
+    }
+
+    private func setupLocalizedLabelTexts() {
+        self.onlineStatusText.text = localizedString(
+            forKey: LocalizationKey.offline,
+            fileName: localizationFileName)
+        self.profileName.text = localizedString(
+            forKey: LocalizationKey.noName,
+            fileName: localizationFileName)
     }
     
 }

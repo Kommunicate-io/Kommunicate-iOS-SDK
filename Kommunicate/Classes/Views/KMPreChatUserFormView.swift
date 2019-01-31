@@ -20,7 +20,9 @@ class CircleView: UIView {
     }
 }
 
-class KMPreChatUserFormView: UIView {
+class KMPreChatUserFormView: UIView, Localizable {
+
+    var localizationFileName: String!
 
     @IBOutlet var contentView: KMPreChatUserFormView!
     @IBOutlet weak var emailTextField: UITextField!
@@ -31,12 +33,25 @@ class KMPreChatUserFormView: UIView {
     @IBOutlet weak var phoneNumberTitle: UILabel!
     @IBOutlet weak var sendInstructionsButton: UIButton!
 
+    @IBOutlet weak var getStartedDescriptionLabel: UILabel!
     @IBOutlet weak var errorMessageLabel: UILabel!
 
     @IBOutlet weak var topStackView: UIStackView!
 
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
-    override init(frame: CGRect) {
+
+    struct LocalizationKey {
+        private static let prefix = "PreChatView"
+        private static let suffix = "Title"
+        static let getStarted = prefix + "GetStartedDescription"
+        static let nameTitle = prefix + "Name" + suffix
+        static let emailTitle = prefix + "Email" + suffix
+        static let phoneNumberTitle = prefix + "PhoneNumber" + suffix
+        static let sendInstructionsButtonTitle = prefix + "SendInstructionsButton" + suffix
+    }
+
+    required init(frame: CGRect, localizationFileName: String) {
+        self.localizationFileName = localizationFileName
         super.init(frame: frame)
         commonInit()
     }
@@ -53,10 +68,12 @@ class KMPreChatUserFormView: UIView {
         addSubview(contentView)
         contentView.frame = self.bounds
         contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        setupLocalizedLabelTexts()
     }
 
-    func setPlaceHolder(for textField: UITextField, withText text: String) {
-        textField.attributedPlaceholder = placeholderWith(text: text)
+    func setPlaceHolder(for textField: UITextField, valueFromKey key: String) {
+        let placeholder = localizedString(forKey: key, fileName: localizationFileName)
+        textField.attributedPlaceholder = placeholderWith(text: placeholder)
     }
 
     func showErrorLabelWith(message: String) {
@@ -72,5 +89,19 @@ class KMPreChatUserFormView: UIView {
             .foregroundColor: UIColor(173, green: 168, blue: 168),
             .font: UIFont(name: "HelveticaNeue-Medium", size: 16.0) ?? UIFont.systemFont(ofSize: 16.0)
             ])
+    }
+
+    private func setupLocalizedLabelTexts() {
+        getStartedDescriptionLabel.text =
+            localizedString(forKey: LocalizationKey.getStarted, fileName: localizationFileName)
+        nameTitleLabel.text =
+            localizedString(forKey: LocalizationKey.nameTitle, fileName: localizationFileName)
+        emailTitleLabel.text =
+            localizedString(forKey: LocalizationKey.emailTitle, fileName: localizationFileName)
+        phoneNumberTitle.text =
+            localizedString(forKey: LocalizationKey.phoneNumberTitle, fileName: localizationFileName)
+        let buttonTitle =
+            localizedString(forKey: LocalizationKey.sendInstructionsButtonTitle, fileName: localizationFileName)
+        sendInstructionsButton.setTitle(buttonTitle, for: .normal)
     }
 }

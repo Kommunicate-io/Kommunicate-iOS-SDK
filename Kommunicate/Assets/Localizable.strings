@@ -1,0 +1,39 @@
+/* 
+  Localizable.strings
+  Pods
+
+  Created by Mukesh on 24/01/19.
+  
+*/
+
+/* PreChatView */
+
+/* Name textfield's title label*/
+PreChatViewNameTitle = "Name";
+/* Email textfield's title label*/
+PreChatViewEmailTitle = "Email";
+/* Phone number textfield's title label*/
+PreChatViewPhoneNumberTitle = "Phone number";
+/* Name textfield's placeholder*/
+PreChatViewNamePlaceholder = "Name";
+/* Email textfield's placeholder*/
+PreChatViewEmailPlaceholder = "Email";
+/* Phone number textfield title placeholder*/
+PreChatViewPhoneNumberPlaceholder = "Phone number";
+/* Email and Phone number empty error message */
+PreChatViewEmailAndPhoneNumberEmptyError = "Please fill email or the phone number";
+/* Invalid Email error message */
+PreChatViewEmailInvalidError = "Please enter correct email address";
+/* Invalid Phone number error message */
+PreChatViewPhoneNumberInvalidError = "Please enter correct phone number";
+/* Send instructions button title */
+PreChatViewSendInstructionsButtonTitle = "SUBMIT";
+/* Get Started description on top */
+PreChatViewGetStartedDescription = "We just need a few details to help you get started";
+
+/* User's connection status */
+online = "Online";
+offline = "Offline";
+
+/* Will be shown when the user's display name is not set */
+noName = "No Name";
