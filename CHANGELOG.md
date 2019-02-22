@@ -2,6 +2,12 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+1.2.0(Upcoming release)
+
+### Enhancements
+
+- [AL-2993] Updated Kommunicate framework to Swift 4.2.
+
 1.1.0
 
 ### Enhancements
