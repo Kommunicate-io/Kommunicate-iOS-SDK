@@ -101,8 +101,6 @@ open class Kommunicate: NSObject {
     @objc open class func registerUser(
         _ kmUser: KMUser,
         completion : @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
-        let alChatLauncher: ALChatLauncher = ALChatLauncher(applicationId: applicationId)
-
         let registerUserClientService: ALRegisterUserClientService = ALRegisterUserClientService()
 
         registerUserClientService.initWithCompletion(kmUser, withCompletion: { (response, error) in
