@@ -24,7 +24,6 @@ open class KMConversationViewController: ALKConversationViewController {
     let awayMessageView = AwayMessageView(frame: CGRect.zero)
     var conversationService = KMConversationService()
 
-    lazy var channelKey = self.viewModel.channelKey
     private let awayMessageheight = 80.0
 
     override open func viewWillAppear(_ animated: Bool) {
@@ -107,8 +106,8 @@ open class KMConversationViewController: ALKConversationViewController {
     }
 
     private func updateAssigneeDetails() {
-        viewModel.updateAssigneeDetails(groupId: channelKey) {
-            self.customNavigationView.updateView(assignee: self.viewModel.conversationAssignee(groupId: self.channelKey))
+        viewModel.updateAssigneeDetails(groupId: viewModel.channelKey) {
+            self.customNavigationView.updateView(assignee: self.viewModel.conversationAssignee(groupId: self.viewModel.channelKey))
         }
     }
 

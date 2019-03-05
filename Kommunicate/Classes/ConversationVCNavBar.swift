@@ -174,7 +174,7 @@ class ConversationVCNavBar: UIView, Localizable {
     }
     
     private func setupOnlineStatus(_ contact: ALContact) {
-        if contact.connected {
+        if (contact.connected || contact.roleType == 1) {
             onlineStatusText.text = localizedString(
                 forKey: LocalizationKey.online,
                 fileName: localizationFileName)
