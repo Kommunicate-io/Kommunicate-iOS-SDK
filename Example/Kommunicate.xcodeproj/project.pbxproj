@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1AD224B3222E92DE00184112 /* ConversationDetailMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD224B2222E92DE00184112 /* ConversationDetailMock.swift */; };
+		1AD224B5222E935900184112 /* KMConversationViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD224B4222E935900184112 /* KMConversationViewControllerTests.swift */; };
 		1AFB913121A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB913021A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
@@ -32,6 +34,8 @@
 
 /* Begin PBXFileReference section */
 		02A5491CCF26CCAE37134836 /* Pods_Kommunicate_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Kommunicate_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1AD224B2222E92DE00184112 /* ConversationDetailMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDetailMock.swift; sourceTree = "<group>"; };
+		1AD224B4222E935900184112 /* KMConversationViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KMConversationViewControllerTests.swift; sourceTree = "<group>"; };
 		1AFB913021A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationVCNavBarSnapshotTests.swift; sourceTree = "<group>"; };
 		1B1CC9E49975F48B2A2355C6 /* Pods_Kommunicate_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Kommunicate_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		20340762654EA27594C64588 /* Pods-Kommunicate_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kommunicate_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Kommunicate_Example/Pods-Kommunicate_Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -76,6 +80,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1AD224B1222E92C700184112 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				1AD224B2222E92DE00184112 /* ConversationDetailMock.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
 		5A96A34B1141879E347AD2AC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -133,10 +145,12 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				1AD224B1222E92C700184112 /* Mocks */,
 				607FACEB1AFB9204008FA782 /* KommunicateTests.swift */,
 				1AFB913021A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift */,
 				8B8FFA9321D5171F00C8ED57 /* PaymentTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
+				1AD224B4222E935900184112 /* KMConversationViewControllerTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -407,6 +421,8 @@
 				8B8FFA9421D5171F00C8ED57 /* PaymentTests.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* KommunicateTests.swift in Sources */,
 				1AFB913121A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift in Sources */,
+				1AD224B5222E935900184112 /* KMConversationViewControllerTests.swift in Sources */,
+				1AD224B3222E92DE00184112 /* ConversationDetailMock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

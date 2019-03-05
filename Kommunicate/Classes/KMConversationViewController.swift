@@ -23,6 +23,7 @@ open class KMConversationViewController: ALKConversationViewController {
 
     let awayMessageView = AwayMessageView(frame: CGRect.zero)
     var conversationService = KMConversationService()
+    var conversationDetail = ConversationDetail()
 
     private let awayMessageheight = 80.0
 
@@ -105,9 +106,9 @@ open class KMConversationViewController: ALKConversationViewController {
         NotificationCenter.default.post(notification)
     }
 
-    private func updateAssigneeDetails() {
-        viewModel.updateAssigneeDetails(groupId: viewModel.channelKey) {
-            self.customNavigationView.updateView(assignee: self.viewModel.conversationAssignee(groupId: self.viewModel.channelKey))
+    func updateAssigneeDetails() {
+        conversationDetail.updatedAssigneeDetails(groupId: viewModel.channelKey) { (contact) in
+            self.customNavigationView.updateView(assignee: contact)
         }
     }
 
@@ -116,7 +117,7 @@ open class KMConversationViewController: ALKConversationViewController {
         navigationItem.titleView = UIView()
 
         // Create custom navigation view.
-        customNavigationView.updateView(assignee: viewModel.conversationAssignee(groupId: viewModel.channelKey))
+        customNavigationView.updateView(assignee: conversationDetail.conversationAssignee(groupId: viewModel.channelKey))
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
     }
 
