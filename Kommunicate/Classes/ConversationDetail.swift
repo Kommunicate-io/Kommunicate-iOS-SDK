@@ -7,51 +7,50 @@
 
 import Foundation
 import Applozic
-import ApplozicSwift
 
-extension ALKConversationViewModel {
-    
-    public func conversationAssignee(groupId: NSNumber?) -> ALContact? {
-        let channelService = ALChannelService()
-        let contactDbService = ALContactDBService()
+class ConversationDetail {
+
+    let channelService = ALChannelService()
+    let userService = ALUserService()
+    let contactDbService = ALContactDBService()
+
+    func conversationAssignee(groupId: NSNumber?) -> ALContact? {
         // Check if group conversation.
         guard let channelKey = groupId else {
             return nil
         }
-        
+
         let channel = channelService.getChannelByKey(channelKey)
         let metadata = channel?.metadata
         // Check if metadata contains assignee details
         guard let assigneeId = metadata?[ChannelMetadataKeys.conversationAssignee] as? String else {
             return nil
         }
-        
+
         // Load contact from assignee id
         guard let assignee = contactDbService.loadContact(byKey: "userId", value: assigneeId) else {
             return nil
         }
         return assignee
     }
-    
-    
-    public func updateAssigneeDetails(groupId: NSNumber?, completion: @escaping () -> ()) {
-        let userService = ALUserService()
-        let contactDbService = ALContactDBService()
+
+
+    func updatedAssigneeDetails(groupId: NSNumber?, completion: @escaping (ALContact?) -> ()) {
         guard let assignee = conversationAssignee(groupId: groupId) else {
-            completion()
+            completion(nil)
             return
         }
         let userIds: [String] = [assignee.userId]
         userService.fetchAndupdateUserDetails(NSMutableArray(array: userIds), withCompletion: { (userDetailArray, error) in
             guard let userDetails = userDetailArray else {
-                completion()
+                completion(assignee)
                 return
             }
             for case let userDetail as ALUserDetail in userDetails {
-                contactDbService.update(userDetail)
+                self.contactDbService.update(userDetail)
             }
-            completion()
+            completion(assignee)
         })
     }
-    
+
 }
