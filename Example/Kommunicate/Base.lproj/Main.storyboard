@@ -64,6 +64,19 @@
                                                             <action selector="getStartedBtn:" destination="Pbo-Hd-r2L" eventType="touchUpInside" id="hHi-u0-2t3"/>
                                                         </connections>
                                                     </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IhW-KT-6ZW">
+                                                        <rect key="frame" x="15" y="476" width="345" height="38"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="38" id="Rj5-ia-CyY"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Login as Visitor">
+                                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="loginAsVisitor:" destination="Pbo-Hd-r2L" eventType="touchUpInside" id="HFZ-Rc-zeB"/>
+                                                        </connections>
+                                                    </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kommunicate Sample App" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X3K-bg-emN">
                                                         <rect key="frame" x="10" y="80" width="355" height="22"/>
                                                         <constraints>
@@ -74,17 +87,41 @@
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Or" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jjr-c8-kDh">
+                                                        <rect key="frame" x="178" y="425" width="19" height="21"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="19" id="Anu-6V-cBk"/>
+                                                            <constraint firstAttribute="height" constant="21" id="hLY-O1-qSD"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="If you Login as a visitor then you don't have to pass a user Id and password. You will be logged in with a random User Id" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tqo-8T-wEX">
+                                                        <rect key="frame" x="15" y="522" width="345" height="29"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
                                                 </subviews>
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstItem="qRU-af-vN7" firstAttribute="top" secondItem="mSt-We-A0W" secondAttribute="bottom" constant="50" id="57l-UI-laE"/>
+                                                    <constraint firstItem="IhW-KT-6ZW" firstAttribute="leading" secondItem="V0H-EM-7CR" secondAttribute="leading" constant="15" id="AYu-Hv-gMI"/>
+                                                    <constraint firstItem="Jjr-c8-kDh" firstAttribute="top" secondItem="qRU-af-vN7" secondAttribute="bottom" constant="30" id="BMg-Oy-hkq"/>
                                                     <constraint firstAttribute="trailing" secondItem="mSt-We-A0W" secondAttribute="trailing" constant="15" id="FLv-Cp-sB1"/>
+                                                    <constraint firstItem="Jjr-c8-kDh" firstAttribute="centerX" secondItem="qRU-af-vN7" secondAttribute="centerX" id="KsP-VU-S2t"/>
                                                     <constraint firstItem="X3K-bg-emN" firstAttribute="leading" secondItem="V0H-EM-7CR" secondAttribute="leading" constant="10" id="Np7-8Q-Xpy"/>
+                                                    <constraint firstItem="tqo-8T-wEX" firstAttribute="leading" secondItem="V0H-EM-7CR" secondAttribute="leading" constant="15" id="O3e-rj-SV7"/>
+                                                    <constraint firstAttribute="trailing" secondItem="tqo-8T-wEX" secondAttribute="trailing" constant="15" id="Pyx-XQ-S8s"/>
                                                     <constraint firstAttribute="trailing" secondItem="qRU-af-vN7" secondAttribute="trailing" constant="15" id="QL3-el-aZs"/>
                                                     <constraint firstItem="mSt-We-A0W" firstAttribute="leading" secondItem="V0H-EM-7CR" secondAttribute="leading" constant="15" id="Sgp-s0-ZLy"/>
+                                                    <constraint firstItem="IhW-KT-6ZW" firstAttribute="top" secondItem="Jjr-c8-kDh" secondAttribute="bottom" constant="30" id="ZFH-Yo-UOq"/>
+                                                    <constraint firstItem="tqo-8T-wEX" firstAttribute="top" secondItem="IhW-KT-6ZW" secondAttribute="bottom" constant="8" id="anX-ag-AII"/>
                                                     <constraint firstItem="qRU-af-vN7" firstAttribute="leading" secondItem="V0H-EM-7CR" secondAttribute="leading" constant="15" id="dwa-3G-e23"/>
                                                     <constraint firstItem="qRU-af-vN7" firstAttribute="centerY" secondItem="V0H-EM-7CR" secondAttribute="centerY" constant="40" id="fD4-Pc-6Y1"/>
                                                     <constraint firstItem="X3K-bg-emN" firstAttribute="top" secondItem="V0H-EM-7CR" secondAttribute="top" constant="80" id="fD5-3l-EI7"/>
+                                                    <constraint firstAttribute="trailing" secondItem="IhW-KT-6ZW" secondAttribute="trailing" constant="15" id="hl7-Ev-YnW"/>
                                                     <constraint firstAttribute="trailing" secondItem="X3K-bg-emN" secondAttribute="trailing" constant="10" id="j3N-DF-dJr"/>
                                                 </constraints>
                                             </view>
@@ -117,7 +154,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="aB8-D4-8VU"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="w1a-yR-ixw" id="dU3-Z0-Ed2"/>
                         <outlet property="emailId" destination="leR-dq-agW" id="ve3-vW-YZe"/>
+                        <outlet property="loginAsVisitorButton" destination="IhW-KT-6ZW" id="VwO-xu-zuL"/>
                         <outlet property="password" destination="xme-mF-3j3" id="tep-tF-bhh"/>
                         <outlet property="userName" destination="RlE-qT-f7W" id="UvT-te-bYx"/>
                     </connections>
@@ -139,25 +178,27 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="45" translatesAutoresizingMaskIntoConstraints="NO" id="y8r-rN-lWt">
-                                <rect key="frame" x="26" y="226" width="323" height="175"/>
+                                <rect key="frame" x="26" y="251" width="323" height="125"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dLS-vh-glM">
-                                        <rect key="frame" x="11.5" y="0.0" width="300" height="80"/>
+                                        <rect key="frame" x="11.5" y="0.0" width="300" height="40"/>
+                                        <color key="backgroundColor" red="0.08235294118" green="0.53333333329999999" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="GyF-GG-sDu"/>
-                                            <constraint firstAttribute="height" constant="80" id="mJZ-zc-ucj"/>
+                                            <constraint firstAttribute="height" constant="40" id="mJZ-zc-ucj"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Launch Conversations"/>
+                                        <state key="normal" title="Launch Conversations">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
                                         <connections>
                                             <action selector="launchConversation:" destination="X0S-4o-tJq" eventType="touchUpInside" id="cJK-Bp-Fju"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H1w-vp-gBV">
-                                        <rect key="frame" x="111.5" y="125" width="100" height="50"/>
+                                        <rect key="frame" x="11.5" y="85" width="300" height="40"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="LcB-DP-Yba"/>
-                                            <constraint firstAttribute="height" constant="50" id="WQ4-1U-ji6"/>
+                                            <constraint firstAttribute="height" constant="40" id="WQ4-1U-ji6"/>
                                         </constraints>
                                         <state key="normal" title="Logout"/>
                                         <connections>
@@ -165,6 +206,9 @@
                                         </connections>
                                     </button>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="H1w-vp-gBV" firstAttribute="width" secondItem="dLS-vh-glM" secondAttribute="width" id="MtW-7p-qT9"/>
+                                </constraints>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kommunicate Sample App" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U4k-ig-LW4">
                                 <rect key="frame" x="26" y="94" width="323" height="22"/>

@@ -16,30 +16,19 @@ class LoginViewController: UIViewController {
 
     @IBOutlet weak var emailId: UITextField!
 
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var loginAsVisitorButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        KMUserDefaultHandler.setUserAuthenticationTypeId(1) // APPLOZIC
-
+        loginAsVisitorButton.layer.borderWidth = 1
+        loginAsVisitorButton.layer.borderColor = UIColor(hexString: "1588B2")?.cgColor
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 
     @IBAction func getStartedBtn(_ sender: AnyObject) {
-        let kmUser = KMUser()
         let applicationId = AppDelegate.appId
-        guard !applicationId.isEmpty else {
-            fatalError("Please pass your AppId in the AppDelegate file.")
-        }
-
-        Kommunicate.setup(applicationId: applicationId)
-        kmUser.applicationId = applicationId
+        setupApplicationKey(applicationId)
 
         guard let userIdEntered = userName.text, !userIdEntered.isEmpty else {
             let alertMessage = "Please enter a userId. If you are trying the app for the first time then just enter a random Id"
@@ -51,25 +40,48 @@ class LoginViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
             return
         }
-        kmUser.userId = self.userName.text
-        KMUserDefaultHandler.setUserId(kmUser.userId)
+        let kmUser = userWithUserId(userIdEntered, andApplicationId: applicationId)
 
         print("userName:: " , kmUser.userId)
         if(!((emailId.text?.isEmpty)!)){
             kmUser.email = emailId.text
-            KMUserDefaultHandler.setEmailId(kmUser.email)
         }
 
         if (!((password.text?.isEmpty)!)){
             kmUser.password = password.text
-            KMUserDefaultHandler.setPassword(kmUser.password)
         }
         registerUser(kmUser)
     }
 
+    @IBAction func loginAsVisitor(_ sender: Any) {
+        let applicationId = AppDelegate.appId
+        setupApplicationKey(applicationId)
+
+        let kmUser = userWithUserId(Kommunicate.randomId(), andApplicationId: applicationId)
+        registerUser(kmUser)
+    }
+
+    private func setupApplicationKey(_ applicationId: String) {
+        guard !applicationId.isEmpty else {
+            fatalError("Please pass your AppId in the AppDelegate file.")
+        }
+        Kommunicate.setup(applicationId: applicationId)
+    }
+
+    private func userWithUserId(
+        _ userId: String,
+        andApplicationId applicationId: String) -> KMUser {
+        let kmUser = KMUser()
+        kmUser.userId = userId
+        kmUser.applicationId = applicationId
+        return kmUser
+    }
+
     private func registerUser(_ kmUser: KMUser) {
+        activityIndicator.startAnimating()
         Kommunicate.registerUser(kmUser, completion: {
             response, error in
+            self.activityIndicator.stopAnimating()
             guard error == nil else {
                 NSLog("[REGISTRATION] Kommunicate user registration error: %@", error.debugDescription)
                 return
