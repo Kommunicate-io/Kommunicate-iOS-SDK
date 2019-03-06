@@ -174,6 +174,12 @@ open class Kommunicate: NSObject {
      */
     @objc open class func showConversations(from viewController: UIViewController) {
         let conversationVC = ALKConversationListViewController(configuration: Kommunicate.defaultConfiguration)
+        conversationVC.conversationListTableViewController =
+            KMConversationListTableVC(viewModel: conversationVC.viewModel,
+                                      dbService: conversationVC.dbService,
+                                      configuration: conversationVC.configuration,
+                                      delegate: conversationVC.self,
+                                      showSearch: false)
         let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
         conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
         conversationVC.conversationViewController = conversationViewController
