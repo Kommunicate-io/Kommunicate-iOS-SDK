@@ -21,7 +21,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f60-be-cnY">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="f60-be-cnY">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="674"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="q98-oe-vjs">
@@ -64,23 +64,33 @@
                                                             <action selector="getStartedBtn:" destination="Pbo-Hd-r2L" eventType="touchUpInside" id="hHi-u0-2t3"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IhW-KT-6ZW">
-                                                        <rect key="frame" x="15" y="476" width="345" height="38"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="38" id="Rj5-ia-CyY"/>
-                                                        </constraints>
-                                                        <state key="normal" title="Login as Visitor">
-                                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="loginAsVisitor:" destination="Pbo-Hd-r2L" eventType="touchUpInside" id="HFZ-Rc-zeB"/>
-                                                        </connections>
-                                                    </button>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="23M-bc-Mf5">
+                                                        <rect key="frame" x="15" y="476" width="345" height="75"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IhW-KT-6ZW">
+                                                                <rect key="frame" x="0.0" y="0.0" width="345" height="38"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="38" id="Rj5-ia-CyY"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Login as Visitor">
+                                                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="loginAsVisitor:" destination="Pbo-Hd-r2L" eventType="touchUpInside" id="HFZ-Rc-zeB"/>
+                                                                </connections>
+                                                            </button>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="If you Login as a visitor then you don't have to pass a user Id and password. You will be logged in with a random User Id" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tqo-8T-wEX">
+                                                                <rect key="frame" x="0.0" y="46" width="345" height="29"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kommunicate Sample App" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X3K-bg-emN">
                                                         <rect key="frame" x="10" y="80" width="355" height="22"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="jWL-Kt-u77"/>
                                                             <constraint firstAttribute="height" constant="22" id="pMe-QX-5oR"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -90,39 +100,30 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Or" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jjr-c8-kDh">
                                                         <rect key="frame" x="178" y="425" width="19" height="21"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="19" id="Anu-6V-cBk"/>
+                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="19" id="Anu-6V-cBk"/>
                                                             <constraint firstAttribute="height" constant="21" id="hLY-O1-qSD"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="If you Login as a visitor then you don't have to pass a user Id and password. You will be logged in with a random User Id" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tqo-8T-wEX">
-                                                        <rect key="frame" x="15" y="522" width="345" height="29"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
                                                 </subviews>
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
+                                                    <constraint firstItem="23M-bc-Mf5" firstAttribute="top" secondItem="Jjr-c8-kDh" secondAttribute="bottom" constant="30" id="0MB-H6-5D0"/>
                                                     <constraint firstItem="qRU-af-vN7" firstAttribute="top" secondItem="mSt-We-A0W" secondAttribute="bottom" constant="50" id="57l-UI-laE"/>
-                                                    <constraint firstItem="IhW-KT-6ZW" firstAttribute="leading" secondItem="V0H-EM-7CR" secondAttribute="leading" constant="15" id="AYu-Hv-gMI"/>
                                                     <constraint firstItem="Jjr-c8-kDh" firstAttribute="top" secondItem="qRU-af-vN7" secondAttribute="bottom" constant="30" id="BMg-Oy-hkq"/>
                                                     <constraint firstAttribute="trailing" secondItem="mSt-We-A0W" secondAttribute="trailing" constant="15" id="FLv-Cp-sB1"/>
-                                                    <constraint firstItem="Jjr-c8-kDh" firstAttribute="centerX" secondItem="qRU-af-vN7" secondAttribute="centerX" id="KsP-VU-S2t"/>
+                                                    <constraint firstItem="23M-bc-Mf5" firstAttribute="leading" secondItem="V0H-EM-7CR" secondAttribute="leading" constant="15" id="KYT-T1-rBo"/>
                                                     <constraint firstItem="X3K-bg-emN" firstAttribute="leading" secondItem="V0H-EM-7CR" secondAttribute="leading" constant="10" id="Np7-8Q-Xpy"/>
-                                                    <constraint firstItem="tqo-8T-wEX" firstAttribute="leading" secondItem="V0H-EM-7CR" secondAttribute="leading" constant="15" id="O3e-rj-SV7"/>
-                                                    <constraint firstAttribute="trailing" secondItem="tqo-8T-wEX" secondAttribute="trailing" constant="15" id="Pyx-XQ-S8s"/>
                                                     <constraint firstAttribute="trailing" secondItem="qRU-af-vN7" secondAttribute="trailing" constant="15" id="QL3-el-aZs"/>
                                                     <constraint firstItem="mSt-We-A0W" firstAttribute="leading" secondItem="V0H-EM-7CR" secondAttribute="leading" constant="15" id="Sgp-s0-ZLy"/>
-                                                    <constraint firstItem="IhW-KT-6ZW" firstAttribute="top" secondItem="Jjr-c8-kDh" secondAttribute="bottom" constant="30" id="ZFH-Yo-UOq"/>
-                                                    <constraint firstItem="tqo-8T-wEX" firstAttribute="top" secondItem="IhW-KT-6ZW" secondAttribute="bottom" constant="8" id="anX-ag-AII"/>
                                                     <constraint firstItem="qRU-af-vN7" firstAttribute="leading" secondItem="V0H-EM-7CR" secondAttribute="leading" constant="15" id="dwa-3G-e23"/>
                                                     <constraint firstItem="qRU-af-vN7" firstAttribute="centerY" secondItem="V0H-EM-7CR" secondAttribute="centerY" constant="40" id="fD4-Pc-6Y1"/>
                                                     <constraint firstItem="X3K-bg-emN" firstAttribute="top" secondItem="V0H-EM-7CR" secondAttribute="top" constant="80" id="fD5-3l-EI7"/>
-                                                    <constraint firstAttribute="trailing" secondItem="IhW-KT-6ZW" secondAttribute="trailing" constant="15" id="hl7-Ev-YnW"/>
                                                     <constraint firstAttribute="trailing" secondItem="X3K-bg-emN" secondAttribute="trailing" constant="10" id="j3N-DF-dJr"/>
+                                                    <constraint firstAttribute="trailing" secondItem="23M-bc-Mf5" secondAttribute="trailing" constant="15" id="k3i-bE-kQm"/>
+                                                    <constraint firstItem="Jjr-c8-kDh" firstAttribute="centerX" secondItem="V0H-EM-7CR" secondAttribute="centerX" id="xOI-aM-TSi"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
@@ -158,6 +159,7 @@
                         <outlet property="emailId" destination="leR-dq-agW" id="ve3-vW-YZe"/>
                         <outlet property="loginAsVisitorButton" destination="IhW-KT-6ZW" id="VwO-xu-zuL"/>
                         <outlet property="password" destination="xme-mF-3j3" id="tep-tF-bhh"/>
+                        <outlet property="scrollView" destination="f60-be-cnY" id="w1m-A3-pra"/>
                         <outlet property="userName" destination="RlE-qT-f7W" id="UvT-te-bYx"/>
                     </connections>
                 </viewController>

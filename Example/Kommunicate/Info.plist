@@ -30,10 +30,10 @@
 	<string>Please allow Location Services to determine your location.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>$(PRODUCT_NAME) request audio use</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Allow write access</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) photo use</string>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>Allow write access</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -50,7 +50,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
 	</array>
 </dict>
 </plist>
