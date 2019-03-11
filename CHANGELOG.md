@@ -7,6 +7,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 ### Enhancements
 
 - [AL-2993] Updated Kommunicate framework to Swift 4.2.
+- [AL-3071] Added support to show conversation assignee details in conversation list screen.
 
 1.1.0
 

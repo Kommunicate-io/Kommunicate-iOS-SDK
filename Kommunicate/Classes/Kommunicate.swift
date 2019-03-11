@@ -174,6 +174,13 @@ open class Kommunicate: NSObject {
      */
     @objc open class func showConversations(from viewController: UIViewController) {
         let conversationVC = ALKConversationListViewController(configuration: Kommunicate.defaultConfiguration)
+        conversationVC.conversationListTableViewController.dataSource.cellConfigurator = {
+            (messageModel, tableCell) in
+            let cell = tableCell as! ALKChatCell
+            let message = ChatMessage(message: messageModel)
+            cell.update(viewModel: message, identity: nil)
+            cell.chatCellDelegate = conversationVC.conversationListTableViewController.self
+        }
         let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
         conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
         conversationVC.conversationViewController = conversationViewController
@@ -322,4 +329,56 @@ open class Kommunicate: NSObject {
         ALApplozicSettings.setSwiftFramework(true)
         ALApplozicSettings.hideMessages(withMetadataKeys: ["KM_ASSIGN", "KM_STATUS"])
     }
+}
+
+class ChatMessage: ALKChatViewModelProtocol {
+    var avatar: URL?
+
+    var avatarImage: UIImage?
+
+    var avatarGroupImageUrl: String?
+
+    var name: String
+
+    var groupName: String
+
+    var theLastMessage: String?
+
+    var hasUnreadMessages: Bool
+
+    var totalNumberOfUnreadMessages: UInt
+
+    var isGroupChat: Bool
+
+    var contactId: String?
+
+    var channelKey: NSNumber?
+
+    var conversationId: NSNumber!
+
+    var createdAt: String?
+
+    init(message: ALKChatViewModelProtocol) {
+        self.avatar = message.avatar
+        self.avatarImage = message.avatarImage
+        self.avatarGroupImageUrl = message.avatarGroupImageUrl
+        self.name = message.name
+        self.groupName = message.groupName
+        self.theLastMessage = message.theLastMessage
+        self.hasUnreadMessages = message.hasUnreadMessages
+        self.totalNumberOfUnreadMessages = message.totalNumberOfUnreadMessages
+        self.isGroupChat = message.isGroupChat
+        self.contactId = message.contactId
+        self.channelKey = message.channelKey
+        self.conversationId = message.conversationId
+        self.createdAt = message.createdAt
+        // Update message to show conversation assignee details
+        guard
+            isGroupChat,
+            let assignee = ConversationDetail().conversationAssignee(groupId: self.channelKey)
+            else { return }
+        self.groupName = assignee.getDisplayName()
+        self.avatarGroupImageUrl = assignee.contactImageUrl
+    }
+
 }
