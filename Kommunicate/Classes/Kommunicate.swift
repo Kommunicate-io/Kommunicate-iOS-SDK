@@ -166,6 +166,24 @@ open class Kommunicate: NSObject {
         }
     }
 
+    /// This method is used to return an instance of conversation list view controller.
+    ///
+    /// - Returns: Instance of `ALKConversationListViewController`
+    @objc open class func conversationListViewController() -> ALKConversationListViewController {
+        let conversationVC = ALKConversationListViewController(configuration: Kommunicate.defaultConfiguration)
+        conversationVC.conversationListTableViewController.dataSource.cellConfigurator = {
+            (messageModel, tableCell) in
+            let cell = tableCell as! ALKChatCell
+            let message = ChatMessage(message: messageModel)
+            cell.update(viewModel: message, identity: nil)
+            cell.chatCellDelegate = conversationVC.conversationListTableViewController.self
+        }
+        let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
+        conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
+        conversationVC.conversationViewController = conversationViewController
+        return conversationVC
+    }
+
     /**
      Launch chat list from a ViewController.
 
@@ -173,10 +191,7 @@ open class Kommunicate: NSObject {
         - viewController: ViewController from which the chat list will be launched.
      */
     @objc open class func showConversations(from viewController: UIViewController) {
-        let conversationVC = ALKConversationListViewController(configuration: Kommunicate.defaultConfiguration)
-        let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
-        conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
-        conversationVC.conversationViewController = conversationViewController
+        let conversationVC = conversationListViewController()
         let navVC = ALKBaseNavigationViewController(rootViewController: conversationVC)
         viewController.present(navVC, animated: false, completion: nil)
     }
@@ -322,4 +337,46 @@ open class Kommunicate: NSObject {
         ALApplozicSettings.setSwiftFramework(true)
         ALApplozicSettings.hideMessages(withMetadataKeys: ["KM_ASSIGN", "KM_STATUS"])
     }
+}
+
+class ChatMessage: ALKChatViewModelProtocol {
+    var messageType: ALKMessageType
+    var avatar: URL?
+    var avatarImage: UIImage?
+    var avatarGroupImageUrl: String?
+    var name: String
+    var groupName: String
+    var theLastMessage: String?
+    var hasUnreadMessages: Bool
+    var totalNumberOfUnreadMessages: UInt
+    var isGroupChat: Bool
+    var contactId: String?
+    var channelKey: NSNumber?
+    var conversationId: NSNumber!
+    var createdAt: String?
+
+    init(message: ALKChatViewModelProtocol) {
+        self.avatar = message.avatar
+        self.avatarImage = message.avatarImage
+        self.avatarGroupImageUrl = message.avatarGroupImageUrl
+        self.name = message.name
+        self.groupName = message.groupName
+        self.theLastMessage = message.theLastMessage
+        self.hasUnreadMessages = message.hasUnreadMessages
+        self.totalNumberOfUnreadMessages = message.totalNumberOfUnreadMessages
+        self.isGroupChat = message.isGroupChat
+        self.contactId = message.contactId
+        self.channelKey = message.channelKey
+        self.conversationId = message.conversationId
+        self.createdAt = message.createdAt
+        self.messageType = message.messageType
+        // Update message to show conversation assignee details
+        guard
+            isGroupChat,
+            let assignee = ConversationDetail().conversationAssignee(groupId: self.channelKey)
+            else { return }
+        self.groupName = assignee.getDisplayName()
+        self.avatarGroupImageUrl = assignee.contactImageUrl
+    }
+
 }
