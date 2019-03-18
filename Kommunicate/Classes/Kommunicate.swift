@@ -166,13 +166,10 @@ open class Kommunicate: NSObject {
         }
     }
 
-    /**
-     Launch chat list from a ViewController.
-
-     - Parameters:
-        - viewController: ViewController from which the chat list will be launched.
-     */
-    @objc open class func showConversations(from viewController: UIViewController) {
+    /// This method is used to return an instance of conversation list view controller.
+    ///
+    /// - Returns: Instance of `ALKConversationListViewController`
+    @objc open class func conversationListViewController() -> ALKConversationListViewController {
         let conversationVC = ALKConversationListViewController(configuration: Kommunicate.defaultConfiguration)
         conversationVC.conversationListTableViewController.dataSource.cellConfigurator = {
             (messageModel, tableCell) in
@@ -184,6 +181,17 @@ open class Kommunicate: NSObject {
         let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
         conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
         conversationVC.conversationViewController = conversationViewController
+        return conversationVC
+    }
+
+    /**
+     Launch chat list from a ViewController.
+
+     - Parameters:
+        - viewController: ViewController from which the chat list will be launched.
+     */
+    @objc open class func showConversations(from viewController: UIViewController) {
+        let conversationVC = conversationListViewController()
         let navVC = ALKBaseNavigationViewController(rootViewController: conversationVC)
         viewController.present(navVC, animated: false, completion: nil)
     }
@@ -332,30 +340,19 @@ open class Kommunicate: NSObject {
 }
 
 class ChatMessage: ALKChatViewModelProtocol {
+    var messageType: ALKMessageType
     var avatar: URL?
-
     var avatarImage: UIImage?
-
     var avatarGroupImageUrl: String?
-
     var name: String
-
     var groupName: String
-
     var theLastMessage: String?
-
     var hasUnreadMessages: Bool
-
     var totalNumberOfUnreadMessages: UInt
-
     var isGroupChat: Bool
-
     var contactId: String?
-
     var channelKey: NSNumber?
-
     var conversationId: NSNumber!
-
     var createdAt: String?
 
     init(message: ALKChatViewModelProtocol) {
@@ -372,6 +369,7 @@ class ChatMessage: ALKChatViewModelProtocol {
         self.channelKey = message.channelKey
         self.conversationId = message.conversationId
         self.createdAt = message.createdAt
+        self.messageType = message.messageType
         // Update message to show conversation assignee details
         guard
             isGroupChat,
