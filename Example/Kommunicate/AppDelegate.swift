@@ -15,6 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    // Pass your App Id here. You can get the App Id from install section in the dashboard.
+    static let appId = ""
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
@@ -23,6 +25,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         KMPushNotificationHandler.shared.dataConnectionNotificationHandlerWith(Kommunicate.defaultConfiguration)
         let kmApplocalNotificationHandler : KMAppLocalNotification =  KMAppLocalNotification.appLocalNotificationHandler()
         kmApplocalNotificationHandler.dataConnectionNotificationHandler()
+
+        if (KMUserDefaultHandler.isLoggedIn())
+        {
+            // Get login screen from storyboard and present it
+            if let viewController = UIStoryboard(name: "Main", bundle: nil)
+                .instantiateViewController(withIdentifier: "NavViewController") as? UINavigationController {
+                self.window?.makeKeyAndVisible();
+                self.window?.rootViewController!.present(viewController, animated:true, completion: nil)
+            }
+        }
 
         if (launchOptions != nil)
         {

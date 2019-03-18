@@ -17,6 +17,7 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* KommunicateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* KommunicateTests.swift */; };
 		81050FDED97ED682BDA95788 /* Pods_Kommunicate_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A5491CCF26CCAE37134836 /* Pods_Kommunicate_Example.framework */; };
+		8B33037F2226A494003BF306 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B33037E2226A494003BF306 /* LoginViewController.swift */; };
 		8B5BC12A22002FDC00F39956 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8B5BC12822002FDC00F39956 /* Localizable.strings */; };
 		8B8FFA9421D5171F00C8ED57 /* PaymentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8FFA9321D5171F00C8ED57 /* PaymentTests.swift */; };
 		9B62C0C2E360C245E75858BC /* Pods_Kommunicate_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B1CC9E49975F48B2A2355C6 /* Pods_Kommunicate_Tests.framework */; };
@@ -50,6 +51,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* KommunicateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KommunicateTests.swift; sourceTree = "<group>"; };
 		66048B39F43D5FE62EF374B5 /* Kommunicate.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Kommunicate.podspec; path = ../Kommunicate.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		8B33037E2226A494003BF306 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8B5BC12422002C4000F39956 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8B5BC12522002C4000F39956 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		8B5BC12922002FDC00F39956 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
+				8B33037D2226A43B003BF306 /* Login & Launch */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 			);
 			name = "Example for Kommunicate";
@@ -171,6 +174,14 @@
 				A705F6509C85EF919B1A8ED7 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		8B33037D2226A43B003BF306 /* Login & Launch */ = {
+			isa = PBXGroup;
+			children = (
+				8B33037E2226A494003BF306 /* LoginViewController.swift */,
+			);
+			name = "Login & Launch";
 			sourceTree = "<group>";
 		};
 		8E5A06963AD79A49983FD533 /* Pods */ = {
@@ -409,6 +420,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B33037F2226A494003BF306 /* LoginViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 			);
