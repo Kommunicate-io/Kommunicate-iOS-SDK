@@ -148,6 +148,9 @@ extension KMConversationViewController: NavigationBarCallbacks {
     func backButtonPressed() {
         guard let channelId = viewModel.channelKey else { return }
         sendConversationCloseNotification(channelId: String(describing: channelId))
-        self.navigationController?.popViewController(animated: true)
+        let popVC = self.navigationController?.popViewController(animated: true)
+        if popVC == nil {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 }

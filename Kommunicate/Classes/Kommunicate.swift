@@ -218,8 +218,12 @@ open class Kommunicate: NSObject {
             conversationViewController.title = channel.name
             conversationViewController.viewModel = convViewModel
             conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
-            viewController.navigationController?
-                .pushViewController(conversationViewController, animated: false)
+            if let navigationVC = viewController.navigationController {
+                navigationVC.pushViewController(conversationViewController, animated: false)
+            } else {
+                let navigationController = UINavigationController(rootViewController: conversationViewController)
+                viewController.present(navigationController, animated: false, completion: nil)
+            }
             completionHandler(true)
         }
     }
