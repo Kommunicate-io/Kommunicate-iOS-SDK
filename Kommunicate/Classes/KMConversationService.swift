@@ -44,17 +44,8 @@ public class KMConversationService: KMConservationServiceable {
     }
 
     let groupMetadata: NSMutableDictionary = {
-        let metadata = NSMutableDictionary()
-        metadata.setValue("", forKey: AL_CREATE_GROUP_MESSAGE)
-        metadata.setValue("", forKey: AL_REMOVE_MEMBER_MESSAGE)
-        metadata.setValue("", forKey: AL_ADD_MEMBER_MESSAGE)
-        metadata.setValue("", forKey: AL_JOIN_MEMBER_MESSAGE)
-        metadata.setValue("", forKey: AL_GROUP_NAME_CHANGE_MESSAGE)
-        metadata.setValue("", forKey: AL_GROUP_ICON_CHANGE_MESSAGE)
-        metadata.setValue("", forKey: AL_GROUP_LEFT_MESSAGE)
-        metadata.setValue("", forKey: AL_DELETED_GROUP_MESSAGE)
-        metadata.setValue("true", forKey: "HIDE")
-        metadata.setValue("false", forKey: "ALERT")
+        let metadata = NSMutableDictionary(
+            dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
 
         // Required for features like setting user language in server.
         guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
