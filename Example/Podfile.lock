@@ -1,8 +1,8 @@
 PODS:
-  - Applozic (6.8.2):
+  - Applozic (6.9.0):
     - SDWebImage (~> 4.4)
-  - ApplozicSwift (2.4.0):
-    - Applozic (~> 6.8.2)
+  - ApplozicSwift (2.5.0):
+    - Applozic (~> 6.9.0)
     - Kingfisher (~> 4.7.0)
     - MGSwipeTableCell (~> 1.5.6)
   - FBSnapshotTestCase (2.1.4):
@@ -10,22 +10,22 @@ PODS:
   - FBSnapshotTestCase/Core (2.1.4)
   - FBSnapshotTestCase/SwiftSupport (2.1.4):
     - FBSnapshotTestCase/Core
-  - iOSSnapshotTestCase (4.0.1):
-    - iOSSnapshotTestCase/SwiftSupport (= 4.0.1)
-  - iOSSnapshotTestCase/Core (4.0.1)
-  - iOSSnapshotTestCase/SwiftSupport (4.0.1):
+  - iOSSnapshotTestCase (5.0.2):
+    - iOSSnapshotTestCase/SwiftSupport (= 5.0.2)
+  - iOSSnapshotTestCase/Core (5.0.2)
+  - iOSSnapshotTestCase/SwiftSupport (5.0.2):
     - iOSSnapshotTestCase/Core
   - Kingfisher (4.7.0)
   - Kommunicate (1.4.0):
-    - ApplozicSwift (~> 2.4.0)
+    - ApplozicSwift (~> 2.5.0)
   - MGSwipeTableCell (1.5.6)
-  - Nimble (7.3.1)
-  - Nimble-Snapshots (6.9.0):
-    - Nimble-Snapshots/Core (= 6.9.0)
-  - Nimble-Snapshots/Core (6.9.0):
-    - iOSSnapshotTestCase (~> 4.0)
+  - Nimble (7.3.4)
+  - Nimble-Snapshots (6.9.1):
+    - Nimble-Snapshots/Core (= 6.9.1)
+  - Nimble-Snapshots/Core (6.9.1):
+    - iOSSnapshotTestCase (~> 5.0)
     - Nimble (~> 7.0)
-  - Quick (1.3.2)
+  - Quick (2.0.0)
   - SDWebImage (4.4.6):
     - SDWebImage/Core (= 4.4.6)
   - SDWebImage/Core (4.4.6)
@@ -55,16 +55,16 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Applozic: d16300c97171523445827e8f28cb382049146c7e
-  ApplozicSwift: f9577588fdcb11b7a59377f3bc566b3b23767a9b
+  Applozic: e7ca1b4c8b981562d60ab412f2b5b821c213ed09
+  ApplozicSwift: aa14e9b613e05ec062aaf9562fb1b3ccd8c9c497
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
-  iOSSnapshotTestCase: f3b2b7e606fe03fdbe49af84316bd235df32dc44
+  iOSSnapshotTestCase: 2d51aa06775e95cecb0a1fb9c5c159ccd1dd4596
   Kingfisher: da6b005aa96d37698e3e4f1ccfe96a5b9bbf27d6
-  Kommunicate: d7fffd24884dc03c5c2f2b9614f0d9080e98919a
+  Kommunicate: 819ad155504265a96ebca834e1180c52e20bebcb
   MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
-  Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
-  Nimble-Snapshots: 79394f8d0aea3df54bd5ff78ee9dff05a523a09c
-  Quick: 2623cb30d7a7f41ca62f684f679586558f483d46
+  Nimble: 051e3d8912d40138fa5591c78594f95fb172af37
+  Nimble-Snapshots: bbd1ab264bacc24a9ce24a8363bc05aac783aeb0
+  Quick: ce1276c7c27ba2da3cb2fd0cde053c3648b3b22d
   SDWebImage: 3f3f0c02f09798048c47a5ed0a13f17b063572d8
 
 PODFILE CHECKSUM: dc4c8879e4b38387271291b5935272ba668a0818
