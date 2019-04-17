@@ -43,6 +43,19 @@ public class KMConversationService: KMConservationServiceable {
         case messageNotPresent
     }
 
+    let groupMetadata: NSMutableDictionary = {
+        let metadata = NSMutableDictionary(
+            dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
+
+        // Required for features like setting user language in server.
+        guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
+            !messageMetadata.isEmpty else {
+                return metadata
+        }
+        metadata.addEntries(from: messageMetadata)
+        return metadata
+    }()
+
     //MARK: - Initialization
 
     public init() { }
@@ -249,21 +262,6 @@ public class KMConversationService: KMConservationServiceable {
         return agentIds.map { createAgentGroupUserFrom(agentId: $0) }
     }
 
-    private func getGroupMetadata() -> NSMutableDictionary {
-        let metadata = NSMutableDictionary()
-        metadata.setValue("", forKey: AL_CREATE_GROUP_MESSAGE)
-        metadata.setValue("", forKey: AL_REMOVE_MEMBER_MESSAGE)
-        metadata.setValue("", forKey: AL_ADD_MEMBER_MESSAGE)
-        metadata.setValue("", forKey: AL_JOIN_MEMBER_MESSAGE)
-        metadata.setValue("", forKey: AL_GROUP_NAME_CHANGE_MESSAGE)
-        metadata.setValue("", forKey: AL_GROUP_ICON_CHANGE_MESSAGE)
-        metadata.setValue("", forKey: AL_GROUP_LEFT_MESSAGE)
-        metadata.setValue("", forKey: AL_DELETED_GROUP_MESSAGE)
-        metadata.setValue("true", forKey: "HIDE")
-        metadata.setValue("false", forKey: "ALERT")
-        return metadata
-    }
-
     private func isGroupPresent(clientId: String, completion:@escaping (_ isPresent: Bool)->()){
         let client = ALChannelService()
         client.getChannelInformation(byResponse: nil, orClientChannelKey: clientId, withCompletion: {
@@ -294,7 +292,6 @@ public class KMConversationService: KMConservationServiceable {
         }
         let alChannelService = ALChannelService()
         let groupUsers = members.map { $0.toDict() }
-        let metadata = getGroupMetadata()
 
         alChannelService.createChannel(
             groupName,
@@ -302,7 +299,7 @@ public class KMConversationService: KMConservationServiceable {
             andMembersList: membersList,
             andImageLink: nil,
             channelType: 10,
-            andMetaData: metadata,
+            andMetaData: groupMetadata,
             adminUser: agentIds.first,
             withGroupUsers: NSMutableArray(array: groupUsers),
             withCompletion: {
