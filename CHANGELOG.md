@@ -2,7 +2,7 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
-1.4.0(Upcoming release)
+1.4.0
 
 ### Enhancments
 
