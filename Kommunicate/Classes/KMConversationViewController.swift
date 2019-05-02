@@ -43,6 +43,22 @@ open class KMConversationViewController: ALKConversationViewController {
         })
     }
 
+    required public init(configuration: ALKConfiguration) {
+        super.init(configuration: configuration)
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "UPDATE_CHANNEL_METADATA"), object: nil, queue: nil, using: {[weak self] _ in
+            guard
+                let weakSelf = self,
+                weakSelf.viewModel != nil,
+                weakSelf.viewModel.isGroup
+            else { return }
+            weakSelf.updateAssigneeDetails()
+        })
+    }
+
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
     open override func viewDidLoad() {
         super.viewDidLoad()
 
