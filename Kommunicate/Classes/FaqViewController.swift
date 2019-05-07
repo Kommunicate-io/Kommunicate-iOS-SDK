@@ -29,6 +29,7 @@ public class FaqViewController: UIViewController, Localizable {
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.allowsBackForwardNavigationGestures = true
+        webView.navigationDelegate = self
         view = webView
     }
 
@@ -56,6 +57,19 @@ public class FaqViewController: UIViewController, Localizable {
         navigationBar.tintColor = configuration.navigationBarItemColor
         navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: configuration.navigationBarTitleColor]
         navigationBar.isTranslucent = false
+    }
+
+}
+
+extension FaqViewController: WKNavigationDelegate {
+
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        guard navigationAction.navigationType == .linkActivated else {
+            decisionHandler(.allow)
+            return
+        }
+        webView.load(navigationAction.request)
+        decisionHandler(.cancel)
     }
 
 }
