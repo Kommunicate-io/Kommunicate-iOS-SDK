@@ -16,6 +16,10 @@ final class URLBuilder {
         return URLBuilder(host: "api.kommunicate.io")
     }
 
+    static var helpcenterApi: URLBuilder {
+        return URLBuilder(host: "helpcenter.kommunicate.io")
+    }
+
     var url: URL? {
         var components = self.components
         if !pathComponents.isEmpty {

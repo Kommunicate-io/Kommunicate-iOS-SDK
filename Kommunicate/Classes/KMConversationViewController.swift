@@ -34,6 +34,13 @@ open class KMConversationViewController: ALKConversationViewController {
         // Fetch Assignee details every time view is launched.
         updateAssigneeDetails()
         messageStatus()
+        NotificationCenter.default.addObserver(
+            forName: Notification.Name(rawValue: "RightNavBarConversationViewAction"),
+            object: nil,
+            queue: nil,
+            using: { notification in
+                Kommunicate.openFaq(from: self, with: self.configuration)
+        })
     }
 
     open override func viewDidLoad() {
