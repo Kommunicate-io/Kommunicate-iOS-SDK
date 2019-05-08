@@ -1,7 +1,7 @@
 PODS:
   - Applozic (6.9.0):
     - SDWebImage (~> 4.4)
-  - ApplozicSwift (2.5.0):
+  - ApplozicSwift (2.5.1):
     - Applozic (~> 6.9.0)
     - Kingfisher (~> 4.7.0)
     - MGSwipeTableCell (~> 1.5.6)
@@ -17,7 +17,7 @@ PODS:
     - iOSSnapshotTestCase/Core
   - Kingfisher (4.7.0)
   - Kommunicate (1.4.0):
-    - ApplozicSwift (~> 2.5.0)
+    - ApplozicSwift (~> 2.5.1)
   - MGSwipeTableCell (1.5.6)
   - Nimble (7.3.4)
   - Nimble-Snapshots (6.9.1):
@@ -56,11 +56,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Applozic: e7ca1b4c8b981562d60ab412f2b5b821c213ed09
-  ApplozicSwift: aa14e9b613e05ec062aaf9562fb1b3ccd8c9c497
+  ApplozicSwift: 043bdd3fb0f5153159c458ef86b4a2210c2e233d
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 2d51aa06775e95cecb0a1fb9c5c159ccd1dd4596
   Kingfisher: da6b005aa96d37698e3e4f1ccfe96a5b9bbf27d6
-  Kommunicate: 1e5947b422f0b4b2c0c7d4a4e8ad47dd85913286
+  Kommunicate: a35319dda39bfa46674466e1bd122cff90c36828
   MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
   Nimble: 051e3d8912d40138fa5591c78594f95fb172af37
   Nimble-Snapshots: bbd1ab264bacc24a9ce24a8363bc05aac783aeb0
