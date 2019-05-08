@@ -2,6 +2,12 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+1.4.1
+
+### Fixes
+
+- [AL-3493] Fixed an issue where Kommunicate localization file was not part of the pod.
+
 1.4.0
 
 ### Enhancments
