@@ -50,8 +50,10 @@ open class Kommunicate: NSObject {
         var config = KMConfiguration()
         config.isTapOnNavigationBarEnabled = false
         config.isProfileTapActionEnabled = false
-        config.hideStartChatButton = true
-        config.hideRightNavBarButtonForConversationView = true
+        let faqImage = UIImage(named: "faq_image", in: Bundle.kommunicate, compatibleWith: nil)
+        config.rightNavBarImageForConversationView = faqImage
+        config.rightNavBarImageForConversationListView = faqImage
+        config.handleNavIconClickOnConversationListView = true
         return config
     }()
     
@@ -89,6 +91,29 @@ open class Kommunicate: NSObject {
         self.applicationId = applicationId
         ALUserDefaultsHandler.setApplicationKey(applicationId)
         self.defaultChatViewSettings()
+    }
+
+    private class func observeListControllerNavigationClick() {
+        let notifName = defaultConfiguration.nsNotificationNameForNavIconClick
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name(notifName),
+            object: nil,
+            queue: nil) {
+                notification in
+                guard let vc = notification.object as? ALKConversationListViewController else {
+                    return
+                }
+                openFaq(from: vc, with: defaultConfiguration)
+        }
+    }
+
+    open class func openFaq(from vc: UIViewController, with configuration: ALKConfiguration) {
+        guard let url = URLBuilder.faqURL(for: ALUserDefaultsHandler.getApplicationKey()).url else {
+            return
+        }
+        let faqVC = FaqViewController(url: url, configuration: configuration)
+        let navVC = ALKBaseNavigationViewController(rootViewController: faqVC)
+        vc.present(navVC, animated: true, completion: nil)
     }
 
     /**
@@ -181,6 +206,7 @@ open class Kommunicate: NSObject {
         let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
         conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
         conversationVC.conversationViewController = conversationViewController
+        observeListControllerNavigationClick()
         return conversationVC
     }
 

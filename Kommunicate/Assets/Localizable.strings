@@ -37,3 +37,6 @@ offline = "Offline";
 
 /* Will be shown when the user's display name is not set */
 noName = "No Name";
+
+/* Navigation title for faq view controller */
+FaqTitle = "FAQ";

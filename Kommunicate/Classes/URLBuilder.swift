@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Applozic
 
 final class URLBuilder {
 
@@ -14,6 +15,18 @@ final class URLBuilder {
 
     static var kommunicateApi: URLBuilder {
         return URLBuilder(host: "api.kommunicate.io")
+    }
+
+    static var helpcenterApi: URLBuilder {
+        guard let baseUrl = ALUserDefaultsHandler.getBASEURL() else {
+            return URLBuilder(host: "helpcenter.kommunicate.io")
+        }
+        if baseUrl.contains("-ca") {
+            return URLBuilder(host: "helpcenter-ca.kommunicate.io")
+        } else if baseUrl.contains("-test") {
+            return URLBuilder(host: "helpcenter-test.kommunicate.io")
+        }
+        return URLBuilder(host: "helpcenter.kommunicate.io")
     }
 
     var url: URL? {
