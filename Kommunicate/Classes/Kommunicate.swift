@@ -403,7 +403,7 @@ class ChatMessage: ALKChatViewModelProtocol {
         // Update message to show conversation assignee details
         guard
             isGroupChat,
-            let assignee = ConversationDetail().conversationAssignee(groupId: self.channelKey)
+            let assignee = ConversationDetail().conversationAssignee(groupId: self.channelKey, userId: self.contactId)
             else { return }
         self.groupName = assignee.getDisplayName()
         self.avatarGroupImageUrl = assignee.contactImageUrl

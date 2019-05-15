@@ -14,7 +14,7 @@ class ConversationDetailMock: ConversationDetail {
 
     var groupId: NSNumber!
 
-    override func updatedAssigneeDetails(groupId: NSNumber?, completion: @escaping (ALContact?) -> ()) {
+    override func updatedAssigneeDetails(groupId: NSNumber?, userId: String?, completion: @escaping (ALContact?) -> ()) {
         self.groupId = groupId
         completion(nil)
     }

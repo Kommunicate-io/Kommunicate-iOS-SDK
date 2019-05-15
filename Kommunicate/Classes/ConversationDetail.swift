@@ -14,10 +14,13 @@ class ConversationDetail {
     let userService = ALUserService()
     let contactDbService = ALContactDBService()
 
-    func conversationAssignee(groupId: NSNumber?) -> ALContact? {
+    func conversationAssignee(groupId: NSNumber?, userId: String?) -> ALContact? {
         // Check if group conversation.
         guard let channelKey = groupId else {
-            return nil
+            guard let userId = userId else {
+                return nil
+            }
+            return ALContactService().loadContact(byKey: "userId", value: userId)
         }
 
         let channel = channelService.getChannelByKey(channelKey)
@@ -35,8 +38,10 @@ class ConversationDetail {
     }
 
 
-    func updatedAssigneeDetails(groupId: NSNumber?, completion: @escaping (ALContact?) -> ()) {
-        guard let assignee = conversationAssignee(groupId: groupId) else {
+    func updatedAssigneeDetails(groupId: NSNumber?,
+                                userId: String?,
+                                completion: @escaping (ALContact?) -> ()) {
+        guard let assignee = conversationAssignee(groupId: groupId, userId: userId) else {
             completion(nil)
             return
         }

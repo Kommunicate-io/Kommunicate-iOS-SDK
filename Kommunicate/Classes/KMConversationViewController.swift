@@ -114,7 +114,7 @@ open class KMConversationViewController: ALKConversationViewController {
     }
 
     func updateAssigneeDetails() {
-        conversationDetail.updatedAssigneeDetails(groupId: viewModel.channelKey) { (contact) in
+        conversationDetail.updatedAssigneeDetails(groupId: viewModel.channelKey, userId: viewModel.contactId) { (contact) in
             self.customNavigationView.updateView(assignee: contact)
         }
     }
@@ -124,7 +124,7 @@ open class KMConversationViewController: ALKConversationViewController {
         navigationItem.titleView = UIView()
 
         // Create custom navigation view.
-        customNavigationView.updateView(assignee: conversationDetail.conversationAssignee(groupId: viewModel.channelKey))
+        customNavigationView.updateView(assignee: conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId))
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
     }
 
@@ -153,11 +153,11 @@ open class KMConversationViewController: ALKConversationViewController {
 
 extension KMConversationViewController: NavigationBarCallbacks {
     func backButtonPressed() {
-        guard let channelId = viewModel.channelKey else { return }
-        sendConversationCloseNotification(channelId: String(describing: channelId))
         let popVC = self.navigationController?.popViewController(animated: true)
         if popVC == nil {
             self.dismiss(animated: true, completion: nil)
         }
+        guard let channelId = viewModel.channelKey else { return }
+        sendConversationCloseNotification(channelId: String(describing: channelId))
     }
 }
