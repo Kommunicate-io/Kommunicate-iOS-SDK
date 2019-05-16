@@ -205,6 +205,7 @@ open class Kommunicate: NSObject {
         }
         let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
         conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
+        conversationViewController.viewModel = ALKConversationViewModel(contactId: nil, channelKey: nil, localizedStringFileName: defaultConfiguration.localizedStringFileName)
         conversationVC.conversationViewController = conversationViewController
         observeListControllerNavigationClick()
         return conversationVC

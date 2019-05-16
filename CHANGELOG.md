@@ -7,6 +7,10 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 ### Enhancements
 - [AL-2816] Added support for showing FAQ.
 - Now, contact details will be shown for one-to-one chat also.
+- Assignee details will now be updated real-time provided MQTT/APNS is connected.
+
+### Fixes
+- Fixed a crash where viewModel was nil while opening the controller.
 
 1.4.1
 
