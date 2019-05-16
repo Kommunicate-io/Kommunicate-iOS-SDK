@@ -6,6 +6,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 ---
 ### Enhancements
 - [AL-2816] Added support for showing FAQ.
+- Now, contact details will be shown for one-to-one chat also.
 
 1.4.1
 
