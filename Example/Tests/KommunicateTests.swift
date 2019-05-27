@@ -23,6 +23,7 @@ class KommunicateTests: XCTestCase {
             agentIds: [String],
             botIds: [String]?,
             useLastConversation: Bool = false,
+            clientConversationId: String?,
             completion:@escaping (_ clientGroupId: String) -> ()) {
 
             createConversationsCalled = true
