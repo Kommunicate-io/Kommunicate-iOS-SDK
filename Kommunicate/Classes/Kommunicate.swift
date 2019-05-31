@@ -177,16 +177,38 @@ open class Kommunicate: NSObject {
         agentIds: [String] = [],
         botIds: [String]?,
         useLastConversation: Bool = false,
+        clientConversationId: String? = nil,
         completion:@escaping (_ clientGroupId: String) -> ()) {
         let service = KMConversationService()
         if KMUserDefaultHandler.isLoggedIn() {
-            service.createConversation(
-                userId: KMUserDefaultHandler.getUserId(),
-                agentIds: agentIds,
-                botIds: botIds,
-                useLastConversation: useLastConversation,
-                completion: { response in
-                completion(response.clientChannelKey ?? "")
+
+            var allAgentIds = agentIds
+            var allBotIds = ["bot"] // Default bot that should be added everytime.
+
+            if let botIds = botIds { allBotIds.append(contentsOf: botIds) }
+            service.defaultAgentFor(completion: {
+                result in
+                switch result {
+                case .success(let agentId):
+                    allAgentIds.append(agentId)
+                case .failure(let error):
+                    print("Error while fetching agents id: \(error)")
+                    completion("")
+                }
+                allAgentIds = allAgentIds.uniqueElements
+
+                var clientConversationId = clientConversationId
+                if useLastConversation {
+                    clientConversationId = service.createClientIdFrom(userId: userId, agentIds: allAgentIds, botIds: botIds ?? [])
+                }
+                service.createConversation(
+                    userId: KMUserDefaultHandler.getUserId(),
+                    agentIds: allAgentIds,
+                    botIds: allBotIds,
+                    clientConversationId: clientConversationId,
+                    completion: { response in
+                        completion(response.clientChannelKey ?? "")
+                })
             })
         }
     }

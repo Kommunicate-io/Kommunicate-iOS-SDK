@@ -24,7 +24,7 @@ public protocol KMConservationServiceable {
         userId: String,
         agentIds: [String],
         botIds: [String]?,
-        useLastConversation: Bool,
+        clientConversationId: String?,
         completion: @escaping (Response) -> ())
 }
 
@@ -69,7 +69,7 @@ public class KMConversationService: KMConservationServiceable {
         - userId: User id of the participant.
         - agentId: User id of the agent.
         - botIds: A list of bot ids to be added in the conversation.
-        - useLastConversation: If there is a conversation already present then that will be returned.
+        - clientConversationId: client Id which will be associated with this conversation.
 
      - Returns: Response object.
     */
@@ -77,55 +77,28 @@ public class KMConversationService: KMConservationServiceable {
         userId: String,
         agentIds: [String],
         botIds: [String]?,
-        useLastConversation: Bool,
+        clientConversationId: String? = nil,
         completion: @escaping (Response) -> ()) {
-        var clientId: String? = nil
-        var allAgentIds = agentIds
-        var allBotIds = ["bot"] // Default bot that should be added everytime.
-        if let botIds = botIds {allBotIds.append(contentsOf: botIds)}
-        defaultAgentFor(completion: {
-            result in
-            switch result {
-            case .success(let agentId):
-                allAgentIds.append(agentId)
-            case .failure(let error):
-                print("Error while fetching agents id: \(error)")
-            }
-            allAgentIds = allAgentIds.uniqueElements
-            if useLastConversation {
-                // Sort and combine agent ids.
-                var newClientId = allAgentIds
-                    .sorted(by: <)
-                    .reduce("", {$0+$1.lowercased()+"_"}) + userId.lowercased()
 
-                // Sort and combine bot ids other than the default bot id.
-                if let botIds = self.removeDefaultBotIdFrom(botIds: botIds) {
-                    newClientId =
-                        newClientId + Set(botIds)
-                            .sorted(by: <)
-                            .reduce("", {$0+"_"+$1.lowercased()})
-                }
-                clientId = newClientId
-                self.isGroupPresent(clientId: newClientId, completion: {
-                    present in
-                    if present {
-                        let response = Response(success: true, clientChannelKey: newClientId, error: nil)
-                        completion(response)
-                    } else {
-                        self.createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentIds: allAgentIds, botIds: allBotIds, completion: {
-                            response in
-                            completion(response)
-                        })
-                    }
-                })
-            } else {
-                self.createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentIds: allAgentIds, botIds: allBotIds, completion: {
-                    response in
+        if let clientId = clientConversationId, !clientId.isEmpty {
+            self.isGroupPresent(clientId: clientId, completion: {
+                present in
+                if present {
+                    let response = Response(success: true, clientChannelKey: clientId, error: nil)
                     completion(response)
-                })
-            }
-        })
-
+                } else {
+                    self.createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentIds: agentIds, botIds: botIds, completion: {
+                        response in
+                        completion(response)
+                    })
+                }
+            })
+        } else {
+            self.createNewChannelAndConversation(clientChannelKey: nil, userId: userId, agentIds: agentIds, botIds: botIds, completion: {
+                response in
+                completion(response)
+            })
+        }
     }
 
     /**
@@ -216,6 +189,63 @@ public class KMConversationService: KMConservationServiceable {
         })
     }
 
+    @available(*, deprecated, renamed: "createConversation(userId:agentIds:botIds:clientConversationId:completion:)")
+    public func createConversation(
+        userId: String,
+        agentIds: [String],
+        botIds: [String]?,
+        useLastConversation: Bool,
+        completion: @escaping (Response) -> ()) {
+        var clientId: String? = nil
+        var allAgentIds = agentIds
+        var allBotIds = ["bot"] // Default bot that should be added everytime.
+        if let botIds = botIds {allBotIds.append(contentsOf: botIds)}
+        defaultAgentFor(completion: {
+            result in
+            switch result {
+            case .success(let agentId):
+                allAgentIds.append(agentId)
+            case .failure(let error):
+                print("Error while fetching agents id: \(error)")
+            }
+            allAgentIds = allAgentIds.uniqueElements
+            if useLastConversation {
+                // Sort and combine agent ids.
+                var newClientId = allAgentIds
+                    .sorted(by: <)
+                    .reduce("", {$0+$1.lowercased()+"_"}) + userId.lowercased()
+
+                // Sort and combine bot ids other than the default bot id.
+                if let botIds = self.removeDefaultBotIdFrom(botIds: botIds) {
+                    newClientId =
+                        newClientId + Set(botIds)
+                            .sorted(by: <)
+                            .reduce("", {$0+"_"+$1.lowercased()})
+                }
+                clientId = newClientId
+                self.isGroupPresent(clientId: newClientId, completion: {
+                    present in
+                    if present {
+                        let response = Response(success: true, clientChannelKey: newClientId, error: nil)
+                        completion(response)
+                    } else {
+                        self.createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentIds: allAgentIds, botIds: allBotIds, completion: {
+                            response in
+                            completion(response)
+                        })
+                    }
+                })
+            } else {
+                self.createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentIds: allAgentIds, botIds: allBotIds, completion: {
+                    response in
+                    completion(response)
+                })
+            }
+        })
+
+    }
+
+
     func makeAwayMessageFrom(json: [String: Any]) -> Result<String> {
         guard
             let data = json["data"] as? [String: Any],
@@ -238,6 +268,22 @@ public class KMConversationService: KMConservationServiceable {
                 return .failure(APIError.jsonConversion)
         }
         return .success(agentId)
+    }
+
+    func createClientIdFrom(userId: String, agentIds: [String], botIds: [String]) -> String {
+        // Sort and combine agent ids.
+        var newClientId = agentIds
+            .sorted(by: <)
+            .reduce("", {$0+$1.lowercased()+"_"}) + userId.lowercased()
+
+        // Sort and combine bot ids other than the default bot id.
+        if let botIds = self.removeDefaultBotIdFrom(botIds: botIds) {
+            newClientId =
+                newClientId + Set(botIds)
+                    .sorted(by: <)
+                    .reduce("", {$0+"_"+$1.lowercased()})
+        }
+        return newClientId
     }
 
     //MARK: - Private methods
@@ -326,3 +372,4 @@ public class KMConversationService: KMConservationServiceable {
         return allBotIds
     }
 }
+
