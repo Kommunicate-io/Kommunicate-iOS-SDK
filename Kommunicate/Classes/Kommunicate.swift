@@ -54,6 +54,8 @@ open class Kommunicate: NSObject {
         config.rightNavBarImageForConversationView = faqImage
         config.rightNavBarImageForConversationListView = faqImage
         config.handleNavIconClickOnConversationListView = true
+        config.disableSwipeInChatCell = true
+        config.hideContactInChatBar = true
         return config
     }()
     
@@ -222,7 +224,7 @@ open class Kommunicate: NSObject {
             (messageModel, tableCell) in
             let cell = tableCell as! ALKChatCell
             let message = ChatMessage(message: messageModel)
-            cell.update(viewModel: message, identity: nil)
+            cell.update(viewModel: message, identity: nil, disableSwipe: Kommunicate.defaultConfiguration.disableSwipeInChatCell)
             cell.chatCellDelegate = conversationVC.conversationListTableViewController.self
         }
         let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
