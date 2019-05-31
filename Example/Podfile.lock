@@ -20,7 +20,7 @@ PODS:
   - iOSSnapshotTestCase/SwiftSupport (5.0.2):
     - iOSSnapshotTestCase/Core
   - Kingfisher (4.7.0)
-  - Kommunicate (1.5.0):
+  - Kommunicate (1.6.0):
     - ApplozicSwift (~> 2.7.0)
   - MGSwipeTableCell (1.5.6)
   - Nimble (7.3.4)
@@ -64,7 +64,7 @@ SPEC CHECKSUMS:
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 2d51aa06775e95cecb0a1fb9c5c159ccd1dd4596
   Kingfisher: da6b005aa96d37698e3e4f1ccfe96a5b9bbf27d6
-  Kommunicate: 0d1650d621032ce8065c53f8af479b080c0a2071
+  Kommunicate: 60f9232188a7abdf85f89110b7fd748ad50d62cd
   MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
   Nimble: 051e3d8912d40138fa5591c78594f95fb172af37
   Nimble-Snapshots: bbd1ab264bacc24a9ce24a8363bc05aac783aeb0
