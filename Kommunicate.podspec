@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/Kommunicate-io/Kommunicate-iOS-SDK.git', :tag => s.version }
 
   s.social_media_url = 'https://twitter.com/kommunicateio'
-  s.ios.deployment_target = '9.0'
+  s.ios.deployment_target = '10.0'
   s.swift_version = '4.2'
   s.source_files = 'Kommunicate/Classes/**/*.{swift}'
   s.resources = 'Kommunicate/Assets/**/*{lproj,storyboard,xib,xcassets,json,strings}'
