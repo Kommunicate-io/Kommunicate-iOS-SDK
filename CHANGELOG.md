@@ -2,7 +2,7 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
-2.0.0(Upcoming release)
+2.0.0
 
 ### Enhancements
 [AL-3623] Now iOS 10 is the minimum version supported.
