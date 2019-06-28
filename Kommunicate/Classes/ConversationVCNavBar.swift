@@ -166,7 +166,7 @@ class ConversationVCNavBar: UIView, Localizable {
         }
         if let downloadURL = url {
             let resource = ImageResource(downloadURL: downloadURL, cacheKey: downloadURL.absoluteString)
-            self.profileImage.kf.setImage(with: resource, placeholder: placeHolder, options: nil, progressBlock: nil, completionHandler: nil)
+            self.profileImage.kf.setImage(with: resource, placeholder: placeHolder)
         } else {
             self.profileImage.image = placeHolder
         }
