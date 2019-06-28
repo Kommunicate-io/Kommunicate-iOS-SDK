@@ -1,14 +1,14 @@
 PODS:
-  - Applozic (6.10.0):
+  - Applozic (6.12.0):
     - SDWebImage (~> 4.4)
-  - ApplozicSwift (2.7.0):
-    - ApplozicSwift/Complete (= 2.7.0)
-  - ApplozicSwift/Complete (2.7.0):
-    - Applozic (~> 6.10.0)
+  - ApplozicSwift (3.0.0):
+    - ApplozicSwift/Complete (= 3.0.0)
+  - ApplozicSwift/Complete (3.0.0):
+    - Applozic (~> 6.12.0)
     - ApplozicSwift/RichMessageKit
-    - Kingfisher (~> 4.7.0)
+    - Kingfisher (~> 5.6.0)
     - MGSwipeTableCell (~> 1.5.6)
-  - ApplozicSwift/RichMessageKit (2.7.0)
+  - ApplozicSwift/RichMessageKit (3.0.0)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
   - FBSnapshotTestCase/Core (2.1.4)
@@ -19,9 +19,9 @@ PODS:
   - iOSSnapshotTestCase/Core (5.0.2)
   - iOSSnapshotTestCase/SwiftSupport (5.0.2):
     - iOSSnapshotTestCase/Core
-  - Kingfisher (4.7.0)
+  - Kingfisher (5.6.0)
   - Kommunicate (1.6.0):
-    - ApplozicSwift (~> 2.7.0)
+    - ApplozicSwift (~> 3.0.0)
   - MGSwipeTableCell (1.5.6)
   - Nimble (7.3.4)
   - Nimble-Snapshots (6.9.1):
@@ -30,9 +30,9 @@ PODS:
     - iOSSnapshotTestCase (~> 5.0)
     - Nimble (~> 7.0)
   - Quick (2.0.0)
-  - SDWebImage (4.4.6):
-    - SDWebImage/Core (= 4.4.6)
-  - SDWebImage/Core (4.4.6)
+  - SDWebImage (4.4.7):
+    - SDWebImage/Core (= 4.4.7)
+  - SDWebImage/Core (4.4.7)
 
 DEPENDENCIES:
   - FBSnapshotTestCase (~> 2.1.4)
@@ -59,17 +59,17 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Applozic: 6bf1a748c69ca5197e7524b095c0f8837d6be4f3
-  ApplozicSwift: 40c908ab501accb5aff1f80b93c24ce8aac7673d
+  Applozic: 2b0d175082ddb533cd3578b2339ae6629fac3bc2
+  ApplozicSwift: fec5bcb9e95cb6c785ffe45110f76db282cc3813
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 2d51aa06775e95cecb0a1fb9c5c159ccd1dd4596
-  Kingfisher: da6b005aa96d37698e3e4f1ccfe96a5b9bbf27d6
-  Kommunicate: ac0e748b3484a9881a2b2490e15f775c9ca334bc
+  Kingfisher: 1a50df6880a60bae26f3e21a0df3d17b892f5e0b
+  Kommunicate: c43d446ebeedaa59cc8e46a86fe34cecefecbfbd
   MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
   Nimble: 051e3d8912d40138fa5591c78594f95fb172af37
   Nimble-Snapshots: bbd1ab264bacc24a9ce24a8363bc05aac783aeb0
   Quick: ce1276c7c27ba2da3cb2fd0cde053c3648b3b22d
-  SDWebImage: 3f3f0c02f09798048c47a5ed0a13f17b063572d8
+  SDWebImage: c10d14a8883ebd89664f02a422006f66a85c0c5d
 
 PODFILE CHECKSUM: c4ea011b9a5ec8fda788fea71ce37c668218a091
 
