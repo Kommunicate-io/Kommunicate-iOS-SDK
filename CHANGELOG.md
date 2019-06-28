@@ -2,9 +2,14 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+2.0.0(Upcoming release)
+
+### Enhancements
+[AL-3623] Now iOS 10 is the minimum version supported.
+
 1.6.0
 ---
-### Enhancments
+### Enhancements
 - [AL-3482] Now in `createConversation` API, clientConversationId can be passed. You can use this Id if you want to link a conversation with some event on your side.
 
 1.5.0
