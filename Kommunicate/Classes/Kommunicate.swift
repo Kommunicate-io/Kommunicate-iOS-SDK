@@ -26,6 +26,10 @@ public typealias KMRegisterUserClientService = ALRegisterUserClientService
 public typealias KMPushNotificationHandler = ALKPushNotificationHandler
 public typealias KMConfiguration = ALKConfiguration
 
+let nsNotificationForFAQ : String =  "NSNotificationForFAQ"
+let nsNotificationForCreateConversation : String =  "NSNotificationForCreateConversation"
+
+
 @objc
 open class Kommunicate: NSObject {
 
@@ -52,8 +56,17 @@ open class Kommunicate: NSObject {
         config.isProfileTapActionEnabled = false
         let faqImage = UIImage(named: "faq_image", in: Bundle.kommunicate, compatibleWith: nil)
         config.rightNavBarImageForConversationView = faqImage
-        config.rightNavBarImageForConversationListView = faqImage
         config.handleNavIconClickOnConversationListView = true
+        var navigationItems = [ALKNavigationItem]()
+
+        let faqItem = ALKNavigationItem(identifier: nsNotificationForFAQ, buttonImage: nil, buttonText: "FAQ")
+
+        let createConversationItem = ALKNavigationItem(identifier: nsNotificationForCreateConversation, buttonImage: UIImage(named: "fill_214", in:  Bundle(for: ALKConversationListViewController.self), compatibleWith: nil), buttonText: "")
+
+        navigationItems.append(faqItem)
+        navigationItems.append(createConversationItem)
+
+        config.navigationItems = navigationItems
         config.disableSwipeInChatCell = true
         config.hideContactInChatBar = true
         return config
@@ -96,7 +109,7 @@ open class Kommunicate: NSObject {
     }
 
     private class func observeListControllerNavigationClick() {
-        let notifName = defaultConfiguration.nsNotificationNameForNavIconClick
+        let notifName = "NSNotificationForFAQ"
         NotificationCenter.default.addObserver(
             forName: NSNotification.Name(notifName),
             object: nil,
@@ -110,7 +123,7 @@ open class Kommunicate: NSObject {
     }
 
     private class func observeListControllerNavigationCustomButtonClick() {
-        let notifName = defaultConfiguration.NotificationForCustomButtonNavIconClick
+        let notifName = "NSNotificationForCreateConversation"
         NotificationCenter.default.addObserver(
             forName: NSNotification.Name(notifName),
             object: nil,
