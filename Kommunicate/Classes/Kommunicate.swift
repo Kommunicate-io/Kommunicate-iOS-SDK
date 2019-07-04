@@ -26,12 +26,12 @@ public typealias KMRegisterUserClientService = ALRegisterUserClientService
 public typealias KMPushNotificationHandler = ALKPushNotificationHandler
 public typealias KMConfiguration = ALKConfiguration
 
-let nsNotificationForFAQ : String =  "NSNotificationForFAQ"
-let nsNotificationForCreateConversation : String =  "NSNotificationForCreateConversation"
+public let nsNotificationForFAQ : String =  "NSNotificationForFAQ"
+public let nsNotificationForCreateConversation : String =  "NSNotificationForCreateConversation"
 
 
 @objc
-open class Kommunicate: NSObject {
+open class Kommunicate: NSObject,Localizable{
 
     //MARK: - Public properties
 
@@ -52,21 +52,30 @@ open class Kommunicate: NSObject {
     */
     public static var defaultConfiguration: KMConfiguration = {
         var config = KMConfiguration()
+
         config.isTapOnNavigationBarEnabled = false
         config.isProfileTapActionEnabled = false
+
         let faqImage = UIImage(named: "faq_image", in: Bundle.kommunicate, compatibleWith: nil)
-        config.rightNavBarImageForConversationView = faqImage
-        config.handleNavIconClickOnConversationListView = true
-        var navigationItems = [ALKNavigationItem]()
+
+        var navigationItemsForConversationList = [ALKNavigationItem]()
 
         let faqItem = ALKNavigationItem(identifier: nsNotificationForFAQ, buttonImage: nil, buttonText: "FAQ")
 
         let createConversationItem = ALKNavigationItem(identifier: nsNotificationForCreateConversation, buttonImage: UIImage(named: "fill_214", in:  Bundle(for: ALKConversationListViewController.self), compatibleWith: nil), buttonText: "")
 
-        navigationItems.append(faqItem)
-        navigationItems.append(createConversationItem)
+        navigationItemsForConversationList.append(faqItem)
+        navigationItemsForConversationList.append(createConversationItem)
 
-        config.navigationItems = navigationItems
+        var navigationItemsForConversationView = [ALKNavigationItem]()
+
+        navigationItemsForConversationView.append(faqItem)
+
+        config.navigationItemsForConversationList = navigationItemsForConversationList
+
+        config.hideStartChatButton = true
+
+        config.navigationItemsForConversationView = navigationItemsForConversationView
         config.disableSwipeInChatCell = true
         config.hideContactInChatBar = true
         return config
@@ -525,3 +534,4 @@ class ChatMessage: ALKChatViewModelProtocol {
     }
 
 }
+

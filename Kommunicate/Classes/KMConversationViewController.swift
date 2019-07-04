@@ -35,7 +35,7 @@ open class KMConversationViewController: ALKConversationViewController {
         updateAssigneeDetails()
         messageStatus()
         NotificationCenter.default.addObserver(
-            forName: Notification.Name(rawValue: "RightNavBarConversationViewAction"),
+            forName: Notification.Name(rawValue: nsNotificationForFAQ),
             object: nil,
             queue: nil,
             using: { notification in
