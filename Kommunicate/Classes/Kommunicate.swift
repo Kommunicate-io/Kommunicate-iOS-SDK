@@ -56,13 +56,13 @@ open class Kommunicate: NSObject,Localizable{
         config.isTapOnNavigationBarEnabled = false
         config.isProfileTapActionEnabled = false
 
-        let faqImage = UIImage(named: "faq_image", in: Bundle.kommunicate, compatibleWith: nil)
-
         var navigationItemsForConversationList = [ALKNavigationItem]()
 
-        let faqItem = ALKNavigationItem(identifier: nsNotificationForFAQ, buttonImage: nil, buttonText:  NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
+        let faqItem = ALKNavigationItem(identifier: nsNotificationForFAQ,buttonText:  NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
 
-        let createConversationItem = ALKNavigationItem(identifier: nsNotificationForCreateConversation, buttonImage: UIImage(named: "fill_214", in:  Bundle(for: ALKConversationListViewController.self), compatibleWith: nil), buttonText: "")
+        let startNewImage =  UIImage(named: "fill_214", in:  Bundle(for: ALKConversationListViewController.self), compatibleWith: nil)!
+
+        let createConversationItem = ALKNavigationItem(identifier: nsNotificationForCreateConversation, buttonImage: startNewImage)
 
         navigationItemsForConversationList.append(faqItem)
         navigationItemsForConversationList.append(createConversationItem)
