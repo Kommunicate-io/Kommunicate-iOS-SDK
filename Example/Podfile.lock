@@ -63,12 +63,12 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   ApplozicSwift:
-    :commit: 3ba05a1e0b19af00f2a40888a1afbb9beb9df0af
+    :commit: 99cadd3355652826584bf0e4f87b295445afeab5
     :git: https://github.com/AppLozic/ApplozicSwift.git
 
 SPEC CHECKSUMS:
   Applozic: 2b0d175082ddb533cd3578b2339ae6629fac3bc2
-  ApplozicSwift: cd7e7be52db40c7b8c9b8dbaae14a579801e386c
+  ApplozicSwift: fec5bcb9e95cb6c785ffe45110f76db282cc3813
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 2d51aa06775e95cecb0a1fb9c5c159ccd1dd4596
   Kingfisher: 1a50df6880a60bae26f3e21a0df3d17b892f5e0b
@@ -79,6 +79,6 @@ SPEC CHECKSUMS:
   Quick: ce1276c7c27ba2da3cb2fd0cde053c3648b3b22d
   SDWebImage: c10d14a8883ebd89664f02a422006f66a85c0c5d
 
-PODFILE CHECKSUM: 851d254a8fd9d112283223c6e671f5bc0680c80d
+PODFILE CHECKSUM: 67829b98fda86eae44832b1e0d88d5abafce55da
 
 COCOAPODS: 1.7.1
