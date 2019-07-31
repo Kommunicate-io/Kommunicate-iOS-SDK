@@ -146,3 +146,7 @@ OneYear = "1 Year";
 MuteButton = "Mute";
 UnmuteButton = "Unmute";
 NoConversationsLabelText = "Start to chat with your friends by tapping the 'New Chat' button";
+/* Crete conversation  info e*/
+UnbaleCreteConversationError = "Unable to create conversation";
+OkButton = "Okay";
+WaitMessage = "Please wait...";

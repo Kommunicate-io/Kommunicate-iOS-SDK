@@ -105,101 +105,6 @@ open class Kommunicate: NSObject,Localizable{
         self.defaultChatViewSettings()
     }
 
-    private class func createConversationAndLaunch(notification:Notification){
-
-        guard let vc = notification.object as? ALKConversationListViewController else {
-            return
-        }
-        let alertView =  displayAlert(viewController :vc)
-
-        createConversation(userId: KMUserDefaultHandler.getUserId(), agentIds: [], botIds: [], useLastConversation: false, clientConversationId: nil, completion: { response in
-
-            guard !response.isEmpty else {
-                DispatchQueue.main.async {
-                    alertView.dismiss(animated: false, completion: {
-                        showAlert(viewController: vc)
-                    })
-                }
-                return
-            }
-            DispatchQueue.main.async {
-                showConversationWith(groupId: response, from: vc, completionHandler: { success in
-                    alertView.dismiss(animated: false, completion: nil)
-                    guard success else {
-                        return
-                    }
-                    print("Kommunicate: conversation was shown")
-                })
-            }
-        })
-    }
-
-    private class func showAlert(viewController:ALKConversationListViewController){
-
-        let alertMessage = "Unable to create conversation"
-        let alert = UIAlertController(
-            title: "",
-            message: alertMessage,
-            preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
-        viewController.present(alert, animated: true, completion: nil)
-    }
-
-    private class func  displayAlert(viewController:ALKConversationListViewController) -> UIAlertController {
-
-        let loadingAlertController = UIAlertController(title: "Please wait...", message: nil, preferredStyle: .alert)
-        let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .gray)
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-
-        loadingAlertController.view.addSubview(activityIndicator)
-
-        let xConstraint: NSLayoutConstraint = NSLayoutConstraint(item: activityIndicator, attribute: .centerX, relatedBy: .equal, toItem: loadingAlertController.view, attribute: .centerX, multiplier: 1, constant: 0)
-        let yConstraint: NSLayoutConstraint = NSLayoutConstraint(item: activityIndicator, attribute: .centerY, relatedBy: .equal, toItem: loadingAlertController.view, attribute: .centerY, multiplier: 1.4, constant: 0)
-
-        NSLayoutConstraint.activate([ xConstraint, yConstraint])
-        activityIndicator.isUserInteractionEnabled = false
-        activityIndicator.startAnimating()
-
-        let height: NSLayoutConstraint = NSLayoutConstraint(item: loadingAlertController.view, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 80)
-        loadingAlertController.view.addConstraint(height);
-        
-        viewController.present(loadingAlertController, animated: true, completion: nil)
-
-        return loadingAlertController
-    }
-
-    open class func openFaq(from vc: UIViewController, with configuration: ALKConfiguration) {
-        guard let url = URLBuilder.faqURL(for: ALUserDefaultsHandler.getApplicationKey()).url else {
-            return
-        }
-        let faqVC = FaqViewController(url: url, configuration: configuration)
-        let navVC = ALKBaseNavigationViewController(rootViewController: faqVC)
-        vc.present(navVC, animated: true, completion: nil)
-    }
-
-    private class func observeListControllerNavigationCustomButtonClick() {
-        NotificationCenter.default.addObserver(
-            forName: NSNotification.Name(ALKNavigationItem.NSNotificationForConversationListNavigationTap),
-            object: nil,
-            queue: nil) {
-                notification in
-                guard let notificationInfo = notification.userInfo else{
-                    return
-                }
-
-                let identifier = notificationInfo["identifier"] as? Int
-                if identifier  ==  conversationCreateIdentifier  {
-                    createConversationAndLaunch(notification: notification)
-                }else if identifier == faqIdentifier{
-                    guard let vc = notification.object as? ALKConversationListViewController else {
-                        return
-                    }
-                    openFaq(from: vc, with: defaultConfiguration)
-                }
-        }
-    }
-
-
     /**
      Registers a new user, if it's already registered then user will be logged in.
 
@@ -430,7 +335,6 @@ open class Kommunicate: NSObject,Localizable{
         }
     }
 
-
     private class func isNilOrEmpty(_ string: NSString?) -> Bool {
 
         switch string {
@@ -464,6 +368,106 @@ open class Kommunicate: NSObject,Localizable{
                     })
                 }
         })
+    }
+
+    private class func showAlert(viewController:ALKConversationListViewController){
+
+         let alertMessage =  NSLocalizedString("UnbaleCreteConversationError", value: "Unable to create conversation", comment: "")
+
+        let okText =  NSLocalizedString("OkButton", value: "Okay", comment: "")
+
+        let alert = UIAlertController(
+            title: "",
+            message: alertMessage,
+            preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: okText, style: UIAlertAction.Style.default, handler: nil))
+        viewController.present(alert, animated: true, completion: nil)
+    }
+
+    private class func createConversationAndLaunch(notification:Notification){
+
+        guard let vc = notification.object as? ALKConversationListViewController else {
+            return
+        }
+        let alertView =  displayAlert(viewController :vc)
+
+        createConversation(userId: KMUserDefaultHandler.getUserId(), agentIds: [], botIds: [], useLastConversation: false, clientConversationId: nil, completion: { response in
+
+            guard !response.isEmpty else {
+                DispatchQueue.main.async {
+                    alertView.dismiss(animated: false, completion: {
+                        showAlert(viewController: vc)
+                    })
+                }
+                return
+            }
+            DispatchQueue.main.async {
+                showConversationWith(groupId: response, from: vc, completionHandler: { success in
+                    alertView.dismiss(animated: false, completion: nil)
+                    guard success else {
+                        return
+                    }
+                    print("Kommunicate: conversation was shown")
+                })
+            }
+        })
+    }
+
+    private class func  displayAlert(viewController:ALKConversationListViewController) -> UIAlertController {
+
+        let alertTitle =  NSLocalizedString("WaitMessage", value: "Please wait...", comment: "")
+
+        let loadingAlertController = UIAlertController(title: alertTitle, message: nil, preferredStyle: .alert)
+
+        let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .gray)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+
+        loadingAlertController.view.addSubview(activityIndicator)
+
+        let xConstraint: NSLayoutConstraint = NSLayoutConstraint(item: activityIndicator, attribute: .centerX, relatedBy: .equal, toItem: loadingAlertController.view, attribute: .centerX, multiplier: 1, constant: 0)
+        let yConstraint: NSLayoutConstraint = NSLayoutConstraint(item: activityIndicator, attribute: .centerY, relatedBy: .equal, toItem: loadingAlertController.view, attribute: .centerY, multiplier: 1.4, constant: 0)
+
+        NSLayoutConstraint.activate([ xConstraint, yConstraint])
+        activityIndicator.isUserInteractionEnabled = false
+        activityIndicator.startAnimating()
+
+        let height: NSLayoutConstraint = NSLayoutConstraint(item: loadingAlertController.view, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 80)
+        loadingAlertController.view.addConstraint(height);
+
+        viewController.present(loadingAlertController, animated: true, completion: nil)
+
+        return loadingAlertController
+    }
+
+    open class func openFaq(from vc: UIViewController, with configuration: ALKConfiguration) {
+        guard let url = URLBuilder.faqURL(for: ALUserDefaultsHandler.getApplicationKey()).url else {
+            return
+        }
+        let faqVC = FaqViewController(url: url, configuration: configuration)
+        let navVC = ALKBaseNavigationViewController(rootViewController: faqVC)
+        vc.present(navVC, animated: true, completion: nil)
+    }
+
+    private class func observeListControllerNavigationCustomButtonClick() {
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name(ALKNavigationItem.NSNotificationForConversationListNavigationTap),
+            object: nil,
+            queue: nil) {
+                notification in
+                guard let notificationInfo = notification.userInfo else{
+                    return
+                }
+
+                let identifier = notificationInfo["identifier"] as? Int
+                if identifier  ==  conversationCreateIdentifier  {
+                    createConversationAndLaunch(notification: notification)
+                }else if identifier == faqIdentifier{
+                    guard let vc = notification.object as? ALKConversationListViewController else {
+                        return
+                    }
+                    openFaq(from: vc, with: defaultConfiguration)
+                }
+        }
     }
 
     static private func defaultChatViewSettings() {
