@@ -312,6 +312,14 @@ open class Kommunicate: NSObject,Localizable{
         return String.random(length: 32)
     }
 
+    open class func openFaq(from vc: UIViewController, with configuration: ALKConfiguration) {
+        guard let url = URLBuilder.faqURL(for: ALUserDefaultsHandler.getApplicationKey()).url else {
+            return
+        }
+        let faqVC = FaqViewController(url: url, configuration: configuration)
+        let navVC = ALKBaseNavigationViewController(rootViewController: faqVC)
+        vc.present(navVC, animated: true, completion: nil)
+    }
 
     //MARK: - Private methods
 
@@ -372,7 +380,7 @@ open class Kommunicate: NSObject,Localizable{
 
     private class func showAlert(viewController:ALKConversationListViewController){
 
-         let alertMessage =  NSLocalizedString("UnbaleCreteConversationError", value: "Unable to create conversation", comment: "")
+         let alertMessage =  NSLocalizedString("UnableToCreateConversationError", value: "Unable to create conversation", comment: "")
 
         let okText =  NSLocalizedString("OkButton", value: "Okay", comment: "")
 
@@ -437,15 +445,6 @@ open class Kommunicate: NSObject,Localizable{
         viewController.present(loadingAlertController, animated: true, completion: nil)
 
         return loadingAlertController
-    }
-
-    open class func openFaq(from vc: UIViewController, with configuration: ALKConfiguration) {
-        guard let url = URLBuilder.faqURL(for: ALUserDefaultsHandler.getApplicationKey()).url else {
-            return
-        }
-        let faqVC = FaqViewController(url: url, configuration: configuration)
-        let navVC = ALKBaseNavigationViewController(rootViewController: faqVC)
-        vc.present(navVC, animated: true, completion: nil)
     }
 
     private class func observeListControllerNavigationCustomButtonClick() {
