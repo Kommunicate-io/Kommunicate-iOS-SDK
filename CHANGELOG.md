@@ -2,6 +2,12 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+
+2.1.0
+
+### Enhancements
+[AL-3540]Added create conversation
+
 2.0.0
 
 ### Enhancements

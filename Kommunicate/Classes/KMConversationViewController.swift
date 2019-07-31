@@ -13,6 +13,7 @@ import ApplozicSwift
 /// navigationItem.backBarButtonItem = UIBarButtonItem(customView: UIView())
 open class KMConversationViewController: ALKConversationViewController {
 
+    private let faqIdentifier =  11223346
     public var kmConversationViewConfiguration: KMConversationViewConfiguration!
 
     lazy var customNavigationView = ConversationVCNavBar(
@@ -35,11 +36,17 @@ open class KMConversationViewController: ALKConversationViewController {
         updateAssigneeDetails()
         messageStatus()
         NotificationCenter.default.addObserver(
-            forName: Notification.Name(rawValue: "RightNavBarConversationViewAction"),
+            forName: Notification.Name(rawValue: ALKNavigationItem.NSNotificationForConversationViewNavigationTap),
             object: nil,
             queue: nil,
             using: { notification in
-                Kommunicate.openFaq(from: self, with: self.configuration)
+                guard let notificationInfo = notification.userInfo else{
+                    return
+                }
+                let identifier = notificationInfo["identifier"] as? Int
+                if identifier == self.faqIdentifier{
+                    Kommunicate.openFaq(from: self, with: self.configuration)
+                }
         })
     }
 

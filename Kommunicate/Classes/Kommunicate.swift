@@ -25,9 +25,11 @@ public typealias KMDbHandler = ALDBHandler
 public typealias KMRegisterUserClientService = ALRegisterUserClientService
 public typealias KMPushNotificationHandler = ALKPushNotificationHandler
 public typealias KMConfiguration = ALKConfiguration
+private let conversationCreateIdentifier = 112233445
+private let faqIdentifier =  11223346
 
 @objc
-open class Kommunicate: NSObject {
+open class Kommunicate: NSObject,Localizable{
 
     //MARK: - Public properties
 
@@ -48,12 +50,20 @@ open class Kommunicate: NSObject {
     */
     public static var defaultConfiguration: KMConfiguration = {
         var config = KMConfiguration()
+
         config.isTapOnNavigationBarEnabled = false
         config.isProfileTapActionEnabled = false
-        let faqImage = UIImage(named: "faq_image", in: Bundle.kommunicate, compatibleWith: nil)
-        config.rightNavBarImageForConversationView = faqImage
-        config.rightNavBarImageForConversationListView = faqImage
-        config.handleNavIconClickOnConversationListView = true
+        var navigationItemsForConversationList = [ALKNavigationItem]()
+        let faqItem = ALKNavigationItem(identifier: faqIdentifier,text:  NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
+        let startNewImage =  UIImage(named: "fill_214", in:  Bundle(for: ALKConversationListViewController.self), compatibleWith: nil)!
+        let createConversationItem = ALKNavigationItem(identifier: conversationCreateIdentifier, icon: startNewImage)
+        navigationItemsForConversationList.append(faqItem)
+        navigationItemsForConversationList.append(createConversationItem)
+        var navigationItemsForConversationView = [ALKNavigationItem]()
+        navigationItemsForConversationView.append(faqItem)
+        config.navigationItemsForConversationList = navigationItemsForConversationList
+        config.hideStartChatButton = true
+        config.navigationItemsForConversationView = navigationItemsForConversationView
         config.disableSwipeInChatCell = true
         config.hideContactInChatBar = true
         return config
@@ -93,29 +103,6 @@ open class Kommunicate: NSObject {
         self.applicationId = applicationId
         ALUserDefaultsHandler.setApplicationKey(applicationId)
         self.defaultChatViewSettings()
-    }
-
-    private class func observeListControllerNavigationClick() {
-        let notifName = defaultConfiguration.nsNotificationNameForNavIconClick
-        NotificationCenter.default.addObserver(
-            forName: NSNotification.Name(notifName),
-            object: nil,
-            queue: nil) {
-                notification in
-                guard let vc = notification.object as? ALKConversationListViewController else {
-                    return
-                }
-                openFaq(from: vc, with: defaultConfiguration)
-        }
-    }
-
-    open class func openFaq(from vc: UIViewController, with configuration: ALKConfiguration) {
-        guard let url = URLBuilder.faqURL(for: ALUserDefaultsHandler.getApplicationKey()).url else {
-            return
-        }
-        let faqVC = FaqViewController(url: url, configuration: configuration)
-        let navVC = ALKBaseNavigationViewController(rootViewController: faqVC)
-        vc.present(navVC, animated: true, completion: nil)
     }
 
     /**
@@ -231,7 +218,7 @@ open class Kommunicate: NSObject {
         conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
         conversationViewController.viewModel = ALKConversationViewModel(contactId: nil, channelKey: nil, localizedStringFileName: defaultConfiguration.localizedStringFileName)
         conversationVC.conversationViewController = conversationViewController
-        observeListControllerNavigationClick()
+        observeListControllerNavigationCustomButtonClick()
         return conversationVC
     }
 
@@ -325,6 +312,14 @@ open class Kommunicate: NSObject {
         return String.random(length: 32)
     }
 
+    open class func openFaq(from vc: UIViewController, with configuration: ALKConfiguration) {
+        guard let url = URLBuilder.faqURL(for: ALUserDefaultsHandler.getApplicationKey()).url else {
+            return
+        }
+        let faqVC = FaqViewController(url: url, configuration: configuration)
+        let navVC = ALKBaseNavigationViewController(rootViewController: faqVC)
+        vc.present(navVC, animated: true, completion: nil)
+    }
 
     //MARK: - Private methods
 
@@ -347,7 +342,6 @@ open class Kommunicate: NSObject {
             })
         }
     }
-
 
     private class func isNilOrEmpty(_ string: NSString?) -> Bool {
 
@@ -382,6 +376,97 @@ open class Kommunicate: NSObject {
                     })
                 }
         })
+    }
+
+    private class func showAlert(viewController:ALKConversationListViewController){
+
+         let alertMessage =  NSLocalizedString("UnableToCreateConversationError", value: "Unable to create conversation", comment: "")
+
+        let okText =  NSLocalizedString("OkButton", value: "Okay", comment: "")
+
+        let alert = UIAlertController(
+            title: "",
+            message: alertMessage,
+            preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: okText, style: UIAlertAction.Style.default, handler: nil))
+        viewController.present(alert, animated: true, completion: nil)
+    }
+
+    private class func createConversationAndLaunch(notification:Notification){
+
+        guard let vc = notification.object as? ALKConversationListViewController else {
+            return
+        }
+        let alertView =  displayAlert(viewController :vc)
+
+        createConversation(userId: KMUserDefaultHandler.getUserId(), agentIds: [], botIds: [], useLastConversation: false, clientConversationId: nil, completion: { response in
+
+            guard !response.isEmpty else {
+                DispatchQueue.main.async {
+                    alertView.dismiss(animated: false, completion: {
+                        showAlert(viewController: vc)
+                    })
+                }
+                return
+            }
+            DispatchQueue.main.async {
+                showConversationWith(groupId: response, from: vc, completionHandler: { success in
+                    alertView.dismiss(animated: false, completion: nil)
+                    guard success else {
+                        return
+                    }
+                    print("Kommunicate: conversation was shown")
+                })
+            }
+        })
+    }
+
+    private class func  displayAlert(viewController:ALKConversationListViewController) -> UIAlertController {
+
+        let alertTitle =  NSLocalizedString("WaitMessage", value: "Please wait...", comment: "")
+
+        let loadingAlertController = UIAlertController(title: alertTitle, message: nil, preferredStyle: .alert)
+
+        let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .gray)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+
+        loadingAlertController.view.addSubview(activityIndicator)
+
+        let xConstraint: NSLayoutConstraint = NSLayoutConstraint(item: activityIndicator, attribute: .centerX, relatedBy: .equal, toItem: loadingAlertController.view, attribute: .centerX, multiplier: 1, constant: 0)
+        let yConstraint: NSLayoutConstraint = NSLayoutConstraint(item: activityIndicator, attribute: .centerY, relatedBy: .equal, toItem: loadingAlertController.view, attribute: .centerY, multiplier: 1.4, constant: 0)
+
+        NSLayoutConstraint.activate([ xConstraint, yConstraint])
+        activityIndicator.isUserInteractionEnabled = false
+        activityIndicator.startAnimating()
+
+        let height: NSLayoutConstraint = NSLayoutConstraint(item: loadingAlertController.view, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 80)
+        loadingAlertController.view.addConstraint(height);
+
+        viewController.present(loadingAlertController, animated: true, completion: nil)
+
+        return loadingAlertController
+    }
+
+    private class func observeListControllerNavigationCustomButtonClick() {
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name(ALKNavigationItem.NSNotificationForConversationListNavigationTap),
+            object: nil,
+            queue: nil) {
+                notification in
+                guard let notificationInfo = notification.userInfo else{
+                    return
+                }
+
+                let identifier = notificationInfo["identifier"] as? Int
+                if identifier  ==  conversationCreateIdentifier  {
+                    createConversationAndLaunch(notification: notification)
+                }else if identifier == faqIdentifier{
+                    guard let vc = notification.object as? ALKConversationListViewController else {
+                        return
+                    }
+                    openFaq(from: vc, with: defaultConfiguration)
+                }
+        }
     }
 
     static private func defaultChatViewSettings() {
@@ -435,3 +520,4 @@ class ChatMessage: ALKChatViewModelProtocol {
     }
 
 }
+
