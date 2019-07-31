@@ -3,9 +3,7 @@ platform :ios, '10.0'
 
 target 'Kommunicate_Example' do
   pod 'Kommunicate', :path => '../'
-
-  pod 'ApplozicSwift', :git => 'https://github.com/AppLozic/ApplozicSwift.git', :branch => 'AL-3540'
-
+  
   target 'Kommunicate_Tests' do
     inherit! :search_paths
 

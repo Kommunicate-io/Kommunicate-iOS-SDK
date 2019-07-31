@@ -25,10 +25,8 @@ public typealias KMDbHandler = ALDBHandler
 public typealias KMRegisterUserClientService = ALRegisterUserClientService
 public typealias KMPushNotificationHandler = ALKPushNotificationHandler
 public typealias KMConfiguration = ALKConfiguration
-
-public let nsNotificationForFAQ : String =  "NSNotificationForFAQ"
-public let nsNotificationForCreateConversation : String =  "NSNotificationForCreateConversation"
-
+private let conversationCreateIdentifier = 112233445
+private let faqIdentifier =  11223346
 
 @objc
 open class Kommunicate: NSObject,Localizable{
@@ -55,26 +53,16 @@ open class Kommunicate: NSObject,Localizable{
 
         config.isTapOnNavigationBarEnabled = false
         config.isProfileTapActionEnabled = false
-
         var navigationItemsForConversationList = [ALKNavigationItem]()
-
-        let faqItem = ALKNavigationItem(identifier: nsNotificationForFAQ,text:  NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
-
+        let faqItem = ALKNavigationItem(identifier: faqIdentifier,text:  NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
         let startNewImage =  UIImage(named: "fill_214", in:  Bundle(for: ALKConversationListViewController.self), compatibleWith: nil)!
-
-        let createConversationItem = ALKNavigationItem(identifier: nsNotificationForCreateConversation, icon: startNewImage)
-
+        let createConversationItem = ALKNavigationItem(identifier: conversationCreateIdentifier, icon: startNewImage)
         navigationItemsForConversationList.append(faqItem)
         navigationItemsForConversationList.append(createConversationItem)
-
         var navigationItemsForConversationView = [ALKNavigationItem]()
-
         navigationItemsForConversationView.append(faqItem)
-
         config.navigationItemsForConversationList = navigationItemsForConversationList
-
         config.hideStartChatButton = true
-
         config.navigationItemsForConversationView = navigationItemsForConversationView
         config.disableSwipeInChatCell = true
         config.hideContactInChatBar = true
@@ -131,23 +119,11 @@ open class Kommunicate: NSObject,Localizable{
         }
     }
 
-    private class func observeListControllerNavigationCustomButtonClick() {
-        let notifName = "NSNotificationForCreateConversation"
-        NotificationCenter.default.addObserver(
-            forName: NSNotification.Name(notifName),
-            object: nil,
-            queue: nil) {
-                notification in
-                createConversationAndLaunch(notification: notification)
-        }
-    }
-
     private class func createConversationAndLaunch(notification:Notification){
 
         guard let vc = notification.object as? ALKConversationListViewController else {
             return
         }
-
         let alertView =  displayAlert(viewController :vc)
 
         createConversation(userId: KMUserDefaultHandler.getUserId(), agentIds: [], botIds: [], useLastConversation: false, clientConversationId: nil, completion: { response in
@@ -206,7 +182,6 @@ open class Kommunicate: NSObject,Localizable{
         return loadingAlertController
     }
 
-
     open class func openFaq(from vc: UIViewController, with configuration: ALKConfiguration) {
         guard let url = URLBuilder.faqURL(for: ALUserDefaultsHandler.getApplicationKey()).url else {
             return
@@ -215,6 +190,29 @@ open class Kommunicate: NSObject,Localizable{
         let navVC = ALKBaseNavigationViewController(rootViewController: faqVC)
         vc.present(navVC, animated: true, completion: nil)
     }
+
+    private class func observeListControllerNavigationCustomButtonClick() {
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name(ALKNavigationItem.NSNotificationForConversationListNavigationTap),
+            object: nil,
+            queue: nil) {
+                notification in
+                guard let notificationInfo = notification.userInfo else{
+                    return
+                }
+
+                let identifier = notificationInfo["identifier"] as? Int
+                if identifier  ==  conversationCreateIdentifier  {
+                    createConversationAndLaunch(notification: notification)
+                }else if identifier == faqIdentifier{
+                    guard let vc = notification.object as? ALKConversationListViewController else {
+                        return
+                    }
+                    openFaq(from: vc, with: defaultConfiguration)
+                }
+        }
+    }
+
 
     /**
      Registers a new user, if it's already registered then user will be logged in.
