@@ -105,20 +105,6 @@ open class Kommunicate: NSObject,Localizable{
         self.defaultChatViewSettings()
     }
 
-    private class func observeListControllerNavigationClick() {
-        let notifName = "NSNotificationForFAQ"
-        NotificationCenter.default.addObserver(
-            forName: NSNotification.Name(notifName),
-            object: nil,
-            queue: nil) {
-                notification in
-                guard let vc = notification.object as? ALKConversationListViewController else {
-                    return
-                }
-                openFaq(from: vc, with: defaultConfiguration)
-        }
-    }
-
     private class func createConversationAndLaunch(notification:Notification){
 
         guard let vc = notification.object as? ALKConversationListViewController else {
@@ -327,7 +313,6 @@ open class Kommunicate: NSObject,Localizable{
         conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
         conversationViewController.viewModel = ALKConversationViewModel(contactId: nil, channelKey: nil, localizedStringFileName: defaultConfiguration.localizedStringFileName)
         conversationVC.conversationViewController = conversationViewController
-        observeListControllerNavigationClick()
         observeListControllerNavigationCustomButtonClick()
         return conversationVC
     }
