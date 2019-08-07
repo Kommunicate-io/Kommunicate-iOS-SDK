@@ -471,7 +471,7 @@ open class Kommunicate: NSObject,Localizable{
 
     static private func defaultChatViewSettings() {
         ALUserDefaultsHandler.setGoogleMapAPIKey("AIzaSyCOacEeJi-ZWLLrOtYyj3PKMTOFEG7HDlw") //REPLACE WITH YOUR GOOGLE MAPKEY
-        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), ALKConversationViewController.description()])
+        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description()])
         ALApplozicSettings.setFilterContactsStatus(true)
         ALUserDefaultsHandler.setDebugLogsRequire(true)
         ALApplozicSettings.setSwiftFramework(true)
