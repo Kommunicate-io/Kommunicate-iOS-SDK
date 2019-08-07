@@ -87,7 +87,7 @@ open class KMConversationViewController: ALKConversationViewController {
         // Hide away message view whenever a new message comes.
         // Make sure the message is not from same user.
         guard !viewModel.messageModels.isEmpty else { return }
-        if !viewModel.messageModels[viewModel.messageModels.count - 1].isMyMessage {
+        if let lastMessage = viewModel.messageModels.last, !lastMessage.isMyMessage {
             showAwayMessage(false)
         }
     }

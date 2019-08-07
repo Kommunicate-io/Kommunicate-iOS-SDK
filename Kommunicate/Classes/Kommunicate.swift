@@ -397,9 +397,14 @@ open class Kommunicate: NSObject,Localizable{
         guard let vc = notification.object as? ALKConversationListViewController else {
             return
         }
+        vc.view.isUserInteractionEnabled = false
+        vc.navigationController?.view.isUserInteractionEnabled = false
         let alertView =  displayAlert(viewController :vc)
 
         createConversation(userId: KMUserDefaultHandler.getUserId(), agentIds: [], botIds: [], useLastConversation: false, clientConversationId: nil, completion: { response in
+
+            vc.view.isUserInteractionEnabled = true
+            vc.navigationController?.view.isUserInteractionEnabled = true
 
             guard !response.isEmpty else {
                 DispatchQueue.main.async {
