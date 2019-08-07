@@ -397,9 +397,14 @@ open class Kommunicate: NSObject,Localizable{
         guard let vc = notification.object as? ALKConversationListViewController else {
             return
         }
+        vc.view.isUserInteractionEnabled = false
+        vc.navigationController?.view.isUserInteractionEnabled = false
         let alertView =  displayAlert(viewController :vc)
 
         createConversation(userId: KMUserDefaultHandler.getUserId(), agentIds: [], botIds: [], useLastConversation: false, clientConversationId: nil, completion: { response in
+
+            vc.view.isUserInteractionEnabled = true
+            vc.navigationController?.view.isUserInteractionEnabled = true
 
             guard !response.isEmpty else {
                 DispatchQueue.main.async {
@@ -471,7 +476,7 @@ open class Kommunicate: NSObject,Localizable{
 
     static private func defaultChatViewSettings() {
         ALUserDefaultsHandler.setGoogleMapAPIKey("AIzaSyCOacEeJi-ZWLLrOtYyj3PKMTOFEG7HDlw") //REPLACE WITH YOUR GOOGLE MAPKEY
-        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), ALKConversationViewController.description()])
+        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description()])
         ALApplozicSettings.setFilterContactsStatus(true)
         ALUserDefaultsHandler.setDebugLogsRequire(true)
         ALApplozicSettings.setSwiftFramework(true)

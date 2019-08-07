@@ -85,7 +85,11 @@ open class KMConversationViewController: ALKConversationViewController {
         super.newMessagesAdded()
 
         // Hide away message view whenever a new message comes.
-        showAwayMessage(false)
+        // Make sure the message is not from same user.
+        guard !viewModel.messageModels.isEmpty else { return }
+        if let lastMessage = viewModel.messageModels.last, !lastMessage.isMyMessage {
+            showAwayMessage(false)
+        }
     }
 
     func addAwayMessageConstraints() {
@@ -110,6 +114,7 @@ open class KMConversationViewController: ALKConversationViewController {
                     self.awayMessageView.set(message: message)
                 case .failure(let error):
                     print("Message status error: \(error)")
+                    self.showAwayMessage(false)
                     return
                 }
             }

@@ -2,6 +2,11 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+2.2.0
+### Fixes
+- Fixed an issue where tapping on notification was opening other chat screen.
+- Fixed an issue where away message was getting hidden after a message is sent by the logged-in user from some other platform.
+- Fixed an issue where away message was being shown even when some of the agents were online.
 
 2.1.0
 
