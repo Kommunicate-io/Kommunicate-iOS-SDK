@@ -12,6 +12,7 @@ extension ALKConfiguration {
     public var hideFaqButtonInConversationView: Bool {
         set {
             guard newValue else { return }
+            navigationItemsForConversationView.removeAll(where: { $0.identifier == faqIdentifier })
             navigationItemsForConversationView = []
         }
         get {
@@ -23,9 +24,7 @@ extension ALKConfiguration {
     public var hideFaqButtonInConversationList: Bool {
         set {
             guard newValue else { return }
-            let icon =  UIImage(named: "fill_214", in:  Bundle(for: ALKConversationListViewController.self), compatibleWith: nil)!
-            let createButton = ALKNavigationItem(identifier: conversationCreateIdentifier, icon: icon)
-            navigationItemsForConversationList = [createButton]
+            navigationItemsForConversationList.removeAll(where: { $0.identifier == faqIdentifier })
         }
         get {
             /// Return value doesn't matter
@@ -36,8 +35,7 @@ extension ALKConfiguration {
     public var hideStartConversationButton: Bool {
         set {
             guard newValue else { return }
-            let faqItem = ALKNavigationItem(identifier: faqIdentifier, text:  NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
-            navigationItemsForConversationList = [faqItem]
+            navigationItemsForConversationList.removeAll(where: { $0.identifier == conversationCreateIdentifier })
         }
         get {
             /// Return value doesn't matter
