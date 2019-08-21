@@ -25,8 +25,8 @@ public typealias KMDbHandler = ALDBHandler
 public typealias KMRegisterUserClientService = ALRegisterUserClientService
 public typealias KMPushNotificationHandler = ALKPushNotificationHandler
 public typealias KMConfiguration = ALKConfiguration
-private let conversationCreateIdentifier = 112233445
-private let faqIdentifier =  11223346
+let conversationCreateIdentifier = 112233445
+let faqIdentifier =  11223346
 
 @objc
 open class Kommunicate: NSObject,Localizable{
@@ -54,7 +54,7 @@ open class Kommunicate: NSObject,Localizable{
         config.isTapOnNavigationBarEnabled = false
         config.isProfileTapActionEnabled = false
         var navigationItemsForConversationList = [ALKNavigationItem]()
-        let faqItem = ALKNavigationItem(identifier: faqIdentifier,text:  NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
+        let faqItem = ALKNavigationItem(identifier: faqIdentifier, text:  NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
         let startNewImage =  UIImage(named: "fill_214", in:  Bundle(for: ALKConversationListViewController.self), compatibleWith: nil)!
         let createConversationItem = ALKNavigationItem(identifier: conversationCreateIdentifier, icon: startNewImage)
         navigationItemsForConversationList.append(faqItem)
