@@ -2,6 +2,10 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+2.2.1 (upcoming releases)
+### Enhancements
+- [AL-3788] Simplified the setting to hide FAQ button and start new conversation button.
+
 2.2.0
 ### Fixes
 - Fixed an issue where tapping on notification was opening other chat screen.
