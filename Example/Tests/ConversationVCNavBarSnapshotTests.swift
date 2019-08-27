@@ -23,6 +23,14 @@ class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
         alContact.displayName = "Demo Display Name"
         return alContact
     }()
+
+    let mockChannel: ALChannel = {
+        let channel = ALChannel()
+        channel.key = 1244444
+        channel.name = "Channel name"
+        channel.type = Int16(SUPPORT_GROUP.rawValue)
+        return channel
+    }()
     
     override func spec() {
         describe ("conversationVC NavBar") {
@@ -43,14 +51,14 @@ class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
             
             it ("show agent online") {
                 self.mockContact.connected = true
-                customNavigationView.updateView(assignee: self.mockContact)
+                customNavigationView.updateView(assignee: self.mockContact,channel:self.mockChannel )
                 navigationController.navigationBar.snapshotView(afterScreenUpdates: true)
                 expect(navigationController.navigationBar).to(haveValidSnapshot())
             }
             
             it ("show agent offline") {
                 self.mockContact.connected = false
-                customNavigationView.updateView(assignee: self.mockContact)
+                customNavigationView.updateView(assignee: self.mockContact,channel: self.mockChannel)
                 navigationController.navigationBar.snapshotView(afterScreenUpdates: true)
                 expect(navigationController.navigationBar).to(haveValidSnapshot())
             }
