@@ -76,6 +76,12 @@ open class KommunicateConversationBuilder {
     }
 
     @discardableResult
+    public func useOriginalTitle(_ isUseOriginalTitle: Bool) ->  KommunicateConversationBuilder {
+        conversation.useOriginalTitle = isUseOriginalTitle
+        return self
+    }
+
+    @discardableResult
     public  func build() ->  KommunicateConversation {
         return conversation
     }
@@ -83,7 +89,6 @@ open class KommunicateConversationBuilder {
     public init() {
 
     }
-
 }
 
 
