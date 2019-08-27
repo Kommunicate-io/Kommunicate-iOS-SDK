@@ -146,8 +146,8 @@ open class KMConversationViewController: ALKConversationViewController {
     }
 
     func updateAssigneeDetails() {
-        conversationDetail.updatedAssigneeDetails(groupId: viewModel.channelKey, userId: viewModel.contactId) { (contact) in
-            self.customNavigationView.updateView(assignee: contact)
+        conversationDetail.updatedAssigneeDetails(groupId: viewModel.channelKey, userId: viewModel.contactId) { (contact,channel) in
+            self.customNavigationView.updateView(assignee: contact,channel: channel)
         }
     }
 
@@ -156,7 +156,8 @@ open class KMConversationViewController: ALKConversationViewController {
         navigationItem.titleView = UIView()
 
         // Create custom navigation view.
-        customNavigationView.updateView(assignee: conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId))
+       let (contact,channel) =  conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId)
+        customNavigationView.updateView(assignee:contact ,channel: channel)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
     }
 
