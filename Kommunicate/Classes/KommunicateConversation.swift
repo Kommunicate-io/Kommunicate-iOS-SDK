@@ -17,7 +17,6 @@ import Applozic
     var skipRouting: Bool = false
     var isSingleConversation: Bool = true
     var useOriginalTitle: Bool = false
-    var conversationAssignee : String?
     var conversationTitle : String?
     var conversationMetadata =  [AnyHashable : Any]()
 }
@@ -57,11 +56,6 @@ open class KommunicateConversationBuilder {
         return self
     }
 
-    @discardableResult
-    public  func assignConversationTo(_ conversationAssignee: String) ->  KommunicateConversationBuilder {
-        conversation.conversationAssignee = conversationAssignee
-        return self
-    }
 
     @discardableResult
     public func withConversationTitle(_ conversationTitle: String) ->  KommunicateConversationBuilder {

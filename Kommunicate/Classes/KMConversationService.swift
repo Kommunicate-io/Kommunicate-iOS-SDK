@@ -133,11 +133,6 @@ public class KMConversationService: KMConservationServiceable {
             metadata.addEntries(from: conversation.conversationMetadata)
         }
 
-        if let conversationAssigneeUserId = conversation.conversationAssignee {
-            metadata.setValue(conversationAssigneeUserId, forKey: conversationAssignee)
-            metadata.setValue("true", forKey: skipeRouting)
-        }
-
         if conversation.skipRouting {
             metadata.setValue("true", forKey: skipeRouting)
         }
