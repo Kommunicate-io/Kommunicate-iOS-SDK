@@ -9,6 +9,8 @@ import Foundation
 import ApplozicSwift
 
 extension ALKConfiguration {
+
+    /// If true, faq button in conversation view will be hidden.
     public var hideFaqButtonInConversationView: Bool {
         set {
             guard newValue else { return }
@@ -16,30 +18,29 @@ extension ALKConfiguration {
             navigationItemsForConversationView = []
         }
         get {
-            /// Return value doesn't matter
-            return true
+            return navigationItemsForConversationView.contains { $0.identifier == faqIdentifier }
         }
     }
 
+    /// If true, faq button in conversation list will be hidden.
     public var hideFaqButtonInConversationList: Bool {
         set {
             guard newValue else { return }
             navigationItemsForConversationList.removeAll(where: { $0.identifier == faqIdentifier })
         }
         get {
-            /// Return value doesn't matter
-            return true
+            return navigationItemsForConversationList.contains { $0.identifier == faqIdentifier }
         }
     }
 
+    /// If true, start conversation button in conversation list will be hidden.
     public var hideStartConversationButton: Bool {
         set {
             guard newValue else { return }
             navigationItemsForConversationList.removeAll(where: { $0.identifier == conversationCreateIdentifier })
         }
         get {
-            /// Return value doesn't matter
-            return true
+            return navigationItemsForConversationList.contains { $0.identifier == conversationCreateIdentifier }
         }
     }
 }

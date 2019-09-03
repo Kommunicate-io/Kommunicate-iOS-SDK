@@ -18,8 +18,8 @@ public class KMPushNotificationHandler: Localizable {
     var conversationId: NSNumber?
     var configuration: KMConfiguration!
 
-    /// Make it true to hide chat list on press of notification
-    public static var hideChatListOnNotification: Bool = false
+    /// Make it false to show chat list on press of notification
+    public static var hideChatListOnNotification: Bool = true
 
     private var alContact: ALContact? {
         let alContactDbService = ALContactDBService()

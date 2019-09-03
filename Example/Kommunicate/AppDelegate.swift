@@ -99,7 +99,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let service = KMPushNotificationService()
-        guard !service.isKommunicateNotification(notification.request.content.userInfo) else {
+        let dict = notification.request.content.userInfo
+        guard !service.isKommunicateNotification(dict) else {
+            service.processPushNotification(dict, appState: UIApplication.shared.applicationState)
+            completionHandler([])
             return
         }
         completionHandler([.sound, .badge, .alert])
