@@ -15,7 +15,7 @@ import Applozic
     var clientConversationId : String?
     var botIds: [String]?
     var skipRouting: Bool = false
-    var isSingleConversation: Bool = true
+    var isSingleConversation: Bool = false
     var useOriginalTitle: Bool = false
     var conversationTitle : String?
     var conversationMetadata =  [AnyHashable : Any]()
