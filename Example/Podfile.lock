@@ -1,14 +1,14 @@
 PODS:
   - Applozic (6.14.1):
     - SDWebImage (~> 5.0.6)
-  - ApplozicSwift (3.2.0):
-    - ApplozicSwift/Complete (= 3.2.0)
-  - ApplozicSwift/Complete (3.2.0):
+  - ApplozicSwift (3.3.0):
+    - ApplozicSwift/Complete (= 3.3.0)
+  - ApplozicSwift/Complete (3.3.0):
     - Applozic (~> 6.14.0)
     - ApplozicSwift/RichMessageKit
     - Kingfisher (~> 5.7.0)
     - MGSwipeTableCell (~> 1.6.8)
-  - ApplozicSwift/RichMessageKit (3.2.0)
+  - ApplozicSwift/RichMessageKit (3.3.0)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
   - FBSnapshotTestCase/Core (2.1.4)
@@ -19,10 +19,10 @@ PODS:
   - iOSSnapshotTestCase/Core (5.0.2)
   - iOSSnapshotTestCase/SwiftSupport (5.0.2):
     - iOSSnapshotTestCase/Core
-  - Kingfisher (5.7.0)
-  - Kommunicate (2.2.0):
-    - ApplozicSwift (~> 3.2.0)
-  - MGSwipeTableCell (1.6.8)
+  - Kingfisher (5.7.1)
+  - Kommunicate (2.3.0):
+    - ApplozicSwift (~> 3.3.0)
+  - MGSwipeTableCell (1.6.9)
   - Nimble (7.3.4)
   - Nimble-Snapshots (6.9.1):
     - Nimble-Snapshots/Core (= 6.9.1)
@@ -60,12 +60,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Applozic: 2b43fbc14a3fbd3cd5664c1040d1b1d86e21d3d1
-  ApplozicSwift: d77be0211f9f3e00d6f908c210e607a2d58aaf49
+  ApplozicSwift: 61af4c8729cd56c75a6379548df9a620da983028
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 2d51aa06775e95cecb0a1fb9c5c159ccd1dd4596
-  Kingfisher: c7d211b54f1f30d8060aadab177d52b4349c825b
-  Kommunicate: 0aac7e0cf28dcae6b7b6c96b572439d8e3744baf
-  MGSwipeTableCell: dc4eca3212ed38a563b27d6aa7b3c01ce656c1e2
+  Kingfisher: 176d377ad339113c99ad4980cbae687f807e20fe
+  Kommunicate: 8b9d3144d3d350d3451cb435a05fb54f2b08d96e
+  MGSwipeTableCell: 17349a8b56c81245bd77671251eb8aa9d486d46b
   Nimble: 051e3d8912d40138fa5591c78594f95fb172af37
   Nimble-Snapshots: bbd1ab264bacc24a9ce24a8363bc05aac783aeb0
   Quick: ce1276c7c27ba2da3cb2fd0cde053c3648b3b22d
@@ -73,4 +73,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 082b42a1ee8e13768ec8ed01a094d7959ec3a111
 
-COCOAPODS: 1.7.3
+COCOAPODS: 1.7.5
