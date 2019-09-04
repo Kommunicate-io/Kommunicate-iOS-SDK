@@ -1,6 +1,6 @@
 ## Migration Guides
 
-### Migrating from versions < 2.2.0
+### Migrating from versions < 2.3.0
 
 ####  FAQ Button configuration
 
