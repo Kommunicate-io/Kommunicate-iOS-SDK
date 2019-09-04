@@ -23,10 +23,9 @@ public typealias KMPushNotificationService = ALPushNotificationService
 public typealias KMAppLocalNotification = ALAppLocalNotifications
 public typealias KMDbHandler = ALDBHandler
 public typealias KMRegisterUserClientService = ALRegisterUserClientService
-public typealias KMPushNotificationHandler = ALKPushNotificationHandler
 public typealias KMConfiguration = ALKConfiguration
-private let conversationCreateIdentifier = 112233445
-private let faqIdentifier =  11223346
+let conversationCreateIdentifier = 112233445
+let faqIdentifier =  11223346
 
 @objc
 open class Kommunicate: NSObject,Localizable{
@@ -54,7 +53,7 @@ open class Kommunicate: NSObject,Localizable{
         config.isTapOnNavigationBarEnabled = false
         config.isProfileTapActionEnabled = false
         var navigationItemsForConversationList = [ALKNavigationItem]()
-        let faqItem = ALKNavigationItem(identifier: faqIdentifier,text:  NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
+        let faqItem = ALKNavigationItem(identifier: faqIdentifier, text:  NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
         let startNewImage =  UIImage(named: "fill_214", in:  Bundle(for: ALKConversationListViewController.self), compatibleWith: nil)!
         let createConversationItem = ALKNavigationItem(identifier: conversationCreateIdentifier, icon: startNewImage)
         navigationItemsForConversationList.append(faqItem)
@@ -207,18 +206,7 @@ open class Kommunicate: NSObject,Localizable{
     /// - Returns: Instance of `ALKConversationListViewController`
     @objc open class func conversationListViewController() -> ALKConversationListViewController {
         let conversationVC = ALKConversationListViewController(configuration: Kommunicate.defaultConfiguration)
-        conversationVC.conversationListTableViewController.dataSource.cellConfigurator = {
-            (messageModel, tableCell) in
-            let cell = tableCell as! ALKChatCell
-            let message = ChatMessage(message: messageModel)
-            cell.update(viewModel: message, identity: nil, disableSwipe: Kommunicate.defaultConfiguration.disableSwipeInChatCell)
-            cell.chatCellDelegate = conversationVC.conversationListTableViewController.self
-        }
-        let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
-        conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
-        conversationViewController.viewModel = ALKConversationViewModel(contactId: nil, channelKey: nil, localizedStringFileName: defaultConfiguration.localizedStringFileName)
-        conversationVC.conversationViewController = conversationViewController
-        observeListControllerNavigationCustomButtonClick()
+        configureListVC(conversationVC)
         return conversationVC
     }
 
@@ -251,18 +239,9 @@ open class Kommunicate: NSObject,Localizable{
                 completionHandler(false)
                 return
             }
-            let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: key, localizedStringFileName: defaultConfiguration.localizedStringFileName)
-            let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
-            conversationViewController.title = channel.name
-            conversationViewController.viewModel = convViewModel
-            conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
-            if let navigationVC = viewController.navigationController {
-                navigationVC.pushViewController(conversationViewController, animated: false)
-            } else {
-                let navigationController = UINavigationController(rootViewController: conversationViewController)
-                viewController.present(navigationController, animated: false, completion: nil)
-            }
-            completionHandler(true)
+            self.openChatWith(groupId: key, from: viewController, completionHandler: { result in
+                completionHandler(result)
+            })
         }
     }
 
@@ -319,6 +298,37 @@ open class Kommunicate: NSObject,Localizable{
         let faqVC = FaqViewController(url: url, configuration: configuration)
         let navVC = ALKBaseNavigationViewController(rootViewController: faqVC)
         vc.present(navVC, animated: true, completion: nil)
+    }
+
+    //MARK: - Internal methods
+
+    class func configureListVC(_ vc: ALKConversationListViewController) {
+        vc.conversationListTableViewController.dataSource.cellConfigurator = {
+            (messageModel, tableCell) in
+            let cell = tableCell as! ALKChatCell
+            let message = ChatMessage(message: messageModel)
+            cell.update(viewModel: message, identity: nil, disableSwipe: Kommunicate.defaultConfiguration.disableSwipeInChatCell)
+            cell.chatCellDelegate = vc.conversationListTableViewController.self
+        }
+        let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
+        conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
+        conversationViewController.viewModel = ALKConversationViewModel(contactId: nil, channelKey: nil, localizedStringFileName: defaultConfiguration.localizedStringFileName)
+        vc.conversationViewController = conversationViewController
+        observeListControllerNavigationCustomButtonClick()
+    }
+
+    class func openChatWith(groupId: NSNumber, from viewController: UIViewController, completionHandler: @escaping (Bool) -> Void) {
+        let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName)
+        let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
+        conversationViewController.viewModel = convViewModel
+        conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
+        if let navigationVC = viewController.navigationController {
+            navigationVC.pushViewController(conversationViewController, animated: false)
+        } else {
+            let navigationController = UINavigationController(rootViewController: conversationViewController)
+            viewController.present(navigationController, animated: false, completion: nil)
+        }
+        completionHandler(true)
     }
 
     //MARK: - Private methods

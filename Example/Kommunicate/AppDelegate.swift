@@ -11,7 +11,7 @@ import UserNotifications
 import Kommunicate
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
 
@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        UNUserNotificationCenter.current().delegate = self
         registerForNotification()
         
         KMPushNotificationHandler.shared.dataConnectionNotificationHandlerWith(Kommunicate.defaultConfiguration)
@@ -35,37 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.window?.rootViewController!.present(viewController, animated:true, completion: nil)
             }
         }
-
-        if (launchOptions != nil)
-        {
-            let dictionary = launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] as? NSDictionary
-
-            if (dictionary != nil)
-            {
-                print("launched from push notification")
-                let kmPushNotificationService: KMPushNotificationService = KMPushNotificationService()
-
-                let appState: NSNumber = NSNumber(value: 0 as Int32)
-                let _ = kmPushNotificationService.processPushNotification(launchOptions,updateUI:appState)
-            }
-        }
         return true
-    }
-
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any])
-    {
-        print("Received notification :: \(userInfo.description)")
-        let kmPushNotificationService: KMPushNotificationService = KMPushNotificationService()
-        kmPushNotificationService.notificationArrived(to: application, with: userInfo)
-    }
-
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler
-        completionHandler: @escaping (UIBackgroundFetchResult) -> Void)
-    {
-        print("Received notification With Completion :: \(userInfo.description)")
-        let kmPushNotificationService: KMPushNotificationService = KMPushNotificationService()
-        kmPushNotificationService.notificationArrived(to: application, with: userInfo)
-        completionHandler(UIBackgroundFetchResult.newData)
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -116,21 +87,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func registerForNotification() {
-        if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
+        UNUserNotificationCenter.current().requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
 
-                if granted {
-                    DispatchQueue.main.async {
-                        UIApplication.shared.registerForRemoteNotifications()
-                    }
+            if granted {
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
                 }
             }
-        } else {
-            // Fallback on earlier versions
-            let settings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
-            UIApplication.shared.registerUserNotificationSettings(settings)
-            UIApplication.shared.registerForRemoteNotifications()
-
         }
     }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let service = KMPushNotificationService()
+        let dict = notification.request.content.userInfo
+        guard !service.isKommunicateNotification(dict) else {
+            service.processPushNotification(dict, appState: UIApplication.shared.applicationState)
+            completionHandler([])
+            return
+        }
+        completionHandler([.sound, .badge, .alert])
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        let service = KMPushNotificationService()
+        let dict = response.notification.request.content.userInfo
+        if service.isApplozicNotification(dict) {
+            service.processPushNotification(dict, appState: UIApplication.shared.applicationState)
+        }
+        completionHandler()
+    }
+
 }
