@@ -102,7 +102,7 @@ import the framework with `import Kommunicate`.
 
 ## Docs
 
-Please check the [documentation](https://docs.kommunicate.io/docs/ios-authentication.html) for more details on installation, configuration, and customization.
+Please check the [documentation](https://docs.kommunicate.io/docs/ios-installation) for more details on installation, configuration, and customization.
 
 ## License
 
