@@ -10,7 +10,7 @@ import Applozic
 
 @objc public class KommunicateConversation : NSObject {
 
-    var userId : String = ALUserDefaultsHandler.getUserId()
+    var userId : String = ALUserDefaultsHandler.getUserId() ?? Kommunicate.randomId()
     var agentIds : [String] = []
     var clientConversationId : String?
     var botIds: [String]?
