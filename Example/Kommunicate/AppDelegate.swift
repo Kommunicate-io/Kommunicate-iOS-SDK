@@ -20,6 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        let navigationBarProxy = UINavigationBar.appearance()
+        navigationBarProxy.barTintColor
+            = UIColor(red:0.93, green:0.94, blue:0.95, alpha:1.0) // light nav blue
+        navigationBarProxy.isTranslucent = false
+
         registerForNotification()
         
         KMPushNotificationHandler.shared.dataConnectionNotificationHandlerWith(Kommunicate.defaultConfiguration)
@@ -31,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Get login screen from storyboard and present it
             if let viewController = UIStoryboard(name: "Main", bundle: nil)
                 .instantiateViewController(withIdentifier: "NavViewController") as? UINavigationController {
+                viewController.modalPresentationStyle = .fullScreen
                 self.window?.makeKeyAndVisible();
                 self.window?.rootViewController!.present(viewController, animated:true, completion: nil)
             }

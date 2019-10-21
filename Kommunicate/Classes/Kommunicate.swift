@@ -65,7 +65,7 @@ open class Kommunicate: NSObject,Localizable{
         config.hideStartChatButton = true
         config.navigationItemsForConversationView = navigationItemsForConversationView
         config.disableSwipeInChatCell = true
-        config.hideContactInChatBar = true
+        config.chatBar.optionsToShow = .some([.camera, .location, .gallery, .video])
         return config
     }()
     
@@ -249,6 +249,7 @@ open class Kommunicate: NSObject,Localizable{
     @objc open class func showConversations(from viewController: UIViewController) {
         let conversationVC = conversationListViewController()
         let navVC = ALKBaseNavigationViewController(rootViewController: conversationVC)
+        navVC.modalPresentationStyle = .fullScreen
         viewController.present(navVC, animated: false, completion: nil)
     }
 
@@ -277,7 +278,8 @@ open class Kommunicate: NSObject,Localizable{
             if let navigationVC = viewController.navigationController {
                 navigationVC.pushViewController(conversationViewController, animated: false)
             } else {
-                let navigationController = UINavigationController(rootViewController: conversationViewController)
+                let navigationController = ALKBaseNavigationViewController(rootViewController: conversationViewController)
+                navigationController.modalPresentationStyle = .fullScreen
                 viewController.present(navigationController, animated: false, completion: nil)
             }
             completionHandler(true)
