@@ -2,6 +2,11 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+
+2.4.0
+### Enhancements
+- Added iOS 13 support 
+
 2.3.0
 ### Enhancements
 - [AL-3788] Simplified the setting to hide FAQ button and start new conversation button.
