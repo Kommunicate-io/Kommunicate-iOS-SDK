@@ -138,6 +138,7 @@ class LoginViewController: UIViewController {
             print("User registration was successful: %@ \(String(describing: response?.isRegisteredSuccessfully()))")
             if let viewController = UIStoryboard(name: "Main", bundle: nil)
                 .instantiateViewController(withIdentifier: "NavViewController") as? UINavigationController {
+                viewController.modalPresentationStyle = .fullScreen
                 self.present(viewController, animated:true, completion: nil)
             }
         })
