@@ -2,6 +2,10 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+2.3.0 (upcoming)
+### Enhancements
+- [AL-3762] Add passing conversation title and show it in navigation title
+
 2.2.0
 ### Fixes
 - Fixed an issue where tapping on notification was opening other chat screen.
