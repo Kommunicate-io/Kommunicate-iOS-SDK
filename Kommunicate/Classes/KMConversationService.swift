@@ -67,42 +67,14 @@ public class KMConversationService: KMConservationServiceable {
 
     //MARK: - Public methods
 
-    /**
-     Creates a new conversation with the details passed.
-
-     - Parameters:
-        - userId: User id of the participant.
-        - agentId: User id of the agent.
-        - botIds: A list of bot ids to be added in the conversation.
-        - clientConversationId: client Id which will be associated with this conversation.
-
-     - Returns: Response object.
-    */
-    public func createConversation(
-        userId: String,
-        agentIds: [String],
-        botIds: [String]?,
-        clientConversationId: String? = nil,
-        completion: @escaping (Response) -> ()) {
-
-        let kommunicateConversationBuilder = KommunicateConversationBuilder()
-            .withAgentIds(agentIds)
-            .withBotIds(botIds ?? [])
-            .withClientConversationId(clientConversationId)
-
-        let conversation =  kommunicateConversationBuilder.build()
-        createConversation(conversation: conversation) { response in
-            completion(response)
-        }
-    }
-
-    ///     Creates a new conversation with the KommunicateConversation object.
+    ///   Creates a new conversation with the KommunicateConversation object.
     /// - Parameters:
     ///   - conversation: KommunicateConversation object
     ///   - completion: Response object
 
-    public func createConversation(conversation: KommunicateConversation,
-        completion: @escaping (Response) -> ()) {
+    public func createConversation(
+        conversation: KommunicateConversation,
+        completion: @escaping (Response)->()) {
 
         if let clientId = conversation.clientConversationId, !clientId.isEmpty {
             self.isGroupPresent(clientId: clientId, completion: {
@@ -122,38 +94,6 @@ public class KMConversationService: KMConservationServiceable {
             })
         }
     }
-
-
-    func getMetaDataWith(_ conversation: KommunicateConversation) -> NSMutableDictionary {
-
-        let metadata = NSMutableDictionary(
-            dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
-
-        if  !conversation.conversationMetadata.isEmpty {
-            metadata.addEntries(from: conversation.conversationMetadata)
-        }
-
-        if conversation.skipRouting {
-            metadata.setValue("true", forKey: skipRouting)
-        }
-
-        if let conversationTitle = conversation.conversationTitle {
-            metadata.setValue(conversationTitle, forKey: kmConversationTitle)
-            metadata.setValue("true", forKey: kmOriginalTitle)
-        }
-
-        if conversation.useOriginalTitle {
-            metadata.setValue("true", forKey: kmOriginalTitle)
-        }
-
-        guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
-            !messageMetadata.isEmpty else {
-                return metadata
-        }
-        metadata.addEntries(from: messageMetadata)
-        return metadata
-    }
-
 
     /**
      Fetches away message for the given group id.
@@ -243,7 +183,7 @@ public class KMConversationService: KMConservationServiceable {
         })
     }
 
-    @available(*, deprecated, renamed: "createConversation(userId:agentIds:botIds:clientConversationId:completion:)")
+    @available(*, deprecated, message: "Use createConversation(conversation:completion:)")
     public func createConversation(
         userId: String,
         agentIds: [String],
@@ -299,6 +239,36 @@ public class KMConversationService: KMConservationServiceable {
 
     }
 
+    /**
+     Creates a new conversation with the details passed.
+
+     - Parameters:
+        - userId: User id of the participant.
+        - agentId: User id of the agent.
+        - botIds: A list of bot ids to be added in the conversation.
+        - clientConversationId: client Id which will be associated with this conversation.
+
+     - Returns: Response object.
+    */
+    @available(*, deprecated, message: "Use createConversation(conversation:completion:)")
+    public func createConversation(
+        userId: String,
+        agentIds: [String],
+        botIds: [String]?,
+        clientConversationId: String? = nil,
+        completion: @escaping (Response) -> ()) {
+
+        let kommunicateConversationBuilder = KommunicateConversationBuilder()
+            .withAgentIds(agentIds)
+            .withBotIds(botIds ?? [])
+            .withClientConversationId(clientConversationId)
+
+        let conversation =  kommunicateConversationBuilder.build()
+        createConversation(conversation: conversation) { response in
+            completion(response)
+        }
+    }
+
 
     func makeAwayMessageFrom(json: [String: Any]) -> Result<String> {
         guard
@@ -338,6 +308,36 @@ public class KMConversationService: KMConservationServiceable {
                     .reduce("", {$0+"_"+$1.lowercased()})
         }
         return newClientId
+    }
+
+    func getMetaDataWith(_ conversation: KommunicateConversation) -> NSMutableDictionary {
+
+        let metadata = NSMutableDictionary(
+            dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
+
+        if  !conversation.conversationMetadata.isEmpty {
+            metadata.addEntries(from: conversation.conversationMetadata)
+        }
+
+        if conversation.skipRouting {
+            metadata.setValue("true", forKey: skipRouting)
+        }
+
+        if let conversationTitle = conversation.conversationTitle {
+            metadata.setValue(conversationTitle, forKey: kmConversationTitle)
+            metadata.setValue("true", forKey: kmOriginalTitle)
+        }
+
+        if conversation.useOriginalTitle {
+            metadata.setValue("true", forKey: kmOriginalTitle)
+        }
+
+        guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
+            !messageMetadata.isEmpty else {
+                return metadata
+        }
+        metadata.addEntries(from: messageMetadata)
+        return metadata
     }
 
     //MARK: - Private methods

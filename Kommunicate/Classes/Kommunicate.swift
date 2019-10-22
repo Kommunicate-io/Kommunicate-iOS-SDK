@@ -151,35 +151,6 @@ open class Kommunicate: NSObject,Localizable{
         }
     }
 
-    /**
-     Creates a new conversation with the details passed.
-
-     - Parameters:
-        - userId: User id of the participant.
-        - agentId: User id of the agent.
-        - botIds: A list of bot ids to be added in the conversation.
-        - useLastConversation: If there is a conversation already present then that will be returned.
-
-     - Returns: Group id if successful otherwise nil.
-     */
-    @objc open class func createConversation(
-        userId: String,
-        agentIds: [String] = [],
-        botIds: [String]?,
-        useLastConversation: Bool = false,
-        clientConversationId: String? = nil,
-        completion:@escaping (_ clientGroupId: String) -> ()) {
-        let kommunicateConversationBuilder = KommunicateConversationBuilder()
-            .useLastConversation(useLastConversation)
-            .withAgentIds(agentIds)
-            .withBotIds(botIds)
-        let conversation =  kommunicateConversationBuilder.build()
-
-        createConversation(conversation: conversation) { (clientConversationId) in
-            completion(clientConversationId)
-        }
-    }
-
     ///  Creates a new conversation with the details passed.
     ///
     /// - Parameters:
@@ -512,6 +483,36 @@ open class Kommunicate: NSObject,Localizable{
         ALApplozicSettings.setSwiftFramework(true)
         ALApplozicSettings.hideMessages(withMetadataKeys: ["KM_ASSIGN", "KM_STATUS"])
     }
+
+    /**
+        Creates a new conversation with the details passed.
+
+        - Parameters:
+           - userId: User id of the participant.
+           - agentId: User id of the agent.
+           - botIds: A list of bot ids to be added in the conversation.
+           - useLastConversation: If there is a conversation already present then that will be returned.
+
+        - Returns: Group id if successful otherwise nil.
+        */
+       @available(*, deprecated, message: "Use createConversation(conversation:completion:)")
+       @objc open class func createConversation(
+           userId: String,
+           agentIds: [String] = [],
+           botIds: [String]?,
+           useLastConversation: Bool = false,
+           clientConversationId: String? = nil,
+           completion:@escaping (_ clientGroupId: String) -> ()) {
+           let kommunicateConversationBuilder = KommunicateConversationBuilder()
+               .useLastConversation(useLastConversation)
+               .withAgentIds(agentIds)
+               .withBotIds(botIds)
+           let conversation =  kommunicateConversationBuilder.build()
+
+           createConversation(conversation: conversation) { (clientConversationId) in
+               completion(clientConversationId)
+           }
+       }
 }
 
 class ChatMessage: ALKChatViewModelProtocol {
