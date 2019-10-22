@@ -15,7 +15,7 @@ import Applozic
     var clientConversationId : String?
     var botIds: [String]?
     var skipRouting: Bool = false
-    var isSingleConversation: Bool = false
+    var useLastConversation: Bool = false
     var useOriginalTitle: Bool = false
     var conversationTitle : String?
     var conversationMetadata =  [AnyHashable : Any]()
@@ -51,8 +51,8 @@ open class KommunicateConversationBuilder {
     }
 
     @discardableResult
-    public  func useLastConversation(_ isSingleConversation: Bool) ->  KommunicateConversationBuilder {
-        conversation.isSingleConversation = isSingleConversation
+    public func useLastConversation(_ useLastConversation: Bool) ->  KommunicateConversationBuilder {
+        conversation.useLastConversation = useLastConversation
         return self
     }
 

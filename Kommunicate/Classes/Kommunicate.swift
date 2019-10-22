@@ -207,7 +207,7 @@ open class Kommunicate: NSObject,Localizable{
                 conversation.agentIds = allAgentIds
                 conversation.botIds = allBotIds
 
-                if conversation.isSingleConversation {
+                if conversation.useLastConversation {
                     conversation.clientConversationId = service.createClientIdFrom(userId: conversation.userId, agentIds: conversation.agentIds, botIds: conversation.botIds ?? [])
                 }
 
@@ -387,7 +387,10 @@ open class Kommunicate: NSObject,Localizable{
     private class func createAConversationAndLaunch(
         from viewController: UIViewController,
         completion:@escaping (_ error: KommunicateError?) -> ()) {
-        createConversation() { (response) in
+        let kommunicateConversationBuilder = KommunicateConversationBuilder()
+            .useLastConversation(true)
+        let conversation = kommunicateConversationBuilder.build()
+        createConversation(conversation: conversation) { (response) in
             guard !response.isEmpty else {
                 completion(KommunicateError.conversationCreateFailed)
                 return

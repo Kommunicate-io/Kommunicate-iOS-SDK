@@ -31,7 +31,7 @@ public protocol KMConservationServiceable {
 public class KMConversationService: KMConservationServiceable {
 
     let conversationAssignee = "CONVERSATION_ASSIGNEE";
-    let skipeRouting = "SKIP_ROUTING";
+    let skipRouting = "SKIP_ROUTING";
     let kmConversationTitle = "KM_CONVERSATION_TITLE";
     let kmOriginalTitle = "KM_ORIGINAL_TITLE";
 
@@ -134,7 +134,7 @@ public class KMConversationService: KMConservationServiceable {
         }
 
         if conversation.skipRouting {
-            metadata.setValue("true", forKey: skipeRouting)
+            metadata.setValue("true", forKey: skipRouting)
         }
 
         if let conversationTitle = conversation.conversationTitle {

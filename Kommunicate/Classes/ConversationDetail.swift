@@ -62,7 +62,7 @@ class ConversationDetail {
             for case let userDetail as ALUserDetail in userDetails {
                 self.contactDbService.update(userDetail)
             }
-            completion(assignee,alChannel)
+            completion(contact,alChannel)
         })
     }
 
