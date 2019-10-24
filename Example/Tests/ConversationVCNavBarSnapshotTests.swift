@@ -40,6 +40,7 @@ class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
                 viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
                 navigationController = UINavigationController(rootViewController: viewController)
                 self.applyColor(navigationController: navigationController)
+                customNavigationView.setupAppearance(navigationController.navigationBar)
             }
 
 
@@ -62,7 +63,12 @@ class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
 
     func applyColor(navigationController : UINavigationController) {
         navigationController.navigationBar.isTranslucent = false
-        navigationController.navigationBar.tintColor = UIColor(red:0.10, green:0.65, blue:0.89, alpha:1.0)
+        navigationController.navigationBar.tintColor = UIColor.red
+        navigationController.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor.blue,
+            .font: UIFont.boldSystemFont(ofSize: 16),
+            .subtitleFont: UIFont.systemFont(ofSize: 8)
+        ]
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.backgroundColor =  UIColor(red:0.93, green:0.94, blue:0.95, alpha:1.0)
