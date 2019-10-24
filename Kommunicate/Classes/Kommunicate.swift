@@ -24,6 +24,8 @@ public typealias KMAppLocalNotification = ALAppLocalNotifications
 public typealias KMDbHandler = ALDBHandler
 public typealias KMRegisterUserClientService = ALRegisterUserClientService
 public typealias KMConfiguration = ALKConfiguration
+public typealias KMMessageStyle = ALKMessageStyle
+public typealias KMBaseNavigationViewController = ALKBaseNavigationViewController
 let conversationCreateIdentifier = 112233445
 let faqIdentifier =  11223346
 
@@ -218,7 +220,7 @@ open class Kommunicate: NSObject,Localizable{
      */
     @objc open class func showConversations(from viewController: UIViewController) {
         let conversationVC = conversationListViewController()
-        let navVC = ALKBaseNavigationViewController(rootViewController: conversationVC)
+        let navVC = KMBaseNavigationViewController(rootViewController: conversationVC)
         navVC.modalPresentationStyle = .fullScreen
         viewController.present(navVC, animated: false, completion: nil)
     }
@@ -297,7 +299,7 @@ open class Kommunicate: NSObject,Localizable{
             return
         }
         let faqVC = FaqViewController(url: url, configuration: configuration)
-        let navVC = ALKBaseNavigationViewController(rootViewController: faqVC)
+        let navVC = KMBaseNavigationViewController(rootViewController: faqVC)
         vc.present(navVC, animated: true, completion: nil)
     }
 
@@ -326,7 +328,7 @@ open class Kommunicate: NSObject,Localizable{
         if let navigationVC = viewController.navigationController {
             navigationVC.pushViewController(conversationViewController, animated: false)
         } else {
-            let navigationController = ALKBaseNavigationViewController(rootViewController: conversationViewController)
+            let navigationController = KMBaseNavigationViewController(rootViewController: conversationViewController)
             navigationController.modalPresentationStyle = .fullScreen
             viewController.present(navigationController, animated: false, completion: nil)
         }
