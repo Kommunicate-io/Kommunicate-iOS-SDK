@@ -24,6 +24,8 @@ public typealias KMAppLocalNotification = ALAppLocalNotifications
 public typealias KMDbHandler = ALDBHandler
 public typealias KMRegisterUserClientService = ALRegisterUserClientService
 public typealias KMConfiguration = ALKConfiguration
+public typealias KMMessageStyle = ALKMessageStyle
+public typealias KMBaseNavigationViewController = ALKBaseNavigationViewController
 let conversationCreateIdentifier = 112233445
 let faqIdentifier =  11223346
 
@@ -64,10 +66,10 @@ open class Kommunicate: NSObject,Localizable{
         config.hideStartChatButton = true
         config.navigationItemsForConversationView = navigationItemsForConversationView
         config.disableSwipeInChatCell = true
-        config.hideContactInChatBar = true
+        config.chatBar.optionsToShow = .some([.camera, .location, .gallery, .video])
         return config
     }()
-    
+
     /// Configuration which defines the behavior of ConversationView components.
     public static var kmConversationViewConfiguration = KMConversationViewConfiguration()
 
@@ -218,7 +220,8 @@ open class Kommunicate: NSObject,Localizable{
      */
     @objc open class func showConversations(from viewController: UIViewController) {
         let conversationVC = conversationListViewController()
-        let navVC = ALKBaseNavigationViewController(rootViewController: conversationVC)
+        let navVC = KMBaseNavigationViewController(rootViewController: conversationVC)
+        navVC.modalPresentationStyle = .fullScreen
         viewController.present(navVC, animated: false, completion: nil)
     }
 
@@ -296,7 +299,7 @@ open class Kommunicate: NSObject,Localizable{
             return
         }
         let faqVC = FaqViewController(url: url, configuration: configuration)
-        let navVC = ALKBaseNavigationViewController(rootViewController: faqVC)
+        let navVC = KMBaseNavigationViewController(rootViewController: faqVC)
         vc.present(navVC, animated: true, completion: nil)
     }
 
@@ -325,7 +328,8 @@ open class Kommunicate: NSObject,Localizable{
         if let navigationVC = viewController.navigationController {
             navigationVC.pushViewController(conversationViewController, animated: false)
         } else {
-            let navigationController = UINavigationController(rootViewController: conversationViewController)
+            let navigationController = KMBaseNavigationViewController(rootViewController: conversationViewController)
+            navigationController.modalPresentationStyle = .fullScreen
             viewController.present(navigationController, animated: false, completion: nil)
         }
         completionHandler(true)
@@ -535,4 +539,3 @@ class ChatMessage: ALKChatViewModelProtocol {
     }
 
 }
-

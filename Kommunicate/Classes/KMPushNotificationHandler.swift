@@ -102,8 +102,9 @@ public class KMPushNotificationHandler: Localizable {
         let notificationData = NotificationHelper.NotificationData(userId: userId, groupId: groupId, conversationId: conversationId)
         let vc = NotificationHelper().getConversationVCToLaunch(notification: notificationData, configuration: configuration)
         Kommunicate.configureListVC(vc)
-        let nav = ALKBaseNavigationViewController(rootViewController: vc)
+        let nav = KMBaseNavigationViewController(rootViewController: vc)
         navVC?.modalTransitionStyle = .crossDissolve
+        navVC?.modalPresentationStyle = .fullScreen
         topVC.present(nav, animated: true, completion: nil)
     }
 

@@ -69,6 +69,10 @@ open class KMConversationViewController: ALKConversationViewController {
     open override func viewDidLoad() {
         super.viewDidLoad()
 
+        if let navBar = navigationController?.navigationBar {
+            customNavigationView.setupAppearance(navBar)
+        }
+
         checkPlanAndShowSuspensionScreen()
         addAwayMessageConstraints()
         showAwayMessage(false)

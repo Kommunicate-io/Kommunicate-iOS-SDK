@@ -13,6 +13,12 @@ protocol NavigationBarCallbacks {
     func backButtonPressed()
 }
 
+extension NSAttributedString.Key {
+    /// Use it to set font for subtitle in navigation bar.
+    /// Default: nil
+    public static let subtitleFont = NSAttributedString.Key("KMSubtitleFont")
+}
+
 class ConversationVCNavBar: UIView, Localizable {
     
     var navigationBarBackgroundColor: UIColor
@@ -22,7 +28,9 @@ class ConversationVCNavBar: UIView, Localizable {
     
     let backButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(named: "icon_back", in: Bundle.kommunicate, compatibleWith: nil), for: .normal)
+        var image = UIImage(named: "icon_back", in: Bundle.kommunicate, compatibleWith: nil)
+        image = image?.withRenderingMode(.alwaysTemplate)
+        button.setImage(image, for: .normal)
         button.isUserInteractionEnabled = true
         return button
     }()
@@ -112,6 +120,22 @@ class ConversationVCNavBar: UIView, Localizable {
     
     @objc func backButtonClicked(_ sender: UIButton) {
         delegate.backButtonPressed()
+    }
+
+    func setupAppearance(_ appearance: UINavigationBar) {
+        if let textColor = appearance.titleTextAttributes?[.foregroundColor] as? UIColor {
+            profileName.textColor = textColor
+            onlineStatusText.textColor = textColor
+        }
+        if let titleFont = appearance.titleTextAttributes?[.font] as? UIFont {
+            profileName.font = titleFont
+        }
+        if let subtitleFont = appearance.titleTextAttributes?[.subtitleFont] as? UIFont {
+            onlineStatusText.font = subtitleFont
+        }
+        if let tintColor = appearance.tintColor {
+            backButton.tintColor = tintColor
+        }
     }
 
     private func setupConstraints() {
