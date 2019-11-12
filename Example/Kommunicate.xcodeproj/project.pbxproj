@@ -251,6 +251,7 @@
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = C25JNDCBM4;
 						LastSwiftMigration = 1000;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -580,6 +581,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Kommunicate_Example.entitlements;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = C25JNDCBM4;
 				INFOPLIST_FILE = Kommunicate/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -587,6 +589,7 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Kommunicate.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = com.Kommunicate.demo;
 				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
@@ -597,6 +600,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Kommunicate_Example.entitlements;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = C25JNDCBM4;
 				INFOPLIST_FILE = Kommunicate/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -604,6 +608,7 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Kommunicate.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = com.Kommunicate.demo;
 				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
