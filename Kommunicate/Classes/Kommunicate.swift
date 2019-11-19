@@ -58,8 +58,8 @@ open class Kommunicate: NSObject,Localizable{
         let faqItem = ALKNavigationItem(identifier: faqIdentifier, text:  NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
         let startNewImage =  UIImage(named: "fill_214", in:  Bundle(for: ALKConversationListViewController.self), compatibleWith: nil)!
         let createConversationItem = ALKNavigationItem(identifier: conversationCreateIdentifier, icon: startNewImage)
-        navigationItemsForConversationList.append(faqItem)
         navigationItemsForConversationList.append(createConversationItem)
+        navigationItemsForConversationList.append(faqItem)
         var navigationItemsForConversationView = [ALKNavigationItem]()
         navigationItemsForConversationView.append(faqItem)
         config.navigationItemsForConversationList = navigationItemsForConversationList
