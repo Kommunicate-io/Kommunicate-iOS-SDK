@@ -2,11 +2,10 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
-2.5.0 (Upcoming)
+2.5.0
+
 ### Enhancements
-
 - Moved the new conversation button in navigation bar to the right.
-
 
 2.4.0 
 ### Enhancements
