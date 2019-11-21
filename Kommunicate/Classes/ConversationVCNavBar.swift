@@ -183,19 +183,19 @@ class ConversationVCNavBar: UIView, Localizable {
         
         var placeHolder : UIImage?
         var url: URL?
-        
-        if(channel != nil){
+
+        if(channel != nil) {
             if let imageUrl = channel?.channelImageURL {
                 url = URL(string: imageUrl)
             }
             if(channel?.type == Int16(SUPPORT_GROUP.rawValue)){
-                placeHolder  = UIImage(named: "placeholder", in: Bundle.kommunicate, compatibleWith: nil)
+                placeHolder = placeHolderImage(contact: contact, channel: channel)
                 setupOnlineStatus(contact)
             }else{
-                placeHolder  = UIImage(named: "groupPlaceholder", in: Bundle(for: ALKConversationListViewController.self), compatibleWith: nil)
+                placeHolder = placeHolderImage(contact: contact, channel: channel)
             }
         }else{
-            placeHolder  = UIImage(named: "placeholder", in: Bundle.kommunicate, compatibleWith: nil)
+            placeHolder = placeHolderImage(contact: contact, channel: channel)
             if let imageUrl = contact?.contactImageUrl {
                 url = URL(string: imageUrl)
             }
@@ -213,6 +213,21 @@ class ConversationVCNavBar: UIView, Localizable {
             self.profileImage.image = placeHolderImage
         }
         profileName.text = name
+    }
+
+    private func placeHolderImage(contact:ALContact? ,channel:ALChannel?) -> UIImage? {
+        var placeHolder : UIImage?
+        
+        if (channel != nil) {
+            if(channel?.type == Int16(SUPPORT_GROUP.rawValue)) {
+                placeHolder  = UIImage(named: "placeholder", in: Bundle.kommunicate, compatibleWith: nil)
+            }else {
+                placeHolder  = UIImage(named: "groupPlaceholder", in: Bundle(for: ALKConversationListViewController.self), compatibleWith: nil)
+            }
+        } else {
+            placeHolder  = UIImage(named: "placeholder", in: Bundle.kommunicate, compatibleWith: nil)
+        }
+        return placeHolder
     }
     
     private func setupOnlineStatus(_ contact: ALContact?) {

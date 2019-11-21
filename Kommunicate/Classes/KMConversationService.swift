@@ -11,6 +11,13 @@ import ApplozicSwift
 
 public struct ChannelMetadataKeys {
     static let conversationAssignee = "CONVERSATION_ASSIGNEE"
+    static let skipRouting = "SKIP_ROUTING";
+    static let kmConversationTitle = "KM_CONVERSATION_TITLE";
+    static let kmOriginalTitle = "KM_ORIGINAL_TITLE";
+}
+
+struct LocalizationKey {
+    static let supportChannelName = "SupportChannelName"
 }
 
 public enum Result<Value> {
@@ -28,12 +35,7 @@ public protocol KMConservationServiceable {
         completion: @escaping (Response) -> ())
 }
 
-public class KMConversationService: KMConservationServiceable {
-
-    let conversationAssignee = "CONVERSATION_ASSIGNEE";
-    let skipRouting = "SKIP_ROUTING";
-    let kmConversationTitle = "KM_CONVERSATION_TITLE";
-    let kmOriginalTitle = "KM_ORIGINAL_TITLE";
+public class KMConversationService: KMConservationServiceable,Localizable {
 
     /// Conversation API response
     public struct Response {
@@ -67,13 +69,13 @@ public class KMConversationService: KMConservationServiceable {
 
     //MARK: - Public methods
 
-    ///   Creates a new conversation with the KommunicateConversation object.
+    ///   Creates a new conversation with the KMConversation object.
     /// - Parameters:
-    ///   - conversation: KommunicateConversation object
+    ///   - conversation: KMConversation object
     ///   - completion: Response object
 
     public func createConversation(
-        conversation: KommunicateConversation,
+        conversation: KMConversation,
         completion: @escaping (Response)->()) {
 
         if let clientId = conversation.clientConversationId, !clientId.isEmpty {
@@ -258,7 +260,7 @@ public class KMConversationService: KMConservationServiceable {
         clientConversationId: String? = nil,
         completion: @escaping (Response) -> ()) {
 
-        let kommunicateConversationBuilder = KommunicateConversationBuilder()
+        let kommunicateConversationBuilder = KMConversationBuilder()
             .withAgentIds(agentIds)
             .withBotIds(botIds ?? [])
             .withClientConversationId(clientConversationId)
@@ -310,26 +312,26 @@ public class KMConversationService: KMConservationServiceable {
         return newClientId
     }
 
-    func getMetaDataWith(_ conversation: KommunicateConversation) -> NSMutableDictionary {
+    func getMetaDataWith(_ conversation: KMConversation) -> NSMutableDictionary {
 
         let metadata = NSMutableDictionary(
             dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
 
-        if  !conversation.conversationMetadata.isEmpty {
+        if !conversation.conversationMetadata.isEmpty {
             metadata.addEntries(from: conversation.conversationMetadata)
         }
 
         if conversation.skipRouting {
-            metadata.setValue("true", forKey: skipRouting)
+            metadata.setValue("true", forKey: ChannelMetadataKeys.skipRouting)
         }
 
         if let conversationTitle = conversation.conversationTitle {
-            metadata.setValue(conversationTitle, forKey: kmConversationTitle)
-            metadata.setValue("true", forKey: kmOriginalTitle)
+            metadata.setValue(conversationTitle, forKey: ChannelMetadataKeys.kmConversationTitle)
+            metadata.setValue("true", forKey: ChannelMetadataKeys.kmOriginalTitle)
         }
 
         if conversation.useOriginalTitle {
-            metadata.setValue("true", forKey: kmOriginalTitle)
+            metadata.setValue("true", forKey: ChannelMetadataKeys.kmOriginalTitle)
         }
 
         guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
@@ -381,7 +383,7 @@ public class KMConversationService: KMConservationServiceable {
         botIds: [String]?,
         completion: @escaping (Response) -> ()) {
 
-        let kommunicateConversationBuilder = KommunicateConversationBuilder()
+        let kommunicateConversationBuilder = KMConversationBuilder()
             .withAgentIds(agentIds)
             .withBotIds(botIds ?? [])
             .withClientConversationId(clientChannelKey)
@@ -392,9 +394,12 @@ public class KMConversationService: KMConservationServiceable {
         }
     }
 
-    private func createNewChannelAndConversation(conversation:KommunicateConversation,
+    private func createNewChannelAndConversation(conversation:KMConversation,
                                                  completion: @escaping (Response) -> ()) {
-        let groupName = conversation.conversationTitle ?? "Support"
+        let groupName = conversation.conversationTitle ?? localizedString(
+            forKey: LocalizationKey.supportChannelName,
+            fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
+
         var members: [KMGroupUser] = []
         members.append(KMGroupUser(groupRole: .user, userId: conversation.userId))
         let membersList = NSMutableArray()

@@ -154,10 +154,10 @@ open class Kommunicate: NSObject,Localizable{
     ///  Creates a new conversation with the details passed.
     ///
     /// - Parameters:
-    ///   - conversation: KommunicateConversation object.
+    ///   - conversation: KMConversation object.
     ///   - completion: clientConversationId if successful otherwise empty string.
     @objc open class func createConversation(
-        conversation: KommunicateConversation = KommunicateConversation(),completion:@escaping (_ clientGroupId: String) -> ()) {
+        conversation: KMConversation = KMConversation(),completion:@escaping (_ clientGroupId: String) -> ()) {
         let service = KMConversationService()
         if KMUserDefaultHandler.isLoggedIn() {
             var allAgentIds = conversation.agentIds
@@ -358,7 +358,7 @@ open class Kommunicate: NSObject,Localizable{
     private class func createAConversationAndLaunch(
         from viewController: UIViewController,
         completion:@escaping (_ error: KommunicateError?) -> ()) {
-        let kommunicateConversationBuilder = KommunicateConversationBuilder()
+        let kommunicateConversationBuilder = KMConversationBuilder()
             .useLastConversation(true)
         let conversation = kommunicateConversationBuilder.build()
         createConversation(conversation: conversation) { (response) in
@@ -503,7 +503,7 @@ open class Kommunicate: NSObject,Localizable{
            useLastConversation: Bool = false,
            clientConversationId: String? = nil,
            completion:@escaping (_ clientGroupId: String) -> ()) {
-           let kommunicateConversationBuilder = KommunicateConversationBuilder()
+           let kommunicateConversationBuilder = KMConversationBuilder()
                .useLastConversation(useLastConversation)
                .withAgentIds(agentIds)
                .withBotIds(botIds)
