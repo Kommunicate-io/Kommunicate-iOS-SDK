@@ -180,8 +180,6 @@ class ConversationVCNavBar: UIView, Localizable {
     }
     
     private func setupProfile(_ contact: ALContact?,_ channel:ALChannel?) {
-        
-        var placeHolder : UIImage?
         var url: URL?
 
         if(channel != nil) {
@@ -189,19 +187,15 @@ class ConversationVCNavBar: UIView, Localizable {
                 url = URL(string: imageUrl)
             }
             if(channel?.type == Int16(SUPPORT_GROUP.rawValue)){
-                placeHolder = placeHolderImage(contact: contact, channel: channel)
                 setupOnlineStatus(contact)
-            }else{
-                placeHolder = placeHolderImage(contact: contact, channel: channel)
             }
         }else{
-            placeHolder = placeHolderImage(contact: contact, channel: channel)
             if let imageUrl = contact?.contactImageUrl {
                 url = URL(string: imageUrl)
             }
             setupOnlineStatus(contact)
         }
-        setUpProfileNameAndImage(name:  channel != nil ? channel?.name : contact?.getDisplayName(), imageUrl: url, placeHolderImage: placeHolder)
+        setUpProfileNameAndImage(name:  channel != nil ? channel?.name : contact?.getDisplayName(), imageUrl: url, placeHolderImage: placeHolderImage(contact: contact, channel: channel))
     }
     
     func setUpProfileNameAndImage(name:String?,imageUrl:URL?,placeHolderImage:UIImage?)  {
