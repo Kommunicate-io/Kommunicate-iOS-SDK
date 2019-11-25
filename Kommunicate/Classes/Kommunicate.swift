@@ -506,7 +506,7 @@ open class Kommunicate: NSObject,Localizable{
            let kommunicateConversationBuilder = KMConversationBuilder()
                .useLastConversation(useLastConversation)
                .withAgentIds(agentIds)
-               .withBotIds(botIds)
+               .withBotIds(botIds ?? [])
            let conversation =  kommunicateConversationBuilder.build()
 
            createConversation(conversation: conversation) { (clientConversationId) in
