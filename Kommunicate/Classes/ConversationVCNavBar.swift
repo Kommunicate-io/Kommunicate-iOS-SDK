@@ -111,7 +111,7 @@ class ConversationVCNavBar: UIView, Localizable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateView(assignee: ALContact?,channel:ALChannel?) {
+    func updateView(assignee: ALContact?,channel:ALChannel) {
         setupProfile(assignee,channel)
     }
     
@@ -179,26 +179,24 @@ class ConversationVCNavBar: UIView, Localizable {
         backButton.setImage(image, for: .normal)
     }
     
-    private func setupProfile(_ contact: ALContact?,_ channel:ALChannel?) {
+    private func setupProfile(_ contact: ALContact?,_ channel:ALChannel) {
         var url: URL?
 
-        if(channel != nil) {
-            if let imageUrl = channel?.channelImageURL {
-                url = URL(string: imageUrl)
-            }
-            if(channel?.type == Int16(SUPPORT_GROUP.rawValue)){
-                setupOnlineStatus(contact)
-            }
-        }else{
-            if let imageUrl = contact?.contactImageUrl {
-                url = URL(string: imageUrl)
-            }
+        if let imageUrl = channel.channelImageURL {
+            url = URL(string: imageUrl)
+        }
+        if(channel.type == Int16(SUPPORT_GROUP.rawValue)){
             setupOnlineStatus(contact)
         }
-        setUpProfileNameAndImage(name:  channel != nil ? channel?.name : contact?.getDisplayName(), imageUrl: url, placeHolderImage: placeHolderImage(contact: contact, channel: channel))
+
+        guard let placeHolderImage = placeHolderImage(channel: channel) else {
+            return
+        }
+
+        setupProfileNameAndImage(name:  channel.name, imageUrl: url, placeHolderImage: placeHolderImage)
     }
     
-    func setUpProfileNameAndImage(name:String?,imageUrl:URL?,placeHolderImage:UIImage?)  {
+    func setupProfileNameAndImage(name:String,imageUrl:URL?,placeHolderImage:UIImage)  {
         
         if let downloadURL = imageUrl {
             let resource = ImageResource(downloadURL: downloadURL, cacheKey: downloadURL.absoluteString)
@@ -209,17 +207,13 @@ class ConversationVCNavBar: UIView, Localizable {
         profileName.text = name
     }
 
-    private func placeHolderImage(contact:ALContact? ,channel:ALChannel?) -> UIImage? {
+    private func placeHolderImage(channel:ALChannel) -> UIImage? {
         var placeHolder : UIImage?
-        
-        if (channel != nil) {
-            if(channel?.type == Int16(SUPPORT_GROUP.rawValue)) {
-                placeHolder  = UIImage(named: "placeholder", in: Bundle.kommunicate, compatibleWith: nil)
-            }else {
-                placeHolder  = UIImage(named: "groupPlaceholder", in: Bundle(for: ALKConversationListViewController.self), compatibleWith: nil)
-            }
-        } else {
+
+        if(channel.type == Int16(SUPPORT_GROUP.rawValue)) {
             placeHolder  = UIImage(named: "placeholder", in: Bundle.kommunicate, compatibleWith: nil)
+        }else {
+            placeHolder  = UIImage(named: "groupPlaceholder", in: Bundle(for: ALKConversationListViewController.self), compatibleWith: nil)
         }
         return placeHolder
     }
