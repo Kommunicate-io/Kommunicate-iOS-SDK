@@ -29,6 +29,10 @@ public typealias KMBaseNavigationViewController = ALKBaseNavigationViewControlle
 let conversationCreateIdentifier = 112233445
 let faqIdentifier =  11223346
 
+enum KMLocalizationKey {
+    static let noName = "NoName"
+}
+
 @objc
 open class Kommunicate: NSObject,Localizable{
 
@@ -151,31 +155,20 @@ open class Kommunicate: NSObject,Localizable{
         }
     }
 
-    /**
-     Creates a new conversation with the details passed.
-
-     - Parameters:
-        - userId: User id of the participant.
-        - agentId: User id of the agent.
-        - botIds: A list of bot ids to be added in the conversation.
-        - useLastConversation: If there is a conversation already present then that will be returned.
-
-     - Returns: Group id if successful otherwise nil.
-     */
+    ///  Creates a new conversation with the details passed.
+    ///
+    /// - Parameters:
+    ///   - conversation: KMConversation object.
+    ///   - completion: clientConversationId if successful otherwise empty string.
     @objc open class func createConversation(
-        userId: String,
-        agentIds: [String] = [],
-        botIds: [String]?,
-        useLastConversation: Bool = false,
-        clientConversationId: String? = nil,
-        completion:@escaping (_ clientGroupId: String) -> ()) {
+        conversation: KMConversation = KMConversationBuilder().build(),completion:@escaping (_ clientGroupId: String) -> ()) {
         let service = KMConversationService()
         if KMUserDefaultHandler.isLoggedIn() {
-
-            var allAgentIds = agentIds
+            var allAgentIds = conversation.agentIds
             var allBotIds = ["bot"] // Default bot that should be added everytime.
 
-            if let botIds = botIds { allBotIds.append(contentsOf: botIds) }
+            if let botIds = conversation.botIds { allBotIds.append(contentsOf: botIds) }
+
             service.defaultAgentFor(completion: {
                 result in
                 switch result {
@@ -183,25 +176,24 @@ open class Kommunicate: NSObject,Localizable{
                     allAgentIds.append(agentId)
                 case .failure(let error):
                     print("Error while fetching agents id: \(error)")
-                    completion("")
                 }
                 allAgentIds = allAgentIds.uniqueElements
+                conversation.agentIds = allAgentIds
+                conversation.botIds = allBotIds
 
-                var clientConversationId = clientConversationId
-                if useLastConversation {
-                    clientConversationId = service.createClientIdFrom(userId: userId, agentIds: allAgentIds, botIds: botIds ?? [])
+                if conversation.useLastConversation {
+                    conversation.clientConversationId = service.createClientIdFrom(userId: conversation.userId, agentIds: conversation.agentIds, botIds: conversation.botIds ?? [])
                 }
-                service.createConversation(
-                    userId: KMUserDefaultHandler.getUserId(),
-                    agentIds: allAgentIds,
-                    botIds: allBotIds,
-                    clientConversationId: clientConversationId,
-                    completion: { response in
-                        completion(response.clientChannelKey ?? "")
+
+                service.createConversation(conversation: conversation, completion: { response in
+                    completion(response.clientChannelKey ?? "")
                 })
             })
+        }else{
+            completion("")
         }
     }
+
 
     /// This method is used to return an instance of conversation list view controller.
     ///
@@ -369,27 +361,25 @@ open class Kommunicate: NSObject,Localizable{
     private class func createAConversationAndLaunch(
         from viewController: UIViewController,
         completion:@escaping (_ error: KommunicateError?) -> ()) {
-        let userId = ALUserDefaultsHandler.getUserId() ?? Kommunicate.randomId()
-        createConversation(
-            userId: userId,
-            botIds: nil,
-            useLastConversation: true,
-            completion: { response in
-                guard !response.isEmpty else {
-                    completion(KommunicateError.conversationCreateFailed)
-                    return
-                }
-                DispatchQueue.main.async {
-                    showConversationWith(groupId: response, from: viewController, completionHandler: { success in
-                        guard success else {
-                            completion(KommunicateError.conversationNotPresent)
-                            return
-                        }
-                        print("Kommunicate: conversation was shown")
-                        completion(nil)
-                    })
-                }
-        })
+        let kommunicateConversationBuilder = KMConversationBuilder()
+            .useLastConversation(true)
+        let conversation = kommunicateConversationBuilder.build()
+        createConversation(conversation: conversation) { (response) in
+            guard !response.isEmpty else {
+                completion(KommunicateError.conversationCreateFailed)
+                return
+            }
+            DispatchQueue.main.async {
+                showConversationWith(groupId: response, from: viewController, completionHandler: { success in
+                    guard success else {
+                        completion(KommunicateError.conversationNotPresent)
+                        return
+                    }
+                    print("Kommunicate: conversation was shown")
+                    completion(nil)
+                })
+            }
+        }
     }
 
     private class func showAlert(viewController:ALKConversationListViewController){
@@ -496,9 +486,39 @@ open class Kommunicate: NSObject,Localizable{
         ALApplozicSettings.setSwiftFramework(true)
         ALApplozicSettings.hideMessages(withMetadataKeys: ["KM_ASSIGN", "KM_STATUS"])
     }
+
+    /**
+        Creates a new conversation with the details passed.
+
+        - Parameters:
+           - userId: User id of the participant.
+           - agentId: User id of the agent.
+           - botIds: A list of bot ids to be added in the conversation.
+           - useLastConversation: If there is a conversation already present then that will be returned.
+
+        - Returns: Group id if successful otherwise nil.
+        */
+       @available(*, deprecated, message: "Use createConversation(conversation:completion:)")
+       @objc open class func createConversation(
+           userId: String,
+           agentIds: [String] = [],
+           botIds: [String]?,
+           useLastConversation: Bool = false,
+           clientConversationId: String? = nil,
+           completion:@escaping (_ clientGroupId: String) -> ()) {
+           let kommunicateConversationBuilder = KMConversationBuilder()
+               .useLastConversation(useLastConversation)
+               .withAgentIds(agentIds)
+               .withBotIds(botIds ?? [])
+           let conversation =  kommunicateConversationBuilder.build()
+
+           createConversation(conversation: conversation) { (clientConversationId) in
+               completion(clientConversationId)
+           }
+       }
 }
 
-class ChatMessage: ALKChatViewModelProtocol {
+class ChatMessage: ALKChatViewModelProtocol,Localizable {
     var messageType: ALKMessageType
     var avatar: URL?
     var avatarImage: UIImage?
@@ -530,12 +550,14 @@ class ChatMessage: ALKChatViewModelProtocol {
         self.createdAt = message.createdAt
         self.messageType = message.messageType
         // Update message to show conversation assignee details
-        guard
-            isGroupChat,
-            let assignee = ConversationDetail().conversationAssignee(groupId: self.channelKey, userId: self.contactId)
-            else { return }
-        self.groupName = assignee.getDisplayName()
-        self.avatarGroupImageUrl = assignee.contactImageUrl
+        let (_,channel) = ConversationDetail().conversationAssignee(groupId: self.channelKey, userId: self.contactId)
+
+        guard let alChannel = channel  else {
+            self.groupName = localizedString(forKey: KMLocalizationKey.noName, fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
+            return
+        }
+        self.groupName = alChannel.name ?? localizedString(forKey: KMLocalizationKey.noName, fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
+        self.avatarGroupImageUrl = alChannel.channelImageURL
     }
 
 }

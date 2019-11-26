@@ -7,6 +7,7 @@
 
 import Foundation
 import Applozic
+import ApplozicSwift
 import Kingfisher
 
 protocol NavigationBarCallbacks {
@@ -110,12 +111,8 @@ class ConversationVCNavBar: UIView, Localizable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateView(assignee: ALContact?) {
-        guard let contact = assignee else {
-            return
-        }
-        setupProfileImage(contact)
-        setupOnlineStatus(contact)
+    func updateView(assignee: ALContact?,channel:ALChannel) {
+        setupProfile(assignee,channel)
     }
     
     @objc func backButtonClicked(_ sender: UIButton) {
@@ -182,23 +179,51 @@ class ConversationVCNavBar: UIView, Localizable {
         backButton.setImage(image, for: .normal)
     }
     
-    private func setupProfileImage(_ contact: ALContact) {
-        let placeHolder = UIImage(named: "placeholder", in: Bundle.kommunicate, compatibleWith: nil)
+    private func setupProfile(_ contact: ALContact?,_ channel:ALChannel) {
         var url: URL?
-        if let imageUrl = contact.contactImageUrl {
+
+        if let imageUrl = channel.channelImageURL {
             url = URL(string: imageUrl)
         }
-        if let downloadURL = url {
-            let resource = ImageResource(downloadURL: downloadURL, cacheKey: downloadURL.absoluteString)
-            self.profileImage.kf.setImage(with: resource, placeholder: placeHolder)
-        } else {
-            self.profileImage.image = placeHolder
+        if(channel.type == Int16(SUPPORT_GROUP.rawValue)){
+            setupOnlineStatus(contact)
         }
-        profileName.text = contact.getDisplayName()
+
+        guard let placeHolderImage = placeHolderImage(channel: channel) else {
+            return
+        }
+
+        setupProfileNameAndImage(name:  channel.name, imageUrl: url, placeHolderImage: placeHolderImage)
     }
     
-    private func setupOnlineStatus(_ contact: ALContact) {
-        if (contact.connected || contact.roleType == 1) {
+    func setupProfileNameAndImage(name:String,imageUrl:URL?,placeHolderImage:UIImage)  {
+        
+        if let downloadURL = imageUrl {
+            let resource = ImageResource(downloadURL: downloadURL, cacheKey: downloadURL.absoluteString)
+            self.profileImage.kf.setImage(with: resource, placeholder: placeHolderImage)
+        } else {
+            self.profileImage.image = placeHolderImage
+        }
+        profileName.text = name
+    }
+
+    private func placeHolderImage(channel:ALChannel) -> UIImage? {
+        var placeHolder : UIImage?
+
+        if(channel.type == Int16(SUPPORT_GROUP.rawValue)) {
+            placeHolder  = UIImage(named: "placeholder", in: Bundle.kommunicate, compatibleWith: nil)
+        }else {
+            placeHolder  = UIImage(named: "groupPlaceholder", in: Bundle(for: ALKConversationListViewController.self), compatibleWith: nil)
+        }
+        return placeHolder
+    }
+    
+    private func setupOnlineStatus(_ contact: ALContact?) {
+        guard let alContact = contact else {
+            return;
+        }
+        
+        if (alContact.connected || alContact.roleType == 1) {
             onlineStatusText.text = localizedString(
                 forKey: LocalizationKey.online,
                 fileName: localizationFileName)

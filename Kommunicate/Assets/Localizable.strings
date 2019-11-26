@@ -40,3 +40,10 @@ noName = "No Name";
 
 /* Navigation title for faq view controller */
 FaqTitle = "FAQ";
+
+/* Default Support channel name */
+SupportChannelName = "Support";
+
+/* No name text */
+NoName = "No Name";
+

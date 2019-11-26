@@ -11,6 +11,13 @@ import ApplozicSwift
 
 public struct ChannelMetadataKeys {
     static let conversationAssignee = "CONVERSATION_ASSIGNEE"
+    static let skipRouting = "SKIP_ROUTING";
+    static let kmConversationTitle = "KM_CONVERSATION_TITLE";
+    static let kmOriginalTitle = "KM_ORIGINAL_TITLE";
+}
+
+struct LocalizationKey {
+    static let supportChannelName = "SupportChannelName"
 }
 
 public enum Result<Value> {
@@ -28,7 +35,7 @@ public protocol KMConservationServiceable {
         completion: @escaping (Response) -> ())
 }
 
-public class KMConversationService: KMConservationServiceable {
+public class KMConversationService: KMConservationServiceable,Localizable {
 
     /// Conversation API response
     public struct Response {
@@ -62,40 +69,29 @@ public class KMConversationService: KMConservationServiceable {
 
     //MARK: - Public methods
 
-    /**
-     Creates a new conversation with the details passed.
+    ///   Creates a new conversation with the KMConversation object.
+    /// - Parameters:
+    ///   - conversation: KMConversation object
+    ///   - completion: Response object
 
-     - Parameters:
-        - userId: User id of the participant.
-        - agentId: User id of the agent.
-        - botIds: A list of bot ids to be added in the conversation.
-        - clientConversationId: client Id which will be associated with this conversation.
-
-     - Returns: Response object.
-    */
     public func createConversation(
-        userId: String,
-        agentIds: [String],
-        botIds: [String]?,
-        clientConversationId: String? = nil,
-        completion: @escaping (Response) -> ()) {
+        conversation: KMConversation,
+        completion: @escaping (Response)->()) {
 
-        if let clientId = clientConversationId, !clientId.isEmpty {
+        if let clientId = conversation.clientConversationId, !clientId.isEmpty {
             self.isGroupPresent(clientId: clientId, completion: {
                 present in
                 if present {
                     let response = Response(success: true, clientChannelKey: clientId, error: nil)
                     completion(response)
                 } else {
-                    self.createNewChannelAndConversation(clientChannelKey: clientId, userId: userId, agentIds: agentIds, botIds: botIds, completion: {
-                        response in
+                    self.createNewChannelAndConversation(conversation: conversation, completion: { response in
                         completion(response)
                     })
                 }
             })
         } else {
-            self.createNewChannelAndConversation(clientChannelKey: nil, userId: userId, agentIds: agentIds, botIds: botIds, completion: {
-                response in
+            self.createNewChannelAndConversation(conversation: conversation, completion: { response in
                 completion(response)
             })
         }
@@ -189,7 +185,7 @@ public class KMConversationService: KMConservationServiceable {
         })
     }
 
-    @available(*, deprecated, renamed: "createConversation(userId:agentIds:botIds:clientConversationId:completion:)")
+    @available(*, deprecated, message: "Use createConversation(conversation:completion:)")
     public func createConversation(
         userId: String,
         agentIds: [String],
@@ -245,6 +241,36 @@ public class KMConversationService: KMConservationServiceable {
 
     }
 
+    /**
+     Creates a new conversation with the details passed.
+
+     - Parameters:
+        - userId: User id of the participant.
+        - agentId: User id of the agent.
+        - botIds: A list of bot ids to be added in the conversation.
+        - clientConversationId: client Id which will be associated with this conversation.
+
+     - Returns: Response object.
+    */
+    @available(*, deprecated, message: "Use createConversation(conversation:completion:)")
+    public func createConversation(
+        userId: String,
+        agentIds: [String],
+        botIds: [String]?,
+        clientConversationId: String? = nil,
+        completion: @escaping (Response) -> ()) {
+
+        let kommunicateConversationBuilder = KMConversationBuilder()
+            .withAgentIds(agentIds)
+            .withBotIds(botIds ?? [])
+            .withClientConversationId(clientConversationId)
+
+        let conversation =  kommunicateConversationBuilder.build()
+        createConversation(conversation: conversation) { response in
+            completion(response)
+        }
+    }
+
 
     func makeAwayMessageFrom(json: [String: Any]) -> Result<String> {
         guard
@@ -284,6 +310,36 @@ public class KMConversationService: KMConservationServiceable {
                     .reduce("", {$0+"_"+$1.lowercased()})
         }
         return newClientId
+    }
+
+    func getMetaDataWith(_ conversation: KMConversation) -> NSMutableDictionary {
+
+        let metadata = NSMutableDictionary(
+            dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
+
+        if !conversation.conversationMetadata.isEmpty {
+            metadata.addEntries(from: conversation.conversationMetadata)
+        }
+
+        if conversation.skipRouting {
+            metadata.setValue("true", forKey: ChannelMetadataKeys.skipRouting)
+        }
+
+        if let conversationTitle = conversation.conversationTitle {
+            metadata.setValue(conversationTitle, forKey: ChannelMetadataKeys.kmConversationTitle)
+            metadata.setValue("true", forKey: ChannelMetadataKeys.kmOriginalTitle)
+        }
+
+        if conversation.useOriginalTitle {
+            metadata.setValue("true", forKey: ChannelMetadataKeys.kmOriginalTitle)
+        }
+
+        guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
+            !messageMetadata.isEmpty else {
+                return metadata
+        }
+        metadata.addEntries(from: messageMetadata)
+        return metadata
     }
 
     //MARK: - Private methods
@@ -326,14 +382,31 @@ public class KMConversationService: KMConservationServiceable {
         agentIds: [String],
         botIds: [String]?,
         completion: @escaping (Response) -> ()) {
-        let groupName = "Support"
+
+        let kommunicateConversationBuilder = KMConversationBuilder()
+            .withAgentIds(agentIds)
+            .withBotIds(botIds ?? [])
+            .withClientConversationId(clientChannelKey)
+
+        let conversation =  kommunicateConversationBuilder.build()
+        createNewChannelAndConversation(conversation: conversation) { respsone in
+            completion(respsone)
+        }
+    }
+
+    private func createNewChannelAndConversation(conversation:KMConversation,
+                                                 completion: @escaping (Response) -> ()) {
+        let groupName = conversation.conversationTitle ?? localizedString(
+            forKey: LocalizationKey.supportChannelName,
+            fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
+
         var members: [KMGroupUser] = []
-        members.append(KMGroupUser(groupRole: .user, userId: userId))
+        members.append(KMGroupUser(groupRole: .user, userId: conversation.userId))
         let membersList = NSMutableArray()
-        if let botUsers = getBotGroupUser(userIds: botIds) {
+        if let botUsers = getBotGroupUser(userIds: conversation.botIds) {
             members.append(contentsOf: botUsers)
         }
-        if let agentUsers = agentGroupUsersFor(agentIds: agentIds) {
+        if let agentUsers = agentGroupUsersFor(agentIds: conversation.agentIds) {
             members.append(contentsOf: agentUsers)
         }
         let alChannelService = ALChannelService()
@@ -341,12 +414,12 @@ public class KMConversationService: KMConservationServiceable {
 
         alChannelService.createChannel(
             groupName,
-            orClientChannelKey: clientChannelKey,
+            orClientChannelKey: conversation.clientConversationId,
             andMembersList: membersList,
             andImageLink: nil,
             channelType: 10,
-            andMetaData: groupMetadata,
-            adminUser: agentIds.first,
+            andMetaData: getMetaDataWith(conversation),
+            adminUser: conversation.agentIds.first,
             withGroupUsers: NSMutableArray(array: groupUsers),
             withCompletion: {
                 channel, error in

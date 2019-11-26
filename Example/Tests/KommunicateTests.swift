@@ -18,15 +18,9 @@ class KommunicateTests: XCTestCase {
             showConversationsCalled = true
         }
 
-        override class func createConversation(
-            userId: String,
-            agentIds: [String],
-            botIds: [String]?,
-            useLastConversation: Bool = false,
-            clientConversationId: String?,
-            completion:@escaping (_ clientGroupId: String) -> ()) {
-
+        override class func createConversation(conversation: KMConversation, completion: @escaping (String) -> ()) {
             createConversationsCalled = true
+            completion("")
         }
 
         override class func createAndShowConversation(

@@ -2,13 +2,17 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
-2.5.0 (Upcoming)
-### Enhancements
 
+3.0.0 (Upcoming)
+### Enhancements
+-  Added a new create conversation method based on the builder pattern.
+- [AL-3762] Added an option to pass conversation title and it will be shown in navigation bar.
+
+2.5.0
+### Enhancements
 - Moved the new conversation button in navigation bar to the right.
 
-
-2.4.0 
+2.4.0
 ### Enhancements
 - Added iOS 13 support
 - Added support to change navigation bar properties using UIAppearance.
