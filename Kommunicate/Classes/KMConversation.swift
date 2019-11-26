@@ -11,21 +11,26 @@ import Applozic
 /// KMConversation is used for creating conversation
 @objc public class KMConversation : NSObject {
 
-    var userId : String = ALUserDefaultsHandler.getUserId() ?? Kommunicate.randomId()
-    var agentIds : [String] = []
-    var clientConversationId : String?
-    var botIds: [String]?
-    var skipRouting: Bool = false
-    var useLastConversation: Bool = false
-    var useOriginalTitle: Bool = false
-    var conversationTitle : String?
-    var conversationMetadata =  [AnyHashable : Any]()
+    let userId : String
+    public var agentIds : [String] = []
+    public var clientConversationId : String?
+    public var botIds: [String]?
+    public var skipRouting: Bool = false
+    public var useLastConversation: Bool = false
+    public var useOriginalTitle: Bool = false
+    public var conversationTitle : String?
+    public var conversationMetadata =  [AnyHashable : Any]()
+
+    public init(userId: String){
+        self.userId = userId
+    }
+
 }
 
 /// KMConversationBuilder is used for building KMConversation object
 @objc public class KMConversationBuilder : NSObject {
 
-    private var conversation = KMConversation()
+    private var conversation = KMConversation(userId: KMUserDefaultHandler.getUserId() ?? Kommunicate.randomId())
 
     /// If you want to associate this conversation with a unique ID, then pass clientConversationId. If you pass clientConversationId then useLastConversation needs to be false.
     /// - Parameter clientConversationId: Pass your clientConversationId, If you want to create conversation with your own clientConversationId

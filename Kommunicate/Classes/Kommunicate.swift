@@ -157,7 +157,7 @@ open class Kommunicate: NSObject,Localizable{
     ///   - conversation: KMConversation object.
     ///   - completion: clientConversationId if successful otherwise empty string.
     @objc open class func createConversation(
-        conversation: KMConversation = KMConversation(),completion:@escaping (_ clientGroupId: String) -> ()) {
+        conversation: KMConversation = KMConversationBuilder().build(),completion:@escaping (_ clientGroupId: String) -> ()) {
         let service = KMConversationService()
         if KMUserDefaultHandler.isLoggedIn() {
             var allAgentIds = conversation.agentIds
@@ -172,7 +172,6 @@ open class Kommunicate: NSObject,Localizable{
                     allAgentIds.append(agentId)
                 case .failure(let error):
                     print("Error while fetching agents id: \(error)")
-                    completion("")
                 }
                 allAgentIds = allAgentIds.uniqueElements
                 conversation.agentIds = allAgentIds
