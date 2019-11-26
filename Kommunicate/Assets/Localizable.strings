@@ -43,3 +43,7 @@ FaqTitle = "FAQ";
 
 /* Default Support channel name */
 SupportChannelName = "Support";
+
+/* No name text */
+NoName = "No Name";
+

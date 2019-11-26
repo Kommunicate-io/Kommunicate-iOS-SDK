@@ -9,12 +9,12 @@ This method will create new conversation and the launch conversation
  let kmConversation =
       KMConversationBuilder()
           .withAgentIds( ["<AGENT_IDS>"])// Optional. If you do not pass any agent ID, the default agent will automatically get selected. AGENT_ID is the emailID used to signup on Kommunicate dashboard.
-           .withBotIds(["<BOT_IDS>"])// Optional list of botIds. Go to Manage Bots(https://dashboard.kommunicate.io/bots/manage-bots) -> Copy botID
-           .useLastConversation(false) // If you pass useLastConversation as false, then a new conversation will be created. everytime
+          .withBotIds(["<BOT_IDS>"])// Optional. List of botIds. Go to Manage Bots(https://dashboard.kommunicate.io/bots/manage-bots) -> Copy botID
+           .useLastConversation(false) // If you pass here false, then a new conversation will be created everytime
            .build()
 
  Kommunicate.createConversation(conversation: kmConversation) { (conversationId) in
-     print("Conversatino id @@ ",conversationId)
+     print("Conversation id @@ ",conversationId)
 
      guard !conversationId.isEmpty else {
          print("Failed to create conversation")

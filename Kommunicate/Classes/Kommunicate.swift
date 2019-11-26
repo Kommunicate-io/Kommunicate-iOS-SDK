@@ -29,6 +29,10 @@ public typealias KMBaseNavigationViewController = ALKBaseNavigationViewControlle
 let conversationCreateIdentifier = 112233445
 let faqIdentifier =  11223346
 
+enum KMLocalizationKey {
+    static let noName = "NoName"
+}
+
 @objc
 open class Kommunicate: NSObject,Localizable{
 
@@ -514,7 +518,7 @@ open class Kommunicate: NSObject,Localizable{
        }
 }
 
-class ChatMessage: ALKChatViewModelProtocol {
+class ChatMessage: ALKChatViewModelProtocol,Localizable {
     var messageType: ALKMessageType
     var avatar: URL?
     var avatarImage: UIImage?
@@ -546,9 +550,14 @@ class ChatMessage: ALKChatViewModelProtocol {
         self.createdAt = message.createdAt
         self.messageType = message.messageType
         // Update message to show conversation assignee details
-        let (assignee,channel) = ConversationDetail().conversationAssignee(groupId: self.channelKey, userId: self.contactId)
-        self.groupName = ((channel != nil ? channel?.name : assignee?.getDisplayName()) ?? "No name")
-        self.avatarGroupImageUrl = channel != nil ? channel?.channelImageURL : assignee?.contactImageUrl
+        let (_,channel) = ConversationDetail().conversationAssignee(groupId: self.channelKey, userId: self.contactId)
+
+        guard let alChannel = channel  else {
+            self.groupName = localizedString(forKey: KMLocalizationKey.noName, fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
+            return
+        }
+        self.groupName = alChannel.name ?? localizedString(forKey: KMLocalizationKey.noName, fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
+        self.avatarGroupImageUrl = alChannel.channelImageURL
     }
 
 }
