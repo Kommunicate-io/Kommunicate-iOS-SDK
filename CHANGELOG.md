@@ -5,7 +5,8 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 3.0.0 (Upcoming)
 ### Enhancements
-- [AL-3762] Add passing conversation title and show it in navigation title
+-  Added a new create conversation method based on the builder pattern.
+- [AL-3762] Added an option to pass conversation title and it will be shown in navigation bar.
 
 2.5.0
 ### Enhancements
