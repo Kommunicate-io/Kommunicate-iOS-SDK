@@ -479,7 +479,7 @@ open class Kommunicate: NSObject,Localizable{
     }
 
     static private func defaultChatViewSettings() {
-        KMUserDefaultHandler.setBASEURL(KMURLConstants.CHATURL.DEFAULT_BASE_URL)
+        KMUserDefaultHandler.setBASEURL(API.Backend.chat.rawValue)
         KMUserDefaultHandler.setGoogleMapAPIKey("AIzaSyCOacEeJi-ZWLLrOtYyj3PKMTOFEG7HDlw") //REPLACE WITH YOUR GOOGLE MAPKEY
         ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description()])
         ALApplozicSettings.setFilterContactsStatus(true)
