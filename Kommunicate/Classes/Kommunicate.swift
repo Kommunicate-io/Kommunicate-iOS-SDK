@@ -162,6 +162,13 @@ open class Kommunicate: NSObject,Localizable{
     ///   - completion: clientConversationId if successful otherwise empty string.
     @objc open class func createConversation(
         conversation: KMConversation = KMConversationBuilder().build(),completion:@escaping (_ clientGroupId: String) -> ()) {
+
+        if conversation.conversationTitle != nil, let conversationTitle = conversation.conversationTitle, conversationTitle.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+            print("The conversation title should not be empty")
+            completion("")
+            return;
+        }
+
         let service = KMConversationService()
         if KMUserDefaultHandler.isLoggedIn() {
             var allAgentIds = conversation.agentIds
