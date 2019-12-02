@@ -18,9 +18,9 @@ class KommunicateTests: XCTestCase {
             showConversationsCalled = true
         }
 
-        override class func createConversation(conversation: KMConversation, completion: @escaping (String) -> ()) {
+        override class func createConversation(conversation: KMConversation = KMConversationBuilder().build(), completion: @escaping (Result<String, KMConversationError>) -> ()) {
             createConversationsCalled = true
-            completion("")
+            completion(.success(""))
         }
 
         override class func createAndShowConversation(

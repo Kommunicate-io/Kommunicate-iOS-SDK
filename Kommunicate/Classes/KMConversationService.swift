@@ -20,11 +20,6 @@ struct LocalizationKey {
     static let supportChannelName = "SupportChannelName"
 }
 
-public enum Result<Value> {
-    case success(Value)
-    case failure(Error)
-}
-
 public protocol KMConservationServiceable {
     associatedtype Response
     func createConversation(
@@ -110,7 +105,7 @@ public class KMConversationService: KMConservationServiceable,Localizable {
     public func awayMessageFor(
         applicationKey: String = ALUserDefaultsHandler.getApplicationKey(),
         groupId: NSNumber,
-        completion: @escaping (Result<String>)->()) {
+        completion: @escaping (Result<String, Error>)->()) {
 
 
         // Set up the URL request
@@ -155,7 +150,7 @@ public class KMConversationService: KMConservationServiceable,Localizable {
      **/
     public func defaultAgentFor(
         applicationKey: String = ALUserDefaultsHandler.getApplicationKey(),
-        completion: @escaping (Result<String>)->()) {
+        completion: @escaping (Result<String, Error>)->()) {
         // Set up the URL request
         guard let url = URLBuilder.agentsURLFor(applicationKey: applicationKey).url
             else {
@@ -272,7 +267,7 @@ public class KMConversationService: KMConservationServiceable,Localizable {
     }
 
 
-    func makeAwayMessageFrom(json: [String: Any]) -> Result<String> {
+    func makeAwayMessageFrom(json: [String: Any]) -> Result<String, Error> {
         guard
             let data = json["data"] as? [String: Any],
             let messageList = data["messageList"] as? [Any] else {
@@ -287,7 +282,7 @@ public class KMConversationService: KMConservationServiceable,Localizable {
         return .success(message)
     }
 
-    func agentIdFrom(json: [String: Any]) -> Result<String> {
+    func agentIdFrom(json: [String: Any]) -> Result<String, Error> {
         guard let response = json["response"] as? [String: Any],
             let agentId = response["agentId"] as? String
             else {

@@ -160,12 +160,17 @@ open class Kommunicate: NSObject,Localizable{
     /// - Parameters:
     ///   - conversation: KMConversation object.
     ///   - completion: clientConversationId if successful otherwise empty string.
-    @objc open class func createConversation(
-        conversation: KMConversation = KMConversationBuilder().build(),completion:@escaping (_ clientGroupId: String) -> ()) {
+    open class func createConversation (
+        conversation: KMConversation = KMConversationBuilder().build(), completion:@escaping (Result<String, KMConversationError>) -> ()) {
+
+        if !ALDataNetworkConnection.checkDataNetworkAvailable() {
+            completion(.failure(KMConversationError.internet))
+            return;
+        }
 
         if conversation.conversationTitle != nil, let conversationTitle = conversation.conversationTitle, conversationTitle.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
             print("The conversation title should not be empty")
-            completion("")
+            completion(.failure(KMConversationError.invalidTitle))
             return;
         }
 
@@ -181,8 +186,9 @@ open class Kommunicate: NSObject,Localizable{
                 switch result {
                 case .success(let agentId):
                     allAgentIds.append(agentId)
-                case .failure(let error):
-                    print("Error while fetching agents id: \(error)")
+                case .failure(_):
+                    completion(.failure(KMConversationError.api))
+                    return;
                 }
                 allAgentIds = allAgentIds.uniqueElements
                 conversation.agentIds = allAgentIds
@@ -193,14 +199,22 @@ open class Kommunicate: NSObject,Localizable{
                 }
 
                 service.createConversation(conversation: conversation, completion: { response in
-                    completion(response.clientChannelKey ?? "")
+
+                    guard let error = response.error, response.clientChannelKey == nil  else {
+                        if let conversationId = response.clientChannelKey {
+                            completion(.success(conversationId))
+                        } else {
+                            completion(.failure(KMConversationError.api))
+                        }
+                        return;
+                    }
+                    completion(.failure(KMConversationError.custom(error.localizedDescription)))
                 })
             })
-        }else{
-            completion("")
+        } else {
+            completion(.failure(KMConversationError.notLoggedIn))
         }
     }
-
 
     /// This method is used to return an instance of conversation list view controller.
     ///
@@ -371,20 +385,22 @@ open class Kommunicate: NSObject,Localizable{
         let kommunicateConversationBuilder = KMConversationBuilder()
             .useLastConversation(true)
         let conversation = kommunicateConversationBuilder.build()
-        createConversation(conversation: conversation) { (response) in
-            guard !response.isEmpty else {
+        createConversation(conversation: conversation) { (result) in
+            switch result {
+            case .success(let conversationId):
+                DispatchQueue.main.async {
+                    showConversationWith(groupId: conversationId, from: viewController, completionHandler: { success in
+                        guard success else {
+                            completion(KommunicateError.conversationNotPresent)
+                            return
+                        }
+                        print("Kommunicate: conversation was shown")
+                        completion(nil)
+                    })
+                }
+            case .failure(_):
                 completion(KommunicateError.conversationCreateFailed)
                 return
-            }
-            DispatchQueue.main.async {
-                showConversationWith(groupId: response, from: viewController, completionHandler: { success in
-                    guard success else {
-                        completion(KommunicateError.conversationNotPresent)
-                        return
-                    }
-                    print("Kommunicate: conversation was shown")
-                    completion(nil)
-                })
             }
         }
     }
@@ -505,24 +521,30 @@ open class Kommunicate: NSObject,Localizable{
 
         - Returns: Group id if successful otherwise nil.
         */
-       @available(*, deprecated, message: "Use createConversation(conversation:completion:)")
-       @objc open class func createConversation(
-           userId: String,
-           agentIds: [String] = [],
-           botIds: [String]?,
-           useLastConversation: Bool = false,
-           clientConversationId: String? = nil,
-           completion:@escaping (_ clientGroupId: String) -> ()) {
-           let kommunicateConversationBuilder = KMConversationBuilder()
-               .useLastConversation(useLastConversation)
-               .withAgentIds(agentIds)
-               .withBotIds(botIds ?? [])
-           let conversation =  kommunicateConversationBuilder.build()
+    @available(*, deprecated, message: "Use createConversation(conversation:completion:)")
+    @objc open class func createConversation(
+        userId: String,
+        agentIds: [String] = [],
+        botIds: [String]?,
+        useLastConversation: Bool = false,
+        clientConversationId: String? = nil,
+        completion:@escaping (_ clientGroupId: String) -> ()) {
+        let kommunicateConversationBuilder = KMConversationBuilder()
+            .useLastConversation(useLastConversation)
+            .withAgentIds(agentIds)
+            .withBotIds(botIds ?? [])
+        let conversation =  kommunicateConversationBuilder.build()
 
-           createConversation(conversation: conversation) { (clientConversationId) in
-               completion(clientConversationId)
-           }
-       }
+        createConversation(conversation: conversation) { (result) in
+
+            switch result {
+            case .success(let conversationId):
+                completion(conversationId)
+            case .failure(_):
+                completion("")
+            }
+        }
+    }
 }
 
 class ChatMessage: ALKChatViewModelProtocol,Localizable {
