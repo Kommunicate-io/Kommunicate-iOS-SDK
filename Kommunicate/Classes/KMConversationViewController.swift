@@ -15,6 +15,7 @@ open class KMConversationViewController: ALKConversationViewController {
 
     private let faqIdentifier =  11223346
     public var kmConversationViewConfiguration: KMConversationViewConfiguration!
+    var modelVC: RatingViewController!
 
     lazy var customNavigationView = ConversationVCNavBar(
         delegate: self,
@@ -75,6 +76,11 @@ open class KMConversationViewController: ALKConversationViewController {
         checkPlanAndShowSuspensionScreen()
         addAwayMessageConstraints()
         showAwayMessage(false)
+        setupRating()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+            self.showRating()
+        })
         guard let channelId = viewModel.channelKey else { return }
         sendConversationOpenNotification(channelId: String(describing: channelId))
     }
@@ -199,5 +205,19 @@ extension KMConversationViewController: NavigationBarCallbacks {
         }
         guard let channelId = viewModel.channelKey else { return }
         sendConversationCloseNotification(channelId: String(describing: channelId))
+    }
+}
+
+extension KMConversationViewController {
+
+    func setupRating() {
+        modelVC = RatingViewController()
+        modelVC.closeButtontapped = { [weak self] in
+            self?.dismiss(animated: true, completion: nil)
+        }
+    }
+
+    func showRating() {
+        self.present(modelVC, animated: true, completion: nil)
     }
 }
