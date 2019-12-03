@@ -4,7 +4,7 @@
 
 #### Create new conversation and launch
 
-This method will create new conversation and the launch conversation 
+This method will create new conversation and the launch conversation
   ```swift
  let kmConversation =
       KMConversationBuilder()
@@ -13,19 +13,19 @@ This method will create new conversation and the launch conversation
            .useLastConversation(false) // If you pass here false, then a new conversation will be created everytime
            .build()
 
- Kommunicate.createConversation(conversation: kmConversation) { (conversationId) in
-     print("Conversation id @@ ",conversationId)
-
-     guard !conversationId.isEmpty else {
-         print("Failed to create conversation")
-          return
-      }
-     DispatchQueue.main.async {
-         Kommunicate.showConversationWith(groupId: conversationId, from: self, completionHandler: { (success) in
-             print("conversation was shown")
-         })
+ Kommunicate.createConversation(conversation: kmConversation) { (result) in
+     switch result {
+     case .success(let conversationId):
+        print("Conversation id @@ ",conversationId)
+        DispatchQueue.main.async {
+            Kommunicate.showConversationWith(groupId: conversationId, from: self, completionHandler: { (success) in
+                print("Conversation was shown")
+            })
+        }
+     case .failure(let kmConversationError):
+         print("Failed to create conversation", kmConversationError)
      }
- }
+  }
  ```
 
 ### Migrating from versions < 2.3.0
@@ -50,9 +50,9 @@ This method will create new conversation and the launch conversation
 
 #### Notification tap action.
 
-    Default setting is on tap of notification, chat screen will be opened. On pressing back it won't go to chat list screen. 
+    Default setting is on tap of notification, chat screen will be opened. On pressing back it won't go to chat list screen.
     If you want to go to chat list on pressing back button in chat screen, then add below line in your AppDelegate's didFinishLaunchingWithOptions method.
-    
+
     ```
     KMPushNotificationHandler.hideChatListOnNotification = false
     ```
