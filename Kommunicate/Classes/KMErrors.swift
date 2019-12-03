@@ -6,17 +6,18 @@
 //
 import Foundation
 
+/// KMConversationError  enum is for conversation errors occurred during a creating conversation.
 public enum KMConversationError : LocalizedError {
 
-    // Thrown when title is invalid.
+    /// Thrown when title is invalid.
     case invalidTitle
-    // User is not logged in.
+    /// Thrown when user is not logged in.
     case notLoggedIn
-    // Internet issue.
+    /// Thrown when Internet is not available.
     case internet
-    // API error.
+    /// Thrown when API error.
     case api
-    // Custom error description.
+    /// Custom error description.
     case custom(_ description: String)
 
     public var errorDescription: String? {
