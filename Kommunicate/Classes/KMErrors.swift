@@ -31,7 +31,7 @@ public enum KMConversationError : LocalizedError {
             if let apiError = error {
                 errorMessage = apiError.localizedDescription
             } else {
-                errorMessage = "Failed to proccess API request"
+                errorMessage = "Failed to process API request"
             }
         }
         return errorMessage
