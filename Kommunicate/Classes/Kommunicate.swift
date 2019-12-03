@@ -186,8 +186,8 @@ open class Kommunicate: NSObject,Localizable{
                 switch result {
                 case .success(let agentId):
                     allAgentIds.append(agentId)
-                case .failure(_):
-                    completion(.failure(KMConversationError.api))
+                case .failure(let error):
+                    completion(.failure(KMConversationError.api(error)))
                     return;
                 }
                 allAgentIds = allAgentIds.uniqueElements
@@ -201,11 +201,7 @@ open class Kommunicate: NSObject,Localizable{
                 service.createConversation(conversation: conversation, completion: { response in
 
                     guard let conversationId = response.clientChannelKey else {
-                        if let error = response.error {
-                            completion(.failure(KMConversationError.custom(error.localizedDescription)))
-                        } else {
-                            completion(.failure(KMConversationError.api))
-                        }
+                        completion(.failure(KMConversationError.api(response.error)))
                         return;
                     }
                     completion(.success(conversationId))

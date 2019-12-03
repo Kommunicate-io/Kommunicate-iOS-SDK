@@ -39,12 +39,6 @@ public class KMConversationService: KMConservationServiceable,Localizable {
         public var error: Error? = nil
     }
 
-    public enum APIError: Error {
-        case urlBuilding
-        case jsonConversion
-        case messageNotPresent
-    }
-
     let groupMetadata: NSMutableDictionary = {
         let metadata = NSMutableDictionary(
             dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
