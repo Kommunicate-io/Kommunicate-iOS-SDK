@@ -13,7 +13,7 @@ class DataLoader {
         case network(Error?)
     }
 
-    static func request(url: URL, completion: @escaping (Result<Data>) -> Void) {
+    static func request(url: URL, completion: @escaping (Result<Data, LoadingError>) -> Void) {
 
         let urlRequest = URLRequest(url: url)
 
