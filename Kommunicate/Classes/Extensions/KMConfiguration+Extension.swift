@@ -43,4 +43,53 @@ extension ALKConfiguration {
             return navigationItemsForConversationList.contains { $0.identifier == conversationCreateIdentifier }
         }
     }
+
+    /// Use this to update user's language. It will be passed
+    /// with each message.
+    ///
+    /// - Parameter tag: Language tag to set user's language
+    public mutating func updateUserLanguage(tag: String) throws {
+        do {
+            try updateChatContext(with: [ChannelMetadataKeys.languageTag: tag])
+        } catch {
+            print(error)
+            throw error
+        }
+    }
+
+    private mutating func updateChatContext(with dict: [String: Any]) throws {
+        var metadata = messageMetadata ?? [:]
+        var context: [String: Any] = [:]
+
+        do {
+            let contextDict = try chatContextFromMetadata()
+            context = contextDict ?? [:]
+            context.merge(dict, uniquingKeysWith: { $1 })
+
+            let messageInfoData = try JSONSerialization
+                .data(withJSONObject: context, options: .prettyPrinted)
+            let messageInfoString = String(data: messageInfoData, encoding: .utf8) ?? ""
+            metadata[ChannelMetadataKeys.chatContext] = messageInfoString
+            messageMetadata = metadata
+        } catch {
+            throw error
+        }
+    }
+
+    private func chatContextFromMetadata() throws -> [String: Any]? {
+        guard
+            let messageMetadata = messageMetadata,
+            let chatContext = messageMetadata[ChannelMetadataKeys.chatContext] as? String,
+            let contextData = chatContext.data(using: .utf8) else {
+                return nil
+        }
+        do {
+            let contextDict = try JSONSerialization
+                .jsonObject(with: contextData, options : .allowFragments) as? Dictionary<String, Any>
+            return contextDict
+        }
+        catch {
+            throw error
+        }
+    }
 }
