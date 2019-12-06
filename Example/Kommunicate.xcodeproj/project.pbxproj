@@ -20,6 +20,7 @@
 		8B33037F2226A494003BF306 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B33037E2226A494003BF306 /* LoginViewController.swift */; };
 		8B5BC12A22002FDC00F39956 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8B5BC12822002FDC00F39956 /* Localizable.strings */; };
 		8B8FFA9421D5171F00C8ED57 /* PaymentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8FFA9321D5171F00C8ED57 /* PaymentTests.swift */; };
+		8BC35D6E239A652F0053D001 /* MessageMetadataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC35D6D239A652F0053D001 /* MessageMetadataTests.swift */; };
 		9B62C0C2E360C245E75858BC /* Pods_Kommunicate_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B1CC9E49975F48B2A2355C6 /* Pods_Kommunicate_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +58,7 @@
 		8B5BC12922002FDC00F39956 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8B68A6F72051551F00BF6C22 /* Kommunicate_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Kommunicate_Example.entitlements; sourceTree = "<group>"; };
 		8B8FFA9321D5171F00C8ED57 /* PaymentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentTests.swift; sourceTree = "<group>"; };
+		8BC35D6D239A652F0053D001 /* MessageMetadataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMetadataTests.swift; sourceTree = "<group>"; };
 		96CBD292230F6E24A5E549AE /* Pods-Kommunicate_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kommunicate_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Kommunicate_Example/Pods-Kommunicate_Example.release.xcconfig"; sourceTree = "<group>"; };
 		A705F6509C85EF919B1A8ED7 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		D884C77B872B4F3CEE0E3715 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 				8B8FFA9321D5171F00C8ED57 /* PaymentTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 				1AD224B4222E935900184112 /* KMConversationViewControllerTests.swift */,
+				8BC35D6D239A652F0053D001 /* MessageMetadataTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -424,6 +427,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BC35D6E239A652F0053D001 /* MessageMetadataTests.swift in Sources */,
 				8B8FFA9421D5171F00C8ED57 /* PaymentTests.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* KommunicateTests.swift in Sources */,
 				1AFB913121A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift in Sources */,

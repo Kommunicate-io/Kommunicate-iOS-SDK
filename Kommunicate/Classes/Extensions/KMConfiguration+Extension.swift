@@ -44,27 +44,18 @@ extension ALKConfiguration {
         }
     }
 
-    /// Use this to update user's language. It will be passed
-    /// with each message.
+    /// Use this to pass extra information as metadata, it will be
+    /// passed with each message as value of `KM_CHAT_CONTEXT` key.
     ///
-    /// - Parameter tag: Language tag to set user's language
-    public mutating func updateUserLanguage(tag: String) throws {
-        do {
-            try updateChatContext(with: [ChannelMetadataKeys.languageTag: tag])
-        } catch {
-            print(error)
-            throw error
-        }
-    }
-
-    private mutating func updateChatContext(with dict: [String: Any]) throws {
+    /// - Parameter info: Info that should be passed with each message
+    public mutating func updateChatContext(with info: [String: Any]) throws {
         var metadata = messageMetadata ?? [:]
         var context: [String: Any] = [:]
 
         do {
             let contextDict = try chatContextFromMetadata()
             context = contextDict ?? [:]
-            context.merge(dict, uniquingKeysWith: { $1 })
+            context.merge(info, uniquingKeysWith: { $1 })
 
             let messageInfoData = try JSONSerialization
                 .data(withJSONObject: context, options: .prettyPrinted)
@@ -72,6 +63,20 @@ extension ALKConfiguration {
             metadata[ChannelMetadataKeys.chatContext] = messageInfoString
             messageMetadata = metadata
         } catch {
+            throw error
+        }
+    }
+
+
+    /// Use this to update user's language, it will be passed with
+    /// each message in the metadata.
+    ///
+    /// - Parameter tag: Language tag to set user's language
+    public mutating func updateUserLanguage(tag: String) throws {
+        do {
+            try updateChatContext(with: [ChannelMetadataKeys.languageTag: tag])
+        } catch {
+            print(error)
             throw error
         }
     }
