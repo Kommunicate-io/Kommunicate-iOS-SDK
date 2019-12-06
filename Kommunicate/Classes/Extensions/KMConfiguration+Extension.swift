@@ -76,7 +76,6 @@ extension ALKConfiguration {
         do {
             try updateChatContext(with: [ChannelMetadataKeys.languageTag: tag])
         } catch {
-            print(error)
             throw error
         }
     }
