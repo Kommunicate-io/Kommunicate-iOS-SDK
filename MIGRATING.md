@@ -28,6 +28,14 @@ This method will create new conversation and the launch conversation
   }
  ```
 
+ #### Pass custom data to bot platform
+
+ If you were using `Kommunicate.defaultConfiguration.messageMetadata` to pass custom data(in `KM_CHAT_CONTEXT`) to bot platform, then you can replace that with `updateChatContext`:
+
+ ```
+ try Kommunicate.defaultConfiguration.updateChatContext(with: ["key": "value"])
+ ```
+
 ### Migrating from versions < 2.3.0
 
 ####  FAQ Button configuration

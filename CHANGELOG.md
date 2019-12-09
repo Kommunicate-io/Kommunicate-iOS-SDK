@@ -6,6 +6,8 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 ### Enhancements
 -  Added a new create conversation method based on the builder pattern.
 - [AL-3762] Added an option to pass conversation title and it will be shown in navigation bar.
+- [CM-2] Added support for changing user language.
+- Added a method in `KMConfiguration` for updating chat context.
 
 2.5.0
 ### Enhancements

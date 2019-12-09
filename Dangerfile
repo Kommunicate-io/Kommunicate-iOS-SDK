@@ -37,7 +37,7 @@ changelog_updated = git.modified_files.include? "CHANGELOG.md"
 fail "Any source code changes should have an entry in CHANGELOG.md." if !declared_trivial && !changelog_updated
 
 jira.check(
-  key: ["AL", "CS"],
+  key: ["AL", "CM"],
   url: "https://applozic.atlassian.net/browse",
   fail_on_warning: false
 )

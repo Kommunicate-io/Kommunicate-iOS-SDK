@@ -12,8 +12,10 @@ import ApplozicSwift
 public struct ChannelMetadataKeys {
     static let conversationAssignee = "CONVERSATION_ASSIGNEE"
     static let skipRouting = "SKIP_ROUTING";
-    static let kmConversationTitle = "KM_CONVERSATION_TITLE";
-    static let kmOriginalTitle = "KM_ORIGINAL_TITLE";
+    static let kmConversationTitle = "KM_CONVERSATION_TITLE"
+    static let kmOriginalTitle = "KM_ORIGINAL_TITLE"
+    static let chatContext = "KM_CHAT_CONTEXT"
+    static let languageTag = "kmUserLanguageCode"
 }
 
 struct LocalizationKey {
