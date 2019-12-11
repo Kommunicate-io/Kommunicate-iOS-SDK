@@ -40,8 +40,6 @@ public class FaqViewController: UIViewController, Localizable {
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let navigationController = navigationController else { return }
-        configureNavigationBar(navigationController.navigationBar)
         var backImage = UIImage.init(named: "icon_back", in: Bundle.kommunicate, compatibleWith: nil)
         backImage = backImage?.imageFlippedForRightToLeftLayoutDirection()
         navigationItem.leftBarButtonItem = UIBarButtonItem.init(image: backImage, style: .plain, target: self , action: #selector(backTapped))
@@ -51,14 +49,6 @@ public class FaqViewController: UIViewController, Localizable {
     @objc func backTapped() {
         self.dismiss(animated: true, completion: nil)
     }
-
-    private func configureNavigationBar(_ navigationBar: UINavigationBar) {
-        navigationBar.barTintColor = configuration.navigationBarBackgroundColor
-        navigationBar.tintColor = configuration.navigationBarItemColor
-        navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: configuration.navigationBarTitleColor]
-        navigationBar.isTranslucent = false
-    }
-
 }
 
 extension FaqViewController: WKNavigationDelegate {

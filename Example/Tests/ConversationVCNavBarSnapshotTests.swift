@@ -40,7 +40,6 @@ class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
             
             beforeEach {
                 customNavigationView = ConversationVCNavBar(
-                    navigationBarBackgroundColor: UIColor(236, green: 239, blue: 241),
                     delegate: self,
                     localizationFileName: "Localizable",
                     configuration: KMConversationViewConfiguration())
@@ -72,6 +71,7 @@ class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
     func applyColor(navigationController : UINavigationController) {
         navigationController.navigationBar.isTranslucent = false
         navigationController.navigationBar.tintColor = UIColor.red
+        navigationController.navigationBar.barTintColor = UIColor(236, green: 239, blue: 241)
         navigationController.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.blue,
             .font: UIFont.boldSystemFont(ofSize: 16),

@@ -10,7 +10,7 @@ import Applozic
 import ApplozicSwift
 import Kingfisher
 
-protocol NavigationBarCallbacks {
+protocol NavigationBarCallbacks: AnyObject {
     func backButtonPressed()
 }
 
@@ -21,10 +21,9 @@ extension NSAttributedString.Key {
 }
 
 class ConversationVCNavBar: UIView, Localizable {
-    
-    var navigationBarBackgroundColor: UIColor
+
     var configuration: KMConversationViewConfiguration!
-    var delegate: NavigationBarCallbacks!
+    weak var delegate: NavigationBarCallbacks?
     var localizationFileName: String!
     
     let backButton: UIButton = {
@@ -53,7 +52,6 @@ class ConversationVCNavBar: UIView, Localizable {
     
     lazy var statusIconBackgroundColor: UIView = {
         let view = UIView()
-        view.backgroundColor = self.navigationBarBackgroundColor
         view.layer.cornerRadius = 6
         view.clipsToBounds = true
         return view
@@ -91,11 +89,9 @@ class ConversationVCNavBar: UIView, Localizable {
     }
     
     required init(
-        navigationBarBackgroundColor: UIColor,
         delegate: NavigationBarCallbacks,
         localizationFileName: String,
         configuration: KMConversationViewConfiguration) {
-        self.navigationBarBackgroundColor = navigationBarBackgroundColor
         self.configuration = configuration
         self.delegate = delegate
         self.localizationFileName = localizationFileName
@@ -116,7 +112,7 @@ class ConversationVCNavBar: UIView, Localizable {
     }
     
     @objc func backButtonClicked(_ sender: UIButton) {
-        delegate.backButtonPressed()
+        delegate?.backButtonPressed()
     }
 
     func setupAppearance(_ appearance: UINavigationBar) {
@@ -133,6 +129,7 @@ class ConversationVCNavBar: UIView, Localizable {
         if let tintColor = appearance.tintColor {
             backButton.tintColor = tintColor
         }
+        statusIconBackgroundColor.backgroundColor = appearance.barTintColor
     }
 
     private func setupConstraints() {

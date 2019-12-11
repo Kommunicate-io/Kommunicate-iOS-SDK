@@ -1,14 +1,14 @@
 PODS:
   - Applozic (6.17.1):
     - SDWebImage (~> 5.1.0)
-  - ApplozicSwift (4.0.0):
-    - ApplozicSwift/Complete (= 4.0.0)
-  - ApplozicSwift/Complete (4.0.0):
+  - ApplozicSwift (4.0.1):
+    - ApplozicSwift/Complete (= 4.0.1)
+  - ApplozicSwift/Complete (4.0.1):
     - Applozic (~> 6.17.0)
     - ApplozicSwift/RichMessageKit
     - Kingfisher (~> 5.7.0)
     - MGSwipeTableCell (~> 1.6.9)
-  - ApplozicSwift/RichMessageKit (4.0.0)
+  - ApplozicSwift/RichMessageKit (4.0.1)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
   - FBSnapshotTestCase/Core (2.1.4)
@@ -42,16 +42,17 @@ DEPENDENCIES:
   - Quick
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - Applozic
-    - ApplozicSwift
+  https://github.com/CocoaPods/Specs.git:
     - FBSnapshotTestCase
     - iOSSnapshotTestCase
-    - Kingfisher
-    - MGSwipeTableCell
     - Nimble
     - Nimble-Snapshots
     - Quick
+  trunk:
+    - Applozic
+    - ApplozicSwift
+    - Kingfisher
+    - MGSwipeTableCell
     - SDWebImage
 
 EXTERNAL SOURCES:
@@ -60,7 +61,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Applozic: 222715a22ca0f8048390067ad3e44e80c78d096d
-  ApplozicSwift: b7d470f3e9f13ceb6ab4dd91286d07c524f3f8ff
+  ApplozicSwift: 75effb6ac41c4792912acca935b4990b473adc6f
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 2d51aa06775e95cecb0a1fb9c5c159ccd1dd4596
   Kingfisher: 176d377ad339113c99ad4980cbae687f807e20fe
@@ -73,4 +74,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 082b42a1ee8e13768ec8ed01a094d7959ec3a111
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.8.4

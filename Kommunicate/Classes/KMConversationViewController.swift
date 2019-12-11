@@ -17,7 +17,6 @@ open class KMConversationViewController: ALKConversationViewController {
     public var kmConversationViewConfiguration: KMConversationViewConfiguration!
 
     lazy var customNavigationView = ConversationVCNavBar(
-        navigationBarBackgroundColor: self.configuration.navigationBarBackgroundColor,
         delegate: self,
         localizationFileName: self.configuration.localizedStringFileName,
         configuration: kmConversationViewConfiguration)
