@@ -424,29 +424,33 @@ open class Kommunicate: NSObject,Localizable{
         vc.navigationController?.view.isUserInteractionEnabled = false
         let alertView =  displayAlert(viewController :vc)
 
-        createConversation(userId: KMUserDefaultHandler.getUserId(), agentIds: [], botIds: [], useLastConversation: false, clientConversationId: nil, completion: { response in
+        let kmConversation =
+            KMConversationBuilder()
+                .useLastConversation(false)
+                .build()
 
-            vc.view.isUserInteractionEnabled = true
-            vc.navigationController?.view.isUserInteractionEnabled = true
-
-            guard !response.isEmpty else {
+        Kommunicate.createConversation(conversation: kmConversation) { (result) in
+            switch result {
+            case .success(let conversationId):
                 DispatchQueue.main.async {
+                    vc.view.isUserInteractionEnabled = true
+                    vc.navigationController?.view.isUserInteractionEnabled = true
+                    alertView.dismiss(animated: false, completion: nil)
+                    showConversationWith(groupId: conversationId, from: vc, completionHandler: { (success) in
+                        print("Conversation was shown")
+                    })
+                }
+            case .failure( _):
+                DispatchQueue.main.async {
+                    vc.view.isUserInteractionEnabled = true
+                    vc.navigationController?.view.isUserInteractionEnabled = true
                     alertView.dismiss(animated: false, completion: {
                         showAlert(viewController: vc)
                     })
                 }
-                return
             }
-            DispatchQueue.main.async {
-                showConversationWith(groupId: response, from: vc, completionHandler: { success in
-                    alertView.dismiss(animated: false, completion: nil)
-                    guard success else {
-                        return
-                    }
-                    print("Kommunicate: conversation was shown")
-                })
-            }
-        })
+        }
+
     }
 
     private class func  displayAlert(viewController:ALKConversationListViewController) -> UIAlertController {
