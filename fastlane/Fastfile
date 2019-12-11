@@ -17,7 +17,6 @@ platform :ios do
     version_bump_podspec(path: "Kommunicate.podspec", version_number: version)
     cocoapods(clean: true, podfile: "Example/Podfile", repo_update: true)
 
-    scan()
     pod_lib_lint
 
     sh("git", "add", "-u")
