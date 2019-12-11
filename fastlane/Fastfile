@@ -1,0 +1,44 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Release new version"
+  lane :release do
+	  releaseBranchName = git_branch
+
+    unless releaseBranchName.partition('/').first == "release"
+      raise "Incorrect branch, expected release branch".red
+    end
+
+    sh("git", "fetch")
+    sh("git", "checkout", releaseBranchName)
+
+    version = releaseBranchName.partition('/').last
+  
+    version_bump_podspec(path: "Kommunicate.podspec", version_number: version)
+    cocoapods(clean: true, podfile: "Example/Podfile", repo_update: true)
+
+    scan()
+    pod_lib_lint
+
+    sh("git", "add", "-u")
+    sh("git", "commit", "-m", "Bump version to #{version} [ci skip]")
+    sh("git", "fetch")
+    sh("git", "checkout", "master")
+    sh("git", "merge", releaseBranchName)
+    sh("git", "tag", version)
+    sh("git", "push", "origin", "--tags", "master")
+    sh("git", "checkout", "dev")
+    sh("git", "merge", "master")
+    sh("git", "push", "origin", "dev")
+
+    pod_push
+
+    github_release = set_github_release(
+      repository_name: "Kommunicate-io/Kommunicate-iOS-SDK",
+      api_token: ENV["DANGER_GITHUB_API_TOKEN"],
+      name: version,
+      tag_name: version,
+      commitish: "master"
+    )
+  end
+end
