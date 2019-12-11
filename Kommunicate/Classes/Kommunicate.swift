@@ -155,14 +155,12 @@ open class Kommunicate: NSObject,Localizable{
         }
     }
 
-    ///  Creates a new conversation with the details passed.
-    ///
-    /// - Parameters:
-    ///   - conversation: KMConversation object.
-    ///   - completion: Result<String, KMConversationError> if successful the success callback will have a conversationId else it will be KMConversationError on failure.
+    /// Creates a new conversation with the details passed.
+    /// - Parameter conversation: An instance of `KMConversation` object.
+    /// - Parameter completion: If successful the success callback will have a conversationId else it will be KMConversationError on failure.
     open class func createConversation (
         conversation: KMConversation = KMConversationBuilder().build(),
-        completion:@escaping (Result<String, KMConversationError>) -> ()) {
+        completion: @escaping (Result<String, KMConversationError>) -> ()) {
 
         guard ALDataNetworkConnection.checkDataNetworkAvailable() else {
             completion(.failure(KMConversationError.internet))
