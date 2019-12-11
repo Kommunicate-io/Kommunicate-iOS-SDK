@@ -155,13 +155,12 @@ open class Kommunicate: NSObject,Localizable{
         }
     }
 
-    ///  Creates a new conversation with the details passed.
-    ///
-    /// - Parameters:
-    ///   - conversation: KMConversation object.
-    ///   - completion: clientConversationId if successful otherwise empty string.
+    /// Creates a new conversation with the details passed.
+    /// - Parameter conversation: An instance of `KMConversation` object.
+    /// - Parameter completion: If successful the success callback will have a conversationId else it will be KMConversationError on failure.
     open class func createConversation (
-        conversation: KMConversation = KMConversationBuilder().build(), completion:@escaping (Result<String, KMConversationError>) -> ()) {
+        conversation: KMConversation = KMConversationBuilder().build(),
+        completion: @escaping (Result<String, KMConversationError>) -> ()) {
 
         guard ALDataNetworkConnection.checkDataNetworkAvailable() else {
             completion(.failure(KMConversationError.internet))
@@ -424,29 +423,28 @@ open class Kommunicate: NSObject,Localizable{
         vc.navigationController?.view.isUserInteractionEnabled = false
         let alertView =  displayAlert(viewController :vc)
 
-        createConversation(userId: KMUserDefaultHandler.getUserId(), agentIds: [], botIds: [], useLastConversation: false, clientConversationId: nil, completion: { response in
-
-            vc.view.isUserInteractionEnabled = true
-            vc.navigationController?.view.isUserInteractionEnabled = true
-
-            guard !response.isEmpty else {
+        Kommunicate.createConversation() { (result) in
+            switch result {
+            case .success(let conversationId):
                 DispatchQueue.main.async {
+                    vc.view.isUserInteractionEnabled = true
+                    vc.navigationController?.view.isUserInteractionEnabled = true
+                    alertView.dismiss(animated: false, completion: nil)
+                    showConversationWith(groupId: conversationId, from: vc, completionHandler: { (success) in
+                        print("Conversation was shown")
+                    })
+                }
+            case .failure( _):
+                DispatchQueue.main.async {
+                    vc.view.isUserInteractionEnabled = true
+                    vc.navigationController?.view.isUserInteractionEnabled = true
                     alertView.dismiss(animated: false, completion: {
                         showAlert(viewController: vc)
                     })
                 }
-                return
             }
-            DispatchQueue.main.async {
-                showConversationWith(groupId: response, from: vc, completionHandler: { success in
-                    alertView.dismiss(animated: false, completion: nil)
-                    guard success else {
-                        return
-                    }
-                    print("Kommunicate: conversation was shown")
-                })
-            }
-        })
+        }
+
     }
 
     private class func  displayAlert(viewController:ALKConversationListViewController) -> UIAlertController {
