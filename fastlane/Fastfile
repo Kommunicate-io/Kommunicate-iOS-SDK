@@ -18,7 +18,39 @@ platform :ios do
     cocoapods(clean: true, podfile: "Example/Podfile", repo_update: true)
 
     pod_lib_lint
+    update_changelog_tag
+    push_version_update
 
+    pod_push
+    release_docs
+  end
+
+  desc "Create release draft"
+  lane :release_docs do
+    changelog = read_changelog(
+      section_identifier: "[version]" # replace with version var
+    )
+    set_github_release(
+      repository_name: "Kommunicate-io/Kommunicate-iOS-SDK",
+      api_token: ENV["DANGER_GITHUB_API_TOKEN"],
+      name: version,
+      tag_name: version,
+      description: (changelog rescue "No changelog provided"),
+      is_draft: "true"
+    )
+  end
+
+  desc "Update changelog"
+  lane :update_changelog_tag do
+    stamp_changelog(
+      section_identifier: version,
+      git_tag: version,
+      stamp_date: "true"
+    )
+  end
+
+  desc "Commit and push changes"
+  lane :push_version_update do
     sh("git", "add", "-u")
     sh("git", "commit", "-m", "Bump version to #{version} [ci skip]")
     sh("git", "fetch")
@@ -29,15 +61,5 @@ platform :ios do
     sh("git", "checkout", "dev")
     sh("git", "merge", "master")
     sh("git", "push", "origin", "dev")
-
-    pod_push
-
-    github_release = set_github_release(
-      repository_name: "Kommunicate-io/Kommunicate-iOS-SDK",
-      api_token: ENV["DANGER_GITHUB_API_TOKEN"],
-      name: version,
-      tag_name: version,
-      commitish: "master"
-    )
   end
 end
