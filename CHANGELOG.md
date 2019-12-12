@@ -2,48 +2,51 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
-3.0.0 (Upcoming)
+## [Unreleased]
+
+## [3.0.0] - 2019-12-12
+
 ### Enhancements
--  Added a new create conversation method based on the builder pattern.
+- Added a new create conversation method based on the builder pattern.
 - [AL-3762] Added an option to pass conversation title and it will be shown in navigation bar.
 - [CM-2] Added support for changing user language.
 - Added a method in `KMConfiguration` for updating chat context.
 
-2.5.0
+## [2.5.0]
 ### Enhancements
 - Moved the new conversation button in navigation bar to the right.
 
-2.4.0
+## [2.4.0]
 ### Enhancements
 - Added iOS 13 support
 - Added support to change navigation bar properties using UIAppearance.
 
-2.3.0
+## [2.3.0]
 ### Enhancements
 - [AL-3788] Simplified the setting to hide FAQ button and start new conversation button.
 
-2.2.0
+## [2.2.0]
 ### Fixes
 - Fixed an issue where tapping on notification was opening other chat screen.
 - Fixed an issue where away message was getting hidden after a message is sent by the logged-in user from some other platform.
 - Fixed an issue where away message was being shown even when some of the agents were online.
 
-2.1.0
+## [2.1.0]
 
 ### Enhancements
 [AL-3540]Added create conversation
 
-2.0.0
+## [2.0.0]
 
 ### Enhancements
 [AL-3623] Now iOS 10 is the minimum version supported.
 
-1.6.0
+## [1.6.0]
 ---
 ### Enhancements
 - [AL-3482] Now in `createConversation` API, clientConversationId can be passed. You can use this Id if you want to link a conversation with some event on your side.
 
-1.5.0
+## [1.5.0]
 ---
 ### Enhancements
 - [AL-2816] Added support for showing FAQ.
@@ -53,38 +56,38 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 ### Fixes
 - Fixed a crash where viewModel was nil while opening the controller.
 
-1.4.1
+## [1.4.1]
 
 ### Fixes
 
 - [AL-3493] Fixed an issue where Kommunicate localization file was not part of the pod.
 
-1.4.0
+## [1.4.0]
 
 ### Enhancments
 
 - [AL-3393] Added support for passing send message metadata in create group.
 
-1.3.0
+## [1.3.0]
 
 ### Enhancments
 
 - Now if the parent VC(from where the conversation is shown) doesn't have a navigation controller then the Conversation VC will still be shown.
 
-1.2.0
+## [1.2.0]
 
 ### Enhancements
 
 - [AL-2993] Updated Kommunicate framework to Swift 4.2.
 - [AL-3071] Added support to show conversation assignee details in conversation list screen.
 
-1.1.0
+## [1.1.0]
 
 ### Enhancements
 
 - [AL-3189] Add localization support.
 
-1.0.0
+## [1.0.0]
 ---
 
 ### Enhancements
