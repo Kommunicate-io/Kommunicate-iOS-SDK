@@ -47,6 +47,7 @@ class RatingViewController: UIViewController {
         label.numberOfLines = 1
         label.textColor = .lightGray
         label.backgroundColor = .clear
+        label.isHidden = true
         label.text = "Have other queries?  Restart conversation"
         return label
     }()
@@ -84,6 +85,8 @@ class RatingViewController: UIViewController {
     private lazy var commentsHeightConstraint = commentsView.heightAnchor.constraint(equalToConstant: 0)
     private lazy var submitButtonHeightConstraint = submitButton.heightAnchor.constraint(equalToConstant: 0)
 
+    private var ratingSelected: RatingType?
+
     init(title: String = "Rate the Conversation") {
         super.init(nibName: nil, bundle: nil)
 
@@ -99,7 +102,10 @@ class RatingViewController: UIViewController {
     }
 
     func setupView() {
+        submitButton.addTarget(self, action: #selector(submitTapped), for: .touchUpInside)
+
         ratingView.ratingSelected = {[weak self] rating in
+            self?.ratingSelected = rating
             // Show comments section and hide restart button
             self?.commentsHeightConstraint.constant = 80
             self?.submitButtonHeightConstraint.constant = 30
@@ -174,8 +180,18 @@ class RatingViewController: UIViewController {
     }
 
     @objc func closeTapped() {
-        self.dismiss(animated: true, completion: nil)
+        closeButtontapped?()
     }
+
+    @objc func submitTapped() {
+        guard let ratingSelected = ratingSelected else {
+            print("No rating selected")
+            return
+        }
+        let feedback = Feedback(rating: ratingSelected, comment: commentsView.text)
+        feedbackSubmitted?(feedback)
+    }
+
 
     private func calculatePreferredSize() {
         let targetSize = CGSize(width: view.bounds.width,
