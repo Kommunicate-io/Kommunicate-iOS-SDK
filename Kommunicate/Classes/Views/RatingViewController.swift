@@ -25,9 +25,8 @@ class RatingViewController: UIViewController {
 
     let closeButton: UIButton = {
         let button = UIButton(frame: CGRect.zero)
-        // TODO: change this to icon
-        button.setTitle("close", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        let icon = UIImage(named: "cancel_icon", in: Bundle.kommunicate, compatibleWith: nil)
+        button.setImage(icon, for: .normal)
         return button
     }()
 
@@ -61,23 +60,21 @@ class RatingViewController: UIViewController {
         let textView = UITextView(frame: .zero)
         textView.isSelectable = true
         textView.isScrollEnabled = true
-        textView.dataDetectorTypes = .link
         textView.textColor = .gray
-        textView.linkTextAttributes = [
-            .foregroundColor: UIColor.blue,
-            .underlineStyle: NSUnderlineStyle.single.rawValue
-        ]
-        textView.backgroundColor = .lightGray
+        textView.text = "Add a comment..."
         textView.delaysContentTouches = false
+        textView.layer.borderColor = UIColor(netHex: 0x848484).cgColor
+        textView.layer.cornerRadius = 4
+        textView.layer.borderWidth = 0.7
         return textView
     }()
 
-    // TODO: Color and localization
     let submitButton: UIButton = {
         let button = UIButton(frame: .zero)
-        button.setTitle("Submit", for: .normal)
+        button.setTitle("Submit your rating", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .blue
+        button.backgroundColor = UIColor(netHex: 0x5451e2)
+        button.layer.cornerRadius = 4
         return button
     }()
 
@@ -108,7 +105,7 @@ class RatingViewController: UIViewController {
             self?.ratingSelected = rating
             // Show comments section and hide restart button
             self?.commentsHeightConstraint.constant = 80
-            self?.submitButtonHeightConstraint.constant = 30
+            self?.submitButtonHeightConstraint.constant = 34
             self?.restartConversationView.isHidden = true
             self?.calculatePreferredSize()
         }
@@ -125,8 +122,8 @@ class RatingViewController: UIViewController {
         var allConstraints: [NSLayoutConstraint] = [
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            closeButton.heightAnchor.constraint(equalToConstant: 30),
-            closeButton.widthAnchor.constraint(equalToConstant: 60)
+            closeButton.heightAnchor.constraint(equalToConstant: 20),
+            closeButton.widthAnchor.constraint(equalToConstant: 20)
         ]
 
         var bottomAnchor = view.bottomAnchor
@@ -142,9 +139,9 @@ class RatingViewController: UIViewController {
         ]
 
         let commentsViewConstraints = [
-            commentsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            commentsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            commentsView.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 10),
+            commentsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
+            commentsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -28),
+            commentsView.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 20),
             commentsHeightConstraint
         ]
 
@@ -161,9 +158,9 @@ class RatingViewController: UIViewController {
         ]
 
         let submitButtonConstraints = [
-            submitButton.topAnchor.constraint(equalTo: commentsView.bottomAnchor, constant: 10),
-            submitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            submitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            submitButton.topAnchor.constraint(equalTo: commentsView.bottomAnchor, constant: 20),
+            submitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
+            submitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -28),
             submitButtonHeightConstraint
         ]
 
