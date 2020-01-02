@@ -9,6 +9,8 @@ import Foundation
 
 class FeedbackRatingView: UIView {
 
+    var ratingSelected: ((RatingType) -> Void)?
+
     private let sadEmojiButton: EmojiRatingButton = {
         let button = EmojiRatingButton(frame: .zero, rating: .sad)
         button.tag = 1
@@ -51,6 +53,7 @@ class FeedbackRatingView: UIView {
             }
             // update state of all buttons
             ratingButtons.forEach { $0.isInactive = ($0.tag != selectedRatingTag) }
+            ratingSelected?(RatingType(rawValue: tag) ?? .happy)
         }
     }
 
@@ -87,43 +90,6 @@ class FeedbackRatingView: UIView {
 class EmojiRatingButton: UIView {
 
     typealias Tag = Int
-
-    enum IconName {
-        static let sad = "sad_emoji"
-        static let confused = "confused_emoji"
-        static let happy = "happy_emoji"
-    }
-
-    enum RatingType {
-        case sad
-        case confused
-        case happy
-
-        // TODO: Localization
-        func title() -> String {
-            switch self {
-            case .sad:
-                return "Poor"
-            case .confused:
-                return "Average"
-            case .happy:
-                return "Great"
-            }
-        }
-
-        func icon() -> UIImage? {
-            var name = ""
-            switch self {
-            case .sad:
-                name = IconName.sad
-            case .confused:
-                name = IconName.confused
-            case .happy:
-                name = IconName.happy
-            }
-            return UIImage(named: name, in: Bundle.kommunicate, compatibleWith: nil)
-        }
-    }
 
     var selectedStateWidth: CGFloat = 42
     var ratingTapped: ((Tag) -> Void)?
@@ -223,6 +189,41 @@ class EmojiRatingButton: UIView {
             self.layoutIfNeeded()
             self.titleLabel.alpha = labelAlpha
         })
+    }
+}
+
+extension RatingType {
+
+
+    enum IconName {
+        static let sad = "sad_emoji"
+        static let confused = "confused_emoji"
+        static let happy = "happy_emoji"
+    }
+
+    // TODO: Localization
+    func title() -> String {
+        switch self {
+        case .sad:
+            return "Poor"
+        case .confused:
+            return "Average"
+        case .happy:
+            return "Great"
+        }
+    }
+
+    func icon() -> UIImage? {
+        var name = ""
+        switch self {
+        case .sad:
+            name = IconName.sad
+        case .confused:
+            name = IconName.confused
+        case .happy:
+            name = IconName.happy
+        }
+        return UIImage(named: name, in: Bundle.kommunicate, compatibleWith: nil)
     }
 }
 

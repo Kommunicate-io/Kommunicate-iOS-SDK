@@ -7,9 +7,21 @@
 
 import Foundation
 
+enum RatingType: Int {
+    case sad
+    case confused
+    case happy
+}
+
+struct Feedback {
+    let rating: RatingType
+    let comment: String?
+}
+
 class RatingViewController: UIViewController {
 
     var closeButtontapped: (() -> Void)?
+    var feedbackSubmitted: ((Feedback) -> Void)?
 
     let closeButton: UIButton = {
         let button = UIButton(frame: CGRect.zero)
@@ -29,7 +41,7 @@ class RatingViewController: UIViewController {
         return label
     }()
 
-    // TODO: Create restartView and expose APIs for tap, show etc
+    // NOTE: Enable this when conversation restart support is added.
     let restartConversationView: UILabel = {
         let label = UILabel(frame: .zero)
         label.numberOfLines = 1
@@ -44,7 +56,33 @@ class RatingViewController: UIViewController {
         return view
     }()
 
+    let commentsView: UITextView = {
+        let textView = UITextView(frame: .zero)
+        textView.isSelectable = true
+        textView.isScrollEnabled = true
+        textView.dataDetectorTypes = .link
+        textView.textColor = .gray
+        textView.linkTextAttributes = [
+            .foregroundColor: UIColor.blue,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+        textView.backgroundColor = .lightGray
+        textView.delaysContentTouches = false
+        return textView
+    }()
+
+    // TODO: Color and localization
+    let submitButton: UIButton = {
+        let button = UIButton(frame: .zero)
+        button.setTitle("Submit", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .blue
+        return button
+    }()
+
     lazy var bottomSheetTransitionDelegate = BottomSheetTransitionDelegate()
+    private lazy var commentsHeightConstraint = commentsView.heightAnchor.constraint(equalToConstant: 0)
+    private lazy var submitButtonHeightConstraint = submitButton.heightAnchor.constraint(equalToConstant: 0)
 
     init(title: String = "Rate the Conversation") {
         super.init(nibName: nil, bundle: nil)
@@ -61,8 +99,22 @@ class RatingViewController: UIViewController {
     }
 
     func setupView() {
+        ratingView.ratingSelected = {[weak self] rating in
+            // Show comments section and hide restart button
+            self?.commentsHeightConstraint.constant = 80
+            self?.submitButtonHeightConstraint.constant = 30
+            self?.restartConversationView.isHidden = true
+            self?.calculatePreferredSize()
+        }
         view.layer.cornerRadius = 8
-        view.addViewsForAutolayout(views: [closeButton, titleLabel, ratingView, restartConversationView])
+        view.addViewsForAutolayout(views: [
+            closeButton,
+            titleLabel,
+            ratingView,
+            commentsView,
+            restartConversationView,
+            submitButton
+        ])
 
         var allConstraints: [NSLayoutConstraint] = [
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
@@ -83,6 +135,13 @@ class RatingViewController: UIViewController {
             ratingView.heightAnchor.constraint(equalToConstant: 80),
         ]
 
+        let commentsViewConstraints = [
+            commentsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            commentsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            commentsView.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 10),
+            commentsHeightConstraint
+        ]
+
         let titleViewConstraints = [
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -90,12 +149,19 @@ class RatingViewController: UIViewController {
         ]
 
         let restartViewConstraints = [
-            restartConversationView.topAnchor.constraint(equalTo: ratingView.bottomAnchor),
+            restartConversationView.topAnchor.constraint(equalTo: submitButton.bottomAnchor),
             restartConversationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             restartConversationView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ]
 
-        allConstraints.append(contentsOf: ratingViewConstraints + titleViewConstraints + restartViewConstraints)
+        let submitButtonConstraints = [
+            submitButton.topAnchor.constraint(equalTo: commentsView.bottomAnchor, constant: 10),
+            submitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            submitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            submitButtonHeightConstraint
+        ]
+
+        allConstraints.append(contentsOf: ratingViewConstraints + titleViewConstraints + restartViewConstraints + commentsViewConstraints + submitButtonConstraints)
 
         // NOTE: Presentation controller uses constraints to calculate the
         // height of this view so all items should've a top and
@@ -109,10 +175,6 @@ class RatingViewController: UIViewController {
 
     @objc func closeTapped() {
         self.dismiss(animated: true, completion: nil)
-    }
-
-    @objc func expandTapped() {
-        calculatePreferredSize()
     }
 
     private func calculatePreferredSize() {

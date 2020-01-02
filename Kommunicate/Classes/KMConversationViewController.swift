@@ -215,6 +215,10 @@ extension KMConversationViewController {
         modelVC.closeButtontapped = { [weak self] in
             self?.dismiss(animated: true, completion: nil)
         }
+        modelVC.feedbackSubmitted = { [weak self] feedback in
+            print("feedback submitted with rating: \(feedback.rating)")
+            self?.dismiss(animated: true, completion: nil)
+        }
     }
 
     func showRating() {
