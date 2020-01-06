@@ -46,13 +46,15 @@ class RatingViewController: UIViewController {
         label.numberOfLines = 1
         label.textColor = .lightGray
         label.backgroundColor = .clear
-        label.isHidden = true
+        label.alpha = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Have other queries?  Restart conversation"
         return label
     }()
 
     let ratingView: FeedbackRatingView = {
         let view = FeedbackRatingView(frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
@@ -66,6 +68,7 @@ class RatingViewController: UIViewController {
         textView.layer.borderColor = UIColor(netHex: 0x848484).cgColor
         textView.layer.cornerRadius = 4
         textView.layer.borderWidth = 0.7
+        textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
     }()
 
@@ -75,21 +78,24 @@ class RatingViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(netHex: 0x5451e2)
         button.layer.cornerRadius = 4
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
-    lazy var bottomSheetTransitionDelegate = BottomSheetTransitionDelegate()
-    private lazy var commentsHeightConstraint = commentsView.heightAnchor.constraint(equalToConstant: 0)
-    private lazy var submitButtonHeightConstraint = submitButton.heightAnchor.constraint(equalToConstant: 0)
+    let feedbackStackView: UIStackView = {
+        let stackView = UIStackView(frame: .zero)
+        stackView.distribution = .fill
+        stackView.axis = .vertical
+        stackView.spacing = 30
+        return stackView
+    }()
 
+    lazy var bottomSheetTransitionDelegate = BottomSheetTransitionDelegate()
     private var ratingSelected: RatingType?
 
     init(title: String = "Rate the Conversation") {
         super.init(nibName: nil, bundle: nil)
-
-        transitioningDelegate = bottomSheetTransitionDelegate
-        modalPresentationStyle = .custom
-        view.backgroundColor = .white
+        addConstraints()
         setupView()
         setupButtons()
     }
@@ -98,82 +104,65 @@ class RatingViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setupView() {
-        submitButton.addTarget(self, action: #selector(submitTapped), for: .touchUpInside)
-
-        ratingView.ratingSelected = {[weak self] rating in
-            self?.ratingSelected = rating
-            // Show comments section and hide restart button
-            self?.commentsHeightConstraint.constant = 80
-            self?.submitButtonHeightConstraint.constant = 34
-            self?.restartConversationView.isHidden = true
-            self?.calculatePreferredSize()
-        }
-        view.layer.cornerRadius = 8
+    func addConstraints() {
+        feedbackStackView.addArrangedSubview(ratingView)
+        feedbackStackView.addArrangedSubview(commentsView)
+        feedbackStackView.addArrangedSubview(submitButton)
+        feedbackStackView.addArrangedSubview(restartConversationView)
         view.addViewsForAutolayout(views: [
             closeButton,
             titleLabel,
-            ratingView,
-            commentsView,
-            restartConversationView,
-            submitButton
+            feedbackStackView,
         ])
-
-        var allConstraints: [NSLayoutConstraint] = [
-            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            closeButton.heightAnchor.constraint(equalToConstant: 20),
-            closeButton.widthAnchor.constraint(equalToConstant: 20)
-        ]
-
         var bottomAnchor = view.bottomAnchor
         if #available(iOS 11, *) {
             bottomAnchor = view.safeAreaLayoutGuide.bottomAnchor
         }
 
-        let ratingViewConstraints: [NSLayoutConstraint] = [
-            ratingView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            ratingView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            ratingView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 30),
-            ratingView.heightAnchor.constraint(equalToConstant: 80),
-        ]
+        let commentsViewHeightConstraint = commentsView.heightAnchor.constraint(equalToConstant: 80)
+        commentsViewHeightConstraint.priority = UILayoutPriority(rawValue: 999)
+        let submitButtonHeightConstraint = submitButton.heightAnchor.constraint(equalToConstant: 34)
+        submitButtonHeightConstraint.priority = UILayoutPriority(rawValue: 999)
+        let ratingViewHeightConstraint = ratingView.heightAnchor.constraint(equalToConstant: 80)
+        ratingViewHeightConstraint.priority = UILayoutPriority(rawValue: 999)
 
-        let commentsViewConstraints = [
-            commentsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
-            commentsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -28),
-            commentsView.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 20),
-            commentsHeightConstraint
-        ]
-
-        let titleViewConstraints = [
+        NSLayoutConstraint.activate([
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            closeButton.heightAnchor.constraint(equalToConstant: 20),
+            closeButton.widthAnchor.constraint(equalToConstant: 20),
+            feedbackStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
+            feedbackStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -28),
+            feedbackStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 43),
+            feedbackStackView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
+            ratingViewHeightConstraint,
+            commentsViewHeightConstraint,
+            submitButtonHeightConstraint,
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-        ]
+        ])
+    }
 
-        let restartViewConstraints = [
-            restartConversationView.topAnchor.constraint(equalTo: submitButton.bottomAnchor),
-            restartConversationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            restartConversationView.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ]
-
-        let submitButtonConstraints = [
-            submitButton.topAnchor.constraint(equalTo: commentsView.bottomAnchor, constant: 20),
-            submitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
-            submitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -28),
-            submitButtonHeightConstraint
-        ]
-
-        allConstraints.append(contentsOf: ratingViewConstraints + titleViewConstraints + restartViewConstraints + commentsViewConstraints + submitButtonConstraints)
-
-        // NOTE: Presentation controller uses constraints to calculate the
-        // height of this view so all items should've a top and
-        // bottom constraint otherwise view won't be fully visible.
-        NSLayoutConstraint.activate(allConstraints)
+    func setupView() {
+        transitioningDelegate = bottomSheetTransitionDelegate
+        modalPresentationStyle = .custom
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 8
+        commentsView.isHidden = true
+        submitButton.isHidden = true
     }
 
     func setupButtons() {
         closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
+        submitButton.addTarget(self, action: #selector(submitTapped), for: .touchUpInside)
+        ratingView.ratingSelected = {[weak self] rating in
+            self?.ratingSelected = rating
+            self?.commentsView.isHidden = false
+            self?.submitButton.isHidden = false
+            self?.restartConversationView.isHidden = true
+            self?.calculatePreferredSize()
+        }
     }
 
     @objc func closeTapped() {
