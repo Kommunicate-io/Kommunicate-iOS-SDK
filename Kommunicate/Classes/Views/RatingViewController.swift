@@ -94,6 +94,18 @@ class RatingViewController: UIViewController {
     lazy var bottomSheetTransitionDelegate = BottomSheetTransitionDelegate()
     private var ratingSelected: RatingType?
 
+    private lazy var bottomConstraint: NSLayoutConstraint = {
+        var bottomAnchor = view.bottomAnchor
+        if #available(iOS 11, *) {
+            bottomAnchor = view.safeAreaLayoutGuide.bottomAnchor
+        }
+        let constraint = feedbackStackView.bottomAnchor.constraint(
+            lessThanOrEqualTo: bottomAnchor,
+            constant: 0
+        )
+        return constraint
+    }()
+
     init(title: String = "Rate the Conversation") {
         super.init(nibName: nil, bundle: nil)
         addConstraints()
@@ -103,6 +115,16 @@ class RatingViewController: UIViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addObservers()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        removeObservers()
     }
 
     func addConstraints() {
@@ -115,10 +137,6 @@ class RatingViewController: UIViewController {
             titleLabel,
             feedbackStackView,
         ])
-        var bottomAnchor = view.bottomAnchor
-        if #available(iOS 11, *) {
-            bottomAnchor = view.safeAreaLayoutGuide.bottomAnchor
-        }
 
         let commentsViewHeightConstraint = commentsView.heightAnchor.constraint(equalToConstant: 80)
         commentsViewHeightConstraint.priority = UILayoutPriority(rawValue: 999)
@@ -135,7 +153,7 @@ class RatingViewController: UIViewController {
             feedbackStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
             feedbackStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -28),
             feedbackStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 43),
-            feedbackStackView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
+            bottomConstraint,
             ratingViewHeightConstraint,
             commentsViewHeightConstraint,
             submitButtonHeightConstraint,
@@ -167,6 +185,7 @@ class RatingViewController: UIViewController {
     }
 
     @objc func closeTapped() {
+        endCommentEditing()
         closeButtontapped?()
     }
 
@@ -176,6 +195,7 @@ class RatingViewController: UIViewController {
             return
         }
         let feedback = Feedback(rating: ratingSelected, comment: commentsView.text)
+        endCommentEditing()
         feedbackSubmitted?(feedback)
     }
 
@@ -184,6 +204,42 @@ class RatingViewController: UIViewController {
         let targetSize = CGSize(width: view.bounds.width,
                                 height: UIView.layoutFittingCompressedSize.height)
         preferredContentSize = view.systemLayoutSizeFitting(targetSize)
+    }
+
+    private func endCommentEditing() {
+        if commentsView.isFirstResponder {
+            commentsView.resignFirstResponder()
+        }
+    }
+
+    @objc private func onKeyboardShow(notification: Notification) {
+        let keyboardFrameValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
+        guard
+            commentsView.isFirstResponder,
+            let keyboardSize = (keyboardFrameValue as? NSValue)?.cgRectValue
+            else {
+                return
+        }
+
+        let keyboardHeight = -1 * keyboardSize.height
+        if bottomConstraint.constant == keyboardHeight { return }
+        bottomConstraint.constant = keyboardHeight
+        calculatePreferredSize()
+    }
+
+    @objc private func onKeyboardHide(notification: Notification) {
+        bottomConstraint.constant = 0
+        calculatePreferredSize()
+    }
+
+    private func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    private func removeObservers() {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
