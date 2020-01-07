@@ -58,12 +58,13 @@ class RatingViewController: UIViewController {
         return view
     }()
 
-    let commentsView: UITextView = {
-        let textView = UITextView(frame: .zero)
+    let commentsView: TextViewWithPlaceholder = {
+        let textView = TextViewWithPlaceholder(frame: .zero)
         textView.isSelectable = true
         textView.isScrollEnabled = true
-        textView.textColor = .gray
-        textView.text = "Add a comment..."
+        textView.font = Style.Font.normal(size: 14).font()
+        textView.placeholder = "Add a comment..."
+        textView.placeholderColor = UIColor(netHex: 0xaeaaaa)
         textView.delaysContentTouches = false
         textView.layer.borderColor = UIColor(netHex: 0x848484).cgColor
         textView.layer.cornerRadius = 4
