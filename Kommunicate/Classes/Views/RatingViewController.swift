@@ -35,7 +35,7 @@ class RatingViewController: UIViewController {
         label.font = Style.Font.normal(size: 16).font()
         label.numberOfLines = 1
         label.backgroundColor = .clear
-        label.text = "Rate the conversation"
+        label.text = LocalizedText.title
         label.textAlignment = .center
         return label
     }()
@@ -49,7 +49,7 @@ class RatingViewController: UIViewController {
         label.backgroundColor = .clear
         label.alpha = 0
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Have other queries?  Restart conversation"
+        label.text = LocalizedText.restartConversation
         return label
     }()
 
@@ -64,7 +64,7 @@ class RatingViewController: UIViewController {
         textView.isSelectable = true
         textView.isScrollEnabled = true
         textView.font = Style.Font.normal(size: 14).font()
-        textView.placeholder = "Add a comment..."
+        textView.placeholder = LocalizedText.commentPlaceholder
         textView.placeholderColor = UIColor(netHex: 0xaeaaaa)
         textView.delaysContentTouches = false
         textView.layer.borderColor = UIColor(netHex: 0x848484).cgColor
@@ -76,7 +76,7 @@ class RatingViewController: UIViewController {
 
     let submitButton: UIButton = {
         let button = UIButton(frame: .zero)
-        button.setTitle("Submit your rating", for: .normal)
+        button.setTitle(LocalizedText.submit, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(netHex: 0x5451e2)
         button.layer.cornerRadius = 4
@@ -107,7 +107,7 @@ class RatingViewController: UIViewController {
         return constraint
     }()
 
-    init(title: String = "Rate the Conversation") {
+    init() {
         super.init(nibName: nil, bundle: nil)
         addConstraints()
         setupView()
@@ -362,5 +362,16 @@ private extension RatingViewController {
             static let top: CGFloat = 30.0
             static let height: CGFloat = 80.0
         }
+    }
+}
+
+extension RatingViewController: Localizable {
+    enum LocalizedText {
+        static private let filename = Kommunicate.defaultConfiguration.localizedStringFileName
+
+        static let title = localizedString(forKey: "ConversationRatingTitle", fileName: filename)
+        static let commentPlaceholder = localizedString(forKey: "ConversationRatingCommentsPlaceholder", fileName: filename)
+        static let submit = localizedString(forKey: "ConversationRatingSubmitButtonTitle", fileName: filename)
+        static let restartConversation = localizedString(forKey: "ConversationRatingRestartConversation", fileName: filename)
     }
 }

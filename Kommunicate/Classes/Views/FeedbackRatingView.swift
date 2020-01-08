@@ -112,9 +112,9 @@ class EmojiRatingButton: UIView {
         return button
     }()
 
-    // FIXME: Add font and text color
     private let titleLabel: UILabel = {
         let label = UILabel(frame: .zero)
+        label.font = Style.Font.normal(size: 14).font()
         label.numberOfLines = 2
         label.backgroundColor = .clear
         label.textAlignment = .center
@@ -192,22 +192,29 @@ class EmojiRatingButton: UIView {
     }
 }
 
-extension RatingType {
+extension RatingType: Localizable {
     enum IconName {
         static let sad = "sad_emoji"
         static let confused = "confused_emoji"
         static let happy = "happy_emoji"
     }
 
-    // TODO: Localization
+    enum LocalizedText {
+        static private let filename = Kommunicate.defaultConfiguration.localizedStringFileName
+
+        static let sad = localizedString(forKey: "ConversationRatingOptionPoor", fileName: filename)
+        static let confused = localizedString(forKey: "ConversationRatingOptionAverage", fileName: filename)
+        static let happy = localizedString(forKey: "ConversationRatingOptionGreat", fileName: filename)
+    }
+
     func title() -> String {
         switch self {
         case .sad:
-            return "Poor"
+            return LocalizedText.sad
         case .confused:
-            return "Average"
+            return LocalizedText.confused
         case .happy:
-            return "Great"
+            return LocalizedText.happy
         }
     }
 

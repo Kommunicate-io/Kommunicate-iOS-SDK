@@ -47,3 +47,19 @@ SupportChannelName = "Support";
 /* No name text */
 NoName = "No Name";
 
+/* CSAT Rating */
+
+/* Main title */
+ConversationRatingTitle = "Rate the conversation";
+/* Placeholder for comments input bar */
+ConversationRatingCommentsPlaceholder = "Add a comment...";
+/* Submit button title */
+ConversationRatingSubmitButtonTitle = "Submit your rating";
+/* Restart conversation label */
+ConversationRatingRestartConversation = "Have other queries?  Restart conversation";
+/* Poor rating label */
+ConversationRatingOptionPoor = "Poor";
+/* Average rating label */
+ConversationRatingOptionAverage = "Average";
+/* Great rating label */
+ConversationRatingOptionGreat = "Great";
