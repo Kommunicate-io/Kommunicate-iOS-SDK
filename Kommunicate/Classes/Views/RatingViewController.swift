@@ -7,10 +7,10 @@
 
 import Foundation
 
-enum RatingType: Int {
-    case sad
-    case confused
-    case happy
+enum RatingType: Int, CaseIterable {
+    case sad = 1
+    case confused = 2
+    case happy = 3
 }
 
 struct Feedback {
@@ -32,7 +32,7 @@ class RatingViewController: UIViewController {
 
     let titleLabel: UILabel = {
         let label = UILabel(frame: .zero)
-        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.font = Style.Font.normal(size: 16).font()
         label.numberOfLines = 1
         label.backgroundColor = .clear
         label.text = "Rate the conversation"
@@ -44,7 +44,8 @@ class RatingViewController: UIViewController {
     let restartConversationView: UILabel = {
         let label = UILabel(frame: .zero)
         label.numberOfLines = 1
-        label.textColor = .lightGray
+        label.textColor = UIColor(netHex: 0x8b8888)
+        label.font = Style.Font.normal(size: 14).font()
         label.backgroundColor = .clear
         label.alpha = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -87,7 +88,7 @@ class RatingViewController: UIViewController {
         let stackView = UIStackView(frame: .zero)
         stackView.distribution = .fill
         stackView.axis = .vertical
-        stackView.spacing = 30
+        stackView.spacing = Size.CommentsView.top
         return stackView
     }()
 
@@ -138,28 +139,31 @@ class RatingViewController: UIViewController {
             feedbackStackView,
         ])
 
-        let commentsViewHeightConstraint = commentsView.heightAnchor.constraint(equalToConstant: 80)
-        commentsViewHeightConstraint.priority = UILayoutPriority(rawValue: 999)
-        let submitButtonHeightConstraint = submitButton.heightAnchor.constraint(equalToConstant: 34)
-        submitButtonHeightConstraint.priority = UILayoutPriority(rawValue: 999)
-        let ratingViewHeightConstraint = ratingView.heightAnchor.constraint(equalToConstant: 80)
-        ratingViewHeightConstraint.priority = UILayoutPriority(rawValue: 999)
+        let lowPriority = UILayoutPriority(rawValue: 999)
+        let commentsViewHeightConstraint = commentsView.heightAnchor
+            .constraint(equalToConstant: Size.CommentsView.height)
+        commentsViewHeightConstraint.priority = lowPriority
+        let submitButtonHeightConstraint = submitButton.heightAnchor
+            .constraint(equalToConstant: Size.SubmitButton.height)
+        submitButtonHeightConstraint.priority = lowPriority
+        let ratingViewHeightConstraint = ratingView.heightAnchor
+            .constraint(equalToConstant: Size.RatingView.height)
+        ratingViewHeightConstraint.priority = lowPriority
 
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            closeButton.heightAnchor.constraint(equalToConstant: 20),
-            closeButton.widthAnchor.constraint(equalToConstant: 20),
-            feedbackStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
-            feedbackStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -28),
-            feedbackStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 43),
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: Size.CloseButton.top),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Size.CloseButton.trailing),
+            closeButton.heightAnchor.constraint(equalToConstant: Size.CloseButton.height),
+            closeButton.widthAnchor.constraint(equalTo: closeButton.heightAnchor, multiplier: 1.0),
+            feedbackStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Size.RatingView.leading),
+            feedbackStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Size.RatingView.trailing),
+            feedbackStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Size.RatingView.top),
             bottomConstraint,
             ratingViewHeightConstraint,
             commentsViewHeightConstraint,
             submitButtonHeightConstraint,
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: Size.TitleLabel.top),
         ])
     }
 
@@ -328,5 +332,35 @@ class BottomSheetController: UIPresentationController {
     override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
         super.preferredContentSizeDidChange(forChildContentContainer: container)
         presentedView?.frame = frameOfPresentedViewInContainerView
+    }
+}
+
+private extension RatingViewController {
+    enum Size {
+        enum CloseButton {
+            static let top: CGFloat = 5.0
+            static let trailing: CGFloat = -7
+            static let height: CGFloat = 20.0
+        }
+
+        enum TitleLabel {
+            static let top: CGFloat = 19.0
+        }
+
+        enum RatingView {
+            static let top: CGFloat = 43.0
+            static let leading: CGFloat  = 28.0
+            static let trailing: CGFloat = -28.0
+            static let height: CGFloat = 80.0
+        }
+
+        enum SubmitButton {
+            static let height: CGFloat = 34.0
+        }
+
+        enum CommentsView {
+            static let top: CGFloat = 30.0
+            static let height: CGFloat = 80.0
+        }
     }
 }

@@ -13,19 +13,22 @@ class FeedbackRatingView: UIView {
 
     private let sadEmojiButton: EmojiRatingButton = {
         let button = EmojiRatingButton(frame: .zero, rating: .sad)
-        button.tag = 1
+        button.selectedStateWidth = Size.RatingButton.width
+        button.tag = RatingType.sad.rawValue
         return button
     }()
 
     private let confusedEmojiButton: EmojiRatingButton = {
         let button = EmojiRatingButton(frame: .zero, rating: .confused)
-        button.tag = 2
+        button.selectedStateWidth = Size.RatingButton.width
+        button.tag = RatingType.confused.rawValue
         return button
     }()
 
     private let happyEmojiButton: EmojiRatingButton = {
         let button = EmojiRatingButton(frame: .zero, rating: .happy)
-        button.tag = 3
+        button.selectedStateWidth = Size.RatingButton.width
+        button.tag = RatingType.happy.rawValue
         return button
     }()
 
@@ -34,7 +37,7 @@ class FeedbackRatingView: UIView {
         sv.axis = .horizontal
         sv.distribution = .equalSpacing
         sv.alignment = .fill
-        sv.spacing = 40
+        sv.spacing = Size.RatingButton.trailing
         return sv
     }()
 
@@ -47,16 +50,13 @@ class FeedbackRatingView: UIView {
 
     private var selectedRatingTag = 0 {
         didSet {
-            guard selectedRatingTag >= 1 && selectedRatingTag <= 3 && selectedRatingTag != oldValue
-                else {
-                    return
-            }
+            let allTags = RatingType.allCases.map { $0.rawValue }
+            guard allTags.contains(selectedRatingTag) && selectedRatingTag != oldValue else { return }
             // update state of all buttons
             ratingButtons.forEach { $0.isInactive = ($0.tag != selectedRatingTag) }
             ratingSelected?(RatingType(rawValue: tag) ?? .happy)
         }
     }
-
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -193,8 +193,6 @@ class EmojiRatingButton: UIView {
 }
 
 extension RatingType {
-
-
     enum IconName {
         static let sad = "sad_emoji"
         static let confused = "confused_emoji"
@@ -247,4 +245,13 @@ extension EmojiRatingButton {
 
 private extension UIControl.State {
     static let inactive = UIControl.State(rawValue: 1 << 16)
+}
+
+private extension FeedbackRatingView {
+    enum Size {
+        enum RatingButton {
+            static let trailing: CGFloat = 30.0
+            static let width: CGFloat = 42.0
+        }
+    }
 }
