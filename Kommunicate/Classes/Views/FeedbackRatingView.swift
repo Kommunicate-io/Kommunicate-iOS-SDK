@@ -92,6 +92,7 @@ class EmojiRatingButton: UIView {
     typealias Tag = Int
 
     var selectedStateWidth: CGFloat = 42
+    var maxWidth: CGFloat = 60
     var ratingTapped: ((Tag) -> Void)?
 
     var isInactive: Bool = false {
@@ -115,7 +116,7 @@ class EmojiRatingButton: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.font = Style.Font.normal(size: 14).font()
-        label.numberOfLines = 2
+        label.numberOfLines = 1
         label.backgroundColor = .clear
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -161,13 +162,15 @@ class EmojiRatingButton: UIView {
         verticalStack.addArrangedSubview(titleLabel)
         addViewsForAutolayout(views: [verticalStack])
 
+        let vsWidthConstraint = verticalStack.widthAnchor.constraint(equalToConstant: maxWidth)
+        vsWidthConstraint.priority = UILayoutPriority(999)
         NSLayoutConstraint.activate([
             verticalStack.topAnchor.constraint(equalTo: topAnchor),
             verticalStack.bottomAnchor.constraint(equalTo: bottomAnchor),
             verticalStack.leadingAnchor.constraint(equalTo: leadingAnchor),
             verticalStack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            vsWidthConstraint,
             emojiWidthConstraint,
-            titleLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1)
         ])
     }
 
