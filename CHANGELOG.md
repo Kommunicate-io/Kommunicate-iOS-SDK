@@ -4,6 +4,9 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Enhancements
+- [CM-1] Added CSAT support. It will be shown once the conversation is resolved.
+
 ## [3.0.0] - 2019-12-12
 
 ### Enhancements
