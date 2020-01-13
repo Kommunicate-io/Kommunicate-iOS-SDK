@@ -207,7 +207,8 @@ extension KMConversationViewController: NavigationBarCallbacks {
 extension KMConversationViewController {
 
     func checkFeedbackAndShowRatingView() {
-        guard let channelId = viewModel.channelKey,
+        guard !kmConversationViewConfiguration.isCSATOptionDisabled,
+            let channelId = viewModel.channelKey,
             conversationDetail.isClosedConversation(channelId: channelId.intValue) else {
                 return
         }

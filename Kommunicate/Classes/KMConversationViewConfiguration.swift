@@ -13,6 +13,7 @@ public struct KMConversationViewConfiguration {
     public var imageForBackButton: UIImage?
     public var conversationLaunchNotificationName = "ConversationLaunched"
     public var backButtonNotificationName = "ConversationClosed"
-    
+    public var isCSATOptionDisabled: Bool = false
+
     public init() { }
 }
