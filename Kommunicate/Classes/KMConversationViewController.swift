@@ -35,6 +35,7 @@ open class KMConversationViewController: ALKConversationViewController {
         // Fetch Assignee details every time view is launched.
         updateAssigneeDetails()
         messageStatus()
+        checkFeedbackAndShowRatingView()
         NotificationCenter.default.addObserver(
             forName: Notification.Name(rawValue: ALKNavigationItem.NSNotificationForConversationViewNavigationTap),
             object: nil,
@@ -76,7 +77,6 @@ open class KMConversationViewController: ALKConversationViewController {
         checkPlanAndShowSuspensionScreen()
         addAwayMessageConstraints()
         showAwayMessage(false)
-        setupRating()
         guard let channelId = viewModel.channelKey else { return }
         sendConversationOpenNotification(channelId: String(describing: channelId))
     }
@@ -206,7 +206,19 @@ extension KMConversationViewController: NavigationBarCallbacks {
 
 extension KMConversationViewController {
 
-    func setupRating() {
+    func checkFeedbackAndShowRatingView() {
+        guard let channelId = viewModel.channelKey,
+            conversationDetail.isClosedConversation(channelId: channelId.intValue) else {
+                return
+        }
+        conversationDetail.isFeedbackShownFor(channelId: channelId.intValue, completion: { shown in
+            DispatchQueue.main.async {
+                if !shown { self.showRatingView() }
+            }
+        })
+    }
+
+    private func showRatingView() {
         ratingVC = RatingViewController()
         ratingVC.closeButtontapped = { [weak self] in
             self?.dismiss(animated: true, completion: nil)
@@ -215,9 +227,6 @@ extension KMConversationViewController {
             print("feedback submitted with rating: \(feedback.rating)")
             self?.dismiss(animated: true, completion: nil)
         }
-    }
-
-    func showRating() {
         self.present(ratingVC, animated: true, completion: nil)
     }
 }
