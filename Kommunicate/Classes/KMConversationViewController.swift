@@ -209,6 +209,7 @@ extension KMConversationViewController {
     func checkFeedbackAndShowRatingView() {
         guard !kmConversationViewConfiguration.isCSATOptionDisabled,
             let channelId = viewModel.channelKey,
+            !ALChannelService.isChannelDeleted(channelId),
             conversationDetail.isClosedConversation(channelId: channelId.intValue) else {
                 return
         }
