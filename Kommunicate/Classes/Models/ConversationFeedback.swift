@@ -16,7 +16,7 @@ struct ConversationFeedbackResponse: Codable {
 // MARK: - ConversationFeedback
 struct ConversationFeedback: Codable {
     let id, groupID: Int
-    let comments: String?
+    let comments: [String]?
     let rating: Int
     let type, supportAgentID: Int?
     let userInfo: String?

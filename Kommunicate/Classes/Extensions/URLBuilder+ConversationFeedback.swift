@@ -12,4 +12,9 @@ extension URLBuilder {
         let url = URLBuilder.kommunicateApi.add(paths: ["feedback", groupId])
         return url
     }
+
+    static func feedbackURLForSubmission() -> URLBuilder {
+        let url = URLBuilder.kommunicateApi.add(path: "feedback")
+        return url
+    }
 }

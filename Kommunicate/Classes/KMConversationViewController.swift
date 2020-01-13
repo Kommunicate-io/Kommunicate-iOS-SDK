@@ -226,7 +226,23 @@ extension KMConversationViewController {
         ratingVC.feedbackSubmitted = { [weak self] feedback in
             print("feedback submitted with rating: \(feedback.rating)")
             self?.dismiss(animated: true, completion: nil)
+            self?.submitFeedback(feedback: feedback)
         }
         self.present(ratingVC, animated: true, completion: nil)
+    }
+
+    private func submitFeedback(feedback: Feedback) {
+        guard let channelId = viewModel.channelKey else { return }
+        conversationService.submitFeedback(
+            groupId: channelId.intValue,
+            feedback: feedback
+        ) { result in
+            switch result {
+            case .success(let conversationFeedback):
+                print("feedback submit response success: \(conversationFeedback)")
+            case .failure(let error):
+                print("feedback submit response failure: \(error)")
+            }
+        }
     }
 }
