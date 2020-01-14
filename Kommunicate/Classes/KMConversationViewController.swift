@@ -15,7 +15,7 @@ open class KMConversationViewController: ALKConversationViewController {
 
     private let faqIdentifier =  11223346
     public var kmConversationViewConfiguration: KMConversationViewConfiguration!
-    var ratingVC: RatingViewController!
+    private weak var ratingVC: RatingViewController?
 
     lazy var customNavigationView = ConversationVCNavBar(
         delegate: self,
@@ -53,14 +53,12 @@ open class KMConversationViewController: ALKConversationViewController {
 
     required public init(configuration: ALKConfiguration) {
         super.init(configuration: configuration)
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "UPDATE_CHANNEL_METADATA"), object: nil, queue: nil, using: {[weak self] _ in
-            guard
-                let weakSelf = self,
-                weakSelf.viewModel != nil,
-                weakSelf.viewModel.isGroup
-            else { return }
-            weakSelf.updateAssigneeDetails()
-        })
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(onChannelMetadataUpdate),
+            name: NSNotification.Name(rawValue: "UPDATE_CHANNEL_METADATA"),
+            object: nil
+        )
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -156,6 +154,12 @@ open class KMConversationViewController: ALKConversationViewController {
         }
     }
 
+    @objc func onChannelMetadataUpdate() {
+        guard viewModel != nil, viewModel.isGroup else { return }
+        updateAssigneeDetails()
+        checkFeedbackAndShowRatingView()
+    }
+
     private func setupNavigation() {
         // Remove current title from center of navigation bar
         navigationItem.titleView = UIView()
@@ -211,6 +215,7 @@ extension KMConversationViewController {
             let channelId = viewModel.channelKey,
             !ALChannelService.isChannelDeleted(channelId),
             conversationDetail.isClosedConversation(channelId: channelId.intValue) else {
+                hideRatingView()
                 return
         }
         conversationDetail.isFeedbackShownFor(channelId: channelId.intValue, completion: { shown in
@@ -221,16 +226,28 @@ extension KMConversationViewController {
     }
 
     private func showRatingView() {
-        ratingVC = RatingViewController()
+        guard self.ratingVC == nil else { return }
+        let ratingVC = RatingViewController()
         ratingVC.closeButtontapped = { [weak self] in
-            self?.dismiss(animated: true, completion: nil)
+            self?.hideRatingView()
         }
         ratingVC.feedbackSubmitted = { [weak self] feedback in
             print("feedback submitted with rating: \(feedback.rating)")
-            self?.dismiss(animated: true, completion: nil)
+            self?.hideRatingView()
             self?.submitFeedback(feedback: feedback)
         }
-        self.present(ratingVC, animated: true, completion: nil)
+        self.present(ratingVC, animated: true, completion: {[weak self] in
+            self?.ratingVC = ratingVC
+        })
+    }
+
+    private func hideRatingView() {
+        guard ratingVC != nil && UIViewController.topViewController() is RatingViewController else {
+            return
+        }
+        self.dismiss(animated: true, completion: { [weak self] in
+            self?.ratingVC = nil
+        })
     }
 
     private func submitFeedback(feedback: Feedback) {
