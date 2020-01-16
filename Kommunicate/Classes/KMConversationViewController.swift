@@ -15,7 +15,7 @@ open class KMConversationViewController: ALKConversationViewController {
 
     private let faqIdentifier =  11223346
     public var kmConversationViewConfiguration: KMConversationViewConfiguration!
-    var ratingVC: RatingViewController!
+    private weak var ratingVC: RatingViewController?
 
     lazy var customNavigationView = ConversationVCNavBar(
         delegate: self,
@@ -35,6 +35,7 @@ open class KMConversationViewController: ALKConversationViewController {
         // Fetch Assignee details every time view is launched.
         updateAssigneeDetails()
         messageStatus()
+        checkFeedbackAndShowRatingView()
         NotificationCenter.default.addObserver(
             forName: Notification.Name(rawValue: ALKNavigationItem.NSNotificationForConversationViewNavigationTap),
             object: nil,
@@ -52,14 +53,12 @@ open class KMConversationViewController: ALKConversationViewController {
 
     required public init(configuration: ALKConfiguration) {
         super.init(configuration: configuration)
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "UPDATE_CHANNEL_METADATA"), object: nil, queue: nil, using: {[weak self] _ in
-            guard
-                let weakSelf = self,
-                weakSelf.viewModel != nil,
-                weakSelf.viewModel.isGroup
-            else { return }
-            weakSelf.updateAssigneeDetails()
-        })
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(onChannelMetadataUpdate),
+            name: NSNotification.Name(rawValue: "UPDATE_CHANNEL_METADATA"),
+            object: nil
+        )
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -76,7 +75,6 @@ open class KMConversationViewController: ALKConversationViewController {
         checkPlanAndShowSuspensionScreen()
         addAwayMessageConstraints()
         showAwayMessage(false)
-        setupRating()
         guard let channelId = viewModel.channelKey else { return }
         sendConversationOpenNotification(channelId: String(describing: channelId))
     }
@@ -156,6 +154,12 @@ open class KMConversationViewController: ALKConversationViewController {
         }
     }
 
+    @objc func onChannelMetadataUpdate() {
+        guard viewModel != nil, viewModel.isGroup else { return }
+        updateAssigneeDetails()
+        checkFeedbackAndShowRatingView()
+    }
+
     private func setupNavigation() {
         // Remove current title from center of navigation bar
         navigationItem.titleView = UIView()
@@ -206,18 +210,58 @@ extension KMConversationViewController: NavigationBarCallbacks {
 
 extension KMConversationViewController {
 
-    func setupRating() {
-        ratingVC = RatingViewController()
+    func checkFeedbackAndShowRatingView() {
+        guard !kmConversationViewConfiguration.isCSATOptionDisabled,
+            let channelId = viewModel.channelKey,
+            !ALChannelService.isChannelDeleted(channelId),
+            conversationDetail.isClosedConversation(channelId: channelId.intValue) else {
+                hideRatingView()
+                return
+        }
+        conversationDetail.isFeedbackShownFor(channelId: channelId.intValue, completion: { shown in
+            DispatchQueue.main.async {
+                if !shown { self.showRatingView() }
+            }
+        })
+    }
+
+    private func showRatingView() {
+        guard self.ratingVC == nil else { return }
+        let ratingVC = RatingViewController()
         ratingVC.closeButtontapped = { [weak self] in
-            self?.dismiss(animated: true, completion: nil)
+            self?.hideRatingView()
         }
         ratingVC.feedbackSubmitted = { [weak self] feedback in
             print("feedback submitted with rating: \(feedback.rating)")
-            self?.dismiss(animated: true, completion: nil)
+            self?.hideRatingView()
+            self?.submitFeedback(feedback: feedback)
         }
+        self.present(ratingVC, animated: true, completion: {[weak self] in
+            self?.ratingVC = ratingVC
+        })
     }
 
-    func showRating() {
-        self.present(ratingVC, animated: true, completion: nil)
+    private func hideRatingView() {
+        guard ratingVC != nil && UIViewController.topViewController() is RatingViewController else {
+            return
+        }
+        self.dismiss(animated: true, completion: { [weak self] in
+            self?.ratingVC = nil
+        })
+    }
+
+    private func submitFeedback(feedback: Feedback) {
+        guard let channelId = viewModel.channelKey else { return }
+        conversationService.submitFeedback(
+            groupId: channelId.intValue,
+            feedback: feedback
+        ) { result in
+            switch result {
+            case .success(let conversationFeedback):
+                print("feedback submit response success: \(conversationFeedback)")
+            case .failure(let error):
+                print("feedback submit response failure: \(error)")
+            }
+        }
     }
 }

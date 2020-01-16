@@ -66,4 +66,36 @@ class ConversationDetail {
         })
     }
 
+    func isClosedConversation(channelId: Int) -> Bool {
+        guard let channel = channelService.getChannelByKey(channelId as NSNumber) else {
+            return false
+        }
+        return channel.isClosedConversation
+    }
+
+    func isFeedbackShownFor(channelId: Int, completion: @escaping (Bool)->()) {
+        let conversationService = KMConversationService()
+        conversationService.feedbackFor(groupId: channelId, completion: { result in
+            switch result {
+            case .success(_):
+                completion(true)
+            case .failure(let error):
+                print("Conversation feedback error: \(error.localizedDescription)")
+                completion(false)
+            }
+        })
+    }
+
+}
+
+extension ALChannel {
+    static let ClosedStatus = 2
+
+    var isClosedConversation: Bool {
+        guard let conversationStatus = metadata[CHANNEL_CONVERSATION_STATUS] as? String else {
+            return false
+        }
+        return type == Int16(SUPPORT_GROUP.rawValue) &&
+            Int(conversationStatus) ?? 0 == ALChannel.ClosedStatus
+    }
 }

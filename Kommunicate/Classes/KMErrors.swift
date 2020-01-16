@@ -38,7 +38,7 @@ public enum KMConversationError : LocalizedError {
     }
 }
 
-/// Represents all the errors which can happen while fetching an away message and deafult agent.
+/// Represents all the basic errors that can occur while fetching data.
 public enum APIError: LocalizedError {
 
     ///Thrown when building a URL .
@@ -47,6 +47,9 @@ public enum APIError: LocalizedError {
     case jsonConversion
     ///Thrown when last message is not present.
     case messageNotPresent
+    /// Thrown in case of a network failure.
+    /// - Parameter error: The underlying error object.
+    case network(_ error: Error?)
 
     public var errorDescription: String? {
         var errorMessage: String
@@ -57,6 +60,12 @@ public enum APIError: LocalizedError {
             errorMessage = "Failed while converting the data to JSON format."
         case .messageNotPresent:
             errorMessage = "Failed to get last message."
+        case .network(let error):
+            if let networkError = error {
+                errorMessage = networkError.localizedDescription
+            } else {
+                errorMessage = "Failed to process API request"
+            }
         }
         return errorMessage
     }
