@@ -26,6 +26,8 @@ open class KMConversationViewController: ALKConversationViewController {
     var conversationService = KMConversationService()
     var conversationDetail = ConversationDetail()
 
+    private var converastionNavBarItemToken: NotificationToken? = nil
+
     private let awayMessageheight = 80.0
 
     override open func viewWillAppear(_ animated: Bool) {
@@ -36,19 +38,6 @@ open class KMConversationViewController: ALKConversationViewController {
         updateAssigneeDetails()
         messageStatus()
         checkFeedbackAndShowRatingView()
-        NotificationCenter.default.addObserver(
-            forName: Notification.Name(rawValue: ALKNavigationItem.NSNotificationForConversationViewNavigationTap),
-            object: nil,
-            queue: nil,
-            using: { notification in
-                guard let notificationInfo = notification.userInfo else{
-                    return
-                }
-                let identifier = notificationInfo["identifier"] as? Int
-                if identifier == self.faqIdentifier{
-                    Kommunicate.openFaq(from: self, with: self.configuration)
-                }
-        })
     }
 
     required public init(configuration: ALKConfiguration) {
@@ -93,6 +82,22 @@ open class KMConversationViewController: ALKConversationViewController {
         if let lastMessage = viewModel.messageModels.last, !lastMessage.isMyMessage {
             showAwayMessage(false)
         }
+    }
+
+    func addObserver() {
+        NotificationCenter.default.addObserver(
+            forName: Notification.Name(rawValue: ALKNavigationItem.NSNotificationForConversationViewNavigationTap),
+            object: nil,
+            queue: nil,
+            using: { notification in
+                guard let notificationInfo = notification.userInfo else{
+                    return
+                }
+                let identifier = notificationInfo["identifier"] as? Int
+                if identifier == self.faqIdentifier{
+                    Kommunicate.openFaq(from: self, with: self.configuration)
+                }
+        })
     }
 
     func addAwayMessageConstraints() {

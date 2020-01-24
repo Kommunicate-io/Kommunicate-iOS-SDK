@@ -48,11 +48,11 @@ open class Kommunicate: NSObject,Localizable{
      It's used while initializing any UI component or in
      `KMPushNotificationHandler`.
      - Note: This can be changed from outside if you want to enable or
-            disable some features but avoid initializing a new `KMConfiguration`
-            object as we have set some properties in the default configuration object
-            which shouldn't be disabled. So use the `defaultConfiguration` and change
-            it accordingly.
-    */
+     disable some features but avoid initializing a new `KMConfiguration`
+     object as we have set some properties in the default configuration object
+     which shouldn't be disabled. So use the `defaultConfiguration` and change
+     it accordingly.
+     */
     public static var defaultConfiguration: KMConfiguration = {
         var config = KMConfiguration()
 
@@ -77,6 +77,8 @@ open class Kommunicate: NSObject,Localizable{
     /// Configuration which defines the behavior of ConversationView components.
     public static var kmConversationViewConfiguration = KMConversationViewConfiguration()
 
+    public static let shared = Kommunicate()
+
     public enum KommunicateError: Error {
         case notLoggedIn
         case conversationNotPresent
@@ -93,7 +95,33 @@ open class Kommunicate: NSObject,Localizable{
         }
     }
 
+    private var converastionListNavBarItemToken: NotificationToken? = nil
+
     static var applozicClientType: ApplozicClient.Type = ApplozicClient.self
+
+    public override init() {
+        super.init()
+        addObserver()
+    }
+    
+    func addObserver() {
+        converastionListNavBarItemToken = NotificationCenter.default.observe(name: NSNotification.Name(ALKNavigationItem.NSNotificationForConversationListNavigationTap), object: nil, queue: nil) { notification in
+
+            let pushAssist = ALPushAssist()
+            guard let notificationInfo = notification.userInfo, let topVc = pushAssist.topViewController, topVc is ALKConversationListViewController else {
+                return
+            }
+            let identifier = notificationInfo["identifier"] as? Int
+            if identifier == conversationCreateIdentifier {
+                Kommunicate.createConversationAndLaunch(notification: notification)
+            } else if identifier == faqIdentifier {
+                guard let vc = notification.object as? ALKConversationListViewController else {
+                    return
+                }
+                Kommunicate.openFaq(from: vc, with: Kommunicate.defaultConfiguration)
+            }
+        }
+    }
 
     //MARK: - Public methods
 
@@ -102,21 +130,21 @@ open class Kommunicate: NSObject,Localizable{
      Setup a application id which will be used for all the requests.
 
      - Parameters:
-        - applicationId: Application id that needs to be set up.
+     - applicationId: Application id that needs to be set up.
      */
     @objc open class func setup(applicationId: String) {
         self.applicationId = applicationId
         ALUserDefaultsHandler.setApplicationKey(applicationId)
-        self.defaultChatViewSettings()
+        Kommunicate.shared.defaultChatViewSettings()
     }
 
     /**
      Registers a new user, if it's already registered then user will be logged in.
 
      - Parameters:
-        - kmUser: A KMUser object which contains user details.
-        - completion: The callback with registration response and error.
-    */
+     - kmUser: A KMUser object which contains user details.
+     - completion: The callback with registration response and error.
+     */
     @objc open class func registerUser(
         _ kmUser: KMUser,
         completion : @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
@@ -224,7 +252,7 @@ open class Kommunicate: NSObject,Localizable{
      Launch chat list from a ViewController.
 
      - Parameters:
-        - viewController: ViewController from which the chat list will be launched.
+     - viewController: ViewController from which the chat list will be launched.
      */
     @objc open class func showConversations(from viewController: UIViewController) {
         let conversationVC = conversationListViewController()
@@ -237,10 +265,10 @@ open class Kommunicate: NSObject,Localizable{
      Launch group chat from a ViewController
 
      - Parameters:
-        - clientGroupId: clientChannelKey of the Group.
-        - viewController: ViewController from which the group chat will be launched.
-        - completionHandler: Called with the information whether the conversation was
-                            shown or not.
+     - clientGroupId: clientChannelKey of the Group.
+     - viewController: ViewController from which the group chat will be launched.
+     - completionHandler: Called with the information whether the conversation was
+     shown or not.
 
      */
     @objc open class func showConversationWith(groupId clientGroupId: String, from viewController: UIViewController, completionHandler: @escaping (Bool) -> Void) {
@@ -262,7 +290,7 @@ open class Kommunicate: NSObject,Localizable{
      conversation is present then that will be launched.
 
      - Parameters:
-        - viewController: ViewController from which the group chat will be launched.
+     - viewController: ViewController from which the group chat will be launched.
      */
 
     open class func createAndShowConversation(
@@ -297,7 +325,7 @@ open class Kommunicate: NSObject,Localizable{
      userId.
 
      - Returns: A random alphanumeric string of length 32.
-    */
+     */
     @objc open class func randomId() -> String {
         return String.random(length: 32)
     }
@@ -325,7 +353,7 @@ open class Kommunicate: NSObject,Localizable{
         conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
         conversationViewController.viewModel = ALKConversationViewModel(contactId: nil, channelKey: nil, localizedStringFileName: defaultConfiguration.localizedStringFileName)
         vc.conversationViewController = conversationViewController
-        observeListControllerNavigationCustomButtonClick()
+        let _ = Kommunicate.shared
     }
 
     class func openChatWith(groupId: NSNumber, from viewController: UIViewController, completionHandler: @escaping (Bool) -> Void) {
@@ -402,7 +430,7 @@ open class Kommunicate: NSObject,Localizable{
 
     private class func showAlert(viewController:ALKConversationListViewController){
 
-         let alertMessage =  NSLocalizedString("UnableToCreateConversationError", value: "Unable to create conversation", comment: "")
+        let alertMessage =  NSLocalizedString("UnableToCreateConversationError", value: "Unable to create conversation", comment: "")
 
         let okText =  NSLocalizedString("OkButton", value: "Okay", comment: "")
 
@@ -495,7 +523,7 @@ open class Kommunicate: NSObject,Localizable{
         }
     }
 
-    static private func defaultChatViewSettings() {
+    func defaultChatViewSettings() {
         KMUserDefaultHandler.setBASEURL(API.Backend.chat.rawValue)
         KMUserDefaultHandler.setGoogleMapAPIKey("AIzaSyCOacEeJi-ZWLLrOtYyj3PKMTOFEG7HDlw") //REPLACE WITH YOUR GOOGLE MAPKEY
         ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description()])
@@ -506,16 +534,16 @@ open class Kommunicate: NSObject,Localizable{
     }
 
     /**
-        Creates a new conversation with the details passed.
+     Creates a new conversation with the details passed.
 
-        - Parameters:
-           - userId: User id of the participant.
-           - agentId: User id of the agent.
-           - botIds: A list of bot ids to be added in the conversation.
-           - useLastConversation: If there is a conversation already present then that will be returned.
+     - Parameters:
+     - userId: User id of the participant.
+     - agentId: User id of the agent.
+     - botIds: A list of bot ids to be added in the conversation.
+     - useLastConversation: If there is a conversation already present then that will be returned.
 
-        - Returns: Group id if successful otherwise nil.
-        */
+     - Returns: Group id if successful otherwise nil.
+     */
     @available(*, deprecated, message: "Use createConversation(conversation:completion:)")
     @objc open class func createConversation(
         userId: String,
