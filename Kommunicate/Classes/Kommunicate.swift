@@ -353,7 +353,6 @@ open class Kommunicate: NSObject,Localizable{
         conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
         conversationViewController.viewModel = ALKConversationViewModel(contactId: nil, channelKey: nil, localizedStringFileName: defaultConfiguration.localizedStringFileName)
         vc.conversationViewController = conversationViewController
-        let _ = Kommunicate.shared
     }
 
     class func openChatWith(groupId: NSNumber, from viewController: UIViewController, completionHandler: @escaping (Bool) -> Void) {

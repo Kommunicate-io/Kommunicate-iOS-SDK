@@ -45,6 +45,10 @@ public class KMPushNotificationHandler: Localizable {
 
         self.configuration = configuration
 
+        if (KMUserDefaultHandler.getApplicationKey() != nil) {
+            Kommunicate.setup(applicationId: KMUserDefaultHandler.getApplicationKey())
+        }
+
         // No need to add removeObserver() as it is present in pushAssist.
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "showNotificationAndLaunchChat"), object: nil, queue: nil, using: {[weak self] notification in
             print("launch chat push notification received")
