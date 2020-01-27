@@ -7,6 +7,9 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 ### Enhancements
 - [CM-1] Added CSAT support. It will be shown once the conversation is resolved.
 
+### Fixes
+-[CM-134] Multiple conversations created on click of start new button.
+
 ## [3.0.0] - 2019-12-12
 
 ### Enhancements

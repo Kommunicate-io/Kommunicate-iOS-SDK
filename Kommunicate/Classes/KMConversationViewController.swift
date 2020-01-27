@@ -26,6 +26,9 @@ open class KMConversationViewController: ALKConversationViewController {
     var conversationService = KMConversationService()
     var conversationDetail = ConversationDetail()
 
+    private var converastionNavBarItemToken: NotificationToken? = nil
+    private var channelMetadataUpdateToken: NotificationToken? = nil
+
     private let awayMessageheight = 80.0
 
     override open func viewWillAppear(_ animated: Bool) {
@@ -36,29 +39,11 @@ open class KMConversationViewController: ALKConversationViewController {
         updateAssigneeDetails()
         messageStatus()
         checkFeedbackAndShowRatingView()
-        NotificationCenter.default.addObserver(
-            forName: Notification.Name(rawValue: ALKNavigationItem.NSNotificationForConversationViewNavigationTap),
-            object: nil,
-            queue: nil,
-            using: { notification in
-                guard let notificationInfo = notification.userInfo else{
-                    return
-                }
-                let identifier = notificationInfo["identifier"] as? Int
-                if identifier == self.faqIdentifier{
-                    Kommunicate.openFaq(from: self, with: self.configuration)
-                }
-        })
     }
 
     required public init(configuration: ALKConfiguration) {
         super.init(configuration: configuration)
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(onChannelMetadataUpdate),
-            name: NSNotification.Name(rawValue: "UPDATE_CHANNEL_METADATA"),
-            object: nil
-        )
+         addNotificationCenterObserver()
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -93,6 +78,28 @@ open class KMConversationViewController: ALKConversationViewController {
         if let lastMessage = viewModel.messageModels.last, !lastMessage.isMyMessage {
             showAwayMessage(false)
         }
+    }
+
+    func addNotificationCenterObserver() {
+
+        converastionNavBarItemToken = NotificationCenter.default.observe(name: Notification.Name(rawValue: ALKNavigationItem.NSNotificationForConversationViewNavigationTap), object: nil, queue: nil, using: { notification in
+            guard let notificationInfo = notification.userInfo else {
+                return
+            }
+            let identifier = notificationInfo["identifier"] as? Int
+            if identifier == self.faqIdentifier{
+                Kommunicate.openFaq(from: self, with: self.configuration)
+            }
+        })
+
+        channelMetadataUpdateToken = NotificationCenter.default.observe(name: NSNotification.Name(rawValue: "UPDATE_CHANNEL_METADATA"), object: nil, queue: nil, using: { notification in
+
+            guard
+                self.viewModel != nil,
+                self.viewModel.isGroup
+                else { return }
+            self.updateAssigneeDetails()
+        })
     }
 
     func addAwayMessageConstraints() {
