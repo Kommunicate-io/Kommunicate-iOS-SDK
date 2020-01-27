@@ -11,7 +11,7 @@ import Foundation
 /// Wraps the observer token received from
 /// NotificationCenter.addObserver(forName:object:queue:using:)
 /// and unregisters it in deinit.
-public final class NotificationToken: NSObject {
+final class NotificationToken: NSObject {
     let notificationCenter: NotificationCenter
     let token: Any
 
