@@ -13,20 +13,20 @@ platform :ios do
     sh("git", "checkout", releaseBranchName)
 
     version = releaseBranchName.partition('/').last
-  
     version_bump_podspec(path: "Kommunicate.podspec", version_number: version)
     cocoapods(clean: true, podfile: "Example/Podfile", repo_update: true)
 
     pod_lib_lint
-    update_changelog_tag
-    push_version_update
+    update_changelog_tag(version: version)
+    push_version_update(version: version, releaseBranchName: releaseBranchName)
 
     pod_push
-    release_docs
+    release_docs(version: version)
   end
 
   desc "Create release draft"
-  lane :release_docs do
+  lane :release_docs do |options|
+    version = options[:version]
     changelog = read_changelog(
       section_identifier: "[version]" # replace with version var
     )
@@ -41,7 +41,8 @@ platform :ios do
   end
 
   desc "Update changelog"
-  lane :update_changelog_tag do
+  lane :update_changelog_tag do |options|
+    version = options[:version]
     stamp_changelog(
       section_identifier: version,
       git_tag: version,
@@ -50,16 +51,21 @@ platform :ios do
   end
 
   desc "Commit and push changes"
-  lane :push_version_update do
+  lane :push_version_update do |options|
+    version = options[:version]
+    releaseBranchName = options[:releaseBranchName]
     sh("git", "add", "-u")
     sh("git", "commit", "-m", "Bump version to #{version} [ci skip]")
-    sh("git", "fetch")
+    sh("git", "fetch", "origin", "master")
+    sh("git", "branch", "master", "origin/master")
+    sh("git", "fetch", ".", "#{releaseBranchName}:master")
     sh("git", "checkout", "master")
-    sh("git", "merge", releaseBranchName)
     sh("git", "tag", version)
-    sh("git", "push", "origin", "--tags", "master")
+    sh("git", "fetch", "origin", "dev")
+    sh("git", "branch", "dev", "origin/dev")
+    sh("git", "fetch", ".", "master:dev")
     sh("git", "checkout", "dev")
-    sh("git", "merge", "master")
+    sh("git", "push", "origin", "--tags", "master")
     sh("git", "push", "origin", "dev")
   end
 end
