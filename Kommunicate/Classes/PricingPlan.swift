@@ -29,7 +29,7 @@ struct PricingPlan {
     func showSuspensionScreen() -> Bool {
         let isReleaseBuild = !utility.isThisDebugBuild()
         let isFreePlan = userDefaultsHandler.getUserPricingPackage() == startupPlan
-        let isNotAgent = userDefaultsHandler.getUserRoleType() != Int16(APPLICATION_WEB_ADMIN.rawValue)
+        let isNotAgent = userDefaultsHandler.getUserRoleType() != Int16(AL_APPLICATION_WEB_ADMIN.rawValue)
         guard isReleaseBuild && isNotAgent && isFreePlan else { return false }
         return true
     }

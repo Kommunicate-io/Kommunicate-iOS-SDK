@@ -92,7 +92,7 @@ extension ALChannel {
     static let ClosedStatus = 2
 
     var isClosedConversation: Bool {
-        guard let conversationStatus = metadata[CHANNEL_CONVERSATION_STATUS] as? String else {
+        guard let conversationStatus = metadata[AL_CHANNEL_CONVERSATION_STATUS] as? String else {
             return false
         }
         return type == Int16(SUPPORT_GROUP.rawValue) &&
