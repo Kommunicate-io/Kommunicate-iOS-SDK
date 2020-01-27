@@ -19,7 +19,7 @@ class PaymentTests: XCTestCase {
     func testPayment_whenStartupPlan_andUserRoleWebAdmin_showsSuspension() {
 
         UserDefaultsHandlerMock.pricingPackage = 101
-        UserDefaultsHandlerMock.userRole = Int16(USER_ROLE.rawValue)
+        UserDefaultsHandlerMock.userRole = Int16(AL_USER_ROLE.rawValue)
         UtilityClassMock.isDebugBuild = false
         let pricing = PricingPlan(
             utility: UtilityClassMock.self,
@@ -30,7 +30,7 @@ class PaymentTests: XCTestCase {
 
     func testPayment_whenStartupPlan_andAgentRole_hidesSuspension() {
         UserDefaultsHandlerMock.pricingPackage = 101
-        UserDefaultsHandlerMock.userRole = Int16(APPLICATION_WEB_ADMIN.rawValue)
+        UserDefaultsHandlerMock.userRole = Int16(AL_APPLICATION_WEB_ADMIN.rawValue)
         UtilityClassMock.isDebugBuild = false
         let pricing = PricingPlan(
             utility: UtilityClassMock.self,
@@ -41,7 +41,7 @@ class PaymentTests: XCTestCase {
 
     func testPayment_whenAnyRandomPlan_andUserRole_hidesSuspension() {
         UserDefaultsHandlerMock.pricingPackage = 108
-        UserDefaultsHandlerMock.userRole = Int16(USER_ROLE.rawValue)
+        UserDefaultsHandlerMock.userRole = Int16(AL_USER_ROLE.rawValue)
         UtilityClassMock.isDebugBuild = false
         let pricing = PricingPlan(
             utility: UtilityClassMock.self,
@@ -53,7 +53,7 @@ class PaymentTests: XCTestCase {
     func testPayment_whenDebugBuild_hidesSuspension() {
 
         UserDefaultsHandlerMock.pricingPackage = 101
-        UserDefaultsHandlerMock.userRole = Int16(USER_ROLE.rawValue)
+        UserDefaultsHandlerMock.userRole = Int16(AL_USER_ROLE.rawValue)
         UtilityClassMock.isDebugBuild = true
         let pricing = PricingPlan(
             utility: UtilityClassMock.self,
@@ -68,7 +68,7 @@ class PaymentTests: XCTestCase {
 class UserDefaultsHandlerMock: ALUserDefaultsHandler {
 
     static var pricingPackage: Int16 = 101
-    static var userRole = Int16(APPLICATION_WEB_ADMIN.rawValue)
+    static var userRole = Int16(AL_APPLICATION_WEB_ADMIN.rawValue)
 
     override class func getUserPricingPackage() -> Int16 {
         return pricingPackage
