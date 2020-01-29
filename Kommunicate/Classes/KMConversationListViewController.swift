@@ -127,7 +127,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         setupView()
         extendedLayoutIncludesOpaqueBars = true
     }
-    
+
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if  channelKey != nil {
@@ -660,4 +660,3 @@ extension KMConversationListViewController: UISearchBarDelegate {
         resultVC.clear()
     }
 }
-
