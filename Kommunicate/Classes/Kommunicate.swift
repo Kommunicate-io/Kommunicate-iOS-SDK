@@ -108,14 +108,14 @@ open class Kommunicate: NSObject,Localizable{
         converastionListNavBarItemToken = NotificationCenter.default.observe(name: NSNotification.Name(ALKNavigationItem.NSNotificationForConversationListNavigationTap), object: nil, queue: nil) { notification in
 
             let pushAssist = ALPushAssist()
-            guard let notificationInfo = notification.userInfo, let topVc = pushAssist.topViewController, topVc is ALKConversationListViewController else {
+            guard let notificationInfo = notification.userInfo, let topVc = pushAssist.topViewController, topVc is KMConversationListViewController else {
                 return
             }
             let identifier = notificationInfo["identifier"] as? Int
             if identifier == conversationCreateIdentifier {
                 Kommunicate.createConversationAndLaunch(notification: notification)
             } else if identifier == faqIdentifier {
-                guard let vc = notification.object as? ALKConversationListViewController else {
+                guard let vc = notification.object as? KMConversationListViewController else {
                     return
                 }
                 Kommunicate.openFaq(from: vc, with: Kommunicate.defaultConfiguration)
@@ -254,8 +254,8 @@ open class Kommunicate: NSObject,Localizable{
     /// This method is used to return an instance of conversation list view controller.
     ///
     /// - Returns: Instance of `ALKConversationListViewController`
-    @objc open class func conversationListViewController() -> ALKConversationListViewController {
-        let conversationVC = ALKConversationListViewController(configuration: Kommunicate.defaultConfiguration)
+    @objc open class func conversationListViewController() -> KMConversationListViewController {
+        let conversationVC = KMConversationListViewController(configuration: Kommunicate.defaultConfiguration)
         configureListVC(conversationVC)
         return conversationVC
     }
@@ -353,7 +353,7 @@ open class Kommunicate: NSObject,Localizable{
 
     //MARK: - Internal methods
 
-    class func configureListVC(_ vc: ALKConversationListViewController) {
+    class func configureListVC(_ vc: KMConversationListViewController) {
         vc.conversationListTableViewController.dataSource.cellConfigurator = {
             (messageModel, tableCell) in
             let cell = tableCell as! ALKChatCell
@@ -430,7 +430,7 @@ open class Kommunicate: NSObject,Localizable{
         }
     }
 
-    private class func showAlert(viewController:ALKConversationListViewController){
+    private class func showAlert(viewController:KMConversationListViewController){
 
         let alertMessage =  NSLocalizedString("UnableToCreateConversationError", value: "Unable to create conversation", comment: "")
 
@@ -446,12 +446,12 @@ open class Kommunicate: NSObject,Localizable{
 
     private class func createConversationAndLaunch(notification:Notification){
 
-        guard let vc = notification.object as? ALKConversationListViewController else {
+        guard let vc = notification.object as? KMConversationListViewController else {
             return
         }
         vc.view.isUserInteractionEnabled = false
         vc.navigationController?.view.isUserInteractionEnabled = false
-        let alertView =  displayAlert(viewController :vc)
+        let alertView =  displayAlert(viewController : vc)
 
         Kommunicate.createConversation() { (result) in
             switch result {
@@ -477,7 +477,7 @@ open class Kommunicate: NSObject,Localizable{
 
     }
 
-    private class func  displayAlert(viewController:ALKConversationListViewController) -> UIAlertController {
+    private class func  displayAlert(viewController:KMConversationListViewController) -> UIAlertController {
 
         let alertTitle =  NSLocalizedString("WaitMessage", value: "Please wait...", comment: "")
 
@@ -501,28 +501,6 @@ open class Kommunicate: NSObject,Localizable{
         viewController.present(loadingAlertController, animated: true, completion: nil)
 
         return loadingAlertController
-    }
-
-    private class func observeListControllerNavigationCustomButtonClick() {
-        NotificationCenter.default.addObserver(
-            forName: NSNotification.Name(ALKNavigationItem.NSNotificationForConversationListNavigationTap),
-            object: nil,
-            queue: nil) {
-                notification in
-                guard let notificationInfo = notification.userInfo else{
-                    return
-                }
-
-                let identifier = notificationInfo["identifier"] as? Int
-                if identifier  ==  conversationCreateIdentifier  {
-                    createConversationAndLaunch(notification: notification)
-                }else if identifier == faqIdentifier{
-                    guard let vc = notification.object as? ALKConversationListViewController else {
-                        return
-                    }
-                    openFaq(from: vc, with: defaultConfiguration)
-                }
-        }
     }
 
     func defaultChatViewSettings() {

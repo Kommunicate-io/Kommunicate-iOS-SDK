@@ -13,6 +13,12 @@ protocol Localizable {
 
 extension Localizable {
 
+    static func localizedString(forKey: String) -> String {
+        let bundle = Bundle.kommunicate
+
+        return NSLocalizedString(forKey, tableName: nil, bundle: bundle, value: "", comment: "")
+    }
+
     func localizedString(forKey key: String, fileName: String) -> String {
         return NSLocalizedString(key, tableName: fileName, bundle: Bundle.main, value: Self.defaultValue(forKey: key), comment: "")
     }
