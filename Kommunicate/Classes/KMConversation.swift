@@ -20,6 +20,7 @@ import Applozic
     public var useOriginalTitle: Bool = false
     public var conversationTitle : String?
     public var conversationMetadata =  [AnyHashable : Any]()
+    public var conversationAssignee : String?
 
     public init(userId: String){
         self.userId = userId
@@ -93,6 +94,13 @@ import Applozic
     @discardableResult
     @objc public func useOriginalTitle(_ isUseOriginalTitle: Bool) ->  KMConversationBuilder {
         conversation.useOriginalTitle = isUseOriginalTitle
+        return self
+    }
+
+    /// You can pass the Conversation assignee userId the converastion will be assigned to that user.
+    /// - Parameter conversationAssignee: Pass AgentId or botId
+    @objc public func withConversationAssignee(_ conversationAssignee: String) -> KMConversationBuilder {
+        conversation.conversationAssignee = conversationAssignee
         return self
     }
 
