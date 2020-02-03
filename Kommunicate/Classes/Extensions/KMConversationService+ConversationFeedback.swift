@@ -74,9 +74,10 @@ extension KMConversationService {
         DataLoader.postRequest(url: url, params: params) { result in
             switch result {
             case .success(let data):
-                guard let feedbackResponse = try? ConversationFeedbackResponse(data: data) else {
-                    completion(.failure(.api(.jsonConversion)))
-                    return
+                guard let feedbackResponse =
+                    try? ConversationFeedbackSubmissionResponse(data: data) else {
+                        completion(.failure(.api(.jsonConversion)))
+                        return
                 }
                 do {
                     let feedback = try feedbackResponse.conversationFeedback()
@@ -90,17 +91,5 @@ extension KMConversationService {
                 completion(.failure(.api(.network(error))))
             }
         }
-    }
-}
-
-extension ConversationFeedbackResponse {
-    func conversationFeedback() throws -> ConversationFeedback {
-        guard code == "SUCCESS" else {
-            throw FeedbackError.invalidCodeValue
-        }
-        guard let feedback = data else {
-            throw FeedbackError.notFound
-        }
-        return feedback
     }
 }
