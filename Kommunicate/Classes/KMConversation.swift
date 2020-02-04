@@ -97,8 +97,9 @@ import Applozic
         return self
     }
 
-    /// You can pass the Conversation assignee userId the converastion will be assigned to that user.
+    /// To set the conversation assignee, pass Agent ID or Bot Id.
     /// - Parameter conversationAssignee: Pass AgentId or botId
+    @discardableResult
     @objc public func withConversationAssignee(_ conversationAssignee: String) -> KMConversationBuilder {
         conversation.conversationAssignee = conversationAssignee
         return self
