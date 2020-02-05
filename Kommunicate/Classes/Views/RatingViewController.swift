@@ -9,8 +9,8 @@ import Foundation
 
 enum RatingType: Int, CaseIterable {
     case sad = 1
-    case confused = 2
-    case happy = 3
+    case confused = 5
+    case happy = 10
 }
 
 struct Feedback {

@@ -54,7 +54,7 @@ class FeedbackRatingView: UIView {
             guard allTags.contains(selectedRatingTag) && selectedRatingTag != oldValue else { return }
             // update state of all buttons
             ratingButtons.forEach { $0.isInactive = ($0.tag != selectedRatingTag) }
-            ratingSelected?(RatingType(rawValue: tag) ?? .happy)
+            ratingSelected?(RatingType(rawValue: selectedRatingTag) ?? .happy)
         }
     }
 
