@@ -12,6 +12,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ### Fixes
 - [CM-122] Updated CSAT rating scale to 1-10 from 1-3.
+- [CM-113] Notification tap action is not working in some screens.
 
 ## [3.1.0] - 2020-01-28
 
