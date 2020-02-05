@@ -9,6 +9,58 @@ import Foundation
 
 extension UIViewController {
 
+    var bottomAnchor: NSLayoutYAxisAnchor {
+        if #available(iOS 11.0, *) {
+            return view.safeAreaLayoutGuide.bottomAnchor
+        } else {
+            return view.bottomAnchor
+        }
+    }
+
+    var topAnchor: NSLayoutYAxisAnchor {
+        if #available(iOS 11.0, *) {
+            return view.safeAreaLayoutGuide.topAnchor
+        } else {
+            return view.topAnchor
+        }
+    }
+
+    var leadingAnchor: NSLayoutXAxisAnchor {
+        if #available(iOS 11.0, *) {
+            return view.safeAreaLayoutGuide.leadingAnchor
+        } else {
+            return view.leadingAnchor
+        }
+    }
+
+    var trailingAnchor: NSLayoutXAxisAnchor {
+        if #available(iOS 11.0, *) {
+            return view.safeAreaLayoutGuide.trailingAnchor
+        } else {
+            return view.trailingAnchor
+        }
+    }
+
+    var width: CGFloat {
+        if #available(iOS 11.0, *) {
+            return view.safeAreaLayoutGuide.layoutFrame.width
+        }
+        return UIScreen.main.bounds.width
+    }
+
+    func add(_ child: UIViewController) {
+        addChild(child)
+        view.addSubview(child.view)
+        child.didMove(toParent: self)
+    }
+
+    func remove() {
+        guard parent != nil else { return }
+        willMove(toParent: nil)
+        view.removeFromSuperview()
+        removeFromParent()
+    }
+
     class func topViewController() -> UIViewController? {
         return topViewControllerWithRootViewController(rootViewController: UIApplication.shared.keyWindow?.rootViewController)
     }
