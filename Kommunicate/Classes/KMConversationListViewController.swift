@@ -15,9 +15,8 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     public var conversationListTableViewController: ALKConversationListTableViewController
 
     var searchController: UISearchController!
-// TODO: Uncomment this after search view controller is public
-//    var searchBar: CustomSearchBar!
-//    lazy var resultVC = ALKSearchResultViewController(configuration: configuration)
+    var searchBar: CustomSearchBar!
+    lazy var resultVC = ALKSearchResultViewController(configuration: configuration)
 
     public var dbService = ALMessageDBService()
     public var viewModel = KMConversationListModel()
@@ -82,11 +81,9 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
             queue: nil,
             using: { [weak self] _ in
                 guard let weakSelf = self else { return }
-
-   // TODO: Uncommnet this after making search view controller public
-//                if weakSelf.navigationController?.visibleViewController as? ALKConversationListViewController != nil, weakSelf.configuration.isMessageSearchEnabled, weakSelf.searchBar.searchBar.text == "" {
-//                    weakSelf.showNavigationItems()
-//                }
+                if weakSelf.navigationController?.visibleViewController as? ALKConversationListViewController != nil, weakSelf.configuration.isMessageSearchEnabled, weakSelf.searchBar.searchBar.text == "" {
+                    weakSelf.showNavigationItems()
+                }
             }
         )
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "pushNotification"), object: nil, queue: nil, using: { [weak self] notification in
@@ -188,8 +185,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         alMqttConversationService.subscribeToConversation()
         dbService.delegate = self
         viewModel.delegate = self
-        //TODO: Uncomment this after search view controller public
-       // setupSearchController()
+        setupSearchController()
         setupView()
         extendedLayoutIncludesOpaqueBars = true
     }
@@ -233,15 +229,14 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         let navigationItems = configuration.navigationItemsForConversationList
 
         var rightBarButtonItems: [UIBarButtonItem] = []
-// TODO: Uncomment this after making search view controller public
-//        if configuration.isMessageSearchEnabled {
-//            let barButton = UIBarButtonItem(
-//                image: UIImage(named: "search", in: Bundle.applozic, compatibleWith: nil),
-//                style: .plain,
-//                target: self, action: #selector(searchTapped)
-//            )
-//            rightBarButtonItems.append(barButton)
-//        }
+        if configuration.isMessageSearchEnabled {
+            let barButton = UIBarButtonItem(
+                image: UIImage(named: "search", in: Bundle(for: ALKConversationListViewController.self), compatibleWith: nil),
+                style: .plain,
+                target: self, action: #selector(searchTapped)
+            )
+            rightBarButtonItems.append(barButton)
+        }
 
         if !configuration.hideStartChatButton {
             rightBarButtonItems.append(rightBarButtonItem)
@@ -259,29 +254,28 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
             navigationItem.rightBarButtonItems = Array(rightButtons)
         }
     }
- // TODO: Uncomment this after making Search view Public
-//    func setupSearchController() {
-//        searchController = UISearchController(searchResultsController: resultVC)
-//        searchController.searchBar.autocapitalizationType = .none
-//        searchController.hidesNavigationBarDuringPresentation = false
-//        searchController.searchBar.delegate = self
-//        searchController.searchBar.alpha = 0
-//        searchController.searchBar.showsCancelButton = true
-//        searchBar = CustomSearchBar(searchBar: searchController.searchBar)
-//        definesPresentationContext = true
-//    }
-//
-//    @objc private func searchTapped() {
-//        navigationItem.rightBarButtonItems = nil
-//        navigationItem.leftBarButtonItems = nil
-//        navigationItem.titleView = searchBar
-//
-//        UIView.animate(
-//            withDuration: 0.5,
-//            animations: { self.searchBar.show(true) },
-//            completion: { _ in self.searchBar.becomeFirstResponder() }
-//        )
-//    }
+    func setupSearchController() {
+        searchController = UISearchController(searchResultsController: resultVC)
+        searchController.searchBar.autocapitalizationType = .none
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.delegate = self
+        searchController.searchBar.alpha = 0
+        searchController.searchBar.showsCancelButton = true
+        searchBar = CustomSearchBar(searchBar: searchController.searchBar)
+        definesPresentationContext = true
+    }
+
+    @objc private func searchTapped() {
+        navigationItem.rightBarButtonItems = nil
+        navigationItem.leftBarButtonItems = nil
+        navigationItem.titleView = searchBar
+
+        UIView.animate(
+            withDuration: 0.5,
+            animations: { self.searchBar.show(true) },
+            completion: { _ in self.searchBar.becomeFirstResponder() }
+        )
+    }
 
     func launchChat(contactId: String?, groupId: NSNumber?, conversationId: NSNumber? = nil) {
         let conversationViewModel = viewModel.conversationViewModelOf(type: conversationViewModelType, contactId: contactId, channelId: groupId, conversationId: conversationId)
@@ -502,8 +496,7 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
         guard let viewController = navigationController?.visibleViewController as? KMConversationViewController else {
             return
         }
-      //
-      //  viewController.checkUserBlock()
+        viewController.checkUserBlock()
     }
 
     open func updateLastSeen(atStatus alUserDetail: ALUserDetail!) {
@@ -561,35 +554,32 @@ extension KMConversationListViewController: ALKConversationListTableViewDelegate
         }
         NotificationCenter.default.post(name: Notification.Name(rawValue: ALKNotification.conversationListAction), object: self, userInfo: dic)
     }
-// TODO: - Uncomment this after making search view Controller public
-//    func showNavigationItems() {
-//         searchBar.show(false)
-//         searchBar.resignFirstResponder()
-//         navigationItem.titleView = nil
-//         setupBackButton()
-//         setupNavigationRightButtons()
-//     }
+    func showNavigationItems() {
+         searchBar.show(false)
+         searchBar.resignFirstResponder()
+         navigationItem.titleView = nil
+         setupBackButton()
+         setupNavigationRightButtons()
+     }
 }
 
-// TODO: - Uncomment this after making search view Controller public
-//extension KMConversationListViewController: UISearchBarDelegate {
-//    public func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        guard let searchKey = searchBar.text, !searchKey.isEmpty else {
-//            return
-//        }
-//        resultVC.search(key: searchKey)
-//    }
-//
-//    public func searchBar(_: UISearchBar, textDidChange searchText: String) {
-//        if searchText == "" {
-//            resultVC.clearAndReload()
-//        }
-//    }
-//
-//    public func searchBarCancelButtonClicked(_: UISearchBar) {
-//        showNavigationItems()
-//        resultVC.clear()
-//    }
-//}
+extension KMConversationListViewController: UISearchBarDelegate {
+    public func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchKey = searchBar.text, !searchKey.isEmpty else {
+            return
+        }
+        resultVC.search(key: searchKey)
+    }
 
+    public func searchBar(_: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {
+            resultVC.clearAndReload()
+        }
+    }
+
+    public func searchBarCancelButtonClicked(_: UISearchBar) {
+        showNavigationItems()
+        resultVC.clear()
+    }
+}
 

@@ -37,6 +37,7 @@ PODS:
   - SDWebImage/Core (5.1.1)
 
 DEPENDENCIES:
+  - ApplozicSwift (from `https://github.com/AppLozic/ApplozicSwift.git`, branch `makeSearchViewPublic`)
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - Nimble
@@ -52,14 +53,21 @@ SPEC REPOS:
     - Quick
   trunk:
     - Applozic
-    - ApplozicSwift
     - Kingfisher
     - MGSwipeTableCell
     - SDWebImage
 
 EXTERNAL SOURCES:
+  ApplozicSwift:
+    :branch: makeSearchViewPublic
+    :git: https://github.com/AppLozic/ApplozicSwift.git
   Kommunicate:
     :path: "../"
+
+CHECKOUT OPTIONS:
+  ApplozicSwift:
+    :commit: d499cc8ed00466ce2ce5832b791c76dc326be5a2
+    :git: https://github.com/AppLozic/ApplozicSwift.git
 
 SPEC CHECKSUMS:
   Applozic: 56b5e70268a29478e8cac30df6490b0a9251fd20
@@ -74,6 +82,6 @@ SPEC CHECKSUMS:
   Quick: ce1276c7c27ba2da3cb2fd0cde053c3648b3b22d
   SDWebImage: 96d7f03415ccb28d299d765f93557ff8a617abd8
 
-PODFILE CHECKSUM: 082b42a1ee8e13768ec8ed01a094d7959ec3a111
+PODFILE CHECKSUM: 03051fcb60c5a249bc495730f8b15fccb4725166
 
 COCOAPODS: 1.8.4
