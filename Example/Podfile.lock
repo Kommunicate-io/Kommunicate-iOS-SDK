@@ -37,6 +37,7 @@ PODS:
   - SDWebImage/Core (5.1.1)
 
 DEPENDENCIES:
+  - ApplozicSwift (from `https://github.com/AppLozic/ApplozicSwift.git`, branch `makeSearchViewPublic`)
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - Nimble
@@ -57,8 +58,16 @@ SPEC REPOS:
     - SDWebImage
 
 EXTERNAL SOURCES:
+  ApplozicSwift:
+    :branch: makeSearchViewPublic
+    :git: https://github.com/AppLozic/ApplozicSwift.git
   Kommunicate:
     :path: "../"
+
+CHECKOUT OPTIONS:
+  ApplozicSwift:
+    :commit: d499cc8ed00466ce2ce5832b791c76dc326be5a2
+    :git: https://github.com/AppLozic/ApplozicSwift.git
 
 SPEC CHECKSUMS:
   Applozic: 5ced45cb804f9d9e9819a7839d8d9a70077839eb
