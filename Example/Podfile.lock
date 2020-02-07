@@ -66,7 +66,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   ApplozicSwift:
-    :commit: d499cc8ed00466ce2ce5832b791c76dc326be5a2
+    :commit: 870c48e865e4df139c2d4d3eb78b35ab12762024
     :git: https://github.com/AppLozic/ApplozicSwift.git
 
 SPEC CHECKSUMS:
