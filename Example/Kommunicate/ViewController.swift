@@ -24,6 +24,7 @@ class ViewController: UIViewController {
     @IBAction func launchConversation(_ sender: Any) {
         activityIndicator.startAnimating()
         view.isUserInteractionEnabled = false
+      
         Kommunicate.createAndShowConversation(from: self, completion: {
             error in
             self.activityIndicator.stopAnimating()
@@ -34,7 +35,19 @@ class ViewController: UIViewController {
         })
     }
     @IBAction func logoutAction(_ sender: Any) {
-        Kommunicate.logoutUser()
-        self.dismiss(animated: false, completion: nil)
+        Kommunicate.logoutUser { (result) in
+            switch result {
+            case .success(_):
+                print("Logout success")
+                self.dismiss(animated: false, completion: nil)
+            case .failure( _):
+                print("Logout is success register the push")
+                if !UIApplication.shared.isRegisteredForRemoteNotifications {
+                    let appDelegate: AppDelegate? = UIApplication.shared.delegate as? AppDelegate
+                    appDelegate?.registerForNotification()
+                }
+                self.dismiss(animated: false, completion: nil)
+            }
+        }
     }
 }

@@ -184,6 +184,7 @@ open class Kommunicate: NSObject,Localizable{
     }
 
     /// Logs out the current logged in user and clears all the cache.
+    @available(*, deprecated, message: "Use logoutUser(completion:)")
     @objc open class func logoutUser() {
         let registerUserClientService = ALRegisterUserClientService()
         if let _ = ALUserDefaultsHandler.getDeviceKeyString() {
@@ -191,6 +192,20 @@ open class Kommunicate: NSObject,Localizable{
                 _, _ in
                 NSLog("Applozic logout")
             })
+        }
+    }
+
+    /// Logs out the current logged in user and clears all the cache.
+    open class func logoutUser(completion: @escaping (Result<String, KMError>) -> ()) {
+        let registerUserClientService = ALRegisterUserClientService()
+        if let _ = ALUserDefaultsHandler.getDeviceKeyString() {
+            registerUserClientService.logout { (apiResponse, error) in
+                guard error == nil else {
+                    completion(.failure(KMError.api(error)))
+                    return
+                }
+                completion(.success("success"))
+            }
         }
     }
 

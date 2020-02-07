@@ -70,3 +70,23 @@ public enum APIError: LocalizedError {
         return errorMessage
     }
 }
+
+/// Represents all the errors which can happen during API call.
+public enum KMError : LocalizedError {
+    /// Thrown when an error occurs while calling an API
+    /// - Parameter error: The underlying error object.
+    case api(_ error: Error?)
+    
+    public var errorDescription: String? {
+        var errorMessage: String
+        switch self {
+        case .api(let error):
+            if let apiError = error {
+                errorMessage = apiError.localizedDescription
+            } else {
+                errorMessage = "Failed to process API request"
+            }
+        }
+        return errorMessage
+    }
+}
