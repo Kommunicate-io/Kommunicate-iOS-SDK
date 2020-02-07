@@ -405,13 +405,11 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
     open func updateUserDetail(_ userId: String!) {
         guard let userId = userId else { return }
         print("update user detail")
-
-        ALUserService.updateUserDetail(userId, withCompletion: {
-            userDetail in
-            guard let detail = userDetail else { return }
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "USER_DETAIL_OTHER_VC"), object: detail)
-            self.tableView.reloadData()
-        })
+        viewModel.updateUserDetail(userId: userId) { (success) in
+            if (success) {
+                self.tableView.reloadData()
+            }
+        }
     }
 
     public func isNewMessageForActiveThread(alMessage: ALMessage, vm: ALKConversationViewModel) -> Bool {
@@ -502,7 +500,7 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
     open func updateLastSeen(atStatus alUserDetail: ALUserDetail!) {
         print("Last seen updated")
         viewModel.updateStatusFor(userDetail: alUserDetail)
-        guard let viewController = navigationController?.visibleViewController as? ALKConversationViewController else {
+        guard let viewController = navigationController?.visibleViewController as? KMConversationViewController else {
             return
         }
         viewController.updateLastSeen(atStatus: alUserDetail)
@@ -536,24 +534,13 @@ extension KMConversationListViewController: ALKConversationListTableViewDelegate
     }
 
     public func userBlockNotification(userId: String, isBlocked: Bool) {
-        var dic = [AnyHashable: Any]()
-        dic["UserId"] = userId
-        dic["Controller"] = self
-        dic["Blocked"] = isBlocked
-        NotificationCenter.default.post(name: Notification.Name(rawValue: ALKNotification.conversationListAction), object: self, userInfo: dic)
+        viewModel.userBlockNotification(userId : userId,  isBlocked: isBlocked)
     }
 
     public func muteNotification(conversation: ALMessage, isMuted: Bool) {
-        var dic = [AnyHashable: Any]()
-        dic["Muted"] = isMuted
-        dic["Controller"] = self
-        if conversation.isGroupChat {
-            dic["ChannelKey"] = conversation.groupId
-        } else {
-            dic["UserId"] = conversation.contactIds
-        }
-        NotificationCenter.default.post(name: Notification.Name(rawValue: ALKNotification.conversationListAction), object: self, userInfo: dic)
+        viewModel.muteNotification(conversation: conversation, isMuted: isMuted)
     }
+
     func showNavigationItems() {
          searchBar.show(false)
          searchBar.resignFirstResponder()
