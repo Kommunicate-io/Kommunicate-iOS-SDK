@@ -11,6 +11,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 - App ID sanity check: If an empty App ID is passed or if it is changed later, the app will be stopped in the debug mode.
 - Added restart conversation option. If the conversation is closed, then the input text field will be disabled, and a restart button will be shown.
 - Added logout method with completion and deprecated the ```Kommunicate.logoutUser()``` method.
+- [CM-128] Add no conversations view in conversation list.
 
 ### Fixes
 - [CM-122] Updated CSAT rating scale to 1-10 from 1-3.
