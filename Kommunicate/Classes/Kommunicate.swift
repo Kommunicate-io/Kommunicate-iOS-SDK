@@ -577,6 +577,7 @@ class ChatMessage: ALKChatViewModelProtocol,Localizable {
     var channelKey: NSNumber?
     var conversationId: NSNumber!
     var createdAt: String?
+    var channelType: Int16
 
     init(message: ALKChatViewModelProtocol) {
         self.avatar = message.avatar
@@ -595,6 +596,7 @@ class ChatMessage: ALKChatViewModelProtocol,Localizable {
         self.messageType = message.messageType
         // Update message to show conversation assignee details
         let (_,channel) = ConversationDetail().conversationAssignee(groupId: self.channelKey, userId: self.contactId)
+        self.channelType = message.channelType
 
         guard let alChannel = channel  else {
             self.groupName = localizedString(forKey: KMLocalizationKey.noName, fileName: Kommunicate.defaultConfiguration.localizedStringFileName)

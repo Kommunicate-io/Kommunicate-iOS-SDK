@@ -19,7 +19,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     lazy var resultVC = ALKSearchResultViewController(configuration: configuration)
 
     public var dbService = ALMessageDBService()
-    public var viewModel = KMConversationListModel()
+    public var viewModel = ALKConversationListViewModel()
 
     // To check if coming from push notification
     var contactId: String?
@@ -54,7 +54,6 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         super.init(configuration: configuration)
         conversationListTableViewController.delegate = self
         localizedStringFileName = configuration.localizedStringFileName
-        viewModel.localizationFileName = configuration.localizedStringFileName
     }
 
     public required init?(coder _: NSCoder) {
@@ -81,7 +80,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
             queue: nil,
             using: { [weak self] _ in
                 guard let weakSelf = self else { return }
-                if weakSelf.navigationController?.visibleViewController as? ALKConversationListViewController != nil, weakSelf.configuration.isMessageSearchEnabled, weakSelf.searchBar.searchBar.text == "" {
+                if weakSelf.navigationController?.visibleViewController as? KMConversationListViewController != nil, weakSelf.configuration.isMessageSearchEnabled, weakSelf.searchBar.searchBar.text == "" {
                     weakSelf.showNavigationItems()
                 }
             }
@@ -140,11 +139,11 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
 
             guard let weakSelf = self, let userId = notification.object as? String else { return }
             print("update user detail")
-            ALUserService.updateUserDetail(userId, withCompletion: {
-                userDetail in
-                guard userDetail != nil else { return }
-                weakSelf.tableView.reloadData()
-            })
+            weakSelf.viewModel.updateUserDetail(userId: userId) { (success) in
+                if success {
+                    weakSelf.tableView.reloadData()
+                }
+            }
         })
 
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "UPDATE_CHANNEL_NAME"), object: nil, queue: nil, using: { [weak self] _ in
@@ -278,7 +277,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     }
 
     func launchChat(contactId: String?, groupId: NSNumber?, conversationId: NSNumber? = nil) {
-        let conversationViewModel = viewModel.conversationViewModelOf(type: conversationViewModelType, contactId: contactId, channelId: groupId, conversationId: conversationId)
+        let conversationViewModel = viewModel.conversationViewModelOf(type: conversationViewModelType, contactId: contactId, channelId: groupId, conversationId: conversationId, localizedStringFileName: localizedStringFileName)
 
         let viewController: KMConversationViewController!
         if conversationViewController == nil {
@@ -335,7 +334,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         }
     }
 
-    fileprivate func push(conversationVC: ALKConversationViewController, with viewModel: ALKConversationViewModel) {
+    fileprivate func push(conversationVC: KMConversationViewController, with viewModel: ALKConversationViewModel) {
         if let topVC = navigationController?.topViewController as? KMConversationViewController {
             // Update the details and refresh
             topVC.unsubscribingChannel()
@@ -372,7 +371,7 @@ extension KMConversationListViewController: ALMessagesDelegate {
     }
 }
 
-extension KMConversationListViewController: KMConversationListViewModelDelegate {
+extension KMConversationListViewController: ALKConversationListViewModelDelegate {
     open func startedLoading() {
         DispatchQueue.main.async {
             self.activityIndicator.startAnimating()

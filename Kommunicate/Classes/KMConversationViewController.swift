@@ -263,6 +263,7 @@ open class KMConversationViewController: ALKConversationViewController {
 
 extension KMConversationViewController: NavigationBarCallbacks {
     func backButtonPressed() {
+        view.endEditing(true)
         let popVC = self.navigationController?.popViewController(animated: true)
         if popVC == nil {
             self.dismiss(animated: true, completion: nil)
