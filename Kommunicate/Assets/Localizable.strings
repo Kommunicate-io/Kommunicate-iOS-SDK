@@ -75,4 +75,4 @@ UnableToCreateConversationError = "Unable to create conversation";
 OkButton = "Okay";
 WaitMessage = "Please wait...";
 /* No conversations*/
-NoConversationsLabelText = "No Conversations";
+NoConversationsLabelText = "No conversations";
