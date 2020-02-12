@@ -316,6 +316,11 @@ public class KMConversationService: KMConservationServiceable,Localizable {
             metadata.setValue("true", forKey: ChannelMetadataKeys.skipRouting)
         }
 
+        if  let conversationAssignee = conversation.conversationAssignee, !conversationAssignee.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            metadata.setValue(conversation.conversationAssignee, forKey: ChannelMetadataKeys.conversationAssignee)
+            metadata.setValue("true", forKey: ChannelMetadataKeys.skipRouting)
+        }
+
         if let conversationTitle = conversation.conversationTitle {
             metadata.setValue(conversationTitle, forKey: ChannelMetadataKeys.kmConversationTitle)
             metadata.setValue("true", forKey: ChannelMetadataKeys.kmOriginalTitle)
