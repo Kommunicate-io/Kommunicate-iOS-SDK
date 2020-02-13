@@ -92,7 +92,7 @@ public class KMPushNotificationHelper {
     /// - Parameters:
     ///   - notification: notification that is tapped.
     ///   - configuration: `ALKConfiguration` object.
-    /// - Returns: An instance of `ALKConversationListViewController`
+    /// - Returns: An instance of `KMConversationListViewController`
     public func getConversationVCToLaunch(notification: NotificationData, configuration: ALKConfiguration) -> KMConversationListViewController {
         let viewController = KMConversationListViewController(configuration: configuration)
         viewController.channelKey = notification.groupId
