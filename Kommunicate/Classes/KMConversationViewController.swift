@@ -79,7 +79,7 @@ open class KMConversationViewController: ALKConversationViewController {
     required public init(configuration: ALKConfiguration) {
         fatalError("init(configuration:) has not been implemented")
     }
-    
+
     open override func viewDidLoad() {
         super.viewDidLoad()
 
