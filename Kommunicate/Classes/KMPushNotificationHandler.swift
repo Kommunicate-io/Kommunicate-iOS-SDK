@@ -42,8 +42,7 @@ public class KMPushNotificationHandler: Localizable {
             case NSNumber(value: APP_STATE_ACTIVE.rawValue):
                 guard !KMPushNotificationHelper().isNotificationForActiveThread(notificationData) else { return }
 
-                ///TODO: FIX HERE. USE conversationId also.
-                ALUtilityClass.thirdDisplayNotificationTS(message, andForContactId: notificationData.userId, withGroupId: notificationData.groupId, completionHandler: {
+                ALUtilityClass.thirdDisplayNotificationTS(message, andForContactId: nil, withGroupId: notificationData.groupId, completionHandler: {
 
                     _ in
                     weakSelf.launchIndividualChatWith(notificationData: notificationData)
@@ -58,7 +57,7 @@ public class KMPushNotificationHandler: Localizable {
 
         guard let topVC = ALPushAssist().topViewController, let groupId = notificationData.groupId else { return }
 
-        guard !KMPushNotificationHelper().isApplozicVCAtTop() else {
+        guard !KMPushNotificationHelper().isKommunicateVCAtTop() else {
             KMPushNotificationHelper().handleNotificationTap(notificationData)
             return
         }
@@ -69,7 +68,7 @@ public class KMPushNotificationHandler: Localizable {
             }
             return
         }
-        let notificationData = KMPushNotificationHelper.NotificationData(userId: notificationData.userId, groupId: notificationData.groupId, conversationId: notificationData.conversationId)
+        let notificationData = KMPushNotificationHelper.NotificationData(groupId: notificationData.groupId)
         let vc = KMPushNotificationHelper().getConversationVCToLaunch(notification: notificationData, configuration: configuration)
         Kommunicate.configureListVC(vc)
         let nav = KMBaseNavigationViewController(rootViewController: vc)

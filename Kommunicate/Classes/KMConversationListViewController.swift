@@ -22,21 +22,8 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     public var viewModel = ALKConversationListViewModel()
 
     // To check if coming from push notification
-    var contactId: String?
     var channelKey: NSNumber?
-    var conversationId: NSNumber?
-
     var tableView: UITableView
-
-    lazy var rightBarButtonItem: UIBarButtonItem = {
-        let icon = UIImage(named: "fill_214", in: Bundle(for: ALKConversationListViewController.self), compatibleWith: nil)
-        let barButton = UIBarButtonItem(
-            image: icon,
-            style: .plain,
-            target: self, action: #selector(compose)
-        )
-        return barButton
-    }()
 
     fileprivate var tapToDismiss: UITapGestureRecognizer!
     fileprivate var alMqttConversationService: ALMQTTConversationService!
@@ -60,11 +47,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        removeObserver()
-    }
-
-     func addObserver() {
+    override public func addObserver() {
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "newMessageNotification"), object: nil, queue: nil, using: { [weak self] notification in
             guard let weakSelf = self else { return }
             let msgArray = notification.object as? [ALMessage]
@@ -122,8 +105,8 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
             } else if updateUI == Int(APP_STATE_INACTIVE.rawValue) {
                 // Coming from background
 
-                guard contactId != nil || groupId != nil || conversationId != nil else { return }
-                weakSelf.launchChat(contactId: contactId, groupId: groupId, conversationId: conversationId)
+                guard groupId != nil || conversationId != nil else { return }
+                weakSelf.launchChat(groupId: groupId)
             }
         })
 
@@ -155,7 +138,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     }
 
 
-     func removeObserver() {
+    public override func removeObserver() {
         if alMqttConversationService != nil {
             alMqttConversationService.unsubscribeToConversation()
         }
@@ -190,13 +173,9 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     }
 
     open override func viewDidAppear(_: Bool) {
-        print("contact id: ", contactId as Any)
-        if contactId != nil || channelKey != nil || conversationId != nil {
-            print("contact id present")
-            launchChat(contactId: contactId, groupId: channelKey, conversationId: conversationId)
-            contactId = nil
+        if  channelKey != nil {
+            launchChat(groupId: channelKey)
             channelKey = nil
-            conversationId = nil
         }
     }
 
@@ -230,15 +209,11 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         var rightBarButtonItems: [UIBarButtonItem] = []
         if configuration.isMessageSearchEnabled {
             let barButton = UIBarButtonItem(
-                image: UIImage(named: "search", in: Bundle(for: ALKConversationListViewController.self), compatibleWith: nil),
+                image: UIImage(named: "search", in: Bundle.kommunicate, compatibleWith: nil),
                 style: .plain,
                 target: self, action: #selector(searchTapped)
             )
             rightBarButtonItems.append(barButton)
-        }
-
-        if !configuration.hideStartChatButton {
-            rightBarButtonItems.append(rightBarButtonItem)
         }
 
         for item in navigationItems {
@@ -253,13 +228,10 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
             navigationItem.rightBarButtonItems = Array(rightButtons)
         }
     }
+
     func setupSearchController() {
-        searchController = UISearchController(searchResultsController: resultVC)
-        searchController.searchBar.autocapitalizationType = .none
-        searchController.hidesNavigationBarDuringPresentation = false
+        searchController = resultVC.setUpSearchViewController()
         searchController.searchBar.delegate = self
-        searchController.searchBar.alpha = 0
-        searchController.searchBar.showsCancelButton = true
         searchBar = CustomSearchBar(searchBar: searchController.searchBar)
         definesPresentationContext = true
     }
@@ -276,8 +248,8 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         )
     }
 
-    func launchChat(contactId: String?, groupId: NSNumber?, conversationId: NSNumber? = nil) {
-        let conversationViewModel = viewModel.conversationViewModelOf(type: conversationViewModelType, contactId: contactId, channelId: groupId, conversationId: conversationId, localizedStringFileName: localizedStringFileName)
+    func launchChat(groupId: NSNumber?) {
+        let conversationViewModel = viewModel.conversationViewModelOf(type: conversationViewModelType, contactId: nil, channelId: groupId, conversationId: nil, localizedStringFileName: localizedStringFileName)
 
         let viewController: KMConversationViewController!
         if conversationViewController == nil {
@@ -285,16 +257,10 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
             viewController.viewModel = conversationViewModel
         } else {
             viewController = conversationViewController
-            viewController.viewModel.contactId = conversationViewModel.contactId
             viewController.viewModel.channelKey = conversationViewModel.channelKey
-            viewController.viewModel.conversationProxy = conversationViewModel.conversationProxy
+            viewController.viewModel.contactId = nil
         }
         push(conversationVC: viewController, with: conversationViewModel)
-    }
-
-    @objc func compose() {
-        let newChatVC = ALKNewChatViewController(configuration: configuration, viewModel: ALKNewChatViewModel(localizedStringFileName: configuration.localizedStringFileName))
-        navigationController?.pushViewController(newChatVC, animated: true)
     }
 
     @objc func customButtonEvent(_ sender: AnyObject) {
@@ -323,7 +289,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         }
     }
 
-     func showAccountSuspensionView() {
+    override public func showAccountSuspensionView() {
         let accountVC = ALKAccountSuspensionController()
         present(accountVC, animated: false, completion: nil)
         accountVC.closePressed = { [weak self] in
@@ -444,11 +410,11 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
                 let kmNotificationHelper = KMPushNotificationHelper()
                 let  notificationData =  kmNotificationHelper.notificationData(message: message)
 
-                guard !KMPushNotificationHelper().isApplozicVCAtTop() else {
+                guard !KMPushNotificationHelper().isKommunicateVCAtTop() else {
                     KMPushNotificationHelper().handleNotificationTap(notificationData)
                     return
                 }
-                self.launchChat(contactId: message.contactId, groupId: message.groupId, conversationId: message.conversationId)
+                self.launchChat(groupId: message.groupId)
             }
         }
         if let visibleController = navigationController?.visibleViewController,
@@ -525,7 +491,7 @@ extension KMConversationListViewController: ALKConversationListTableViewDelegate
     }
 
     public func emptyChatCellTapped() {
-        compose()
+
     }
 
     public func scrolledToBottom() {
@@ -541,12 +507,12 @@ extension KMConversationListViewController: ALKConversationListTableViewDelegate
     }
 
     func showNavigationItems() {
-         searchBar.show(false)
-         searchBar.resignFirstResponder()
-         navigationItem.titleView = nil
-         setupBackButton()
-         setupNavigationRightButtons()
-     }
+        searchBar.show(false)
+        searchBar.resignFirstResponder()
+        navigationItem.titleView = nil
+        setupBackButton()
+        setupNavigationRightButtons()
+    }
 }
 
 extension KMConversationListViewController: UISearchBarDelegate {

@@ -67,7 +67,6 @@ open class Kommunicate: NSObject,Localizable{
         var navigationItemsForConversationView = [ALKNavigationItem]()
         navigationItemsForConversationView.append(faqItem)
         config.navigationItemsForConversationList = navigationItemsForConversationList
-        config.hideStartChatButton = true
         config.navigationItemsForConversationView = navigationItemsForConversationView
         config.disableSwipeInChatCell = true
         config.chatBar.optionsToShow = .some([.camera, .location, .gallery, .video])

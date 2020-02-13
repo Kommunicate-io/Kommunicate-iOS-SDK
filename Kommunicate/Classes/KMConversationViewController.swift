@@ -73,7 +73,7 @@ open class KMConversationViewController: ALKConversationViewController {
 
     required public init(configuration: ALKConfiguration) {
         super.init(configuration: configuration)
-         addNotificationCenterObserver()
+        addNotificationCenterObserver()
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -204,7 +204,7 @@ open class KMConversationViewController: ALKConversationViewController {
     private func setupNavigation() {
         // Remove current title from center of navigation bar
         navigationItem.titleView = UIView()
-
+        navigationItem.leftBarButtonItems = nil
         // Create custom navigation view.
         let (contact,channel) =  conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId)
         guard let alChannel = channel else {
@@ -213,6 +213,17 @@ open class KMConversationViewController: ALKConversationViewController {
         }
         customNavigationView.updateView(assignee:contact ,channel: alChannel)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
+    }
+
+    public override func refreshViewController() {
+        clearAndReloadTable()
+        configureChatBar()
+        // Check for group left
+        updateAssigneeDetails()
+        isChannelLeft()
+        checkUserBlock()
+        subscribeChannelToMqtt()
+        viewModel.prepareController()
     }
 
     private func setupConversationClosedView() {

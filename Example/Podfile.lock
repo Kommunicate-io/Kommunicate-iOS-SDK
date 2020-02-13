@@ -37,7 +37,7 @@ PODS:
   - SDWebImage/Core (5.1.1)
 
 DEPENDENCIES:
-  - ApplozicSwift (from `https://github.com/AppLozic/ApplozicSwift.git`, branch `makeSearchViewPublic`)
+  - ApplozicSwift (from `https://github.com/AppLozic/ApplozicSwift.git`, branch `navProfileFix`)
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - Nimble
@@ -59,14 +59,14 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   ApplozicSwift:
-    :branch: makeSearchViewPublic
+    :branch: navProfileFix
     :git: https://github.com/AppLozic/ApplozicSwift.git
   Kommunicate:
     :path: "../"
 
 CHECKOUT OPTIONS:
   ApplozicSwift:
-    :commit: edb5bbe6912bfc4043d0234ddd50dc39301c3ed6
+    :commit: a25ff3f31035042133a73ec89d2eead506249a05
     :git: https://github.com/AppLozic/ApplozicSwift.git
 
 SPEC CHECKSUMS:
@@ -82,6 +82,6 @@ SPEC CHECKSUMS:
   Quick: ce1276c7c27ba2da3cb2fd0cde053c3648b3b22d
   SDWebImage: 96d7f03415ccb28d299d765f93557ff8a617abd8
 
-PODFILE CHECKSUM: 91ded41b98dc072a61954dec02b6abcd52cfa8c4
+PODFILE CHECKSUM: e15f82227063c1a8e06adc0f7b25680ad5151850
 
 COCOAPODS: 1.8.4
