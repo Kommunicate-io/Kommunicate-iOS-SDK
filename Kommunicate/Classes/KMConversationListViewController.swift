@@ -10,6 +10,14 @@ import ApplozicSwift
 import Applozic
 
 public class KMConversationListViewController : ALKBaseViewController, Localizable {
+
+    enum LocalizedText {
+        static private let filename = Kommunicate.defaultConfiguration.localizedStringFileName
+        static let title = localizedString(forKey: "ConversationListVCTitle", fileName: filename)
+        static let NoConversationsLabelText = localizedString(forKey: "NoConversationsLabelText", fileName: filename)
+        static let leftBarBackButtonText = localizedString(forKey: "Back", fileName: filename)
+    }
+
     public var conversationViewController: KMConversationViewController?
     public var conversationViewModelType = ALKConversationViewModel.self
     public var conversationListTableViewController: ALKConversationListTableViewController
@@ -48,123 +56,30 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     }
 
     override public func addObserver() {
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "newMessageNotification"), object: nil, queue: nil, using: { [weak self] notification in
-            guard let weakSelf = self else { return }
-            let msgArray = notification.object as? [ALMessage]
-            print("new notification received: ", msgArray?.first?.message ?? "")
-            guard let list = notification.object as? [Any], !list.isEmpty else { return }
-            weakSelf.viewModel.addMessages(messages: list)
+        NotificationCenter.default.addObserver(self, selector: #selector(addMessages(notification:)),
+                                               name: Notification.Name.newMessageNotification, object: nil)
 
-        })
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide(notification:)), name:  UIResponder.keyboardDidHideNotification, object: nil)
 
-        NotificationCenter.default.addObserver(
-            forName: UIResponder.keyboardDidHideNotification,
-            object: nil,
-            queue: nil,
-            using: { [weak self] _ in
-                guard let weakSelf = self else { return }
-                if weakSelf.navigationController?.visibleViewController as? KMConversationListViewController != nil, weakSelf.configuration.isMessageSearchEnabled, weakSelf.searchBar.searchBar.text == "" {
-                    weakSelf.showNavigationItems()
-                }
-            }
-        )
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "pushNotification"), object: nil, queue: nil, using: { [weak self] notification in
-            print("push notification received: ", notification.object ?? "")
-            guard let weakSelf = self, let object = notification.object as? String else { return }
-            let components = object.components(separatedBy: ":")
-            var groupId: NSNumber?
-            var contactId: String?
-            var conversationId: NSNumber?
+        NotificationCenter.default.addObserver(self, selector: #selector(pushNotification(notification:)), name: Notification.Name.pushNotification, object: nil)
 
-            if components.count > 2 {
-                let groupComponent = Int(components[1])
-                groupId = NSNumber(integerLiteral: groupComponent!)
-            } else if components.count == 2 {
-                let conversationComponent = Int(components[1])
-                conversationId = NSNumber(integerLiteral: conversationComponent!)
-                contactId = components[0]
-            } else {
-                contactId = object
-            }
+        NotificationCenter.default.addObserver(self, selector: #selector(updateMessageList(notification:)), name: Notification.Name.reloadTable, object: nil)
 
-            let message = ALMessage()
-            message.contactIds = contactId
-            message.groupId = groupId
-            let info = notification.userInfo
-            let alertValue = info?["alertValue"]
-            guard let updateUI = info?["updateUI"] as? Int else { return }
-            if updateUI == Int(APP_STATE_ACTIVE.rawValue), weakSelf.isViewLoaded, weakSelf.view.window != nil {
-                guard let alert = alertValue as? String else { return }
-                let alertComponents = alert.components(separatedBy: ":")
-                if alertComponents.count > 1 {
-                    message.message = alertComponents[1]
-                } else {
-                    message.message = alertComponents.first
-                }
-                weakSelf.viewModel.addMessages(messages: [message])
-            } else if updateUI == Int(APP_STATE_INACTIVE.rawValue) {
-                // Coming from background
+        NotificationCenter.default.addObserver(self, selector: #selector(updateUserDetails(notification:)), name: Notification.Name.updateUserDetails, object: nil)
 
-                guard groupId != nil || conversationId != nil else { return }
-                weakSelf.launchChat(groupId: groupId)
-            }
-        })
-
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "reloadTable"), object: nil, queue: nil, using: { [weak self] notification in
-            NSLog("Reloadtable notification received")
-
-            guard let weakSelf = self, let list = notification.object as? [Any] else { return }
-            weakSelf.viewModel.updateMessageList(messages: list)
-        })
-
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "USER_DETAILS_UPDATE_CALL"), object: nil, queue: nil, using: { [weak self] notification in
-            NSLog("update user detail notification received")
-
-            guard let weakSelf = self, let userId = notification.object as? String else { return }
-            print("update user detail")
-            weakSelf.viewModel.updateUserDetail(userId: userId) { (success) in
-                if success {
-                    weakSelf.tableView.reloadData()
-                }
-            }
-        })
-
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "UPDATE_CHANNEL_NAME"), object: nil, queue: nil, using: { [weak self] _ in
-            NSLog("update group name notification received")
-            guard let weakSelf = self, weakSelf.view.window != nil else { return }
-            print("update group detail")
-            weakSelf.tableView.reloadData()
-        })
-    }
-
-
-    public override func removeObserver() {
-        if alMqttConversationService != nil {
-            alMqttConversationService.unsubscribeToConversation()
-        }
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "pushNotification"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "newMessageNotification"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadTable"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "USER_DETAILS_UPDATE_CALL"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "UPDATE_CHANNEL_NAME"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateChannelName(notification:)), name: Notification.Name.updateChannelName, object: nil)
     }
 
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        activityIndicator.center = CGPoint(x: view.bounds.size.width / 2, y: view.bounds.size.height / 2)
-        activityIndicator.color = UIColor.gray
-        view.addSubview(activityIndicator)
-        view.bringSubviewToFront(activityIndicator)
         edgesForExtendedLayout = []
         viewModel.prepareController(dbService: dbService)
     }
 
     open override func viewDidLoad() {
         super.viewDidLoad()
-        alMqttConversationService = ALMQTTConversationService.sharedInstance()
-        alMqttConversationService.mqttConversationDelegate = self
-        alMqttConversationService.subscribeToConversation()
+        setupMqtt()
+        subscribeToConversation()
         dbService.delegate = self
         viewModel.delegate = self
         setupSearchController()
@@ -182,7 +97,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     private func setupView() {
         setupNavigationRightButtons()
         setupBackButton()
-        title = localizedString(forKey: "ConversationListVCTitle",fileName: localizedStringFileName)
+        title = LocalizedText.title
 
         addChild(conversationListTableViewController)
         view.addSubview(conversationListTableViewController.view)
@@ -191,10 +106,110 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         conversationListTableViewController.view.frame = view.bounds
         conversationListTableViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         conversationListTableViewController.view.translatesAutoresizingMaskIntoConstraints = true
+
+        activityIndicator.center = CGPoint(x: view.bounds.size.width / 2, y: view.bounds.size.height / 2)
+        activityIndicator.color = UIColor.gray
+        view.addSubview(activityIndicator)
+        view.bringSubviewToFront(activityIndicator)
+    }
+
+    func setupMqtt() {
+        alMqttConversationService = ALMQTTConversationService.sharedInstance()
+        alMqttConversationService.mqttConversationDelegate = self
+    }
+
+    func subscribeToConversation() {
+        alMqttConversationService.subscribeToConversation()
+    }
+
+    @objc func addMessages(notification: NSNotification) {
+        guard let msgArray = notification.object as? [ALMessage] else { return }
+        print("new notification received: ", msgArray.first?.message ?? "")
+        guard let list = notification.object as? [Any], !list.isEmpty else { return }
+        self.viewModel.addMessages(messages: list)
+    }
+
+    @objc func keyboardDidHide(notification: NSNotification) {
+        guard let _ = notification.object  else { return }
+        if self.navigationController?.visibleViewController as? KMConversationListViewController != nil, self.configuration.isMessageSearchEnabled, self.searchBar.searchBar.text == "" {
+            self.showNavigationItems()
+        }
+    }
+
+    @objc func pushNotification(notification: NSNotification) {
+        print("push notification received: ", notification.object ?? "")
+        guard let object = notification.object as? String else { return }
+        let components = object.components(separatedBy: ":")
+        var groupId: NSNumber?
+        var contactId: String?
+        var conversationId: NSNumber?
+
+        if components.count > 2 {
+            let groupComponent = Int(components[1])
+            groupId = NSNumber(integerLiteral: groupComponent!)
+        } else if components.count == 2 {
+            let conversationComponent = Int(components[1])
+            conversationId = NSNumber(integerLiteral: conversationComponent!)
+            contactId = components[0]
+        } else {
+            contactId = object
+        }
+
+        let message = ALMessage()
+        message.contactIds = contactId
+        message.groupId = groupId
+        let info = notification.userInfo
+        let alertValue = info?["alertValue"]
+        guard let updateUI = info?["updateUI"] as? Int else { return }
+        if updateUI == Int(APP_STATE_ACTIVE.rawValue), self.isViewLoaded, self.view.window != nil {
+            guard let alert = alertValue as? String else { return }
+            let alertComponents = alert.components(separatedBy: ":")
+            if alertComponents.count > 1 {
+                message.message = alertComponents[1]
+            } else {
+                message.message = alertComponents.first
+            }
+            self.viewModel.addMessages(messages: [message])
+        } else if updateUI == Int(APP_STATE_INACTIVE.rawValue) {
+            // Coming from background
+
+            guard groupId != nil || conversationId != nil else { return }
+            self.launchChat(groupId: groupId)
+        }
+    }
+
+    @objc func updateMessageList(notification: NSNotification) {
+        NSLog("Reloadtable notification received")
+        guard let list = notification.object as? [Any] else { return }
+        self.viewModel.updateMessageList(messages: list)
+    }
+
+    @objc func updateUserDetails(notification: NSNotification) {
+        NSLog("update user detail notification received")
+        guard let userId = notification.object as? String else { return }
+        print("update user detail")
+        self.viewModel.updateUserDetail(userId: userId) { (success) in
+            if success {
+                self.tableView.reloadData()
+            }
+        }
+    }
+
+    @objc func updateChannelName(notification: NSNotification) {
+        NSLog("update group name notification received")
+        guard self.view.window != nil else { return }
+        print("update group detail")
+        self.tableView.reloadData()
+    }
+
+    public override func removeObserver() {
+        if alMqttConversationService != nil {
+            alMqttConversationService.unsubscribeToConversation()
+        }
     }
 
     func setupBackButton() {
-        let back = localizedString(forKey: "Back", fileName: localizedStringFileName)
+        let back = LocalizedText.leftBarBackButtonText
 
         let leftBarButtonItem = UIBarButtonItem(title: back, style: .plain, target: self, action: #selector(customBackAction))
 
@@ -319,9 +334,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     func conversationVC() -> KMConversationViewController? {
         return navigationController?.topViewController as? KMConversationViewController
     }
-    
 }
-
 
 extension KMConversationListViewController: ALMessagesDelegate {
     public func getMessagesArray(_ messagesArray: NSMutableArray!) {
@@ -361,7 +374,7 @@ extension KMConversationListViewController: ALKConversationListViewModelDelegate
 
 extension KMConversationListViewController: ALMQTTConversationDelegate {
     open func mqttDidConnected() {
-        if let viewController = navigationController?.visibleViewController as? ALKConversationViewController {
+        if let viewController = navigationController?.visibleViewController as? KMConversationViewController {
             viewController.subscribeChannelToMqtt()
         }
         print("MQTT did connected")
