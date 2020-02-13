@@ -273,10 +273,6 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
             rightBarButtonItems.append(barButton)
         }
 
-        if !configuration.hideStartChatButton {
-            rightBarButtonItems.append(rightBarButtonItem)
-        }
-
         for item in navigationItems {
             let uiBarButtonItem = item.barButton(target: self, action: #selector(customButtonEvent(_:)))
 
