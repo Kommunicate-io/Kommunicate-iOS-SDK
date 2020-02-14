@@ -218,8 +218,8 @@ open class KMConversationViewController: ALKConversationViewController {
     public override func refreshViewController() {
         clearAndReloadTable()
         configureChatBar()
-        // Check for group left
         updateAssigneeDetails()
+        // Check for group left
         isChannelLeft()
         checkUserBlock()
         subscribeChannelToMqtt()
