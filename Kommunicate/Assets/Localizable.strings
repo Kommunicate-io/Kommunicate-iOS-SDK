@@ -49,6 +49,8 @@ NoName = "No Name";
 
 /* Closed Conversation */
 
+/* Conversation resolved label in restart conversation view */
+ConversationClosedDescription = "This conversation has been marked resolved";
 /* Restart conversation label */
 ConversationClosedOtherQueries = "Have other queries?";
 /* Restart conversation Button title */

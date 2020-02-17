@@ -23,9 +23,14 @@ open class KMConversationViewController: ALKConversationViewController {
         configuration: kmConversationViewConfiguration)
 
     let awayMessageView = AwayMessageView(frame: CGRect.zero)
-    let conversationClosedView = ConversationClosedView(frame: .zero)
+    let conversationClosedView: ConversationClosedView = {
+        let closedView = ConversationClosedView(frame: .zero)
+        closedView.isHidden = true
+        return closedView
+    }()
+
     lazy var topConstraintClosedView =
-        conversationClosedView.topAnchor.constraint(equalTo: chatBar.topAnchor)
+        conversationClosedView.topAnchor.constraint(lessThanOrEqualTo: chatBar.topAnchor)
 
     var conversationService = KMConversationService()
     var conversationDetail = ConversationDetail()
@@ -35,10 +40,33 @@ open class KMConversationViewController: ALKConversationViewController {
 
     private let awayMessageheight = 80.0
 
+    private var isClosedConversation: Bool {
+        guard let channelId = viewModel.channelKey,
+            !ALChannelService.isChannelDeleted(channelId),
+            conversationDetail.isClosedConversation(channelId: channelId.intValue) else {
+                return false
+        }
+        return true
+    }
+
+    private var isAwayMessageViewHidden = true {
+        didSet {
+            guard oldValue != isAwayMessageViewHidden else { return }
+            showAwayMessage(!isAwayMessageViewHidden)
+        }
+    }
+
+    private var isClosedConversationViewHidden = true {
+        didSet {
+            guard oldValue != isClosedConversationViewHidden else { return }
+            showClosedConversationView(!isClosedConversationViewHidden)
+        }
+    }
+
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavigation()
-
+        hideAwayAndClosedView()
         // Fetch Assignee details every time view is launched.
         updateAssigneeDetails()
         messageStatus()
@@ -63,7 +91,6 @@ open class KMConversationViewController: ALKConversationViewController {
 
         checkPlanAndShowSuspensionScreen()
         addAwayMessageConstraints()
-        showAwayMessage(false)
         guard let channelId = viewModel.channelKey else { return }
         sendConversationOpenNotification(channelId: String(describing: channelId))
         setupConversationClosedView()
@@ -81,7 +108,7 @@ open class KMConversationViewController: ALKConversationViewController {
         // Make sure the message is not from same user.
         guard !viewModel.messageModels.isEmpty else { return }
         if let lastMessage = viewModel.messageModels.last, !lastMessage.isMyMessage {
-            showAwayMessage(false)
+            isAwayMessageViewHidden = true
         }
     }
 
@@ -118,18 +145,18 @@ open class KMConversationViewController: ALKConversationViewController {
     }
 
     func messageStatus() {
-        guard let channelKey = viewModel.channelKey else { return }
+        guard let channelKey = viewModel.channelKey, !isClosedConversation else { return }
         conversationService.awayMessageFor(groupId: channelKey, completion: {
             result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let message):
                     guard !message.isEmpty else { return }
-                    self.showAwayMessage(true)
+                    self.isAwayMessageViewHidden = false
                     self.awayMessageView.set(message: message)
                 case .failure(let error):
                     print("Message status error: \(error)")
-                    self.showAwayMessage(false)
+                    self.isAwayMessageViewHidden = true
                     return
                 }
             }
@@ -188,7 +215,6 @@ open class KMConversationViewController: ALKConversationViewController {
 
     private func setupConversationClosedView() {
         view.addViewsForAutolayout(views: [conversationClosedView])
-
         var bottomAnchor = view.bottomAnchor
         if #available(iOS 11, *) {
             bottomAnchor = view.safeAreaLayoutGuide.bottomAnchor
@@ -221,6 +247,11 @@ open class KMConversationViewController: ALKConversationViewController {
         chatBar.headerViewHeight = flag ? awayMessageheight:0
         awayMessageView.showMessage(flag)
     }
+
+    private func hideAwayAndClosedView() {
+        isAwayMessageViewHidden = true
+        isClosedConversationViewHidden = true
+    }
 }
 
 extension KMConversationViewController: NavigationBarCallbacks {
@@ -237,21 +268,21 @@ extension KMConversationViewController: NavigationBarCallbacks {
 extension KMConversationViewController {
 
     func checkFeedbackAndShowRatingView() {
+        guard isClosedConversation else {
+            isClosedConversationViewHidden = true
+            hideRatingView()
+            return
+        }
+        isClosedConversationViewHidden = false
         guard let channelId = viewModel.channelKey,
-            !ALChannelService.isChannelDeleted(channelId),
-            conversationDetail.isClosedConversation(channelId: channelId.intValue) else {
-                showChatDisableView(false)
-                hideRatingView()
+            !kmConversationViewConfiguration.isCSATOptionDisabled else {
                 return
         }
-        // disable chat
-        showChatDisableView(true)
-        guard !kmConversationViewConfiguration.isCSATOptionDisabled else { return }
-        conversationDetail.isFeedbackShownFor(channelId: channelId.intValue, completion: { shown in
+        conversationDetail.isFeedbackShownFor(channelId: channelId.intValue) { shown in
             DispatchQueue.main.async {
                 if !shown { self.showRatingView() }
             }
-        })
+        }
     }
 
     private func showRatingView() {
@@ -294,7 +325,20 @@ extension KMConversationViewController {
         }
     }
 
-    private func showChatDisableView(_ flag: Bool) {
+    private func showClosedConversationView(_ flag: Bool) {
+        conversationClosedView.isHidden = !flag
+        var heightDiff: Double = 0
+        if flag {
+            var bottomInset: CGFloat = 0
+            if #available(iOS 11.0, *) {
+                bottomInset = view.safeAreaInsets.bottom
+            }
+            heightDiff = Double(conversationClosedView.intrinsicContentSize.height
+                    - (chatBar.frame.height - bottomInset))
+        } else {
+            conversationClosedView.isHidden = true
+        }
+        chatBar.headerViewHeight = heightDiff
         topConstraintClosedView.isActive = flag
     }
 }

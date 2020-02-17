@@ -39,13 +39,13 @@ class AwayMessageView: UIView {
     private let dottedLayer: CAShapeLayer = {
         let shapeLayer = CAShapeLayer()
         shapeLayer.strokeColor =  UIColor(netHex: 0xbebbbb).cgColor
-        shapeLayer.lineWidth = 1
+        shapeLayer.lineWidth = 0
         shapeLayer.lineDashPattern = [5, 5]
         shapeLayer.path = CGMutablePath()
         return shapeLayer
     }()
     private let dottedLineViewHeight: CGFloat = 1.0
-    lazy private var dottedLineHeightAnchor = dottedLineView.heightAnchor.constraint(equalToConstant: dottedLineViewHeight)
+    lazy private var dottedLineHeightAnchor = dottedLineView.heightAnchor.constraint(equalToConstant: 0)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
