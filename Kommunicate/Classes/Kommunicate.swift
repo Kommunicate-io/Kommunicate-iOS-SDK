@@ -31,9 +31,6 @@ let faqIdentifier =  11223346
 
 enum KMLocalizationKey {
     static let noName = "NoName"
-    static let unableToCreateConversationError = "UnableToCreateConversationError"
-    static let okButton = "OkButton"
-    static let waitMessage = "WaitMessage"
 }
 
 @objc
@@ -96,33 +93,11 @@ open class Kommunicate: NSObject,Localizable{
             updateToken()
         }
     }
-
-    private var converastionListNavBarItemToken: NotificationToken? = nil
-
+    
     static var applozicClientType: ApplozicClient.Type = ApplozicClient.self
 
     public override init() {
         super.init()
-        addObserver()
-    }
-    
-    func addObserver() {
-        converastionListNavBarItemToken = NotificationCenter.default.observe(name: NSNotification.Name(ALKNavigationItem.NSNotificationForConversationListNavigationTap), object: nil, queue: nil) { notification in
-
-            let pushAssist = ALPushAssist()
-            guard let notificationInfo = notification.userInfo, let topVc = pushAssist.topViewController, topVc is KMConversationListViewController else {
-                return
-            }
-            let identifier = notificationInfo["identifier"] as? Int
-            if identifier == conversationCreateIdentifier {
-                Kommunicate.createConversationAndLaunch(notification: notification)
-            } else if identifier == faqIdentifier {
-                guard let vc = notification.object as? KMConversationListViewController else {
-                    return
-                }
-                Kommunicate.openFaq(from: vc, with: Kommunicate.defaultConfiguration)
-            }
-        }
     }
 
     //MARK: - Public methods
@@ -430,79 +405,6 @@ open class Kommunicate: NSObject,Localizable{
                 return
             }
         }
-    }
-
-    private class func showAlert(viewController:KMConversationListViewController){
-
-        let alertMessage = localizedString(forKey: KMLocalizationKey.unableToCreateConversationError, fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
-
-        let okText = localizedString(forKey: KMLocalizationKey.okButton, fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
-
-        let alert = UIAlertController(
-            title: "",
-            message: alertMessage,
-            preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: okText, style: UIAlertAction.Style.default, handler: nil))
-        viewController.present(alert, animated: true, completion: nil)
-    }
-
-    private class func createConversationAndLaunch(notification:Notification){
-
-        guard let vc = notification.object as? KMConversationListViewController else {
-            return
-        }
-        vc.view.isUserInteractionEnabled = false
-        vc.navigationController?.view.isUserInteractionEnabled = false
-        let alertView =  displayAlert(viewController : vc)
-
-        Kommunicate.createConversation() { (result) in
-            switch result {
-            case .success(let conversationId):
-                DispatchQueue.main.async {
-                    vc.view.isUserInteractionEnabled = true
-                    vc.navigationController?.view.isUserInteractionEnabled = true
-                    alertView.dismiss(animated: false, completion: nil)
-                    showConversationWith(groupId: conversationId, from: vc, completionHandler: { (success) in
-                        print("Conversation was shown")
-                    })
-                }
-            case .failure( _):
-                DispatchQueue.main.async {
-                    vc.view.isUserInteractionEnabled = true
-                    vc.navigationController?.view.isUserInteractionEnabled = true
-                    alertView.dismiss(animated: false, completion: {
-                        showAlert(viewController: vc)
-                    })
-                }
-            }
-        }
-
-    }
-
-    private class func  displayAlert(viewController:KMConversationListViewController) -> UIAlertController {
-
-        let alertTitle = localizedString(forKey: KMLocalizationKey.waitMessage, fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
-
-        let loadingAlertController = UIAlertController(title: alertTitle, message: nil, preferredStyle: .alert)
-
-        let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .gray)
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-
-        loadingAlertController.view.addSubview(activityIndicator)
-
-        let xConstraint: NSLayoutConstraint = NSLayoutConstraint(item: activityIndicator, attribute: .centerX, relatedBy: .equal, toItem: loadingAlertController.view, attribute: .centerX, multiplier: 1, constant: 0)
-        let yConstraint: NSLayoutConstraint = NSLayoutConstraint(item: activityIndicator, attribute: .centerY, relatedBy: .equal, toItem: loadingAlertController.view, attribute: .centerY, multiplier: 1.4, constant: 0)
-
-        NSLayoutConstraint.activate([ xConstraint, yConstraint])
-        activityIndicator.isUserInteractionEnabled = false
-        activityIndicator.startAnimating()
-
-        let height: NSLayoutConstraint = NSLayoutConstraint(item: loadingAlertController.view, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 80)
-        loadingAlertController.view.addConstraint(height);
-
-        viewController.present(loadingAlertController, animated: true, completion: nil)
-
-        return loadingAlertController
     }
 
     func defaultChatViewSettings() {

@@ -16,7 +16,13 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         static let title = localizedString(forKey: "ConversationListVCTitle", fileName: filename)
         static let NoConversationsLabelText = localizedString(forKey: "NoConversationsLabelText", fileName: filename)
         static let leftBarBackButtonText = localizedString(forKey: "Back", fileName: filename)
+        static let unableToCreateConversationError = localizedString(forKey: "UnableToCreateConversationError", fileName: filename)
+        static let okButton = localizedString(forKey: "OkButton", fileName: filename)
+        static let waitMessage = localizedString(forKey: "WaitMessage", fileName: filename)
     }
+
+    let conversationCreateIdentifier = 112233445
+    let faqIdentifier =  11223346
 
     public var conversationViewController: KMConversationViewController?
     public var conversationViewModelType = ALKConversationViewModel.self
@@ -33,6 +39,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     var channelKey: NSNumber?
     var tableView: UITableView
 
+    private var converastionListNavBarItemToken: NotificationToken? = nil
     fileprivate var tapToDismiss: UITapGestureRecognizer!
     fileprivate var alMqttConversationService: ALMQTTConversationService!
     fileprivate let activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
@@ -68,6 +75,23 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         NotificationCenter.default.addObserver(self, selector: #selector(updateUserDetails(notification:)), name: Notification.Name.updateUserDetails, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(updateChannelName(notification:)), name: Notification.Name.updateChannelName, object: nil)
+
+        converastionListNavBarItemToken = NotificationCenter.default.observe(name: NSNotification.Name(ALKNavigationItem.NSNotificationForConversationListNavigationTap), object: nil, queue: nil) { notification in
+
+            let pushAssist = ALPushAssist()
+            guard let notificationInfo = notification.userInfo, let topVc = pushAssist.topViewController, topVc is KMConversationListViewController else {
+                return
+            }
+            let identifier = notificationInfo["identifier"] as? Int
+            if identifier == self.conversationCreateIdentifier {
+                self.createConversationAndLaunch(notification: notification)
+            } else if identifier == self.faqIdentifier {
+                guard let vc = notification.object as? KMConversationListViewController else {
+                    return
+                }
+                Kommunicate.openFaq(from: vc, with: Kommunicate.defaultConfiguration)
+            }
+        }
     }
 
     open override func viewWillAppear(_ animated: Bool) {
@@ -315,6 +339,10 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         }
     }
 
+    func conversationVC() -> KMConversationViewController? {
+        return navigationController?.topViewController as? KMConversationViewController
+    }
+
     fileprivate func push(conversationVC: KMConversationViewController, with viewModel: ALKConversationViewModel) {
         if let topVC = navigationController?.topViewController as? KMConversationViewController {
             // Update the details and refresh
@@ -331,8 +359,72 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         }
     }
 
-    func conversationVC() -> KMConversationViewController? {
-        return navigationController?.topViewController as? KMConversationViewController
+    private func showAlert(viewController:KMConversationListViewController) {
+        let alertMessage = LocalizedText.unableToCreateConversationError
+        let okText = LocalizedText.okButton
+        let alert = UIAlertController(
+            title: "",
+            message: alertMessage,
+            preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: okText, style: UIAlertAction.Style.default, handler: nil))
+        viewController.present(alert, animated: true, completion: nil)
+    }
+
+    private func createConversationAndLaunch(notification:Notification){
+
+        guard let vc = notification.object as? KMConversationListViewController else {
+            return
+        }
+        vc.view.isUserInteractionEnabled = false
+        vc.navigationController?.view.isUserInteractionEnabled = false
+        let alertView =  displayAlert(viewController : vc)
+
+        Kommunicate.createConversation() { (result) in
+            switch result {
+            case .success(let conversationId):
+                DispatchQueue.main.async {
+                    vc.view.isUserInteractionEnabled = true
+                    vc.navigationController?.view.isUserInteractionEnabled = true
+                    alertView.dismiss(animated: false, completion: nil)
+                    Kommunicate.showConversationWith(groupId: conversationId, from: vc, completionHandler: { (success) in
+                        print("Conversation was shown")
+                    })
+                }
+            case .failure( _):
+                DispatchQueue.main.async {
+                    vc.view.isUserInteractionEnabled = true
+                    vc.navigationController?.view.isUserInteractionEnabled = true
+                    alertView.dismiss(animated: false, completion: {
+                        self.showAlert(viewController: vc)
+                    })
+                }
+            }
+        }
+    }
+
+    private func displayAlert(viewController:KMConversationListViewController) -> UIAlertController {
+
+        let alertTitle = LocalizedText.waitMessage
+        let loadingAlertController = UIAlertController(title: alertTitle, message: nil, preferredStyle: .alert)
+
+        let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .gray)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+
+        loadingAlertController.view.addSubview(activityIndicator)
+
+        let xConstraint: NSLayoutConstraint = NSLayoutConstraint(item: activityIndicator, attribute: .centerX, relatedBy: .equal, toItem: loadingAlertController.view, attribute: .centerX, multiplier: 1, constant: 0)
+        let yConstraint: NSLayoutConstraint = NSLayoutConstraint(item: activityIndicator, attribute: .centerY, relatedBy: .equal, toItem: loadingAlertController.view, attribute: .centerY, multiplier: 1.4, constant: 0)
+
+        NSLayoutConstraint.activate([ xConstraint, yConstraint])
+        activityIndicator.isUserInteractionEnabled = false
+        activityIndicator.startAnimating()
+
+        let height: NSLayoutConstraint = NSLayoutConstraint(item: loadingAlertController.view, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 80)
+        loadingAlertController.view.addConstraint(height);
+
+        viewController.present(loadingAlertController, animated: true, completion: nil)
+
+        return loadingAlertController
     }
 }
 
