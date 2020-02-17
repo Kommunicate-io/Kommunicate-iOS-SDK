@@ -31,6 +31,9 @@ let faqIdentifier =  11223346
 
 enum KMLocalizationKey {
     static let noName = "NoName"
+    static let unableToCreateConversationError = "UnableToCreateConversationError"
+    static let okButton = "OkButton"
+    static let waitMessage = "WaitMessage"
 }
 
 @objc
@@ -431,9 +434,9 @@ open class Kommunicate: NSObject,Localizable{
 
     private class func showAlert(viewController:KMConversationListViewController){
 
-        let alertMessage =  NSLocalizedString("UnableToCreateConversationError", value: "Unable to create conversation", comment: "")
+        let alertMessage = localizedString(forKey: KMLocalizationKey.unableToCreateConversationError, fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
 
-        let okText =  NSLocalizedString("OkButton", value: "Okay", comment: "")
+        let okText = localizedString(forKey: KMLocalizationKey.okButton, fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
 
         let alert = UIAlertController(
             title: "",
@@ -478,7 +481,7 @@ open class Kommunicate: NSObject,Localizable{
 
     private class func  displayAlert(viewController:KMConversationListViewController) -> UIAlertController {
 
-        let alertTitle =  NSLocalizedString("WaitMessage", value: "Please wait...", comment: "")
+        let alertTitle = localizedString(forKey: KMLocalizationKey.waitMessage, fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
 
         let loadingAlertController = UIAlertController(title: alertTitle, message: nil, preferredStyle: .alert)
 
