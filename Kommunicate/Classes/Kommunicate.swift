@@ -30,9 +30,6 @@ let faqIdentifier =  11223346
 
 enum KMLocalizationKey {
     static let noName = "NoName"
-    static let unableToCreateConversationError = "UnableToCreateConversationError"
-    static let okButton = "OkButton"
-    static let waitMessage = "WaitMessage"
 }
 
 @objc
