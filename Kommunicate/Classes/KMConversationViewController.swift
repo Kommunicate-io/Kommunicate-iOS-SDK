@@ -23,6 +23,10 @@ open class KMConversationViewController: ALKConversationViewController {
         configuration: kmConversationViewConfiguration)
 
     let awayMessageView = AwayMessageView(frame: CGRect.zero)
+    let conversationClosedView = ConversationClosedView(frame: .zero)
+    lazy var topConstraintClosedView =
+        conversationClosedView.topAnchor.constraint(equalTo: chatBar.topAnchor)
+
     var conversationService = KMConversationService()
     var conversationDetail = ConversationDetail()
 
@@ -62,6 +66,7 @@ open class KMConversationViewController: ALKConversationViewController {
         showAwayMessage(false)
         guard let channelId = viewModel.channelKey else { return }
         sendConversationOpenNotification(channelId: String(describing: channelId))
+        setupConversationClosedView()
     }
 
     open override func viewDidLayoutSubviews() {
@@ -181,6 +186,15 @@ open class KMConversationViewController: ALKConversationViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
     }
 
+    private func setupConversationClosedView() {
+        view.addViewsForAutolayout(views: [conversationClosedView])
+        NSLayoutConstraint.activate([
+            conversationClosedView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            conversationClosedView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            conversationClosedView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+    }
+
     private func checkPlanAndShowSuspensionScreen() {
         let accountVC = ALKAccountSuspensionController()
         guard PricingPlan.shared.showSuspensionScreen() else { return }
@@ -218,13 +232,16 @@ extension KMConversationViewController: NavigationBarCallbacks {
 extension KMConversationViewController {
 
     func checkFeedbackAndShowRatingView() {
-        guard !kmConversationViewConfiguration.isCSATOptionDisabled,
-            let channelId = viewModel.channelKey,
+        guard let channelId = viewModel.channelKey,
             !ALChannelService.isChannelDeleted(channelId),
             conversationDetail.isClosedConversation(channelId: channelId.intValue) else {
+                showChatDisableView(false)
                 hideRatingView()
                 return
         }
+        // disable chat
+        showChatDisableView(true)
+        guard !kmConversationViewConfiguration.isCSATOptionDisabled else { return }
         conversationDetail.isFeedbackShownFor(channelId: channelId.intValue, completion: { shown in
             DispatchQueue.main.async {
                 if !shown { self.showRatingView() }
@@ -270,5 +287,9 @@ extension KMConversationViewController {
                 print("feedback submit response failure: \(error)")
             }
         }
+    }
+
+    private func showChatDisableView(_ flag: Bool) {
+        topConstraintClosedView.isActive = flag
     }
 }
