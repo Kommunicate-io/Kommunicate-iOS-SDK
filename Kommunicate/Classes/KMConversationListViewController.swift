@@ -203,13 +203,13 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     }
 
     @objc func updateMessageList(notification: NSNotification) {
-        NSLog("Reloadtable notification received")
+        print("Reloadtable notification received")
         guard let list = notification.object as? [Any] else { return }
         self.viewModel.updateMessageList(messages: list)
     }
 
     @objc func updateUserDetails(notification: NSNotification) {
-        NSLog("update user detail notification received")
+        print("update user detail notification received")
         guard let userId = notification.object as? String else { return }
         print("update user detail")
         self.viewModel.updateUserDetail(userId: userId) { (success) in
@@ -220,7 +220,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     }
 
     @objc func updateChannelName(notification: NSNotification) {
-        NSLog("update group name notification received")
+        print("update group name notification received")
         guard self.view.window != nil else { return }
         print("update group detail")
         self.tableView.reloadData()
