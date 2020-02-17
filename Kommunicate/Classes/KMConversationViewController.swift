@@ -188,10 +188,15 @@ open class KMConversationViewController: ALKConversationViewController {
 
     private func setupConversationClosedView() {
         view.addViewsForAutolayout(views: [conversationClosedView])
+
+        var bottomAnchor = view.bottomAnchor
+        if #available(iOS 11, *) {
+            bottomAnchor = view.safeAreaLayoutGuide.bottomAnchor
+        }
         NSLayoutConstraint.activate([
             conversationClosedView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             conversationClosedView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            conversationClosedView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            conversationClosedView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
 
