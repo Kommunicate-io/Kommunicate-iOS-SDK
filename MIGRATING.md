@@ -1,5 +1,19 @@
 ## Migration Guides
 
+### Migrating from versions < 3.2.0
+
+#### Logout user
+
+  ```swift
+Kommunicate.logoutUser { (result) in
+           switch result {
+           case .success(_):
+               print("Logout success")
+           case .failure( _):
+               print("Logout failure, now registering remote notifications(if not registered)")
+           }
+       }
+  ```
 ### Migrating from versions < 3.0.0
 
 #### Create new conversation and launch
