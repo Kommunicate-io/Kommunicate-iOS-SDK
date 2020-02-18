@@ -39,7 +39,7 @@ class ViewController: UIViewController {
             switch result {
             case .success(_):
                 print("Logout success")
-                self.dismiss(animated: false, completion: nil)
+                self.dismiss(animated: true, completion: nil)
             case .failure( _):
                 print("Logout failure, now registering remote notifications(if not registered)")
                 if !UIApplication.shared.isRegisteredForRemoteNotifications {
@@ -50,11 +50,11 @@ class ViewController: UIViewController {
                             }
                         }
                         DispatchQueue.main.async {
-                            self.dismiss(animated: false, completion: nil)
+                            self.dismiss(animated: true, completion: nil)
                         }
                     }
                 } else {
-                    self.dismiss(animated: false, completion: nil)
+                    self.dismiss(animated: true, completion: nil)
                 }
             }
         }
