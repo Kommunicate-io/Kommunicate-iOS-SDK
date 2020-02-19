@@ -4,15 +4,17 @@
 
 #### Logout user
 
+If you were using `Kommunicate.logoutUser()` to logout the user, then you can replace that with below method 
+
   ```swift
 Kommunicate.logoutUser { (result) in
-           switch result {
-           case .success(_):
-               print("Logout success")
-           case .failure( _):
-               print("Logout failure, now registering remote notifications(if not registered)")
-           }
-       }
+      switch result {
+      case .success(_):
+          print("Logout success")
+      case .failure( _):
+          print("Logout failure, now registering remote notifications(if not registered)")
+      }
+  }
   ```
 ### Migrating from versions < 3.0.0
 
