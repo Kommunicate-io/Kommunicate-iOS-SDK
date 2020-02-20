@@ -8,13 +8,22 @@ If you were using `Kommunicate.logoutUser()` to logout the user, then you can re
 
   ```swift
 Kommunicate.logoutUser { (result) in
-      switch result {
-      case .success(_):
-          print("Logout success")
-      case .failure( _):
-          print("Logout failure, now registering remote notifications(if not registered)")
-      }
-  }
+       switch result {
+       case .success(_):
+           print("Logout success")
+       case .failure( _):
+           print("Logout failure, now registering remote notifications(if not registered)")
+           if !UIApplication.shared.isRegisteredForRemoteNotifications {
+               UNUserNotificationCenter.current().requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
+                   if granted {
+                       DispatchQueue.main.async {
+                           UIApplication.shared.registerForRemoteNotifications()
+                       }
+                   }
+               }
+           }
+       }
+   }
   ```
 ### Migrating from versions < 3.0.0
 
