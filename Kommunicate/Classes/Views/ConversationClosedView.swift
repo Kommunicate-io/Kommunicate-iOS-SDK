@@ -78,6 +78,11 @@ class ConversationClosedView: UIView {
     }
 
     private func setupView() {
+        restartConversationButton.addTarget(
+            self,
+            action: #selector(restartConversationTapped),
+            for: .touchUpInside
+        )
         self.backgroundColor = .background(.mediumGrey)
         setupLayout()
     }
@@ -118,6 +123,10 @@ class ConversationClosedView: UIView {
                 constant: Size.RestartConversationView.bottom
             )
         ])
+    }
+
+    @objc func restartConversationTapped() {
+        restartTapped?()
     }
 }
 

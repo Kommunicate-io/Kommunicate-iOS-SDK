@@ -214,6 +214,9 @@ open class KMConversationViewController: ALKConversationViewController {
     }
 
     private func setupConversationClosedView() {
+        conversationClosedView.restartTapped = {[weak self] in
+            self?.isClosedConversationViewHidden = true
+        }
         view.addViewsForAutolayout(views: [conversationClosedView])
         var bottomAnchor = view.bottomAnchor
         if #available(iOS 11, *) {
