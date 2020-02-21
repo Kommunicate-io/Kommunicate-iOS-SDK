@@ -26,7 +26,6 @@ public typealias KMRegisterUserClientService = ALRegisterUserClientService
 public typealias KMConfiguration = ALKConfiguration
 public typealias KMMessageStyle = ALKMessageStyle
 public typealias KMBaseNavigationViewController = ALKBaseNavigationViewController
-let conversationCreateIdentifier = 112233445
 let faqIdentifier =  11223346
 
 enum KMLocalizationKey {
@@ -60,9 +59,6 @@ open class Kommunicate: NSObject,Localizable{
         config.isProfileTapActionEnabled = false
         var navigationItemsForConversationList = [ALKNavigationItem]()
         let faqItem = ALKNavigationItem(identifier: faqIdentifier, text:  NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
-        let startNewImage =  UIImage(named: "fill_214", in:  Bundle(for: ALKConversationListViewController.self), compatibleWith: nil)!
-        let createConversationItem = ALKNavigationItem(identifier: conversationCreateIdentifier, icon: startNewImage)
-        navigationItemsForConversationList.append(createConversationItem)
         navigationItemsForConversationList.append(faqItem)
         var navigationItemsForConversationView = [ALKNavigationItem]()
         navigationItemsForConversationView.append(faqItem)
