@@ -127,12 +127,23 @@ open class Kommunicate: NSObject,Localizable{
 
 
     /**
-     Setup a application id which will be used for all the requests.
+     Setup an App ID. It will be used for all Kommunicate related requests.
+
+     - NOTE: If the App ID is modified then make sure to log out and log in.
 
      - Parameters:
-     - applicationId: Application id that needs to be set up.
+     - applicationId: App ID that needs to be set up.
      */
     @objc open class func setup(applicationId: String) {
+        guard !applicationId.isEmpty else {
+            assertionFailure("Kommunicate App ID: Empty value passed")
+            return
+        }
+        guard KMUserDefaultHandler.isAppIdEmpty ||
+            KMUserDefaultHandler.matchesCurrentAppId(applicationId) else {
+                assertionFailure("Kommunicate App ID changed: log out and log in again")
+                return
+        }
         self.applicationId = applicationId
         ALUserDefaultsHandler.setApplicationKey(applicationId)
         Kommunicate.shared.defaultChatViewSettings()
@@ -392,15 +403,6 @@ open class Kommunicate: NSObject,Localizable{
         }
     }
 
-    private class func isNilOrEmpty(_ string: NSString?) -> Bool {
-
-        switch string {
-        case .some(let nonNilString): return nonNilString.length == 0
-        default:return true
-
-        }
-    }
-
     private class func createAConversationAndLaunch(
         from viewController: UIViewController,
         completion:@escaping (_ error: KommunicateError?) -> ()) {
@@ -610,5 +612,4 @@ class ChatMessage: ALKChatViewModelProtocol,Localizable {
         self.groupName = alChannel.name ?? localizedString(forKey: KMLocalizationKey.noName, fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
         self.avatarGroupImageUrl = alChannel.channelImageURL
     }
-
 }
