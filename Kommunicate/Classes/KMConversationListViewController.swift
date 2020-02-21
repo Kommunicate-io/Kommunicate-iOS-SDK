@@ -265,7 +265,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
             rightBarButtonItems.append(barButton)
         }
 
-        if !configuration.hideStartChatButton || !configuration.hideStartConversationButton{
+        if !configuration.hideStartChatButton {
             rightBarButtonItems.append(rightBarButtonItem)
         }
 
