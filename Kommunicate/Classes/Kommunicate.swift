@@ -135,7 +135,7 @@ open class Kommunicate: NSObject,Localizable{
      - applicationId: App ID that needs to be set up.
      */
     @objc open class func setup(applicationId: String) {
-        guard !applicationId.isEmpty else {
+        guard !applicationId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             assertionFailure("Kommunicate App ID: Empty value passed")
             return
         }
