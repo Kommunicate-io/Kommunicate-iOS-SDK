@@ -6,6 +6,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ### Enhancements
 - Added way to set the conversation assignee during the conversation create.
+- App ID sanity check: If an empty App ID is passed or if it is changed later, the app will be stopped in the debug mode.
 
 ### Fixes
 - [CM-122] Updated CSAT rating scale to 1-10 from 1-3.
