@@ -27,7 +27,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     public var conversationViewModelType = ALKConversationViewModel.self
     public var conversationListTableViewController: ALKConversationListTableViewController
 
-    var applozicClientType: ApplozicClient.Type = ApplozicClient.self
+    let channelService = ALChannelService()
     var searchController: UISearchController!
     var searchBar: CustomSearchBar!
     lazy var resultVC = ALKSearchResultViewController(configuration: configuration)
@@ -399,19 +399,17 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         Kommunicate.createConversation() { (result) in
             switch result {
             case .success(let conversationId):
-                DispatchQueue.main.async {
-                    self.view.isUserInteractionEnabled = true
-                    alertView.dismiss(animated: true, completion: nil)
-                }
-                let applozicClient = self.applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
-                applozicClient?.getChannelInformation(withChannelKey: nil, orClientChannelKey: conversationId, withCompletion: { (error, channel, response) in
+                self.channelService.getChannelInformation(byResponse: nil, orClientChannelKey: conversationId, withCompletion: { error, channel, response in
+                    DispatchQueue.main.async {
+                        self.view.isUserInteractionEnabled = true
+                        alertView.dismiss(animated: true, completion: nil)
+                    }
                     guard let alChannel = channel else {
                         print("Failed to launch the conversation")
                         return
                     }
                     self.launchChat(groupId: alChannel.key)
                 })
-
             case .failure( _):
                 DispatchQueue.main.async {
                     self.view.isUserInteractionEnabled = true
