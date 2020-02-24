@@ -599,6 +599,7 @@ extension KMConversationListViewController: ALKConversationListTableViewDelegate
 
         let convViewModel = conversationViewModelType.init(contactId: chat.contactId, channelKey: chat.channelKey, localizedStringFileName: configuration.localizedStringFileName)
         let viewController = conversationViewController ?? KMConversationViewController(configuration: configuration)
+        viewController.kmConversationViewConfiguration = Kommunicate.kmConversationViewConfiguration
         viewController.viewModel = convViewModel
         navigationController?.pushViewController(viewController, animated: false)
     }
