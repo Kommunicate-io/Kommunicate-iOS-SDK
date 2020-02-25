@@ -14,7 +14,7 @@ import ApplozicSwift
 open class KMConversationViewController: ALKConversationViewController {
 
     private let faqIdentifier =  11223346
-    private var kmConversationViewConfiguration: KMConversationViewConfiguration!
+    private let kmConversationViewConfiguration: KMConversationViewConfiguration
     private weak var ratingVC: RatingViewController?
 
     lazy var customNavigationView = ConversationVCNavBar(
@@ -72,13 +72,13 @@ open class KMConversationViewController: ALKConversationViewController {
     }
 
     required public init(configuration: ALKConfiguration, conversationViewConfiguration: KMConversationViewConfiguration) {
-        super.init(configuration: configuration)
         self.kmConversationViewConfiguration = conversationViewConfiguration
+        super.init(configuration: configuration)
         addNotificationCenterObserver()
     }
 
     required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
     }
 
     required public init(configuration: ALKConfiguration) {

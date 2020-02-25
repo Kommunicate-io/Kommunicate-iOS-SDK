@@ -39,7 +39,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     var channelKey: NSNumber?
     var tableView: UITableView
 
-    private var kmConversationViewConfiguration: KMConversationViewConfiguration!
+    private let kmConversationViewConfiguration: KMConversationViewConfiguration
 
     lazy var rightBarButtonItem: UIBarButtonItem = {
         let icon = UIImage(named: "startNewIcon", in: Bundle.kommunicate, compatibleWith: nil)
@@ -65,8 +65,8 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
             showSearch: false
         )
         tableView = conversationListTableViewController.tableView
-        super.init(configuration: configuration)
         self.kmConversationViewConfiguration = kmConversationViewConfiguration
+        super.init(configuration: configuration)
         conversationListTableViewController.delegate = self
         localizedStringFileName = configuration.localizedStringFileName
     }
