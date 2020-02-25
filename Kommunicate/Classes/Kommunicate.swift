@@ -334,6 +334,7 @@ open class Kommunicate: NSObject,Localizable{
             cell.update(viewModel: message, identity: nil, disableSwipe: Kommunicate.defaultConfiguration.disableSwipeInChatCell)
             cell.chatCellDelegate = vc.conversationListTableViewController.self
         }
+        vc.kmConversationViewConfiguration = kmConversationViewConfiguration
         let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
         conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
         conversationViewController.viewModel = ALKConversationViewModel(contactId: nil, channelKey: nil, localizedStringFileName: defaultConfiguration.localizedStringFileName)

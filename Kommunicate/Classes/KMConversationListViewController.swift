@@ -24,6 +24,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     let faqIdentifier =  11223346
 
     public var conversationViewController: KMConversationViewController?
+    public var kmConversationViewConfiguration: KMConversationViewConfiguration!
     public var conversationViewModelType = ALKConversationViewModel.self
     public var conversationListTableViewController: ALKConversationListTableViewController
 
@@ -99,7 +100,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
                 guard let vc = notification.object as? KMConversationListViewController else {
                     return
                 }
-                Kommunicate.openFaq(from: vc, with: Kommunicate.defaultConfiguration)
+                Kommunicate.openFaq(from: vc, with: self.configuration)
             }
         }
     }
@@ -309,6 +310,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         if conversationViewController == nil {
             viewController = KMConversationViewController(configuration: configuration)
             viewController.viewModel = conversationViewModel
+            viewController.kmConversationViewConfiguration = kmConversationViewConfiguration
         } else {
             viewController = conversationViewController
             viewController.viewModel.channelKey = conversationViewModel.channelKey
@@ -604,7 +606,9 @@ extension KMConversationListViewController: ALKConversationListTableViewDelegate
 
         let convViewModel = conversationViewModelType.init(contactId: chat.contactId, channelKey: chat.channelKey, localizedStringFileName: configuration.localizedStringFileName)
         let viewController = conversationViewController ?? KMConversationViewController(configuration: configuration)
-        viewController.kmConversationViewConfiguration = Kommunicate.kmConversationViewConfiguration
+        if conversationViewController == nil {
+            viewController.kmConversationViewConfiguration = kmConversationViewConfiguration
+        }
         viewController.viewModel = convViewModel
         navigationController?.pushViewController(viewController, animated: false)
     }
