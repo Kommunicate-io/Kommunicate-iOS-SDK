@@ -24,6 +24,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     let faqIdentifier =  11223346
 
     public var conversationViewController: KMConversationViewController?
+    public var kmConversationViewConfiguration: KMConversationViewConfiguration!
     public var conversationViewModelType = ALKConversationViewModel.self
     public var conversationListTableViewController: ALKConversationListTableViewController
 
