@@ -39,7 +39,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     var channelKey: NSNumber?
     var tableView: UITableView
 
-    private var kmConversationViewConfiguration: KMConversationViewConfiguration?
+    private var kmConversationViewConfiguration: KMConversationViewConfiguration!
 
     lazy var rightBarButtonItem: UIBarButtonItem = {
         let icon = UIImage(named: "startNewIcon", in: Bundle.kommunicate, compatibleWith: nil)
@@ -57,7 +57,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     fileprivate let activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     fileprivate var localizedStringFileName: String!
 
-    public required init(configuration: ALKConfiguration, kmConversationViewConfiguration: KMConversationViewConfiguration?) {
+    public required init(configuration: ALKConfiguration, kmConversationViewConfiguration: KMConversationViewConfiguration) {
         conversationListTableViewController = ALKConversationListTableViewController(
             viewModel: viewModel,
             dbService: dbService,
@@ -314,9 +314,8 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
 
         let viewController: KMConversationViewController!
         if conversationViewController == nil {
-            viewController = KMConversationViewController(configuration: configuration)
+            viewController = KMConversationViewController(configuration: configuration, conversationViewConfiguration: kmConversationViewConfiguration)
             viewController.viewModel = conversationViewModel
-            viewController.kmConversationViewConfiguration = kmConversationViewConfiguration
         } else {
             viewController = conversationViewController
             viewController.viewModel.channelKey = conversationViewModel.channelKey
@@ -537,11 +536,11 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
             let notificationView = ALNotificationView(alMessage: message, withAlertMessage: message.message)
             notificationView?.showNativeNotificationWithcompletionHandler {
                 _ in
-                let kmNotificationHelper = KMPushNotificationHelper()
+                let kmNotificationHelper = KMPushNotificationHelper(self.configuration, self.kmConversationViewConfiguration)
                 let  notificationData =  kmNotificationHelper.notificationData(message: message)
 
-                guard !KMPushNotificationHelper().isKommunicateVCAtTop() else {
-                    KMPushNotificationHelper().handleNotificationTap(notificationData)
+                guard !kmNotificationHelper.isKommunicateVCAtTop() else {
+                    kmNotificationHelper.handleNotificationTap(notificationData)
                     return
                 }
                 self.launchChat(groupId: message.groupId)
@@ -611,10 +610,7 @@ extension KMConversationListViewController: ALKConversationListTableViewDelegate
     public func tapped(_ chat: ALKChatViewModelProtocol, at index: Int) {
 
         let convViewModel = conversationViewModelType.init(contactId: chat.contactId, channelKey: chat.channelKey, localizedStringFileName: configuration.localizedStringFileName)
-        let viewController = conversationViewController ?? KMConversationViewController(configuration: configuration)
-        if conversationViewController == nil {
-            viewController.kmConversationViewConfiguration = kmConversationViewConfiguration
-        }
+        let viewController = conversationViewController ?? KMConversationViewController(configuration: configuration, conversationViewConfiguration: kmConversationViewConfiguration)
         viewController.viewModel = convViewModel
         navigationController?.pushViewController(viewController, animated: false)
     }

@@ -11,6 +11,9 @@ import ApplozicSwift
 
 public class KMPushNotificationHelper {
     /// Stores information about the notification that arrives
+    var conversationViewConfig : KMConversationViewConfiguration!
+    var configuration: ALKConfiguration!
+
     public struct NotificationData {
         public let groupId: NSNumber?
         public var isMute: Bool = false
@@ -24,7 +27,10 @@ public class KMPushNotificationHelper {
         }
     }
 
-    public init() {}
+    public init(_ configuration: ALKConfiguration,_ conversationViewConfig: KMConversationViewConfiguration) {
+        self.configuration = configuration
+        self.conversationViewConfig = conversationViewConfig
+    }
 
     // MARK: - Public methods
 
@@ -93,7 +99,7 @@ public class KMPushNotificationHelper {
     ///   - notification: notification that is tapped.
     ///   - configuration: `ALKConfiguration` object.
     /// - Returns: An instance of `KMConversationListViewController`
-    public func getConversationVCToLaunch(notification: NotificationData, configuration: ALKConfiguration) -> KMConversationListViewController {
+    public func getConversationVCToLaunch(notification: NotificationData) -> KMConversationListViewController {
         let viewController = KMConversationListViewController(configuration: configuration, kmConversationViewConfiguration: Kommunicate.kmConversationViewConfiguration)
         viewController.channelKey = notification.groupId
         return viewController

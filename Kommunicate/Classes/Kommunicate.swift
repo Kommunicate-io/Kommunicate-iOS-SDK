@@ -334,17 +334,15 @@ open class Kommunicate: NSObject,Localizable{
             cell.update(viewModel: message, identity: nil, disableSwipe: Kommunicate.defaultConfiguration.disableSwipeInChatCell)
             cell.chatCellDelegate = vc.conversationListTableViewController.self
         }
-        let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
-        conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
+        let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration)
         conversationViewController.viewModel = ALKConversationViewModel(contactId: nil, channelKey: nil, localizedStringFileName: defaultConfiguration.localizedStringFileName)
         vc.conversationViewController = conversationViewController
     }
 
     class func openChatWith(groupId: NSNumber, from viewController: UIViewController, completionHandler: @escaping (Bool) -> Void) {
         let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName)
-        let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
+        let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration)
         conversationViewController.viewModel = convViewModel
-        conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
         if let navigationVC = viewController.navigationController {
             navigationVC.pushViewController(conversationViewController, animated: false)
         } else {

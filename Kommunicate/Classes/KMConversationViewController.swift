@@ -14,7 +14,7 @@ import ApplozicSwift
 open class KMConversationViewController: ALKConversationViewController {
 
     private let faqIdentifier =  11223346
-    public var kmConversationViewConfiguration: KMConversationViewConfiguration!
+    private var kmConversationViewConfiguration: KMConversationViewConfiguration!
     private weak var ratingVC: RatingViewController?
 
     lazy var customNavigationView = ConversationVCNavBar(
@@ -71,8 +71,9 @@ open class KMConversationViewController: ALKConversationViewController {
         checkFeedbackAndShowRatingView()
     }
 
-    required public init(configuration: ALKConfiguration) {
+    required public init(configuration: ALKConfiguration, conversationViewConfiguration: KMConversationViewConfiguration) {
         super.init(configuration: configuration)
+        self.kmConversationViewConfiguration = conversationViewConfiguration
         addNotificationCenterObserver()
     }
 
@@ -80,6 +81,10 @@ open class KMConversationViewController: ALKConversationViewController {
         super.init(coder: aDecoder)
     }
 
+    required public init(configuration: ALKConfiguration) {
+        fatalError("init(configuration:) has not been implemented")
+    }
+    
     open override func viewDidLoad() {
         super.viewDidLoad()
 
