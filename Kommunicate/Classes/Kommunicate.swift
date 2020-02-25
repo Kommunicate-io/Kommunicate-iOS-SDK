@@ -228,7 +228,7 @@ open class Kommunicate: NSObject,Localizable{
     ///
     /// - Returns: Instance of `ALKConversationListViewController`
     @objc open class func conversationListViewController() -> KMConversationListViewController {
-        let conversationVC = KMConversationListViewController(configuration: Kommunicate.defaultConfiguration)
+        let conversationVC = KMConversationListViewController(configuration: Kommunicate.defaultConfiguration, kmConversationViewConfiguration: Kommunicate.kmConversationViewConfiguration)
         configureListVC(conversationVC)
         return conversationVC
     }
@@ -334,7 +334,6 @@ open class Kommunicate: NSObject,Localizable{
             cell.update(viewModel: message, identity: nil, disableSwipe: Kommunicate.defaultConfiguration.disableSwipeInChatCell)
             cell.chatCellDelegate = vc.conversationListTableViewController.self
         }
-        vc.kmConversationViewConfiguration = kmConversationViewConfiguration
         let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
         conversationViewController.kmConversationViewConfiguration = kmConversationViewConfiguration
         conversationViewController.viewModel = ALKConversationViewModel(contactId: nil, channelKey: nil, localizedStringFileName: defaultConfiguration.localizedStringFileName)

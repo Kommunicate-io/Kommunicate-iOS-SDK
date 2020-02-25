@@ -24,7 +24,6 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     let faqIdentifier =  11223346
 
     public var conversationViewController: KMConversationViewController?
-    public var kmConversationViewConfiguration: KMConversationViewConfiguration!
     public var conversationViewModelType = ALKConversationViewModel.self
     public var conversationListTableViewController: ALKConversationListTableViewController
 
@@ -39,6 +38,8 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     // To check if coming from push notification
     var channelKey: NSNumber?
     var tableView: UITableView
+
+    private var kmConversationViewConfiguration: KMConversationViewConfiguration?
 
     lazy var rightBarButtonItem: UIBarButtonItem = {
         let icon = UIImage(named: "startNewIcon", in: Bundle.kommunicate, compatibleWith: nil)
@@ -56,7 +57,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     fileprivate let activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     fileprivate var localizedStringFileName: String!
 
-    public required init(configuration: ALKConfiguration) {
+    public required init(configuration: ALKConfiguration, kmConversationViewConfiguration: KMConversationViewConfiguration?) {
         conversationListTableViewController = ALKConversationListTableViewController(
             viewModel: viewModel,
             dbService: dbService,
@@ -65,12 +66,17 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         )
         tableView = conversationListTableViewController.tableView
         super.init(configuration: configuration)
+        self.kmConversationViewConfiguration = kmConversationViewConfiguration
         conversationListTableViewController.delegate = self
         localizedStringFileName = configuration.localizedStringFileName
     }
 
     public required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    required init(configuration: ALKConfiguration) {
+        fatalError("init(configuration:) has not been implemented")
     }
 
     override public func addObserver() {
