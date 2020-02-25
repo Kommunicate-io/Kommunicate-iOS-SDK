@@ -29,9 +29,7 @@ open class KMConversationViewController: ALKConversationViewController {
         return closedView
     }()
 
-    lazy var topConstraintClosedView =
-        conversationClosedView.topAnchor.constraint(lessThanOrEqualTo: chatBar.topAnchor)
-
+    var topConstraintClosedView: NSLayoutConstraint?
     var conversationService = KMConversationService()
     var conversationDetail = ConversationDetail()
 
@@ -114,23 +112,27 @@ open class KMConversationViewController: ALKConversationViewController {
 
     func addNotificationCenterObserver() {
 
-        converastionNavBarItemToken = NotificationCenter.default.observe(name: Notification.Name(rawValue: ALKNavigationItem.NSNotificationForConversationViewNavigationTap), object: nil, queue: nil, using: { notification in
-            guard let notificationInfo = notification.userInfo else {
-                return
+        converastionNavBarItemToken = NotificationCenter.default.observe(
+            name: Notification.Name(rawValue:ALKNavigationItem.NSNotificationForConversationViewNavigationTap),
+            object: nil,
+            queue: nil,
+            using: { [weak self] notification in
+            guard let notificationInfo = notification.userInfo,
+                let strongSelf = self else {
+                    return
             }
             let identifier = notificationInfo["identifier"] as? Int
-            if identifier == self.faqIdentifier{
-                Kommunicate.openFaq(from: self, with: self.configuration)
+            if identifier == strongSelf.faqIdentifier{
+                Kommunicate.openFaq(from: strongSelf, with: strongSelf.configuration)
             }
         })
 
-        channelMetadataUpdateToken = NotificationCenter.default.observe(name: NSNotification.Name(rawValue: "UPDATE_CHANNEL_METADATA"), object: nil, queue: nil, using: { notification in
-
-            guard
-                self.viewModel != nil,
-                self.viewModel.isGroup
-                else { return }
-            self.updateAssigneeDetails()
+        channelMetadataUpdateToken = NotificationCenter.default.observe(
+            name: NSNotification.Name(rawValue: "UPDATE_CHANNEL_METADATA"),
+            object: nil,
+            queue: nil,
+            using: { [weak self] notification in
+                self?.onChannelMetadataUpdate()
         })
     }
 
@@ -222,6 +224,8 @@ open class KMConversationViewController: ALKConversationViewController {
         if #available(iOS 11, *) {
             bottomAnchor = view.safeAreaLayoutGuide.bottomAnchor
         }
+        topConstraintClosedView = conversationClosedView.topAnchor
+            .constraint(lessThanOrEqualTo: chatBar.topAnchor)
         NSLayoutConstraint.activate([
             conversationClosedView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             conversationClosedView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -305,7 +309,9 @@ extension KMConversationViewController {
     }
 
     private func hideRatingView() {
-        guard ratingVC != nil && UIViewController.topViewController() is RatingViewController else {
+        guard let ratingVC = ratingVC,
+            UIViewController.topViewController() is RatingViewController,
+            !ratingVC.isBeingDismissed else {
             return
         }
         self.dismiss(animated: true, completion: { [weak self] in
@@ -342,6 +348,6 @@ extension KMConversationViewController {
             conversationClosedView.isHidden = true
         }
         chatBar.headerViewHeight = heightDiff
-        topConstraintClosedView.isActive = flag
+        topConstraintClosedView?.isActive = flag
     }
 }
