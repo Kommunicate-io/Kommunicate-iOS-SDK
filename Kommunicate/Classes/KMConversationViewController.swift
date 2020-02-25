@@ -338,6 +338,7 @@ extension KMConversationViewController {
         conversationClosedView.isHidden = !flag
         var heightDiff: Double = 0
         if flag {
+            view.endEditing(true)
             var bottomInset: CGFloat = 0
             if #available(iOS 11.0, *) {
                 bottomInset = view.safeAreaInsets.bottom
