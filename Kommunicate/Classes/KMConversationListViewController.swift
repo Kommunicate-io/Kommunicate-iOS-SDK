@@ -443,7 +443,9 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     func showNoConversationsView(_ show : Bool) {
         conversationListTableViewController.tableView.isHidden = show
         noConversationLabel.isHidden = !show
-        startNewButton.isHidden = !show
+        if !configuration.hideStartChatButton {
+            startNewButton.isHidden = !show
+        }
     }
 
     private func showAlert() {
