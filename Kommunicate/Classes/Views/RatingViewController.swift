@@ -372,6 +372,6 @@ extension RatingViewController: Localizable {
         static let title = localizedString(forKey: "ConversationRatingTitle", fileName: filename)
         static let commentPlaceholder = localizedString(forKey: "ConversationRatingCommentsPlaceholder", fileName: filename)
         static let submit = localizedString(forKey: "ConversationRatingSubmitButtonTitle", fileName: filename)
-        static let restartConversation = localizedString(forKey: "ConversationRatingRestartConversation", fileName: filename)
+        static let restartConversation = localizedString(forKey: "ConversationClosedRestartConversation", fileName: filename)
     }
 }

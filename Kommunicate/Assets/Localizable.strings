@@ -47,6 +47,15 @@ SupportChannelName = "Support";
 /* No name text */
 NoName = "No Name";
 
+/* Closed Conversation */
+
+/* Conversation resolved label in restart conversation view */
+ConversationClosedDescription = "This conversation has been marked resolved";
+/* Restart conversation label */
+ConversationClosedOtherQueries = "Have other queries?";
+/* Restart conversation Button title */
+ConversationClosedRestartConversation = "Restart conversation";
+
 /* CSAT Rating */
 
 /* Main title */
@@ -55,8 +64,6 @@ ConversationRatingTitle = "Rate the conversation";
 ConversationRatingCommentsPlaceholder = "Add a comment...";
 /* Submit button title */
 ConversationRatingSubmitButtonTitle = "Submit your rating";
-/* Restart conversation label */
-ConversationRatingRestartConversation = "Have other queries?  Restart conversation";
 /* Poor rating label */
 ConversationRatingOptionPoor = "Poor";
 /* Average rating label */
