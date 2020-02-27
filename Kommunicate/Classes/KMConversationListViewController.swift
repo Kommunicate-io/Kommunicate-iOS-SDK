@@ -321,6 +321,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
             viewController.viewModel.channelKey = conversationViewModel.channelKey
             viewController.viewModel.contactId = nil
         }
+        viewController.individualLaunch = false
         push(conversationVC: viewController, with: conversationViewModel)
     }
 
@@ -337,10 +338,9 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
 
     func sync(message: ALMessage) {
         if let viewController = conversationViewController,
+            ALPushAssist().topViewController is KMConversationViewController,
             viewController.viewModel != nil,
-            viewController.viewModel.contactId == message.contactId,
             viewController.viewModel.channelKey == message.groupId {
-            print("Contact id matched1")
             viewController.viewModel.addMessagesToList([message])
         }
         viewModel.prepareController(dbService: dbService)
@@ -612,6 +612,7 @@ extension KMConversationListViewController: ALKConversationListTableViewDelegate
         let convViewModel = conversationViewModelType.init(contactId: chat.contactId, channelKey: chat.channelKey, localizedStringFileName: configuration.localizedStringFileName)
         let viewController = conversationViewController ?? KMConversationViewController(configuration: configuration, conversationViewConfiguration: kmConversationViewConfiguration)
         viewController.viewModel = convViewModel
+        viewController.individualLaunch = false
         navigationController?.pushViewController(viewController, animated: false)
     }
 

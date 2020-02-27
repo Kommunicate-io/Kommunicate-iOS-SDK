@@ -64,11 +64,6 @@ open class KMConversationViewController: ALKConversationViewController {
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavigation()
-        hideAwayAndClosedView()
-        // Fetch Assignee details every time view is launched.
-        updateAssigneeDetails()
-        messageStatus()
-        checkFeedbackAndShowRatingView()
     }
 
     required public init(configuration: ALKConfiguration, conversationViewConfiguration: KMConversationViewConfiguration) {
@@ -223,7 +218,11 @@ open class KMConversationViewController: ALKConversationViewController {
     public override func refreshViewController() {
         clearAndReloadTable()
         configureChatBar()
+        hideAwayAndClosedView()
         updateAssigneeDetails()
+        // Fetch Assignee details every time view is launched.
+        messageStatus()
+        checkFeedbackAndShowRatingView()
         // Check for group left
         isChannelLeft()
         checkUserBlock()

@@ -182,15 +182,9 @@ public class KMPushNotificationHelper {
 
     private func findChatVC(_ notification: NotificationData) {
         guard let vc = ALPushAssist().topViewController else { return }
-        if vc.navigationController?.viewControllers != nil {
-            dismissOurVCIfVisible(vc) { handleTap in
-                if (handleTap){
-                    self.handleNotificationTap(notification)
-                }
-            }
-        } else {
-            vc.dismiss(animated: false) {
-                self.findChatVC(notification)
+        dismissOurVCIfVisible(vc) { handleTap in
+            if (handleTap){
+                self.handleNotificationTap(notification)
             }
         }
     }
