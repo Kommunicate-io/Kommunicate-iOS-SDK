@@ -54,7 +54,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        KMPushNotificationService.applicationEntersForeground()
         print("APP_ENTER_IN_FOREGROUND")
         UIApplication.shared.applicationIconBadgeNumber = 0
     }
