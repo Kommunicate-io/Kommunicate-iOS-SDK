@@ -199,6 +199,9 @@ open class KMConversationViewController: ALKConversationViewController {
     @objc func onChannelMetadataUpdate() {
         guard viewModel != nil, viewModel.isGroup else { return }
         updateAssigneeDetails()
+        // If the user was typing when the status changed
+        view.endEditing(true)
+
         checkFeedbackAndShowRatingView()
     }
 
@@ -296,14 +299,20 @@ extension KMConversationViewController {
             hideRatingView()
             return
         }
+        conversationClosedView.clearFeedback()
         isClosedConversationViewHidden = false
         guard let channelId = viewModel.channelKey,
             !kmConversationViewConfiguration.isCSATOptionDisabled else {
                 return
         }
-        conversationDetail.isFeedbackShownFor(channelId: channelId.intValue) { shown in
+        conversationDetail.feedbackFor(channelId: channelId.intValue) { feedback in
             DispatchQueue.main.async {
-                if !shown { self.showRatingView() }
+                guard let previousFeedback = feedback else {
+                    self.showRatingView()
+                    return
+                }
+                self.conversationClosedView.setFeedback(previousFeedback)
+                self.updateMessageListBottomPadding(isClosedViewHidden: false)
             }
         }
     }
@@ -318,6 +327,7 @@ extension KMConversationViewController {
             print("feedback submitted with rating: \(feedback.rating)")
             self?.hideRatingView()
             self?.submitFeedback(feedback: feedback)
+            // TODO: show closed view with feedback.
         }
         self.present(ratingVC, animated: true, completion: {[weak self] in
             self?.ratingVC = ratingVC
@@ -344,27 +354,43 @@ extension KMConversationViewController {
             switch result {
             case .success(let conversationFeedback):
                 print("feedback submit response success: \(conversationFeedback)")
+                // TODO: Pass this feedback to closed/restart view
+                // Or wait till the feedback is submitted otherwise
+                // rating VC disappears and conv VC appears which in turn calls
+                // the get feedback API which doesn't give any feedback as the call is
+                // still going on.
             case .failure(let error):
                 print("feedback submit response failure: \(error)")
+                // TODO: maybe show failure or show rating view again.
             }
         }
     }
 
-    private func showClosedConversationView(_ flag: Bool) {
-        conversationClosedView.isHidden = !flag
+    private func updateMessageListBottomPadding(isClosedViewHidden: Bool) {
         var heightDiff: Double = 0
-        if flag {
-            view.endEditing(true)
+        if !isClosedViewHidden {
             var bottomInset: CGFloat = 0
             if #available(iOS 11.0, *) {
                 bottomInset = view.safeAreaInsets.bottom
             }
             heightDiff = Double(conversationClosedView.intrinsicContentSize.height
-                    - (chatBar.frame.height - bottomInset))
-        } else {
-            conversationClosedView.isHidden = true
+                - (chatBar.frame.height - bottomInset))
+            if heightDiff < 0 {
+                if (chatBar.headerViewHeight + heightDiff) >= 0 {
+                    heightDiff = chatBar.headerViewHeight + heightDiff
+                } else {
+                    heightDiff = 0
+                }
+            }
         }
         chatBar.headerViewHeight = heightDiff
+        guard heightDiff > 0 else { return }
+        moveTVdown()
+    }
+
+    private func showClosedConversationView(_ flag: Bool) {
+        conversationClosedView.isHidden = !flag
+        updateMessageListBottomPadding(isClosedViewHidden: !flag)
         topConstraintClosedView?.isActive = flag
     }
 }

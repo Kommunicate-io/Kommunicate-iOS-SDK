@@ -99,3 +99,11 @@ extension FeedbackResponse {
         return feedback
     }
 }
+
+extension ConversationFeedback {
+    var feedback: Feedback? {
+        guard let rating = RatingType(rawValue: rating) else { return nil }
+        let comment: String? = comments?.reduce("") { $0 + $1 }
+        return Feedback(rating: rating, comment: comment)
+    }
+}
