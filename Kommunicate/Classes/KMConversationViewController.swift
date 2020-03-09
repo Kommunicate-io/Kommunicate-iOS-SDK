@@ -14,7 +14,7 @@ import ApplozicSwift
 open class KMConversationViewController: ALKConversationViewController {
 
     private let faqIdentifier =  11223346
-    public var kmConversationViewConfiguration: KMConversationViewConfiguration!
+    private let kmConversationViewConfiguration: KMConversationViewConfiguration
     private weak var ratingVC: RatingViewController?
 
     lazy var customNavigationView = ConversationVCNavBar(
@@ -64,22 +64,22 @@ open class KMConversationViewController: ALKConversationViewController {
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavigation()
-        hideAwayAndClosedView()
-        // Fetch Assignee details every time view is launched.
-        updateAssigneeDetails()
-        messageStatus()
-        checkFeedbackAndShowRatingView()
     }
 
-    required public init(configuration: ALKConfiguration) {
+    required public init(configuration: ALKConfiguration, conversationViewConfiguration: KMConversationViewConfiguration) {
+        self.kmConversationViewConfiguration = conversationViewConfiguration
         super.init(configuration: configuration)
-         addNotificationCenterObserver()
+        addNotificationCenterObserver()
     }
 
     required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
     }
 
+    required public init(configuration: ALKConfiguration) {
+        fatalError("init(configuration:) has not been implemented")
+    }
+    
     open override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -204,7 +204,7 @@ open class KMConversationViewController: ALKConversationViewController {
     private func setupNavigation() {
         // Remove current title from center of navigation bar
         navigationItem.titleView = UIView()
-
+        navigationItem.leftBarButtonItems = nil
         // Create custom navigation view.
         let (contact,channel) =  conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId)
         guard let alChannel = channel else {
@@ -213,6 +213,21 @@ open class KMConversationViewController: ALKConversationViewController {
         }
         customNavigationView.updateView(assignee:contact ,channel: alChannel)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
+    }
+
+    public override func refreshViewController() {
+        clearAndReloadTable()
+        configureChatBar()
+        hideAwayAndClosedView()
+        updateAssigneeDetails()
+        // Fetch Assignee details every time view is launched.
+        messageStatus()
+        checkFeedbackAndShowRatingView()
+        // Check for group left
+        isChannelLeft()
+        checkUserBlock()
+        subscribeChannelToMqtt()
+        viewModel.prepareController()
     }
 
     private func setupConversationClosedView() {
@@ -263,6 +278,7 @@ open class KMConversationViewController: ALKConversationViewController {
 
 extension KMConversationViewController: NavigationBarCallbacks {
     func backButtonPressed() {
+        view.endEditing(true)
         let popVC = self.navigationController?.popViewController(animated: true)
         if popVC == nil {
             self.dismiss(animated: true, completion: nil)

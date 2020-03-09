@@ -70,3 +70,7 @@ ConversationRatingOptionPoor = "Poor";
 ConversationRatingOptionAverage = "Average";
 /* Great rating label */
 ConversationRatingOptionGreat = "Great";
+/* Create new conversation info */
+UnableToCreateConversationError = "Unable to create conversation";
+OkButton = "Okay";
+WaitMessage = "Please wait...";

@@ -33,17 +33,6 @@ extension ALKConfiguration {
         }
     }
 
-    /// If true, start conversation button in conversation list will be hidden.
-    public var hideStartConversationButton: Bool {
-        set {
-            guard newValue else { return }
-            navigationItemsForConversationList.removeAll(where: { $0.identifier == conversationCreateIdentifier })
-        }
-        get {
-            return navigationItemsForConversationList.contains { $0.identifier == conversationCreateIdentifier }
-        }
-    }
-
     /// Use this to pass extra information as metadata, it will be
     /// passed with each message as value of `KM_CHAT_CONTEXT` key.
     ///

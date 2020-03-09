@@ -24,9 +24,8 @@ class KMConversationViewControllerTests: QuickSpec {
                 beforeEach {
                     conversationDetailMock = ConversationDetailMock()
                     viewModel = ALKConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: Kommunicate.defaultConfiguration.localizedStringFileName)
-                    viewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration)
+                    viewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: KMConversationViewConfiguration())
                     viewController.viewModel = viewModel
-                    viewController.kmConversationViewConfiguration = KMConversationViewConfiguration()
                     viewController.conversationDetail = conversationDetailMock
                 }
 

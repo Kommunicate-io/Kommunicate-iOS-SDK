@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import Applozic
 
 /// Wraps the observer token received from
 /// NotificationCenter.addObserver(forName:object:queue:using:)
@@ -34,5 +34,13 @@ extension NotificationCenter {
         let token = addObserver(forName: name, object: obj, queue: queue, using: block)
         return NotificationToken(notificationCenter: self, token: token)
     }
+}
+
+extension Notification.Name {
+    static let pushNotification = Notification.Name("pushNotification")
+    static let reloadTable = Notification.Name("reloadTable")
+    static let updateChannelName = Notification.Name("UPDATE_CHANNEL_NAME")
+    static let updateUserDetails = Notification.Name("USER_DETAILS_UPDATE_CALL")
+    static let newMessageNotification = Notification.Name(NEW_MESSAGE_NOTIFICATION)
 }
 
