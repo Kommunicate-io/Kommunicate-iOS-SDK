@@ -132,7 +132,8 @@ public class KMPushNotificationHelper {
         guard let topVC = ALPushAssist().topViewController else { return false }
         let topVCName = String(describing: topVC.classForCoder)
         switch topVCName {
-        case "FaqViewController":
+        case "FaqViewController",
+             "RatingViewController":
             return true
         case _ where topVCName.hasPrefix("KM"):
             return true
@@ -204,7 +205,9 @@ public class KMPushNotificationHelper {
         guard
             vc.navigationController != nil,
             vc.navigationController?.popViewController(animated: false) == nil else {
-                completion(true)
+                vc.dismiss(animated: false) {
+                    completion(true)
+                }
                 return
         }
         vc.dismiss(animated: false) {
