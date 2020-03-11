@@ -4,6 +4,9 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Enhancements
+Added support for syncing package details when a suspension screen is shown.
+
 ## [4.0.0] - 2020-03-09
 
 ### Enhancements

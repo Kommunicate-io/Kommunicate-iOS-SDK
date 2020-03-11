@@ -16,6 +16,7 @@ open class KMConversationViewController: ALKConversationViewController {
     private let faqIdentifier =  11223346
     private let kmConversationViewConfiguration: KMConversationViewConfiguration
     private weak var ratingVC: RatingViewController?
+    private let registerUserClientService = ALRegisterUserClientService()
 
     lazy var customNavigationView = ConversationVCNavBar(
         delegate: self,
@@ -251,18 +252,17 @@ open class KMConversationViewController: ALKConversationViewController {
     private func checkPlanAndShowSuspensionScreen() {
         let accountVC = ALKAccountSuspensionController()
         guard PricingPlan.shared.showSuspensionScreen() else { return }
-        let deadlineTime = DispatchTime.now() + .seconds(3)
-        DispatchQueue.main.asyncAfter(deadline: deadlineTime, execute: {
-
-            self.present(accountVC, animated: false, completion: nil)
-            accountVC.closePressed = {[weak self] in
-                accountVC.dismiss(animated: true, completion: nil)
-                let popVC = self?.navigationController?.popViewController(animated: true)
-                if popVC == nil {
-                    self?.dismiss(animated: true, completion: nil)
-                }
+        self.present(accountVC, animated: false, completion: nil)
+        accountVC.closePressed = {[weak self] in
+            self?.dismiss(animated: true, completion: nil)
+        }
+        self.registerUserClientService.syncAccountStatus { response, error in
+            guard error == nil, let response = response, response.isRegisteredSuccessfully() else {
+                print("Failed to sync the account package status")
+                return
             }
-        })
+            print("Successfuly synced the account package status")
+        }
     }
 
     private func showAwayMessage(_ flag: Bool) {
