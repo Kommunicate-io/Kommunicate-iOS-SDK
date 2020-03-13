@@ -114,6 +114,7 @@ class ConversationClosedView: UIView {
             $0.trailing == trailingAnchor
             $0.bottom ==
                 conversationResolvedLabel.topAnchor + Size.PreviousFeedbackView.bottom
+            $0.top >= topAnchor
         }
 
         // TODO: use layout

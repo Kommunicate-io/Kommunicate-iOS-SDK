@@ -87,6 +87,10 @@ open class KMConversationViewController: ALKConversationViewController {
         if let navBar = navigationController?.navigationBar {
             customNavigationView.setupAppearance(navBar)
         }
+        if #available(iOS 13.0, *) {
+            // Always adopt a light interface style.
+            overrideUserInterfaceStyle = .light
+        }
 
         checkPlanAndShowSuspensionScreen()
         addAwayMessageConstraints()
@@ -312,6 +316,7 @@ extension KMConversationViewController {
                     return
                 }
                 self.conversationClosedView.setFeedback(previousFeedback)
+                self.conversationClosedView.layoutIfNeeded()
                 self.updateMessageListBottomPadding(isClosedViewHidden: false)
             }
         }
@@ -327,7 +332,6 @@ extension KMConversationViewController {
             print("feedback submitted with rating: \(feedback.rating)")
             self?.hideRatingView()
             self?.submitFeedback(feedback: feedback)
-            // TODO: show closed view with feedback.
         }
         self.present(ratingVC, animated: true, completion: {[weak self] in
             self?.ratingVC = ratingVC
@@ -354,14 +358,8 @@ extension KMConversationViewController {
             switch result {
             case .success(let conversationFeedback):
                 print("feedback submit response success: \(conversationFeedback)")
-                // TODO: Pass this feedback to closed/restart view
-                // Or wait till the feedback is submitted otherwise
-                // rating VC disappears and conv VC appears which in turn calls
-                // the get feedback API which doesn't give any feedback as the call is
-                // still going on.
             case .failure(let error):
                 print("feedback submit response failure: \(error)")
-                // TODO: maybe show failure or show rating view again.
             }
         }
     }
@@ -373,7 +371,7 @@ extension KMConversationViewController {
             if #available(iOS 11.0, *) {
                 bottomInset = view.safeAreaInsets.bottom
             }
-            heightDiff = Double(conversationClosedView.intrinsicContentSize.height
+            heightDiff = Double(conversationClosedView.frame.height
                 - (chatBar.frame.height - bottomInset))
             if heightDiff < 0 {
                 if (chatBar.headerViewHeight + heightDiff) >= 0 {

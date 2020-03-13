@@ -21,7 +21,6 @@ class SubmittedFeedbackView: UIView {
 
     override var intrinsicContentSize: CGSize {
         guard feedback != nil else { return .zero }
-        // TODO: move spacing const
         let commentsViewHeight = commentsView.intrinsicContentSize.height
         let spacing: CGFloat = commentsViewHeight > 0 ? 10:0
         return CGSize(
@@ -36,6 +35,8 @@ class SubmittedFeedbackView: UIView {
             commentsView.text = feedback?.comment
             ratingView.isHidden = feedback?.rating == nil
             commentsView.isHidden = feedback?.comment == nil
+            layoutMargins = (feedback != nil)
+                ? UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 0):.zero
         }
     }
 
@@ -50,8 +51,8 @@ class SubmittedFeedbackView: UIView {
     }
 
     private func setupView() {
-        // TODO: Use conversation VC's back color through config
-        backgroundColor = .white
+        backgroundColor = .background(.lightGreyOne)
+        layoutMargins = .zero
     }
 
     private func setupLayout() {
@@ -62,8 +63,8 @@ class SubmittedFeedbackView: UIView {
         mainStack.layout {
             $0.leading == leadingAnchor + 20
             $0.trailing == trailingAnchor - 20
-            $0.bottom == bottomAnchor
-            $0.top >= topAnchor
+            $0.bottom == layoutMarginsGuide.bottomAnchor
+            $0.top >= layoutMarginsGuide.topAnchor
         }
     }
 }
@@ -73,28 +74,37 @@ extension SubmittedFeedbackView {
 
         var rating: RatingType? {
             didSet {
-                // TODO: Localize
-                label.text = (rating != nil) ? "You rated the conversation":""
+                ratedTitleLabel.text = (rating != nil) ? "You rated the conversation":""
+                emojiView.image = rating?.icon()
                 self.invalidateIntrinsicContentSize()
-                self.superview?.setNeedsLayout()
-                self.superview?.layoutIfNeeded()
             }
         }
-        // TODO: two lines(a stroke): leading and trailing
-        // one label in the center and one icon for rating
 
-        // TODO: Change name
-        private let label: UILabel = {
+        private let ratedTitleLabel: UILabel = {
             let label = UILabel(frame: .zero)
             label.numberOfLines = 1
-            label.textColor = .darkGray
-            label.font = Style.Font.italic(size: 14).font()
+            label.textColor = .text(.mediumDarkBlack)
+            label.font = Style.Font.lightItalic(size: 14).font()
+            label.translatesAutoresizingMaskIntoConstraints = false
             return label
+        }()
+
+        private let emojiView = UIImageView(frame: .zero)
+
+        private let leftLineView = UIView(frame: .zero)
+        private let rightLineView = UIView(frame: .zero)
+
+        private let titleStackView: UIStackView = {
+            let stack = UIStackView(frame: .zero)
+            stack.axis = .horizontal
+            stack.alignment = .center
+            stack.spacing = 5
+            return stack
         }()
 
         override var intrinsicContentSize: CGSize {
             guard rating != nil else { return .zero }
-            return label.intrinsicContentSize
+            return ratedTitleLabel.intrinsicContentSize
         }
 
         init() {
@@ -106,13 +116,50 @@ extension SubmittedFeedbackView {
             fatalError("init(coder:) has not been implemented")
         }
 
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            drawAGradientLine(inView: leftLineView, leftAligned: true)
+            drawAGradientLine(inView: rightLineView, leftAligned: false)
+        }
+
         private func setupLayout() {
-            addViewsForAutolayout(views: [label])
-            label.layout {
-                $0.leading == leadingAnchor
-                $0.trailing == trailingAnchor
+            addViewsForAutolayout(views: [titleStackView, leftLineView, rightLineView])
+            titleStackView.addArrangedSubview(ratedTitleLabel)
+            titleStackView.addArrangedSubview(emojiView)
+            titleStackView.layout {
+                $0.centerX == centerXAnchor
                 $0.top == topAnchor
             }
+            NSLayoutConstraint.activate([
+                leftLineView.heightAnchor.constraint(equalToConstant: 0.51),
+                emojiView.widthAnchor.constraint(equalToConstant: 15),
+                emojiView.heightAnchor.constraint(equalToConstant: 15)
+            ])
+            leftLineView.layout {
+                $0.leading == leadingAnchor
+                $0.trailing == titleStackView.leadingAnchor - 10
+                $0.centerY == centerYAnchor
+            }
+            rightLineView.layout {
+                $0.leading == titleStackView.trailingAnchor + 10
+                $0.trailing == trailingAnchor
+                $0.height == leftLineView.heightAnchor
+                $0.centerY == centerYAnchor
+            }
+        }
+
+        func drawAGradientLine(inView containerView: UIView, leftAligned: Bool) {
+            let gradColors = [
+                UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1).cgColor,
+                UIColor(red: 0, green: 0, blue: 0, alpha: 0.72) .cgColor
+            ]
+            let gradientLayer = CAGradientLayer()
+            gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+            gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
+            gradientLayer.colors = leftAligned ? gradColors : gradColors.reversed()
+            gradientLayer.frame = containerView.bounds
+            gradientLayer.opacity = 0.65
+            containerView.layer.addSublayer(gradientLayer)
         }
     }
 }
@@ -131,7 +178,8 @@ extension SubmittedFeedbackView {
             get { return super.text }
             set {
                 let didChange = super.text != newValue
-                super.text = newValue
+                let addQuotes = newValue != nil && !newValue.isEmpty
+                super.text = addQuotes ? "“\(newValue!)”" : newValue
                 if didChange {
                     textChanged()
                 }
@@ -148,15 +196,17 @@ extension SubmittedFeedbackView {
         }
 
         private func textChanged() {
-            // update height
             invalidateIntrinsicContentSize()
-            superview?.setNeedsLayout()
-            superview?.layoutIfNeeded()
+            flashScrollIndicators()
         }
 
         private func setupViews() {
-            font = Style.Font.normal(size: 14).font()
+            font = Style.Font.lightItalic(size: 14).font()
+            textAlignment = .center
+            backgroundColor = .clear
+            textColor = .text(.mediumDarkBlackTwo)
             isEditable = false
+            showsHorizontalScrollIndicator = false
         }
     }
 }

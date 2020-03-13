@@ -26,6 +26,8 @@ struct LayoutProperty<Anchor: LayoutAnchor> {
 
 class LayoutProxy {
     lazy var leading = property(with: view.leadingAnchor)
+    lazy var centerX = property(with: view.centerXAnchor)
+    lazy var centerY = property(with: view.centerYAnchor)
     lazy var trailing = property(with: view.trailingAnchor)
     lazy var top = property(with: view.topAnchor)
     lazy var bottom = property(with: view.bottomAnchor)
