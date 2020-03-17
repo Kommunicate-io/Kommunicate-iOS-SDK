@@ -35,14 +35,14 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     public var dbService = ALMessageDBService()
     public var viewModel = ALKConversationListViewModel()
 
-    struct Padding {
-        struct NoConversationLabel {
+    enum Padding {
+        enum NoConversationLabel {
             static let leading: CGFloat = 10.0
             static let trailing: CGFloat = 10.0
         }
-
-        struct StartNewButton {
+        enum StartNewButton {
             static let height: CGFloat = 50
+            static let width : CGFloat = 50
         }
     }
 
@@ -54,11 +54,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
 
     lazy var startNewButton: UIButton = {
         let button = UIButton(type: .custom)
-        var image =  self.kmConversationViewConfiguration.startNewButtonIcon
-        image = image?.withRenderingMode(.alwaysTemplate)
         button.addTarget(self, action: #selector(compose), for: .touchUpInside)
-        button.setImage(image, for: .normal)
-        button.isHidden = true
         button.isUserInteractionEnabled = true
         return button
     }()
@@ -181,35 +177,39 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         setupNavigationRightButtons()
         setupBackButton()
         title = LocalizedText.title
+        setupViewAndConstraints()
+    }
+
+    func setupViewAndConstraints() {
+        view.isUserInteractionEnabled = false
+        var image = self.kmConversationViewConfiguration.startNewButtonIcon?.scale(with: CGSize.init(width: Padding.StartNewButton.width, height: Padding.StartNewButton.height))
+        image = image?.withRenderingMode(.alwaysTemplate)
+        startNewButton.setImage(image, for: .normal)
 
         backgroundView.addViewsForAutolayout(views: [startNewButton, noConversationLabel, conversationListTableViewController.view])
         view.addViewsForAutolayout(views: [backgroundView])
 
+        activityIndicator.color = UIColor.gray
         backgroundView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         backgroundView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
         backgroundView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
 
-        startNewButton.widthAnchor.constraint(equalTo: backgroundView.widthAnchor).isActive = true
+        startNewButton.widthAnchor.constraint(equalToConstant: Padding.StartNewButton.width).isActive = true
         startNewButton.heightAnchor.constraint(equalToConstant: Padding.StartNewButton.height).isActive = true
         startNewButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
         startNewButton.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor).isActive = true
 
         noConversationLabel.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: Padding.NoConversationLabel.leading).isActive = true
         noConversationLabel.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -Padding.NoConversationLabel.trailing).isActive = true
-        noConversationLabel.centerXAnchor.constraint(equalTo: startNewButton.centerXAnchor).isActive = true
         noConversationLabel.topAnchor.constraint(equalTo: startNewButton.bottomAnchor).isActive = true
 
         conversationListTableViewController.view.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
         conversationListTableViewController.view.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
         conversationListTableViewController.view.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor).isActive = true
         conversationListTableViewController.view.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor).isActive = true
-        backgroundView.bringSubviewToFront(startNewButton)
-        backgroundView.bringSubviewToFront(noConversationLabel)
-        self.view.bringSubviewToFront(backgroundView)
 
         activityIndicator.center = CGPoint(x: view.bounds.size.width / 2, y: view.bounds.size.height / 2)
-        activityIndicator.color = UIColor.gray
         view.addSubview(activityIndicator)
         view.bringSubviewToFront(activityIndicator)
     }
@@ -445,9 +445,10 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     }
 
     func showNoConversationsView(_ show : Bool) {
+        view.isUserInteractionEnabled = true
         conversationListTableViewController.tableView.isHidden = show
         noConversationLabel.isHidden = !show
-        if !configuration.hideStartChatButton {
+        if !configuration.hideEmptyStateStartNewButtonInConversationList, self.kmConversationViewConfiguration.startNewButtonIcon != nil  {
             startNewButton.isHidden = !show
         }
     }
@@ -546,7 +547,7 @@ extension KMConversationListViewController: ALKConversationListViewModelDelegate
     open func listUpdated() {
         DispatchQueue.main.async {
             print("Number of rows \(self.tableView.numberOfRows(inSection: 0))")
-            if (self.viewModel.getChatList().count == 0) {
+            if (self.viewModel.getChatList().isEmpty) {
                 self.showNoConversationsView(true)
             }
             self.tableView.reloadData()
