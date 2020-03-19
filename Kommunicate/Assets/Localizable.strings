@@ -1,9 +1,9 @@
-/* 
+/*
   Localizable.strings
   Pods
 
   Created by Mukesh on 24/01/19.
-  
+
 */
 
 /* PreChatView */
@@ -74,3 +74,5 @@ ConversationRatingOptionGreat = "Great";
 UnableToCreateConversationError = "Unable to create conversation";
 OkButton = "Okay";
 WaitMessage = "Please wait...";
+/* No conversations*/
+NoConversationsLabelText = "No conversations";

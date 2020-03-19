@@ -89,7 +89,7 @@ open class Kommunicate: NSObject,Localizable{
             updateToken()
         }
     }
-    
+
     static var applozicClientType: ApplozicClient.Type = ApplozicClient.self
 
     public override init() {
