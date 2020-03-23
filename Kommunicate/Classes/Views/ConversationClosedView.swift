@@ -117,7 +117,6 @@ class ConversationClosedView: UIView {
             $0.top >= topAnchor
         }
 
-        // TODO: use layout
         NSLayoutConstraint.activate([
             conversationResolvedLabel.leadingAnchor.constraint(
                 greaterThanOrEqualTo: leadingAnchor,

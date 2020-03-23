@@ -104,6 +104,11 @@ open class KMConversationViewController: ALKConversationViewController {
         awayMessageView.drawDottedLines()
     }
 
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        hideAwayAndClosedView()
+    }
+
     override open func newMessagesAdded() {
         super.newMessagesAdded()
 
@@ -230,12 +235,16 @@ open class KMConversationViewController: ALKConversationViewController {
         updateAssigneeDetails()
         // Fetch Assignee details every time view is launched.
         messageStatus()
-        checkFeedbackAndShowRatingView()
         // Check for group left
         isChannelLeft()
         checkUserBlock()
         subscribeChannelToMqtt()
         viewModel.prepareController()
+    }
+
+    public override func loadingFinished(error _: Error?) {
+        super.loadingFinished(error: nil)
+        checkFeedbackAndShowRatingView()
     }
 
     private func setupConversationClosedView() {
@@ -383,7 +392,7 @@ extension KMConversationViewController {
         }
         chatBar.headerViewHeight = heightDiff
         guard heightDiff > 0 else { return }
-        moveTVdown()
+        showLastMessage()
     }
 
     private func showClosedConversationView(_ flag: Bool) {
