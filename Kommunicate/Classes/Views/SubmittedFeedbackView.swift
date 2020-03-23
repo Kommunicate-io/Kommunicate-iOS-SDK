@@ -15,14 +15,15 @@ class SubmittedFeedbackView: UIView {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.distribution = .fillProportionally
-        stack.spacing = 10
+        stack.spacing = Size.MainView.ratingCommentsSpacing
         return stack
     }()
 
     override var intrinsicContentSize: CGSize {
         guard feedback != nil else { return .zero }
         let commentsViewHeight = commentsView.intrinsicContentSize.height
-        let spacing: CGFloat = commentsViewHeight > 0 ? 10:0
+        let spacing: CGFloat = commentsViewHeight > 0 ?
+            Size.MainView.ratingCommentsSpacing : 0
         return CGSize(
             width: frame.width,
             height: spacing + ratingView.intrinsicContentSize.height + commentsViewHeight
@@ -36,7 +37,7 @@ class SubmittedFeedbackView: UIView {
             ratingView.isHidden = feedback?.rating == nil
             commentsView.isHidden = feedback?.comment == nil
             layoutMargins = (feedback != nil)
-                ? UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 0):.zero
+                ? UIEdgeInsets(top: 0, left: 0, bottom: Size.MainView.bottom, right: 0):.zero
         }
     }
 
@@ -61,8 +62,8 @@ class SubmittedFeedbackView: UIView {
         mainStack.addArrangedSubview(commentsView)
 
         mainStack.layout {
-            $0.leading == leadingAnchor + 20
-            $0.trailing == trailingAnchor - 20
+            $0.leading == leadingAnchor + Size.MainView.leading
+            $0.trailing == trailingAnchor + Size.MainView.trailing
             $0.bottom == layoutMarginsGuide.bottomAnchor
             $0.top >= layoutMarginsGuide.topAnchor
         }
@@ -74,7 +75,6 @@ extension SubmittedFeedbackView {
 
         var rating: RatingType? {
             didSet {
-                ratedTitleLabel.text = (rating != nil) ? "You rated the conversation":""
                 emojiView.image = rating?.icon()
                 self.invalidateIntrinsicContentSize()
             }
@@ -84,6 +84,7 @@ extension SubmittedFeedbackView {
             let label = UILabel(frame: .zero)
             label.numberOfLines = 1
             label.textColor = .text(.mediumDarkBlack)
+            label.text = LocalizedText.ratingTitle
             label.font = Style.Font.lightItalic(size: 14).font()
             label.translatesAutoresizingMaskIntoConstraints = false
             return label
@@ -98,7 +99,7 @@ extension SubmittedFeedbackView {
             let stack = UIStackView(frame: .zero)
             stack.axis = .horizontal
             stack.alignment = .center
-            stack.spacing = 5
+            stack.spacing = Size.RatingView.EmojiView.leading
             return stack
         }()
 
@@ -131,17 +132,23 @@ extension SubmittedFeedbackView {
                 $0.top == topAnchor
             }
             NSLayoutConstraint.activate([
-                leftLineView.heightAnchor.constraint(equalToConstant: 0.51),
-                emojiView.widthAnchor.constraint(equalToConstant: 15),
-                emojiView.heightAnchor.constraint(equalToConstant: 15)
+                leftLineView.heightAnchor.constraint(
+                    equalToConstant: Size.RatingView.LineView.height
+                ),
+                emojiView.widthAnchor.constraint(
+                    equalToConstant: Size.RatingView.EmojiView.width
+                ),
+                emojiView.heightAnchor.constraint(
+                    equalToConstant: Size.RatingView.EmojiView.height
+                )
             ])
             leftLineView.layout {
                 $0.leading == leadingAnchor
-                $0.trailing == titleStackView.leadingAnchor - 10
+                $0.trailing == titleStackView.leadingAnchor + Size.RatingView.LineView.trailing
                 $0.centerY == centerYAnchor
             }
             rightLineView.layout {
-                $0.leading == titleStackView.trailingAnchor + 10
+                $0.leading == titleStackView.trailingAnchor + Size.RatingView.LineView.leading
                 $0.trailing == trailingAnchor
                 $0.height == leftLineView.heightAnchor
                 $0.centerY == centerYAnchor
@@ -226,5 +233,37 @@ extension SubmittedFeedbackView.CommentsView {
         let size = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
         reqHeightForComments = size.height
         return reqHeightForComments < maxHeight ? reqHeightForComments:maxHeight
+    }
+}
+
+
+extension SubmittedFeedbackView: Localizable {
+    enum LocalizedText {
+        static private let filename = Kommunicate.defaultConfiguration.localizedStringFileName
+
+        static let ratingTitle = localizedString(forKey: "PreviousConversationFeedbackTitle", fileName: filename)
+    }
+}
+
+extension SubmittedFeedbackView {
+    enum Size {
+        enum MainView {
+            static let ratingCommentsSpacing: CGFloat = 10
+            static let bottom: CGFloat = 7
+            static let leading: CGFloat = 20
+            static let trailing: CGFloat = -20
+        }
+        enum RatingView {
+            enum LineView {
+                static let height: CGFloat = 0.51
+                static let leading: CGFloat = 10
+                static let trailing: CGFloat = -10
+            }
+            enum EmojiView {
+                static let width: CGFloat = 15
+                static let height: CGFloat = 15
+                static let leading: CGFloat = 5
+            }
+        }
     }
 }
