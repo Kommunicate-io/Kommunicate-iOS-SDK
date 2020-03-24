@@ -210,7 +210,7 @@ open class KMConversationViewController: ALKConversationViewController {
         updateAssigneeDetails()
         // If the user was typing when the status changed
         view.endEditing(true)
-
+        guard isClosedConversationViewHidden == isClosedConversation else { return }
         checkFeedbackAndShowRatingView()
     }
 
