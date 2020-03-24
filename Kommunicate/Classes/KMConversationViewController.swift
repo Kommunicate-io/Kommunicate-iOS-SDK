@@ -318,15 +318,13 @@ extension KMConversationViewController {
             !kmConversationViewConfiguration.isCSATOptionDisabled else {
                 return
         }
-        conversationDetail.feedbackFor(channelId: channelId.intValue) { feedback in
+        conversationDetail.feedbackFor(channelId: channelId.intValue) { [weak self] feedback in
             DispatchQueue.main.async {
                 guard let previousFeedback = feedback else {
-                    self.showRatingView()
+                    self?.showRatingView()
                     return
                 }
-                self.conversationClosedView.setFeedback(previousFeedback)
-                self.conversationClosedView.layoutIfNeeded()
-                self.updateMessageListBottomPadding(isClosedViewHidden: false)
+                self?.show(feedback: previousFeedback)
             }
         }
     }
@@ -363,10 +361,14 @@ extension KMConversationViewController {
         conversationService.submitFeedback(
             groupId: channelId.intValue,
             feedback: feedback
-        ) { result in
+        ) { [weak self] result in
             switch result {
             case .success(let conversationFeedback):
                 print("feedback submit response success: \(conversationFeedback)")
+                guard let conversationFeedback = conversationFeedback.feedback else { return }
+                DispatchQueue.main.async {
+                    self?.show(feedback: conversationFeedback)
+                }
             case .failure(let error):
                 print("feedback submit response failure: \(error)")
             }
@@ -399,5 +401,11 @@ extension KMConversationViewController {
         conversationClosedView.isHidden = !flag
         updateMessageListBottomPadding(isClosedViewHidden: !flag)
         topConstraintClosedView?.isActive = flag
+    }
+
+    private func show(feedback: Feedback) {
+        conversationClosedView.setFeedback(feedback)
+        conversationClosedView.layoutIfNeeded()
+        updateMessageListBottomPadding(isClosedViewHidden: false)
     }
 }
