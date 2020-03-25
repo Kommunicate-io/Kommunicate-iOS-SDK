@@ -26,6 +26,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     public var conversationViewController: KMConversationViewController?
     public var conversationViewModelType = ALKConversationViewModel.self
     public var conversationListTableViewController: ALKConversationListTableViewController
+    private let registerUserClientService = ALRegisterUserClientService()
 
     let channelService = ALChannelService()
     var searchController: UISearchController!
@@ -162,6 +163,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         viewModel.delegate = self
         setupSearchController()
         setupView()
+        checkPlanAndShowSuspensionScreen()
         extendedLayoutIncludesOpaqueBars = true
     }
 
@@ -517,6 +519,22 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         viewController.present(loadingAlertController, animated: true, completion: nil)
 
         return loadingAlertController
+    }
+
+    private func checkPlanAndShowSuspensionScreen() {
+        let accountVC = ALKAccountSuspensionController()
+        guard PricingPlan.shared.showSuspensionScreen() else { return }
+        self.present(accountVC, animated: false, completion: nil)
+        accountVC.closePressed = {[weak self] in
+            self?.dismiss(animated: true, completion: nil)
+        }
+        self.registerUserClientService.syncAccountStatus { response, error in
+            guard error == nil, let response = response, response.isRegisteredSuccessfully() else {
+                print("Failed to sync the account package status")
+                return
+            }
+            print("Successfuly synced the account package status")
+        }
     }
 }
 
