@@ -76,3 +76,5 @@ OkButton = "Okay";
 WaitMessage = "Please wait...";
 /* No conversations*/
 NoConversationsLabelText = "No conversations";
+/* Title of the previous conversation view shown to the user */
+PreviousConversationFeedbackTitle = "You rated the conversation";

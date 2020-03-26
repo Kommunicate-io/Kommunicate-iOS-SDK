@@ -87,6 +87,10 @@ open class KMConversationViewController: ALKConversationViewController {
         if let navBar = navigationController?.navigationBar {
             customNavigationView.setupAppearance(navBar)
         }
+        if #available(iOS 13.0, *) {
+            // Always adopt a light interface style.
+            overrideUserInterfaceStyle = .light
+        }
 
         checkPlanAndShowSuspensionScreen()
         addAwayMessageConstraints()
@@ -98,6 +102,11 @@ open class KMConversationViewController: ALKConversationViewController {
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         awayMessageView.drawDottedLines()
+    }
+
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        hideAwayAndClosedView()
     }
 
     override open func newMessagesAdded() {
@@ -199,6 +208,9 @@ open class KMConversationViewController: ALKConversationViewController {
     @objc func onChannelMetadataUpdate() {
         guard viewModel != nil, viewModel.isGroup else { return }
         updateAssigneeDetails()
+        // If the user was typing when the status changed
+        view.endEditing(true)
+        guard isClosedConversationViewHidden == isClosedConversation else { return }
         checkFeedbackAndShowRatingView()
     }
 
@@ -223,12 +235,16 @@ open class KMConversationViewController: ALKConversationViewController {
         updateAssigneeDetails()
         // Fetch Assignee details every time view is launched.
         messageStatus()
-        checkFeedbackAndShowRatingView()
         // Check for group left
         isChannelLeft()
         checkUserBlock()
         subscribeChannelToMqtt()
         viewModel.prepareController()
+    }
+
+    public override func loadingFinished(error _: Error?) {
+        super.loadingFinished(error: nil)
+        checkFeedbackAndShowRatingView()
     }
 
     private func setupConversationClosedView() {
@@ -296,14 +312,19 @@ extension KMConversationViewController {
             hideRatingView()
             return
         }
+        conversationClosedView.clearFeedback()
         isClosedConversationViewHidden = false
         guard let channelId = viewModel.channelKey,
             !kmConversationViewConfiguration.isCSATOptionDisabled else {
                 return
         }
-        conversationDetail.isFeedbackShownFor(channelId: channelId.intValue) { shown in
+        conversationDetail.feedbackFor(channelId: channelId.intValue) { [weak self] feedback in
             DispatchQueue.main.async {
-                if !shown { self.showRatingView() }
+                guard let previousFeedback = feedback else {
+                    self?.showRatingView()
+                    return
+                }
+                self?.show(feedback: previousFeedback)
             }
         }
     }
@@ -340,31 +361,51 @@ extension KMConversationViewController {
         conversationService.submitFeedback(
             groupId: channelId.intValue,
             feedback: feedback
-        ) { result in
+        ) { [weak self] result in
             switch result {
             case .success(let conversationFeedback):
                 print("feedback submit response success: \(conversationFeedback)")
+                guard let conversationFeedback = conversationFeedback.feedback else { return }
+                DispatchQueue.main.async {
+                    self?.show(feedback: conversationFeedback)
+                }
             case .failure(let error):
                 print("feedback submit response failure: \(error)")
             }
         }
     }
 
-    private func showClosedConversationView(_ flag: Bool) {
-        conversationClosedView.isHidden = !flag
+    private func updateMessageListBottomPadding(isClosedViewHidden: Bool) {
         var heightDiff: Double = 0
-        if flag {
-            view.endEditing(true)
+        if !isClosedViewHidden {
             var bottomInset: CGFloat = 0
             if #available(iOS 11.0, *) {
                 bottomInset = view.safeAreaInsets.bottom
             }
-            heightDiff = Double(conversationClosedView.intrinsicContentSize.height
-                    - (chatBar.frame.height - bottomInset))
-        } else {
-            conversationClosedView.isHidden = true
+            heightDiff = Double(conversationClosedView.frame.height
+                - (chatBar.frame.height - bottomInset))
+            if heightDiff < 0 {
+                if (chatBar.headerViewHeight + heightDiff) >= 0 {
+                    heightDiff = chatBar.headerViewHeight + heightDiff
+                } else {
+                    heightDiff = 0
+                }
+            }
         }
         chatBar.headerViewHeight = heightDiff
+        guard heightDiff > 0 else { return }
+        showLastMessage()
+    }
+
+    private func showClosedConversationView(_ flag: Bool) {
+        conversationClosedView.isHidden = !flag
+        updateMessageListBottomPadding(isClosedViewHidden: !flag)
         topConstraintClosedView?.isActive = flag
+    }
+
+    private func show(feedback: Feedback) {
+        conversationClosedView.setFeedback(feedback)
+        conversationClosedView.layoutIfNeeded()
+        updateMessageListBottomPadding(isClosedViewHidden: false)
     }
 }

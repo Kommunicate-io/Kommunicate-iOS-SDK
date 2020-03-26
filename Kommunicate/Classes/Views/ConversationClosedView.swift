@@ -11,6 +11,8 @@ class ConversationClosedView: UIView {
 
     var restartTapped: (()->(Void))?
 
+    private let previousRatingView = SubmittedFeedbackView()
+
     private let conversationResolvedLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.numberOfLines = 1
@@ -63,7 +65,7 @@ class ConversationClosedView: UIView {
     override var intrinsicContentSize: CGSize {
         return CGSize(
             width: conversationResolvedLabel.intrinsicContentSize.width,
-            height: isHidden ? 0:Size.maxHeight
+            height: isHidden ? 0 : (Size.maxHeight + previousRatingView.intrinsicContentSize.height)
         )
     }
 
@@ -73,8 +75,19 @@ class ConversationClosedView: UIView {
     }
 
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupView()
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc func restartConversationTapped() {
+        restartTapped?()
+    }
+
+    func setFeedback(_ feedback: Feedback) {
+        previousRatingView.feedback = feedback
+    }
+
+    func clearFeedback() {
+        previousRatingView.feedback = nil
     }
 
     private func setupView() {
@@ -91,9 +104,18 @@ class ConversationClosedView: UIView {
         restartConversationStackView.addArrangedSubview(otherQueriesLabel)
         restartConversationStackView.addArrangedSubview(restartConversationButton)
         addViewsForAutolayout(views: [
+            previousRatingView,
             conversationResolvedLabel,
             restartConversationStackView
         ])
+
+        previousRatingView.layout {
+            $0.leading == leadingAnchor
+            $0.trailing == trailingAnchor
+            $0.bottom ==
+                conversationResolvedLabel.topAnchor + Size.PreviousFeedbackView.bottom
+            $0.top >= topAnchor
+        }
 
         NSLayoutConstraint.activate([
             conversationResolvedLabel.leadingAnchor.constraint(
@@ -124,10 +146,6 @@ class ConversationClosedView: UIView {
             )
         ])
     }
-
-    @objc func restartConversationTapped() {
-        restartTapped?()
-    }
 }
 
 extension ConversationClosedView: Localizable {
@@ -152,6 +170,10 @@ extension ConversationClosedView: Localizable {
 extension ConversationClosedView {
     enum Size {
         static let maxHeight: CGFloat = 85
+
+        enum PreviousFeedbackView {
+            static let bottom: CGFloat = -16
+        }
 
         enum ConversationResolvedLabel {
             static let leading: CGFloat = 30

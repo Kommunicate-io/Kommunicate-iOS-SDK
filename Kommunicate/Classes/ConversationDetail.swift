@@ -73,15 +73,15 @@ class ConversationDetail {
         return channel.isClosedConversation
     }
 
-    func isFeedbackShownFor(channelId: Int, completion: @escaping (Bool)->()) {
+    func feedbackFor(channelId: Int, completion: @escaping (Feedback?)->()) {
         let conversationService = KMConversationService()
         conversationService.feedbackFor(groupId: channelId, completion: { result in
             switch result {
-            case .success(_):
-                completion(true)
+            case .success(let value):
+                completion(value.feedback)
             case .failure(let error):
                 print("Conversation feedback error: \(error.localizedDescription)")
-                completion(false)
+                completion(nil)
             }
         })
     }

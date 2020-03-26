@@ -71,6 +71,8 @@ class RatingViewController: UIViewController {
         textView.layer.cornerRadius = 4
         textView.layer.borderWidth = 0.7
         textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.backgroundColor = .clear
+        textView.textColor = .black
         return textView
     }()
 

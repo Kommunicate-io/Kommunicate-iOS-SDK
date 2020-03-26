@@ -11,12 +11,15 @@ extension Style {
     enum Color {
         enum Background: Int {
             case mediumGrey = 0xf0f0f0
+            case lightGreyOne = 0xf9f9f9
         }
 
         enum Text: Int {
             case warmGrey = 0x8b8888
             case warmBlue = 0x5451e2
             case brownishGreyTwo = 0x676767
+            case mediumDarkBlack = 0x373535
+            case mediumDarkBlackTwo = 0x363636
         }
     }
 }
