@@ -42,7 +42,6 @@ struct ConversationFeedback: Decodable {
     let comments: [String]?
     let rating: Int
     let type, supportAgentID: Int?
-    let userInfo: String?
     let createdAt, updatedAt: String
     let deleteAt: String?
     let dataCreatedAt, dataUpdatedAt: String
@@ -53,7 +52,7 @@ struct ConversationFeedback: Decodable {
         case groupID = "groupId"
         case comments, rating, type
         case supportAgentID = "supportAgentId"
-        case userInfo, createdAt, updatedAt, deleteAt
+        case createdAt, updatedAt, deleteAt
         case dataCreatedAt = "created_at"
         case dataUpdatedAt = "updated_at"
         case userID = "user_id"
