@@ -25,6 +25,7 @@ public typealias KMDbHandler = ALDBHandler
 public typealias KMRegisterUserClientService = ALRegisterUserClientService
 public typealias KMConfiguration = ALKConfiguration
 public typealias KMMessageStyle = ALKMessageStyle
+public typealias KMStyle = ApplozicSwift.Style
 public typealias KMBaseNavigationViewController = ALKBaseNavigationViewController
 let faqIdentifier =  11223346
 
