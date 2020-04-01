@@ -7,6 +7,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 ### Enhancements
 - Added support for syncing package details when a suspension screen is shown.
 - [CM-41] Now conversation feedback will be shown to the user if it's a resolved conversation.
+- [CM-126] Added an alias for ApplozicSwift's `Style` type.
 
 ## [4.0.0] - 2020-03-09
 
