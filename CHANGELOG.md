@@ -4,6 +4,10 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Enhancements
+
+- [CM-236] Enable CSAT by default.
+
 ## [5.0.0] - 2020-04-01
 
 ### Enhancements
