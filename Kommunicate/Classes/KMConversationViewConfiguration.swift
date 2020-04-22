@@ -13,7 +13,7 @@ public struct KMConversationViewConfiguration {
     public var imageForBackButton: UIImage?
     public var conversationLaunchNotificationName = "ConversationLaunched"
     public var backButtonNotificationName = "ConversationClosed"
-    public var isCSATOptionDisabled: Bool = true
+    public var isCSATOptionDisabled: Bool = false
      /// Start new conversation icon in conversation list.
     public var startNewButtonIcon : UIImage? = UIImage(named: "icon_new_chat_red", in: Bundle.kommunicate, compatibleWith: nil)
 
