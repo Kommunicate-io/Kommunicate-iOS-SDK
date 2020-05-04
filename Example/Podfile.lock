@@ -37,6 +37,7 @@ PODS:
   - SDWebImage/Core (5.1.1)
 
 DEPENDENCIES:
+  - ApplozicSwift (from `/Users/apple/Documents/SWIFT-APPLOZIC/SWIFT-SDK/Swift backup/ApplozicSwift/ApplozicSwift.podspec`)
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - Nimble
@@ -46,7 +47,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Applozic
-    - ApplozicSwift
     - FBSnapshotTestCase
     - iOSSnapshotTestCase
     - Kingfisher
@@ -57,6 +57,8 @@ SPEC REPOS:
     - SDWebImage
 
 EXTERNAL SOURCES:
+  ApplozicSwift:
+    :path: "/Users/apple/Documents/SWIFT-APPLOZIC/SWIFT-SDK/Swift backup/ApplozicSwift/ApplozicSwift.podspec"
   Kommunicate:
     :path: "../"
 
@@ -73,6 +75,6 @@ SPEC CHECKSUMS:
   Quick: 7fb19e13be07b5dfb3b90d4f9824c855a11af40e
   SDWebImage: 96d7f03415ccb28d299d765f93557ff8a617abd8
 
-PODFILE CHECKSUM: c4ea011b9a5ec8fda788fea71ce37c668218a091
+PODFILE CHECKSUM: 1683c391cc15975ab1c644ee3ba2eb45812bff17
 
 COCOAPODS: 1.9.2
