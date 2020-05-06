@@ -65,7 +65,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   ApplozicSwift:
-    :commit: 52df403532b39562daf018b5a4ab20383d4fe54e
+    :commit: 77000ab297daa36543a927a1a135b57cb817ac20
     :git: https://github.com/AppLozic/ApplozicSwift.git
 
 SPEC CHECKSUMS:
@@ -81,6 +81,6 @@ SPEC CHECKSUMS:
   Quick: 7fb19e13be07b5dfb3b90d4f9824c855a11af40e
   SDWebImage: 96d7f03415ccb28d299d765f93557ff8a617abd8
 
-PODFILE CHECKSUM: ab8586fef23f3cf9cd05a4fe8a50681995c36449
+PODFILE CHECKSUM: 3a6f2d0fdd6c1e0be4d346697b21eb3cc6ed2777
 
 COCOAPODS: 1.9.2
