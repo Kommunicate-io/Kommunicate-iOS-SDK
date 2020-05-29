@@ -188,38 +188,48 @@ open class Kommunicate: NSObject,Localizable{
         }
 
         let service = KMConversationService()
+        let appSettingsService = KMAppSettingService()
         if KMUserDefaultHandler.isLoggedIn() {
             var allAgentIds = conversation.agentIds
             var allBotIds = ["bot"] // Default bot that should be added everytime.
 
             if let botIds = conversation.botIds { allBotIds.append(contentsOf: botIds) }
 
-            service.defaultAgentFor(completion: {
+            appSettingsService.appSetting {
                 result in
                 switch result {
-                case .success(let agentId):
-                    allAgentIds.append(agentId)
+                case .success(let appSettings):
+                    allAgentIds.append(appSettings.agentID)
+
+                    if let chatWidget = appSettings.chatWidget,
+                        chatWidget.isSingleThreaded {
+                        conversation.useLastConversation = chatWidget.isSingleThreaded
+                    }
+
                 case .failure(let error):
                     completion(.failure(KMConversationError.api(error)))
-                    return;
+                    return
                 }
+
                 allAgentIds = allAgentIds.uniqueElements
                 conversation.agentIds = allAgentIds
                 conversation.botIds = allBotIds
 
                 if conversation.useLastConversation {
-                    conversation.clientConversationId = service.createClientIdFrom(userId: conversation.userId, agentIds: conversation.agentIds, botIds: conversation.botIds ?? [])
+                    conversation.clientConversationId = service.createClientIdFrom(
+                        userId: conversation.userId,
+                        agentIds: conversation.agentIds,
+                        botIds: conversation.botIds ?? [])
                 }
 
                 service.createConversation(conversation: conversation, completion: { response in
-
                     guard let conversationId = response.clientChannelKey else {
                         completion(.failure(KMConversationError.api(response.error)))
                         return;
                     }
                     completion(.success(conversationId))
                 })
-            })
+            }
         } else {
             completion(.failure(KMConversationError.notLoggedIn))
         }
