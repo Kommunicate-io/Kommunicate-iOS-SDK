@@ -135,47 +135,6 @@ public class KMConversationService: KMConservationServiceable,Localizable {
         })
     }
 
-    /**
-     Fetches and returns the default agent id.
-
-     - Parameters:
-        - applicationkey: Application key for which a default agent has been set.
-
-     - Returns: A Result of type `String`.
-
-     **/
-    public func defaultAgentFor(
-        applicationKey: String = ALUserDefaultsHandler.getApplicationKey(),
-        completion: @escaping (Result<String, Error>)->()) {
-        // Set up the URL request
-        guard let url = URLBuilder.agentsURLFor(applicationKey: applicationKey).url
-            else {
-                completion(.failure(APIError.urlBuilding))
-                return
-        }
-        DataLoader.request(url: url, completion: {
-            result in
-
-            switch result {
-            case .success(let data):
-                do {
-                    guard let agentsJson = try JSONSerialization.jsonObject(with: data, options: [])
-                        as? [String: Any] else {
-                            print("error trying to convert data to JSON")
-                            completion(.failure(APIError.jsonConversion))
-                            return
-                    }
-                    completion(self.agentIdFrom(json: agentsJson))
-                } catch  {
-                    print("error trying to convert data to JSON")
-                    completion(.failure(error))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        })
-    }
-
     @available(*, deprecated, message: "Use createConversation(conversation:completion:)")
     public func createConversation(
         userId: String,
@@ -187,16 +146,26 @@ public class KMConversationService: KMConservationServiceable,Localizable {
         var allAgentIds = agentIds
         var allBotIds = ["bot"] // Default bot that should be added everytime.
         if let botIds = botIds {allBotIds.append(contentsOf: botIds)}
-        defaultAgentFor(completion: {
+
+        let appSettingService = KMAppSettingService()
+        var isSingleThreadedConversation = useLastConversation
+
+        appSettingService.appSetting {
             result in
             switch result {
-            case .success(let agentId):
-                allAgentIds.append(agentId)
+            case .success(let appSettings):
+                allAgentIds.append(appSettings.agentID)
+                if let chatWidget = appSettings.chatWidget,
+                    let isSingleThreaded = chatWidget.isSingleThreaded {
+                    isSingleThreadedConversation = isSingleThreaded
+                }
             case .failure(let error):
-                print("Error while fetching agents id: \(error)")
+                print("Error while fetching app settings: \(error)")
+                return
             }
+
             allAgentIds = allAgentIds.uniqueElements
-            if useLastConversation {
+            if isSingleThreadedConversation {
                 // Sort and combine agent ids.
                 var newClientId = allAgentIds
                     .sorted(by: <)
@@ -228,8 +197,7 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                     completion(response)
                 })
             }
-        })
-
+        }
     }
 
     /**

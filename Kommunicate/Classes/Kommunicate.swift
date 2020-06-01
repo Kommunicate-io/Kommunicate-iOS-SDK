@@ -202,8 +202,8 @@ open class Kommunicate: NSObject,Localizable{
                     allAgentIds.append(appSettings.agentID)
 
                     if let chatWidget = appSettings.chatWidget,
-                        chatWidget.isSingleThreaded {
-                        conversation.useLastConversation = chatWidget.isSingleThreaded
+                        let isSingleThreaded = chatWidget.isSingleThreaded {
+                        conversation.useLastConversation = isSingleThreaded
                     }
 
                 case .failure(let error):

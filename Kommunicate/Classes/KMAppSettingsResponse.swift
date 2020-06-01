@@ -38,7 +38,7 @@ struct ChatWidgetResponse: Decodable {
     let primaryColor : String
     let secondaryColor : String?
     let showPoweredBy : Bool
-    let isSingleThreaded : Bool
+    let isSingleThreaded : Bool?
 }
 
 extension KMAppSettingsResponse {
@@ -53,13 +53,6 @@ extension KMAppSettingsResponse {
             throw KMAppSettingsError.notFound
         }
         return appSettingResponse
-    }
-
-    enum ChatWidgetKeys {
-        static let primaryColor = "primaryColor"
-        static let secondaryColor = "secondaryColor"
-        static let showPoweredBy = "showPoweredBy"
-        static let sentMessageBackgroundColor = "sentMessageBackgroundColor"
     }
 }
 
