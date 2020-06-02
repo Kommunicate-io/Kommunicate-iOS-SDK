@@ -37,7 +37,7 @@ PODS:
   - SDWebImage/Core (5.1.1)
 
 DEPENDENCIES:
-  - ApplozicSwift (from `https://github.com/AppLozic/ApplozicSwift.git`, branch `CM-14`)
+  - ApplozicSwift (from `https://github.com/AppLozic/ApplozicSwift.git`, branch `buttonStyle`)
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - Nimble
@@ -58,14 +58,14 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   ApplozicSwift:
-    :branch: CM-14
+    :branch: buttonStyle
     :git: https://github.com/AppLozic/ApplozicSwift.git
   Kommunicate:
     :path: "../"
 
 CHECKOUT OPTIONS:
   ApplozicSwift:
-    :commit: 4d62b017da7c5e02d6eb010c1e6676d6cbffc41e
+    :commit: 51bbf5c656562238c45b5c9b84bf4caf72851afc
     :git: https://github.com/AppLozic/ApplozicSwift.git
 
 SPEC CHECKSUMS:
@@ -81,6 +81,6 @@ SPEC CHECKSUMS:
   Quick: 7fb19e13be07b5dfb3b90d4f9824c855a11af40e
   SDWebImage: 96d7f03415ccb28d299d765f93557ff8a617abd8
 
-PODFILE CHECKSUM: 3a6f2d0fdd6c1e0be4d346697b21eb3cc6ed2777
+PODFILE CHECKSUM: 57af9295a3d0bb2a5501e8dff7274ad0cab8c6be
 
 COCOAPODS: 1.9.2
