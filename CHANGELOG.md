@@ -4,6 +4,9 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Enhancements
+[CM-23] Single thread conversation based on chat widget rules setup in dashboard
+
 ## [5.1.0] - 2020-04-22
 
 ### Enhancements
