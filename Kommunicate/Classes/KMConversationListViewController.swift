@@ -480,12 +480,13 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
                     DispatchQueue.main.async {
                         self.view.isUserInteractionEnabled = true
                         alertView.dismiss(animated: true, completion: nil)
+
+                        guard let alChannel = channel else {
+                            print("Failed to launch the conversation")
+                            return
+                        }
+                        self.launchChat(groupId: alChannel.key)
                     }
-                    guard let alChannel = channel else {
-                        print("Failed to launch the conversation")
-                        return
-                    }
-                    self.launchChat(groupId: alChannel.key)
                 })
             case .failure( _):
                 DispatchQueue.main.async {
