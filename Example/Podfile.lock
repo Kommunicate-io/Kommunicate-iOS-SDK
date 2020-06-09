@@ -66,7 +66,7 @@ SPEC CHECKSUMS:
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
   Kingfisher: d2279a7abece3c7f25a80cd2b7f363ca5cf3f44c
-  Kommunicate: 16d8f1dfffb53f4dfb7b03732fe1fddb2f89ff89
+  Kommunicate: 9560e545227d7d7ed8665ba9919f962c69283766
   MGSwipeTableCell: b804e4e450dee439c42250be90bd50458bf67fce
   Nimble: dc2fe319733797b05d453f19f5508ca6bcd88f04
   Nimble-Snapshots: 3a4750d83752625c8ebfdc588da105303ee2201e

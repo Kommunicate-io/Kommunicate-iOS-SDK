@@ -514,7 +514,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         activityIndicator.isUserInteractionEnabled = false
         activityIndicator.startAnimating()
 
-        let height: NSLayoutConstraint = NSLayoutConstraint(item: loadingAlertController.view, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 80)
+        let height: NSLayoutConstraint = NSLayoutConstraint(item: loadingAlertController.view as Any, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 80)
         loadingAlertController.view.addConstraint(height);
 
         viewController.present(loadingAlertController, animated: true, completion: nil)
@@ -551,7 +551,7 @@ extension KMConversationListViewController: ALMessagesDelegate {
     }
 
     public func updateMessageList(_ messagesArray: NSMutableArray!) {
-        print("updated message array: ", messagesArray)
+        print("Updated message array: ", messagesArray ?? "empty")
     }
 }
 
@@ -615,7 +615,7 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
     }
 
     open func syncCall(_ alMessage: ALMessage!, andMessageList _: NSMutableArray!) {
-        print("sync call: ", alMessage.message)
+        print("sync call: ", alMessage.message ?? "empty")
         guard let message = alMessage else { return }
         let viewController = navigationController?.visibleViewController as? KMConversationViewController
         if let vm = viewController?.viewModel, vm.contactId != nil || vm.channelKey != nil,
