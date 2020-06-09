@@ -375,7 +375,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
 
         let viewController: KMConversationViewController!
         if conversationViewController == nil {
-            viewController = KMConversationViewController(configuration: configuration, conversationViewConfiguration: kmConversationViewConfiguration)
+            viewController = KMConversationViewController(configuration: configuration, conversationViewConfiguration: kmConversationViewConfiguration, individualLaunch: false)
             viewController.viewModel = conversationViewModel
         } else {
             viewController = conversationViewController
@@ -702,7 +702,7 @@ extension KMConversationListViewController: ALKConversationListTableViewDelegate
     public func tapped(_ chat: ALKChatViewModelProtocol, at index: Int) {
 
         let convViewModel = conversationViewModelType.init(contactId: chat.contactId, channelKey: chat.channelKey, localizedStringFileName: configuration.localizedStringFileName)
-        let viewController = conversationViewController ?? KMConversationViewController(configuration: configuration, conversationViewConfiguration: kmConversationViewConfiguration)
+        let viewController = conversationViewController ?? KMConversationViewController(configuration: configuration, conversationViewConfiguration: kmConversationViewConfiguration, individualLaunch: false)
         viewController.viewModel = convViewModel
         viewController.individualLaunch = false
         navigationController?.pushViewController(viewController, animated: false)
