@@ -6,9 +6,12 @@
 //
 
 import Foundation
+import ApplozicSwift
 
 class KMAppSettingService {
-    
+
+    let appSettingsUserDefaults = ALKAppSettingsUserDefaults()
+
     func appSetting(
         applicationKey: String = KMUserDefaultHandler.getApplicationKey(),
         completion: @escaping (Result<AppSetting, KMAppSettingsError>)->()) {
@@ -36,6 +39,40 @@ class KMAppSettingService {
                 completion(.failure(.api(.network(error))))
             }
         })
+    }
+
+    func updateAppsettings(chatWidgetResponse: ChatWidgetResponse?) {
+        guard let chatWidget = chatWidgetResponse else {
+            return
+        }
+
+        let primaryColor = chatWidget.primaryColor.replacingOccurrences(of: "#", with: "")
+        let appSettings = ALKAppSettings(primaryColor: primaryColor)
+
+        /// Primary color for sent message background
+        appSettings.sentMessageBackgroundColor = primaryColor
+
+        /// Primary color for attachment tint color
+        appSettings.attachmentIconsTintColor = primaryColor
+
+        if let secondaryColor = chatWidget.secondaryColor, !secondaryColor.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            appSettings.secondaryColor = secondaryColor.replacingOccurrences(of: "#", with: "")
+        }
+
+        appSettings.buttonPrimaryColor = primaryColor
+
+        appSettings.showPoweredBy = chatWidget.showPoweredBy
+
+        appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
+    }
+
+    func clearAppSettingsData()  {
+        /// Clearing the app settings data
+        appSettingsUserDefaults.clear()
+
+        /// Clearing the app navigationBar color
+        let navigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [ALKBaseNavigationViewController.self])
+        navigationBarProxy.barTintColor = nil
     }
 
 }

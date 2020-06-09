@@ -145,14 +145,26 @@ open class Kommunicate: NSObject,Localizable{
             }
             else if(!(response?.isRegisteredSuccessfully())!)
             {
-                ALUtilityClass.showAlertMessage("Invalid Password", andTitle: "Oops!!!")
                 let errorPass = NSError(domain:"Invalid Password", code:0, userInfo:nil)
                 completion(response , errorPass as NSError?)
             }
             else
             {
                 print("registered")
-                completion(response , error as NSError?)
+                let kmAppSetting = KMAppSettingService()
+                kmAppSetting.appSetting { (result) in
+                    switch result {
+                    case .success(let appSetting):
+                        DispatchQueue.main.async {
+                            kmAppSetting.updateAppsettings(chatWidgetResponse: appSetting.chatWidget)
+                            completion(response , error as NSError?)
+                        }
+                    case .failure( _) :
+                        DispatchQueue.main.async {
+                            completion(response , error as NSError?)
+                        }
+                    }
+                }
             }
         })
     }
@@ -160,7 +172,9 @@ open class Kommunicate: NSObject,Localizable{
     /// Logs out the current logged in user and clears all the cache.
     open class func logoutUser(completion: @escaping (Result<String, KMError>) -> ()) {
         let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
+        let kmAppSetting = KMAppSettingService()
         applozicClient?.logoutUser(completion: { (error, apiResponse) in
+            kmAppSetting.clearAppSettingsData()
             guard error == nil else {
                 completion(.failure(KMError.api(error)))
                 return
@@ -354,13 +368,9 @@ open class Kommunicate: NSObject,Localizable{
         let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName)
         let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration)
         conversationViewController.viewModel = convViewModel
-        if let navigationVC = viewController.navigationController {
-            navigationVC.pushViewController(conversationViewController, animated: false)
-        } else {
-            let navigationController = KMBaseNavigationViewController(rootViewController: conversationViewController)
-            navigationController.modalPresentationStyle = .fullScreen
-            viewController.present(navigationController, animated: false, completion: nil)
-        }
+        let navigationController = KMBaseNavigationViewController(rootViewController: conversationViewController)
+        navigationController.modalPresentationStyle = .fullScreen
+        viewController.present(navigationController, animated: false, completion: nil)
         completionHandler(true)
     }
 
@@ -462,9 +472,11 @@ open class Kommunicate: NSObject,Localizable{
     @available(*, deprecated, message: "Use logoutUser(completion:)")
     @objc open class func logoutUser() {
         let registerUserClientService = ALRegisterUserClientService()
+        let kmAppSetting = KMAppSettingService()
         if let _ = ALUserDefaultsHandler.getDeviceKeyString() {
             registerUserClientService.logout(completionHandler: {
                 _, _ in
+                kmAppSetting.clearAppSettingsData()
                 NSLog("Applozic logout")
             })
         }
