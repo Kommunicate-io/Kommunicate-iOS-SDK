@@ -67,7 +67,9 @@ open class KMConversationViewController: ALKConversationViewController {
         setupNavigation()
     }
 
-    required public init(configuration: ALKConfiguration, conversationViewConfiguration: KMConversationViewConfiguration ,individualLaunch : Bool) {
+    required public init(configuration: ALKConfiguration,
+                         conversationViewConfiguration: KMConversationViewConfiguration,
+                         individualLaunch : Bool = true) {
         self.kmConversationViewConfiguration = conversationViewConfiguration
         super.init(configuration: configuration)
         self.individualLaunch = individualLaunch

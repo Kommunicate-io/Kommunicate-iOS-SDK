@@ -366,7 +366,7 @@ open class Kommunicate: NSObject,Localizable{
 
     class func openChatWith(groupId: NSNumber, from viewController: UIViewController, completionHandler: @escaping (Bool) -> Void) {
         let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName)
-        let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration, individualLaunch: true)
+        let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration)
         conversationViewController.viewModel = convViewModel
         let navigationController = KMBaseNavigationViewController(rootViewController: conversationViewController)
         navigationController.modalPresentationStyle = .fullScreen
