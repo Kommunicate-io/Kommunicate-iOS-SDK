@@ -67,9 +67,12 @@ open class KMConversationViewController: ALKConversationViewController {
         setupNavigation()
     }
 
-    required public init(configuration: ALKConfiguration, conversationViewConfiguration: KMConversationViewConfiguration) {
+    required public init(configuration: ALKConfiguration,
+                         conversationViewConfiguration: KMConversationViewConfiguration,
+                         individualLaunch : Bool = true) {
         self.kmConversationViewConfiguration = conversationViewConfiguration
         super.init(configuration: configuration)
+        self.individualLaunch = individualLaunch
         addNotificationCenterObserver()
     }
 
@@ -127,14 +130,14 @@ open class KMConversationViewController: ALKConversationViewController {
             object: nil,
             queue: nil,
             using: { [weak self] notification in
-            guard let notificationInfo = notification.userInfo,
-                let strongSelf = self else {
-                    return
-            }
-            let identifier = notificationInfo["identifier"] as? Int
-            if identifier == strongSelf.faqIdentifier{
-                Kommunicate.openFaq(from: strongSelf, with: strongSelf.configuration)
-            }
+                guard let notificationInfo = notification.userInfo,
+                    let strongSelf = self else {
+                        return
+                }
+                let identifier = notificationInfo["identifier"] as? Int
+                if identifier == strongSelf.faqIdentifier{
+                    Kommunicate.openFaq(from: strongSelf, with: strongSelf.configuration)
+                }
         })
 
         channelMetadataUpdateToken = NotificationCenter.default.observe(
@@ -144,6 +147,29 @@ open class KMConversationViewController: ALKConversationViewController {
             using: { [weak self] notification in
                 self?.onChannelMetadataUpdate()
         })
+
+        if individualLaunch {
+            NotificationCenter.default.addObserver(self, selector: #selector(pushNotification(notification:)), name: Notification.Name.pushNotification, object: nil)
+        }
+    }
+
+    @objc func pushNotification(notification: NSNotification) {
+        print("Push notification received in KMConversationViewController: ", notification.object ?? "")
+        let pushNotificationHelper = KMPushNotificationHelper(configuration, kmConversationViewConfiguration)
+        let (notifData, _) = pushNotificationHelper.notificationInfo(notification as Notification)
+        guard
+            self.isViewLoaded,
+            self.view.window != nil,
+            let notificationData = notifData,
+            !pushNotificationHelper.isNotificationForActiveThread(notificationData)
+            else { return }
+
+        unsubscribingChannel()
+        viewModel.contactId = nil
+        viewModel.channelKey = notificationData.groupId
+        viewModel.conversationProxy = nil
+        viewWillLoadFromTappingOnNotification()
+        refreshViewController()
     }
 
     func addAwayMessageConstraints() {
