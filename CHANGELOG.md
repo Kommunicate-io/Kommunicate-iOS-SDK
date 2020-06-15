@@ -4,6 +4,8 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Enhancements
+- Migrated to Swift 5
 ### Fixes
 - [CM-308] Conversation was not switched while we open conversation through notification in some cases.
 

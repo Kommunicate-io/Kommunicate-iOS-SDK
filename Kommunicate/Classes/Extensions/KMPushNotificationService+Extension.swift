@@ -21,6 +21,8 @@ extension ALPushNotificationService {
             processPushNotification(dict, updateUI: NSNumber(value: APP_STATE_BACKGROUND.rawValue))
         case .inactive:
             processPushNotification(dict, updateUI: NSNumber(value: APP_STATE_INACTIVE.rawValue))
+        @unknown default:
+            print("Unknown UIApplication state while processing push notification")
         }
     }
 }

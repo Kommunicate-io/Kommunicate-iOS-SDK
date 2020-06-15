@@ -51,7 +51,7 @@ class LoginViewController: UIViewController {
         }
         let kmUser = userWithUserId(userIdEntered, andApplicationId: applicationId)
 
-        print("userId:: ", kmUser.userId)
+        print("userId:: ", kmUser.userId ?? "")
         if(!((emailId.text?.isEmpty)!)){
             kmUser.email = emailId.text
         }
