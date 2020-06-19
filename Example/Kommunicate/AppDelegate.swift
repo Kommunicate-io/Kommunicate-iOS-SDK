@@ -20,12 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        let navigationBarProxy = UINavigationBar.appearance()
-        navigationBarProxy.barTintColor
-            = UIColor(red:0.93, green:0.94, blue:0.95, alpha:1.0) // light nav blue
-        navigationBarProxy.isTranslucent = false
+        setUpNavigationBarAppearance()
 
         UNUserNotificationCenter.current().delegate = self
+
         registerForNotification()
         KMPushNotificationHandler.shared.dataConnectionNotificationHandlerWith(Kommunicate.defaultConfiguration, Kommunicate.kmConversationViewConfiguration)
         let kmApplocalNotificationHandler : KMAppLocalNotification =  KMAppLocalNotification.appLocalNotificationHandler()
@@ -116,6 +114,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             service.processPushNotification(dict, appState: UIApplication.shared.applicationState)
         }
         completionHandler()
+    }
+
+    func setUpNavigationBarAppearance() {
+
+        // App appearance
+        let navigationBarProxy = UINavigationBar.appearance()
+        navigationBarProxy.isTranslucent = false
+        navigationBarProxy.barTintColor = UIColor(red:0.93, green:0.94, blue:0.95, alpha:1.0) // light nav blue
+        navigationBarProxy.tintColor = .white
+        navigationBarProxy.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+
+        // Kommunicate SDK
+        let kmNavigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [KMBaseNavigationViewController.self])
+        kmNavigationBarProxy.isTranslucent = false
+        kmNavigationBarProxy.tintColor = .white
+        kmNavigationBarProxy.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
     }
 
 }
