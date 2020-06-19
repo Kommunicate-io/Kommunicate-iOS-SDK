@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        AppDelegate.setUpNavigationBarAppearance()
+        setUpNavigationBarAppearance()
 
         UNUserNotificationCenter.current().delegate = self
 
@@ -116,13 +116,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         completionHandler()
     }
 
-    class func setUpNavigationBarAppearance() {
+    func setUpNavigationBarAppearance() {
 
         // App appearance
         let navigationBarProxy = UINavigationBar.appearance()
         navigationBarProxy.isTranslucent = false
-        navigationBarProxy.barTintColor
-            = UIColor(red:0.93, green:0.94, blue:0.95, alpha:1.0) // light nav blue
+        navigationBarProxy.barTintColor = UIColor(red:0.93, green:0.94, blue:0.95, alpha:1.0) // light nav blue
         navigationBarProxy.tintColor = .white
         navigationBarProxy.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
 

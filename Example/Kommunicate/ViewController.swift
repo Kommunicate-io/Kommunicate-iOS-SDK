@@ -22,9 +22,6 @@ class ViewController: UIViewController {
     }
 
     @IBAction func launchConversation(_ sender: Any) {
-
-        AppDelegate.setUpNavigationBarAppearance()
-
         activityIndicator.startAnimating()
         view.isUserInteractionEnabled = false
 
