@@ -114,22 +114,23 @@ class ConversationVCNavBar: UIView, Localizable {
     @objc func backButtonClicked(_ sender: UIButton) {
         delegate?.backButtonPressed()
     }
-
-    func setupAppearance(_ appearance: UINavigationBar) {
-        if let textColor = appearance.titleTextAttributes?[.foregroundColor] as? UIColor {
+    
+    func setupAppearance() {
+        let navigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [KMBaseNavigationViewController.self])
+        if let textColor = navigationBarProxy.titleTextAttributes?[.foregroundColor] as? UIColor {
             profileName.textColor = textColor
             onlineStatusText.textColor = textColor
         }
-        if let titleFont = appearance.titleTextAttributes?[.font] as? UIFont {
+        if let titleFont = navigationBarProxy.titleTextAttributes?[.font] as? UIFont {
             profileName.font = titleFont
         }
-        if let subtitleFont = appearance.titleTextAttributes?[.subtitleFont] as? UIFont {
+        if let subtitleFont = navigationBarProxy.titleTextAttributes?[.subtitleFont] as? UIFont {
             onlineStatusText.font = subtitleFont
         }
-        if let tintColor = appearance.tintColor {
+        if let tintColor = navigationBarProxy.tintColor {
             backButton.tintColor = tintColor
         }
-        statusIconBackgroundColor.backgroundColor = appearance.barTintColor
+        statusIconBackgroundColor.backgroundColor = navigationBarProxy.barTintColor
     }
 
     private func setupConstraints() {

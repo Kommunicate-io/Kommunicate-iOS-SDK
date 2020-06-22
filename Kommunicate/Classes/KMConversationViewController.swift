@@ -87,9 +87,8 @@ open class KMConversationViewController: ALKConversationViewController {
     open override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let navBar = navigationController?.navigationBar {
-            customNavigationView.setupAppearance(navBar)
-        }
+        customNavigationView.setupAppearance()
+        
         if #available(iOS 13.0, *) {
             // Always adopt a light interface style.
             overrideUserInterfaceStyle = .light
