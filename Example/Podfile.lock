@@ -1,14 +1,14 @@
 PODS:
-  - Applozic (7.6.0):
+  - Applozic (7.7.0):
     - SDWebImage (~> 5.7.2)
-  - ApplozicSwift (5.6.0):
-    - ApplozicSwift/Complete (= 5.6.0)
-  - ApplozicSwift/Complete (5.6.0):
-    - Applozic (~> 7.6.0)
+  - ApplozicSwift (5.7.0):
+    - ApplozicSwift/Complete (= 5.7.0)
+  - ApplozicSwift/Complete (5.7.0):
+    - Applozic (~> 7.7.0)
     - ApplozicSwift/RichMessageKit
-    - Kingfisher (~> 5.13.0)
+    - Kingfisher (~> 5.14.0)
     - MGSwipeTableCell (~> 1.6.11)
-  - ApplozicSwift/RichMessageKit (5.6.0)
+  - ApplozicSwift/RichMessageKit (5.7.0)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
   - FBSnapshotTestCase/Core (2.1.4)
@@ -19,13 +19,13 @@ PODS:
   - iOSSnapshotTestCase/Core (6.2.0)
   - iOSSnapshotTestCase/SwiftSupport (6.2.0):
     - iOSSnapshotTestCase/Core
-  - Kingfisher (5.13.4):
-    - Kingfisher/Core (= 5.13.4)
-  - Kingfisher/Core (5.13.4)
+  - Kingfisher (5.14.0):
+    - Kingfisher/Core (= 5.14.0)
+  - Kingfisher/Core (5.14.0)
   - Kommunicate (5.3.0):
-    - ApplozicSwift (~> 5.6.0)
+    - ApplozicSwift (~> 5.7.0)
   - MGSwipeTableCell (1.6.11)
-  - Nimble (8.1.0)
+  - Nimble (8.1.1)
   - Nimble-Snapshots (8.2.1):
     - Nimble-Snapshots/Core (= 8.2.1)
   - Nimble-Snapshots/Core (8.2.1):
@@ -61,14 +61,14 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Applozic: eb60851aac3a74632bafac64ad0e7cefc956250c
-  ApplozicSwift: 2ed5595373c5c63fc443238c3691ac91d1fe9080
+  Applozic: 055c1c646237644b6bac18efcb15214b85f243ff
+  ApplozicSwift: 1d1780d1e3870772f3ed5d9d0dbde9ea0d770bc8
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
-  Kingfisher: d2279a7abece3c7f25a80cd2b7f363ca5cf3f44c
-  Kommunicate: 9560e545227d7d7ed8665ba9919f962c69283766
+  Kingfisher: 7b64389a43139c903ec434788344c288217c792d
+  Kommunicate: 411f7406061c0c6051884e70ed798782d799d1b9
   MGSwipeTableCell: b804e4e450dee439c42250be90bd50458bf67fce
-  Nimble: dc2fe319733797b05d453f19f5508ca6bcd88f04
+  Nimble: 5f8a2fb6fa343a7242dfdd9d42f7267419d464b2
   Nimble-Snapshots: 3a4750d83752625c8ebfdc588da105303ee2201e
   Quick: 6d9559f40647bc4d510103842ef2fdd882d753e2
   SDWebImage: 48b88379b798fd1e4298f95bb25d2cdabbf4deb3
