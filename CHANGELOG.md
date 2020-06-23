@@ -8,7 +8,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 - Migrated to Swift 5
 ### Fixes
 - [CM-308] Conversation was not switched while we open conversation through notification in some cases.
-- Fixed the UI appearance color was not applied in the conversion thread launch.
+- Fixed an issue where changing tint color through UIAppearance was not working in case of directly launching a conversation thread.
 
 ## [5.3.0] - 2020-06-09
 
