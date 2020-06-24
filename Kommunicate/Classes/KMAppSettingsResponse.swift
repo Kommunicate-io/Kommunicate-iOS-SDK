@@ -35,9 +35,9 @@ struct AppSetting: Decodable {
 }
 
 struct ChatWidgetResponse: Decodable {
-    let primaryColor : String
+    let primaryColor : String?
     let secondaryColor : String?
-    let showPoweredBy : Bool
+    let showPoweredBy : Bool?
     let isSingleThreaded : Bool?
 }
 

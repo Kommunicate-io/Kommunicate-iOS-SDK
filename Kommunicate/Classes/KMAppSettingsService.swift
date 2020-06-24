@@ -42,11 +42,12 @@ class KMAppSettingService {
     }
 
     func updateAppsettings(chatWidgetResponse: ChatWidgetResponse?) {
-        guard let chatWidget = chatWidgetResponse else {
-            return
+        guard let chatWidget = chatWidgetResponse,
+            var primaryColor = chatWidget.primaryColor
+            else {
+                return
         }
-
-        let primaryColor = chatWidget.primaryColor.replacingOccurrences(of: "#", with: "")
+        primaryColor = primaryColor.replacingOccurrences(of: "#", with: "")
         let appSettings = ALKAppSettings(primaryColor: primaryColor)
 
         /// Primary color for sent message background
@@ -58,11 +59,8 @@ class KMAppSettingService {
         if let secondaryColor = chatWidget.secondaryColor, !secondaryColor.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             appSettings.secondaryColor = secondaryColor.replacingOccurrences(of: "#", with: "")
         }
-
         appSettings.buttonPrimaryColor = primaryColor
-
-        appSettings.showPoweredBy = chatWidget.showPoweredBy
-
+        appSettings.showPoweredBy = chatWidget.showPoweredBy ?? false
         appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
     }
 
