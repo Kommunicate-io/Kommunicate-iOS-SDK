@@ -128,8 +128,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Kommunicate SDK
         let kmNavigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [KMBaseNavigationViewController.self])
         kmNavigationBarProxy.isTranslucent = false
-        kmNavigationBarProxy.tintColor = .white
-        kmNavigationBarProxy.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        navigationBarProxy.tintColor = UIColor.navigationOceanBlue()
+        kmNavigationBarProxy.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
     }
 
 }
