@@ -4,6 +4,8 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+## [5.4.0] - 2020-06-24
+
 ### Enhancements
 - Migrated to Swift 5
 ### Fixes
@@ -141,6 +143,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 - [AL-2853]Added support for showing Away message.
 - [AL-3062]While creating a conversation, a default agent will be fetched and added. Now it's not required  to pass the agent Ids.
+- [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
