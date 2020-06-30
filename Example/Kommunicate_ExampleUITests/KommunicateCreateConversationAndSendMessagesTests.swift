@@ -1,14 +1,14 @@
 //
-//  ApplozicSwiftGroupUITest.swift
-//  ApplozicSwiftDemoUITests
+//  KommunicateCreateConversationAndSendMessagesTests.swift
+//  KommunicateCreateConversationAndSendMessagesTests
 //
-//  Created by Archit on 26/11/19.
+//  Created by Archit on 11/06/20.
 //  Copyright © 2019 Applozic. All rights reserved.
 //
 
 import XCTest
 
-class KommunicateCreateConversation: XCTestCase {
+class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
     enum GroupData {
         static let typeText = "Hello Kommunicate"
         static let fillUserId = "TestUserId"
@@ -107,7 +107,7 @@ class KommunicateCreateConversation: XCTestCase {
     }
     
     private func login() {
-        let path = Bundle(for: KommunicateCreateConversation.self).url(forResource: "Info", withExtension: "plist")
+        let path = Bundle(for: KommunicateCreateConversationAndSendMessagesTests.self).url(forResource: "Info", withExtension: "plist")
         let dict = NSDictionary(contentsOf: path!) as? [String: Any]
         let userId = dict?[GroupData.fillUserId]
         let password = dict?[GroupData.fillPassword]

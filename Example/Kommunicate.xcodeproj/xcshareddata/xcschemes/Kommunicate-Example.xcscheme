@@ -61,6 +61,16 @@
                ReferencedContainer = "container:Kommunicate.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "C698B49824AB77D5008BB4D9"
+               BuildableName = "Kommunicate_ExampleUITests.xctest"
+               BlueprintName = "Kommunicate_ExampleUITests"
+               ReferencedContainer = "container:Kommunicate.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
