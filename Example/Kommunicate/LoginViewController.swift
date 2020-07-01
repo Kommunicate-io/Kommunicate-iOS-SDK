@@ -36,7 +36,7 @@ class LoginViewController: UIViewController {
 
     @IBAction func getStartedBtn(_ sender: AnyObject) {
         resignFields()
-        let applicationId = AppDelegate.appId
+        let applicationId = (UIApplication.shared.delegate as! AppDelegate).appId
         setupApplicationKey(applicationId)
 
         guard let userIdEntered = userName.text, !userIdEntered.isEmpty else {
@@ -64,7 +64,7 @@ class LoginViewController: UIViewController {
 
     @IBAction func loginAsVisitor(_ sender: Any) {
         resignFields()
-        let applicationId = AppDelegate.appId
+        let applicationId = (UIApplication.shared.delegate as! AppDelegate).appId
         setupApplicationKey(applicationId)
 
         let kmUser = userWithUserId(Kommunicate.randomId(), andApplicationId: applicationId)

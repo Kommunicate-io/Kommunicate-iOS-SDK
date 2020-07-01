@@ -1,12 +1,13 @@
 //
 //  KommunicateCreateConversationAndSendMessagesTests.swift
-//  KommunicateCreateConversationAndSendMessagesTests
+//  Kommunicate_ExampleUITests
 //
 //  Created by Archit on 11/06/20.
-//  Copyright © 2019 Applozic. All rights reserved.
+//  Copyright © 2020 CocoaPods. All rights reserved.
 //
 
 import XCTest
+@testable import Kommunicate_Example
 
 class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
     enum GroupData {
@@ -16,6 +17,8 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
     }
     override func setUp() {
         super.setUp()
+        let appDelegate = (UIApplication.shared.delegate as? AppDelegate)
+        appDelegate?.appId = "22823b4a764f9944ad7913ddb3e43cae1"
         continueAfterFailure = false
         addUIInterruptionMonitor(withDescription: AppPermission.AlertMessage.accessNotificationInApplication) { (alerts) -> Bool in
             if alerts.buttons[AppPermission.AlertButton.allow].exists {
