@@ -26,7 +26,7 @@ class LoginViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setAppIdFromArgs() // Only for UI tests
         loginAsVisitorButton.layer.borderWidth = 1
         loginAsVisitorButton.layer.borderColor = UIColor(hexString: "1588B2")?.cgColor
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -148,5 +148,13 @@ class LoginViewController: UIViewController {
         userName.resignFirstResponder()
         emailId.resignFirstResponder()
         password.resignFirstResponder()
+    }
+
+    private func setAppIdFromArgs() {
+        guard let appId = UserDefaults.standard.string(forKey: "appId") else {
+            return
+        }
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        appDelegate?.appId = appId
     }
 }

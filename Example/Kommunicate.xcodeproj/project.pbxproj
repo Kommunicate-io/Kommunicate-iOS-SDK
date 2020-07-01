@@ -25,7 +25,6 @@
 		C698B4A324AB7803008BB4D9 /* TestCaseInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698B48E24AB76A5008BB4D9 /* TestCaseInfo.swift */; };
 		C698B4A424AB7803008BB4D9 /* KommunicateCreateConversationAndSendMessagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698B48F24AB76A5008BB4D9 /* KommunicateCreateConversationAndSendMessagesTests.swift */; };
 		C698B4A624AB786D008BB4D9 /* KMConversationViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD224B4222E935900184112 /* KMConversationViewControllerTests.swift */; };
-		C698B4AA24AC80E7008BB4D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -564,7 +563,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C698B4AA24AC80E7008BB4D9 /* AppDelegate.swift in Sources */,
 				C698B4A424AB7803008BB4D9 /* KommunicateCreateConversationAndSendMessagesTests.swift in Sources */,
 				C698B4A324AB7803008BB4D9 /* TestCaseInfo.swift in Sources */,
 			);

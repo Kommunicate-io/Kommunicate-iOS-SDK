@@ -7,18 +7,16 @@
 //
 
 import XCTest
-@testable import Kommunicate_Example
 
 class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
     enum GroupData {
         static let typeText = "Hello Kommunicate"
+        static let AppId = "TestAppId"
         static let fillUserId = "TestUserId"
         static let fillPassword = "TestUserPassword"
     }
     override func setUp() {
         super.setUp()
-        let appDelegate = (UIApplication.shared.delegate as? AppDelegate)
-        appDelegate?.appId = "22823b4a764f9944ad7913ddb3e43cae1"
         continueAfterFailure = false
         addUIInterruptionMonitor(withDescription: AppPermission.AlertMessage.accessNotificationInApplication) { (alerts) -> Bool in
             if alerts.buttons[AppPermission.AlertButton.allow].exists {
@@ -26,7 +24,11 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
             }
             return true
         }
-        XCUIApplication().launch()
+        let app = XCUIApplication()
+        if let appId = appIdFromEnvVars() {
+            app.launchArguments = ["-appId", appId]
+        }
+        app.launch()
         sleep(5)
         guard !XCUIApplication().scrollViews.otherElements.buttons[InAppButton.LaunchScreen.getStarted].exists else {
             login()
@@ -132,6 +134,13 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         launchConversationButton.tap()
         app.navigationBars[AppScreen.myChatScreen].buttons[InAppButton.CreatingGroup.startNewIcon].tap()
         return app
+    }
+
+    private func appIdFromEnvVars() -> String? {
+        let path = Bundle(for: KommunicateCreateConversationAndSendMessagesTests.self).url(forResource: "Info", withExtension: "plist")
+        let dict = NSDictionary(contentsOf: path!) as? [String: Any]
+        let appId = dict?[GroupData.AppId] as? String
+        return appId
     }
 }
 
