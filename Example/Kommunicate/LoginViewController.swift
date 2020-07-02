@@ -26,7 +26,7 @@ class LoginViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setAppIdFromArgs() // Only for UI tests
         loginAsVisitorButton.layer.borderWidth = 1
         loginAsVisitorButton.layer.borderColor = UIColor(hexString: "1588B2")?.cgColor
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -36,7 +36,7 @@ class LoginViewController: UIViewController {
 
     @IBAction func getStartedBtn(_ sender: AnyObject) {
         resignFields()
-        let applicationId = AppDelegate.appId
+        let applicationId = (UIApplication.shared.delegate as! AppDelegate).appId
         setupApplicationKey(applicationId)
 
         guard let userIdEntered = userName.text, !userIdEntered.isEmpty else {
@@ -64,7 +64,7 @@ class LoginViewController: UIViewController {
 
     @IBAction func loginAsVisitor(_ sender: Any) {
         resignFields()
-        let applicationId = AppDelegate.appId
+        let applicationId = (UIApplication.shared.delegate as! AppDelegate).appId
         setupApplicationKey(applicationId)
 
         let kmUser = userWithUserId(Kommunicate.randomId(), andApplicationId: applicationId)
@@ -148,5 +148,13 @@ class LoginViewController: UIViewController {
         userName.resignFirstResponder()
         emailId.resignFirstResponder()
         password.resignFirstResponder()
+    }
+
+    private func setAppIdFromArgs() {
+        guard let appId = UserDefaults.standard.string(forKey: "appId") else {
+            return
+        }
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        appDelegate?.appId = appId
     }
 }

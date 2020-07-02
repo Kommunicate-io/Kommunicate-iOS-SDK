@@ -13,3 +13,8 @@ target 'Kommunicate_Example' do
     pod 'Nimble-Snapshots'
   end
 end
+
+target 'Kommunicate_ExampleUITests' do
+  inherit! :search_paths
+  pod 'Kommunicate', :path => '../'
+end
