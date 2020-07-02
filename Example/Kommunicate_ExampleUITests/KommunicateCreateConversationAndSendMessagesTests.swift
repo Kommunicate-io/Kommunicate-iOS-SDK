@@ -41,7 +41,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
         waitFor(object: inputView) { $0.exists }
         inputView.tap()
-        inputView.typeText(GroupData.typeText) // typeing message
+        inputView.typeText(GroupData.typeText) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap()
     }
     
@@ -135,7 +135,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         app.navigationBars[AppScreen.myChatScreen].buttons[InAppButton.CreatingGroup.startNewIcon].tap()
         return app
     }
-
+    
     private func appIdFromEnvVars() -> String? {
         let path = Bundle(for: KommunicateCreateConversationAndSendMessagesTests.self).url(forResource: "Info", withExtension: "plist")
         let dict = NSDictionary(contentsOf: path!) as? [String: Any]

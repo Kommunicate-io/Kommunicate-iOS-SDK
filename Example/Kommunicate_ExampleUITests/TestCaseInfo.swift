@@ -1,10 +1,11 @@
 //
-//  Constante.swift
-//  ApplozicSwiftDemoUITests
+//  TestCaseInfo.swift
+//  Kommunicate_ExampleUITests
 //
-//  Created by Kommunicate on 26/12/19.
-//  Copyright © 2019 Applozic. All rights reserved.
+//  Created by Archit on 11/06/20.
+//  Copyright © 2020 CocoaPods. All rights reserved.
 //
+
 
 import Foundation
 
