@@ -9,26 +9,66 @@
 import XCTest
 
 class KommunicateLoginAsVisitorUITests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
+    enum GroupData {
+        static let AppId = "TestAppId"
+    }
+    override func setUp() {
+        super.setUp()
         continueAfterFailure = false
-
-        // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-        XCUIApplication().launch()
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+        addUIInterruptionMonitor(withDescription: AppPermission.AlertMessage.accessNotificationInApplication) { (alerts) -> Bool in
+            if alerts.buttons[AppPermission.AlertButton.allow].exists {
+                alerts.buttons[AppPermission.AlertButton.allow].tap()
+            }
+            return true
+        }
+        let app = XCUIApplication()
+        if let appId = appIdFromEnvVars() {
+            app.launchArguments = ["-appId", appId]
+        }
+        app.launch()
+        sleep(5)
+        guard !XCUIApplication().scrollViews.otherElements.buttons[InAppButton.LaunchScreen.getStarted].exists else {
+            return
+        }
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    func testFAQButton() {
+        let app = createConversation_Using_LoginAsVisitorButton()
+        let faqButton = app.navigationBars[AppScreen.kMConversationView]
+        waitFor(object: faqButton) { $0.exists }
+        faqButton.buttons[InAppButton.ConversationScreen.faqButton].tap()
+        let backButton =  app.navigationBars[InAppButton.ConversationScreen.faqButton]
+        waitFor(object: backButton) { $0.exists }
+        backButton.buttons[InAppButton.ConversationScreen.backButton].tap()
+        let isLogout = logout()
+        XCTAssertTrue(isLogout, "Failed to Logout")
     }
-
-    func testExample() throws {
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    
+    
+    private func createConversation_Using_LoginAsVisitorButton()  -> (XCUIApplication) {
+        let app = XCUIApplication()
+        let loginAsVisitorButton =  app.scrollViews.otherElements
+        loginAsVisitorButton.buttons[InAppButton.LaunchScreen.loginAsVisitor].tap()
+        let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]
+        waitFor(object: launchConversationButton) { $0.exists }
+        launchConversationButton.tap()
+        return app
     }
-
+    
+    private func logout() -> Bool {
+        let app = XCUIApplication()
+        let backButton = app.navigationBars[AppScreen.kMConversationView]
+        waitFor(object: backButton) { $0.exists }
+        backButton.buttons[InAppButton.ConversationScreen.backButton].tap()
+        let logoutButton = app.staticTexts[InAppButton.LaunchScreen.logoutButton]
+        logoutButton.tap()
+        return true
+    }
+    
+    private func appIdFromEnvVars() -> String? {
+        let path = Bundle(for: KommunicateLoginAsVisitorUITests.self).url(forResource: "Info", withExtension: "plist")
+        let dict = NSDictionary(contentsOf: path!) as? [String: Any]
+        let appId = dict?[GroupData.AppId] as? String
+        return appId
+    }
 }
