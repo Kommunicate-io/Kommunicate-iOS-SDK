@@ -10,6 +10,7 @@ import XCTest
 
 class KommunicateLoginAsVisitorUITests: XCTestCase {
     enum GroupData {
+        static let typeText = "verifying Login as a visitor and FAQ button."
         static let AppId = "TestAppId"
     }
     override func setUp() {
@@ -34,6 +35,11 @@ class KommunicateLoginAsVisitorUITests: XCTestCase {
     
     func testFAQButton() {
         let app = createConversation_Using_LoginAsVisitorButton()
+        let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
+        waitFor(object: inputView) { $0.exists }
+        inputView.tap()
+        inputView.typeText(GroupData.typeText) // typing message
+        app.buttons[InAppButton.ConversationScreen.send].tap()
         let faqButton = app.navigationBars[AppScreen.kMConversationView]
         waitFor(object: faqButton) { $0.exists }
         faqButton.buttons[InAppButton.ConversationScreen.faqButton].tap()
