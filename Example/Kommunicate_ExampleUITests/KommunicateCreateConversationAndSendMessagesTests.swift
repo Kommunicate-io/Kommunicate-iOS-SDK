@@ -70,7 +70,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         waitFor(object: doneButton) { $0.exists }
         doneButton.tap()
     }
-    
+
     func testSendImageThroughCamera() {
         let app = beforeTest_Launch_NewConversation() // Click on launch conversation and then create a group
         let openCamera =
@@ -136,6 +136,19 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         app.navigationBars[AppScreen.myChatScreen].buttons[InAppButton.CreatingGroup.startNewIcon].tap()
         return app
     }
+    
+    override func tearDown() {
+        let app = XCUIApplication()
+        let inConversationbackButton = app.navigationBars[AppScreen.myChatScreen]
+        waitFor(object: inConversationbackButton) { $0.exists }
+        inConversationbackButton.buttons[InAppButton.ConversationScreen.backButton].tap()
+        let backButton = app.navigationBars[AppScreen.myChatScreen]
+        waitFor(object: backButton) { $0.exists }
+        backButton.buttons[InAppButton.ConversationScreen.back].tap()
+        let logoutButton = app.staticTexts[InAppButton.LaunchScreen.logoutButton]
+        logoutButton.tap()
+        super.tearDown()
+      }
     
     private func appIdFromEnvVars() -> String? {
         let path = Bundle(for: KommunicateCreateConversationAndSendMessagesTests.self).url(forResource: "Info", withExtension: "plist")
