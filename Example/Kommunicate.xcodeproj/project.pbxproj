@@ -22,6 +22,7 @@
 		8BC35D6E239A652F0053D001 /* MessageMetadataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC35D6D239A652F0053D001 /* MessageMetadataTests.swift */; };
 		9B62C0C2E360C245E75858BC /* Pods_Kommunicate_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B1CC9E49975F48B2A2355C6 /* Pods_Kommunicate_Tests.framework */; };
 		C45D6CCA1BCC61714F3875A5 /* Pods_Kommunicate_ExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D3F06023D05C6F92070CE6 /* Pods_Kommunicate_ExampleUITests.framework */; };
+		C67D56E824AE439A001BA419 /* KommunicateLoginAsVisitorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67D56E724AE439A001BA419 /* KommunicateLoginAsVisitorUITests.swift */; };
 		C698B4A324AB7803008BB4D9 /* TestCaseInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698B48E24AB76A5008BB4D9 /* TestCaseInfo.swift */; };
 		C698B4A424AB7803008BB4D9 /* KommunicateCreateConversationAndSendMessagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698B48F24AB76A5008BB4D9 /* KommunicateCreateConversationAndSendMessagesTests.swift */; };
 		C698B4A624AB786D008BB4D9 /* KMConversationViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD224B4222E935900184112 /* KMConversationViewControllerTests.swift */; };
@@ -74,6 +75,7 @@
 		95C28FD73848CA7B0A6FFB01 /* Pods-Kommunicate_ExampleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kommunicate_ExampleUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Kommunicate_ExampleUITests/Pods-Kommunicate_ExampleUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		96CBD292230F6E24A5E549AE /* Pods-Kommunicate_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kommunicate_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Kommunicate_Example/Pods-Kommunicate_Example.release.xcconfig"; sourceTree = "<group>"; };
 		A705F6509C85EF919B1A8ED7 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		C67D56E724AE439A001BA419 /* KommunicateLoginAsVisitorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KommunicateLoginAsVisitorUITests.swift; sourceTree = "<group>"; };
 		C698B48E24AB76A5008BB4D9 /* TestCaseInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestCaseInfo.swift; path = Kommunicate_ExampleUITests/TestCaseInfo.swift; sourceTree = SOURCE_ROOT; };
 		C698B48F24AB76A5008BB4D9 /* KommunicateCreateConversationAndSendMessagesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KommunicateCreateConversationAndSendMessagesTests.swift; path = Kommunicate_ExampleUITests/KommunicateCreateConversationAndSendMessagesTests.swift; sourceTree = SOURCE_ROOT; };
 		C698B49924AB77D5008BB4D9 /* Kommunicate_ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Kommunicate_ExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -234,6 +236,7 @@
 				C698B48F24AB76A5008BB4D9 /* KommunicateCreateConversationAndSendMessagesTests.swift */,
 				C698B48E24AB76A5008BB4D9 /* TestCaseInfo.swift */,
 				C698B49D24AB77D5008BB4D9 /* Info.plist */,
+				C67D56E724AE439A001BA419 /* KommunicateLoginAsVisitorUITests.swift */,
 			);
 			path = Kommunicate_ExampleUITests;
 			sourceTree = "<group>";
@@ -564,6 +567,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C698B4A424AB7803008BB4D9 /* KommunicateCreateConversationAndSendMessagesTests.swift in Sources */,
+				C67D56E824AE439A001BA419 /* KommunicateLoginAsVisitorUITests.swift in Sources */,
 				C698B4A324AB7803008BB4D9 /* TestCaseInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
