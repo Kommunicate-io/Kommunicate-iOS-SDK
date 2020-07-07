@@ -41,6 +41,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
         waitFor(object: inputView) { $0.exists }
         inputView.tap()
+        sleep(3) // A temp fix till we add a check for loading
         inputView.typeText(GroupData.typeText) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap()
     }
