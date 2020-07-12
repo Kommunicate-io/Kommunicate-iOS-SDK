@@ -52,6 +52,9 @@ enum InAppButton {
         static let back = "Back"
         static let backButton = "icon back"
         static let faqButton = "FAQ"
+        static let loadingIndicator = "loadingIndicator"
+        static let activityIndicator = "activityIndicator"
+        
     }
 }
 
