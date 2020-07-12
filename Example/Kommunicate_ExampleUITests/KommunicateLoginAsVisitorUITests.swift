@@ -43,32 +43,24 @@ class KommunicateLoginAsVisitorUITests: XCTestCase {
         let faqButton = app.navigationBars[AppScreen.kMConversationView]
         waitFor(object: faqButton) { $0.exists }
         faqButton.buttons[InAppButton.ConversationScreen.faqButton].tap()
+        let faqWebView = app.webViews.firstMatch
+        waitFor(object: faqWebView) { $0.exists }
         let backButton =  app.navigationBars[InAppButton.ConversationScreen.faqButton]
         waitFor(object: backButton) { $0.exists }
         backButton.buttons[InAppButton.ConversationScreen.backButton].tap()
-        let isLogout = logout()
-        XCTAssertTrue(isLogout, "Failed to Logout")
     }
-    
     
     private func createConversation_Using_LoginAsVisitorButton()  -> (XCUIApplication) {
         let app = XCUIApplication()
+            if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
+                app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
+            }
         let loginAsVisitorButton =  app.scrollViews.otherElements
         loginAsVisitorButton.buttons[InAppButton.LaunchScreen.loginAsVisitor].tap()
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]
         waitFor(object: launchConversationButton) { $0.exists }
         launchConversationButton.tap()
         return app
-    }
-    
-    private func logout() -> Bool {
-        let app = XCUIApplication()
-        let backButton = app.navigationBars[AppScreen.kMConversationView]
-        waitFor(object: backButton) { $0.exists }
-        backButton.buttons[InAppButton.ConversationScreen.backButton].tap()
-        let logoutButton = app.staticTexts[InAppButton.LaunchScreen.logoutButton]
-        logoutButton.tap()
-        return true
     }
     
     private func appIdFromEnvVars() -> String? {
