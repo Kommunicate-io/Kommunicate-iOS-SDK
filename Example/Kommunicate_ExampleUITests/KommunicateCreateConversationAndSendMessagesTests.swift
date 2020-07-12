@@ -29,21 +29,14 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
             app.launchArguments = ["-appId", appId]
         }
         app.launch()
+        if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
+            app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
+                 }
         sleep(5)
         guard !XCUIApplication().scrollViews.otherElements.buttons[InAppButton.LaunchScreen.getStarted].exists else {
             login()
             return
         }
-    }
-    
-    func testSendTextMessageInGroup() {
-        let app = beforeTest_Launch_NewConversation()
-        let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
-        waitFor(object: inputView) { $0.exists }
-        inputView.tap()
-        sleep(3) // A temp fix till we add a check for loading
-        inputView.typeText(GroupData.typeText) // typing message
-        app.buttons[InAppButton.ConversationScreen.send].tap()
     }
     
     func testSendImageInGroup() {
@@ -136,19 +129,6 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         app.navigationBars[AppScreen.myChatScreen].buttons[InAppButton.CreatingGroup.startNewIcon].tap()
         return app
     }
-    
-    override func tearDown() {
-        let app = XCUIApplication()
-        let inConversationbackButton = app.navigationBars[AppScreen.myChatScreen]
-        waitFor(object: inConversationbackButton) { $0.exists }
-        inConversationbackButton.buttons[InAppButton.ConversationScreen.backButton].tap()
-        let backButton = app.navigationBars[AppScreen.myChatScreen]
-        waitFor(object: backButton) { $0.exists }
-        backButton.buttons[InAppButton.ConversationScreen.back].tap()
-        let logoutButton = app.staticTexts[InAppButton.LaunchScreen.logoutButton]
-        logoutButton.tap()
-        super.tearDown()
-      }
     
     private func appIdFromEnvVars() -> String? {
         let path = Bundle(for: KommunicateCreateConversationAndSendMessagesTests.self).url(forResource: "Info", withExtension: "plist")
