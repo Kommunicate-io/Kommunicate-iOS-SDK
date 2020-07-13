@@ -35,20 +35,23 @@ class KommunicateLoginAsVisitorUITests: XCTestCase {
     
     func testFAQButton() {
         let app = createConversation_Using_LoginAsVisitorButton()
+        let faqButton = app.navigationBars[AppScreen.kMConversationView]
+        waitFor(object: faqButton) { $0.exists }
+        faqButton.buttons[InAppButton.ConversationScreen.faqButton].tap()
+        let hiHowCanWeHelpYouStaticText = app.webViews.otherElements[AppTextFeild.Helpcenter].staticTexts[AppTextFeild.HeadlineText]
+        waitFor(object: hiHowCanWeHelpYouStaticText) { $0.exists }
+         hiHowCanWeHelpYouStaticText.tap()
+        let backButton =  app.navigationBars[InAppButton.ConversationScreen.faqButton]
+        waitFor(object: backButton) { $0.exists }
+        backButton.buttons[InAppButton.ConversationScreen.backButton].tap()
         let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
         waitFor(object: inputView) { $0.exists }
         inputView.tap()
         inputView.typeText(GroupData.typeText) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap()
-        let faqButton = app.navigationBars[AppScreen.kMConversationView]
-        waitFor(object: faqButton) { $0.exists }
-        faqButton.buttons[InAppButton.ConversationScreen.faqButton].tap()
-        let faqWebView = app.webViews.firstMatch
-        waitFor(object: faqWebView) { $0.exists }
-        let backButton =  app.navigationBars[InAppButton.ConversationScreen.faqButton]
-        waitFor(object: backButton) { $0.exists }
-        backButton.buttons[InAppButton.ConversationScreen.backButton].tap()
+
     }
+
     
     private func createConversation_Using_LoginAsVisitorButton()  -> (XCUIApplication) {
         let app = XCUIApplication()

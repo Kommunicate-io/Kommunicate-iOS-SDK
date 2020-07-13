@@ -81,6 +81,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         let imageRow = app.collectionViews.children(matching: .cell)
         let firstImageInRow = imageRow.element(boundBy: 0)
         let selectFirstImage = firstImageInRow.children(matching: .other).element
+        waitFor(object: selectFirstImage) { $0.exists }
         selectFirstImage.tap()
         let sendImageButton = app.buttons[InAppButton.EditGroup.iconSendWhite]
         waitFor(object: sendImageButton) { $0.exists }
@@ -126,7 +127,9 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]
         waitFor(object: launchConversationButton) { $0.exists }
         launchConversationButton.tap()
-        app.navigationBars[AppScreen.myChatScreen].buttons[InAppButton.CreatingGroup.startNewIcon].tap()
+        let createConversationButton = app.navigationBars[AppScreen.myChatScreen]
+        waitFor(object: createConversationButton) { $0.exists }
+            createConversationButton.buttons[InAppButton.CreatingGroup.startNewIcon].tap()
         return app
     }
     

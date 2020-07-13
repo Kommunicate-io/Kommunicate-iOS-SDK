@@ -68,4 +68,6 @@ enum AppTextFeild {
     static let userId = "User id (Use a random id for the first time login)"
     static let password = "Password"
     static let chatTextView = "chatTextView"
+    static let HeadlineText = "Hi, how can we help you?"
+    static let Helpcenter = "Helpcenter | Helpcenter"
 }
