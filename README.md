@@ -23,6 +23,24 @@ Kommunicate SDK lets you integrate custom chatbots in your mobile apps for autom
 
 To get started with Kommunicate iOS SDK, head over to the Kommunicate website and [Signup](https://dashboard.kommunicate.io/signup?utm_source=github&utm_medium=readme&utm_campaign=ios) to get your Application ID.
 
+
+## Build a BOT on Kommunicate and integrate it in your iOS app
+
+### Kompose
+
+[Kompose](https://dashboard.kommunicate.io/bots/bot-builder) is a Kommunicate’s bot builder that help you in building your own bot, a techie, non-techie, or a person who doesn’t have any idea about chatbots can also build the bot. Anyone can create a chatbot with the Kompose without any assistance.
+
+![Kompose-build](https://user-images.githubusercontent.com/38066371/87525821-a519f000-c6a7-11ea-90d6-97e8fab4d1b3.gif)
+
+
+
+### Following is the UI to create the BOT
+
+![Kompose](https://user-images.githubusercontent.com/38066371/87527229-71d86080-c6a9-11ea-8a2c-467c99badac9.jpeg)
+
+
+
+
 ## Dialogflow Chatbot Integration
 
 Dialogflow is a Google-owned NLP platform to facilitate human-computer interactions such as chatbots, voice bots, etc. 
