@@ -28,6 +28,8 @@ enum InAppButton {
     enum LaunchScreen {
         static let getStarted = "Get Started"
         static let launchChat = "Launch Chat"
+        static let loginAsVisitor = "Login as Visitor"
+        static let logoutButton = "Logout"
     }
     
     enum CreatingGroup {
@@ -47,16 +49,25 @@ enum InAppButton {
         static let openLocation = "locationButtonInConversationScreen"
         static let sendLocation = "Send Location"
         static let done = "Done"
+        static let back = "Back"
+        static let backButton = "icon back"
+        static let faqButton = "FAQ"
+        static let loadingIndicator = "loadingIndicator"
+        static let activityIndicator = "activityIndicator"
+        
     }
 }
 
 enum AppScreen {
     static let myChatScreen = "My Chats"
     static let chatBar = "chatBar"
+    static let kMConversationView = "Kommunicate.KMConversationView"
 }
 
 enum AppTextFeild {
     static let userId = "User id (Use a random id for the first time login)"
     static let password = "Password"
     static let chatTextView = "chatTextView"
+    static let HeadlineText = "Hi, how can we help you?"
+    static let Helpcenter = "Helpcenter | Helpcenter"
 }

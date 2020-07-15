@@ -29,21 +29,14 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
             app.launchArguments = ["-appId", appId]
         }
         app.launch()
+        if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
+            app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
+                 }
         sleep(5)
         guard !XCUIApplication().scrollViews.otherElements.buttons[InAppButton.LaunchScreen.getStarted].exists else {
             login()
             return
         }
-    }
-    
-    func testSendTextMessageInGroup() {
-        let app = beforeTest_Launch_NewConversation()
-        let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
-        waitFor(object: inputView) { $0.exists }
-        inputView.tap()
-        sleep(3) // A temp fix till we add a check for loading
-        inputView.typeText(GroupData.typeText) // typing message
-        app.buttons[InAppButton.ConversationScreen.send].tap()
     }
     
     func testSendImageInGroup() {
@@ -70,7 +63,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         waitFor(object: doneButton) { $0.exists }
         doneButton.tap()
     }
-    
+
     func testSendImageThroughCamera() {
         let app = beforeTest_Launch_NewConversation() // Click on launch conversation and then create a group
         let openCamera =
@@ -88,6 +81,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         let imageRow = app.collectionViews.children(matching: .cell)
         let firstImageInRow = imageRow.element(boundBy: 0)
         let selectFirstImage = firstImageInRow.children(matching: .other).element
+        waitFor(object: selectFirstImage) { $0.exists }
         selectFirstImage.tap()
         let sendImageButton = app.buttons[InAppButton.EditGroup.iconSendWhite]
         waitFor(object: sendImageButton) { $0.exists }
@@ -133,7 +127,9 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]
         waitFor(object: launchConversationButton) { $0.exists }
         launchConversationButton.tap()
-        app.navigationBars[AppScreen.myChatScreen].buttons[InAppButton.CreatingGroup.startNewIcon].tap()
+        let createConversationButton = app.navigationBars[AppScreen.myChatScreen]
+        waitFor(object: createConversationButton) { $0.exists }
+            createConversationButton.buttons[InAppButton.CreatingGroup.startNewIcon].tap()
         return app
     }
     
