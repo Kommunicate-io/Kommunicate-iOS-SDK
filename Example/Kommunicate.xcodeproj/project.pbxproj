@@ -26,6 +26,7 @@
 		C698B4A324AB7803008BB4D9 /* TestCaseInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698B48E24AB76A5008BB4D9 /* TestCaseInfo.swift */; };
 		C698B4A424AB7803008BB4D9 /* KommunicateCreateConversationAndSendMessagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698B48F24AB76A5008BB4D9 /* KommunicateCreateConversationAndSendMessagesTests.swift */; };
 		C698B4A624AB786D008BB4D9 /* KMConversationViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD224B4222E935900184112 /* KMConversationViewControllerTests.swift */; };
+		C6C24FE424C22E8B005B0A84 /* KommunicateRichMessageUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C24FE324C22E8B005B0A84 /* KommunicateRichMessageUITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +81,7 @@
 		C698B48F24AB76A5008BB4D9 /* KommunicateCreateConversationAndSendMessagesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KommunicateCreateConversationAndSendMessagesTests.swift; path = Kommunicate_ExampleUITests/KommunicateCreateConversationAndSendMessagesTests.swift; sourceTree = SOURCE_ROOT; };
 		C698B49924AB77D5008BB4D9 /* Kommunicate_ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Kommunicate_ExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C698B49D24AB77D5008BB4D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C6C24FE324C22E8B005B0A84 /* KommunicateRichMessageUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KommunicateRichMessageUITests.swift; sourceTree = "<group>"; };
 		D884C77B872B4F3CEE0E3715 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -237,6 +239,7 @@
 				C698B48E24AB76A5008BB4D9 /* TestCaseInfo.swift */,
 				C698B49D24AB77D5008BB4D9 /* Info.plist */,
 				C67D56E724AE439A001BA419 /* KommunicateLoginAsVisitorUITests.swift */,
+				C6C24FE324C22E8B005B0A84 /* KommunicateRichMessageUITests.swift */,
 			);
 			path = Kommunicate_ExampleUITests;
 			sourceTree = "<group>";
@@ -569,6 +572,7 @@
 				C698B4A424AB7803008BB4D9 /* KommunicateCreateConversationAndSendMessagesTests.swift in Sources */,
 				C67D56E824AE439A001BA419 /* KommunicateLoginAsVisitorUITests.swift in Sources */,
 				C698B4A324AB7803008BB4D9 /* TestCaseInfo.swift in Sources */,
+				C6C24FE424C22E8B005B0A84 /* KommunicateRichMessageUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
