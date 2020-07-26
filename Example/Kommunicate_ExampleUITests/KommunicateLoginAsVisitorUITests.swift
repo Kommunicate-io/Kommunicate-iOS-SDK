@@ -40,7 +40,7 @@ class KommunicateLoginAsVisitorUITests: XCTestCase {
         faqButton.buttons[InAppButton.ConversationScreen.faqButton].tap()
         let hiHowCanWeHelpYouStaticText = app.webViews.otherElements[AppTextFeild.Helpcenter].staticTexts[AppTextFeild.HeadlineText]
         waitFor(object: hiHowCanWeHelpYouStaticText) { $0.exists }
-         hiHowCanWeHelpYouStaticText.tap()
+        hiHowCanWeHelpYouStaticText.tap()
         let backButton =  app.navigationBars[InAppButton.ConversationScreen.faqButton]
         waitFor(object: backButton) { $0.exists }
         backButton.buttons[InAppButton.ConversationScreen.backButton].tap()
@@ -49,15 +49,20 @@ class KommunicateLoginAsVisitorUITests: XCTestCase {
         inputView.tap()
         inputView.typeText(GroupData.typeText) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap()
-
     }
-
+    
+    override func tearDown() {
+        super.tearDown()
+        let app = XCUIApplication()
+        app.navigationBars[AppScreen.kMConversationView].buttons[InAppButton.ConversationScreen.backButton].tap()
+        app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
+    }
     
     private func createConversation_Using_LoginAsVisitorButton()  -> (XCUIApplication) {
         let app = XCUIApplication()
-            if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
-                app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
-            }
+        if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
+            app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
+        }
         let loginAsVisitorButton =  app.scrollViews.otherElements
         loginAsVisitorButton.buttons[InAppButton.LaunchScreen.loginAsVisitor].tap()
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]
