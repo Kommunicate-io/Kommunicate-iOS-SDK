@@ -61,6 +61,7 @@ enum InAppButton {
 enum AppScreen {
     static let myChatScreen = "My Chats"
     static let chatBar = "chatBar"
+    static let innerChatScreenTableView = "InnerChatScreenTableView"
     static let kMConversationView = "Kommunicate.KMConversationView"
 }
 
@@ -70,4 +71,14 @@ enum AppTextFeild {
     static let chatTextView = "chatTextView"
     static let HeadlineText = "Hi, how can we help you?"
     static let Helpcenter = "Helpcenter | Helpcenter"
+}
+
+enum RichMessageButtons {
+    static let button = "Button"
+    static let goToGoogle = "Go To Google"
+    static let pay = "Pay"
+    static let suggestedReplyButton = "Suggested reply Button"
+    static let submitButton = "submit button"
+    static let seeUsOnFacebook = "See us on facebook"
+    static let linkButton = "Link Button"
 }
