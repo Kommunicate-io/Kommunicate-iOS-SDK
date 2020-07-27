@@ -46,24 +46,24 @@ class ConversationDetail {
                                 userId: String?,
                                 completion: @escaping (ALContact?, ALChannel?) -> ()) {
 
-        let (assignee,alChannel) = conversationAssignee(groupId: groupId, userId: userId)
-
-        guard let contact =  assignee  else {
+        var (assignee, alChannel) = conversationAssignee(groupId: groupId, userId: userId)
+        guard let contact = assignee else {
             completion(nil,alChannel)
             return
         }
 
         let userIds: [String] = [contact.userId]
-        userService.fetchAndupdateUserDetails(NSMutableArray(array: userIds), withCompletion: { (userDetailArray, error) in
-            guard let userDetails = userDetailArray else {
-                completion(contact,alChannel)
+        userService.fetchAndupdateUserDetails(NSMutableArray(array: userIds)) {[weak self] userDetailArray, _ in
+            guard let strongSelf = self, let userDetails = userDetailArray else {
+                completion(contact, alChannel)
                 return
             }
             for case let userDetail as ALUserDetail in userDetails {
-                self.contactDbService.update(userDetail)
+                strongSelf.contactDbService.update(userDetail)
             }
-            completion(contact,alChannel)
-        })
+            (assignee, alChannel) = strongSelf.conversationAssignee(groupId: groupId, userId: userId)
+            completion(assignee, alChannel)
+        }
     }
 
     func isClosedConversation(channelId: Int) -> Bool {

@@ -82,9 +82,9 @@ class ConversationVCNavBar: UIView, Localizable {
     }()
 
     struct LocalizationKey {
-
         static let online = "online"
         static let offline = "offline"
+        static let awayMode = "awayMode"
         static let noName = "noName"
     }
     
@@ -218,10 +218,16 @@ class ConversationVCNavBar: UIView, Localizable {
     
     private func setupOnlineStatus(_ contact: ALContact?) {
         guard let alContact = contact else {
-            return;
+            return
         }
-        
         if (alContact.connected || alContact.roleType == 1) {
+            guard !alContact.isInAwayMode else {
+                onlineStatusText.text = localizedString(
+                    forKey: LocalizationKey.awayMode,
+                    fileName: localizationFileName)
+                onlineStatusIcon.backgroundColor = .background(.darkYellow)
+                return
+            }
             onlineStatusText.text = localizedString(
                 forKey: LocalizationKey.online,
                 fileName: localizationFileName)

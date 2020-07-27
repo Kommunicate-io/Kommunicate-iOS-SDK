@@ -34,6 +34,7 @@ PreChatViewGetStartedDescription = "We just need a few details to help you get s
 /* User's connection status */
 online = "Online";
 offline = "Offline";
+awayMode = "Away";
 
 /* Will be shown when the user's display name is not set */
 noName = "No Name";
