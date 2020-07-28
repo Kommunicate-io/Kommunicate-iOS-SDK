@@ -4,6 +4,9 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Enhancements
+- [CM-327] Added support for showing Agent's away status.
+
 ## [5.4.0] - 2020-06-24
 
 ### Enhancements
