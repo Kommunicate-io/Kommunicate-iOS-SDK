@@ -37,6 +37,7 @@ PODS:
   - SDWebImage/Core (5.7.4)
 
 DEPENDENCIES:
+  - Applozic (from `https://github.com/AppLozic/Applozic-Chat-iOS-Framework.git`, branch `contact-status`)
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - Nimble
@@ -45,7 +46,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - Applozic
     - ApplozicSwift
     - FBSnapshotTestCase
     - iOSSnapshotTestCase
@@ -57,8 +57,16 @@ SPEC REPOS:
     - SDWebImage
 
 EXTERNAL SOURCES:
+  Applozic:
+    :branch: contact-status
+    :git: https://github.com/AppLozic/Applozic-Chat-iOS-Framework.git
   Kommunicate:
     :path: "../"
+
+CHECKOUT OPTIONS:
+  Applozic:
+    :commit: 76770807c658ef3bf29dbe488d0e4a5b620a8afc
+    :git: https://github.com/AppLozic/Applozic-Chat-iOS-Framework.git
 
 SPEC CHECKSUMS:
   Applozic: 437b0af932421eef09cbad558b2928bb80550c7e
@@ -73,6 +81,6 @@ SPEC CHECKSUMS:
   Quick: 6d9559f40647bc4d510103842ef2fdd882d753e2
   SDWebImage: 48b88379b798fd1e4298f95bb25d2cdabbf4deb3
 
-PODFILE CHECKSUM: 5ab43809e48aca107f18f18476bb438b5b140ea1
+PODFILE CHECKSUM: 9f525e6902d1569c4028e12020841e102dcbfb7a
 
 COCOAPODS: 1.9.3
