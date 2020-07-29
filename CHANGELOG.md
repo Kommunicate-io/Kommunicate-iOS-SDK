@@ -7,8 +7,10 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 ### Enhancements
 - [CM-327] Added support for showing Agent's away status.
 ### Fixes
+
 - [CM-376] Use clientConversationId if present when single threaded option is enabled.
 - [CM-395] Fixed an issue where only dashboard settings for single threaded conversation was used.
+- [CM-375] Fixed issue if agentIds are passed in the conversation the default agentId was added.
 
 ## [5.4.0] - 2020-06-24
 
