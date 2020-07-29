@@ -206,7 +206,6 @@ open class Kommunicate: NSObject,Localizable{
         if KMUserDefaultHandler.isLoggedIn() {
             var allAgentIds = conversation.agentIds
             var allBotIds = ["bot"] // Default bot that should be added everytime.
-
             if let botIds = conversation.botIds { allBotIds.append(contentsOf: botIds) }
 
             appSettingsService.appSetting {
@@ -214,8 +213,10 @@ open class Kommunicate: NSObject,Localizable{
                 switch result {
                 case .success(let appSettings):
                     allAgentIds.append(appSettings.agentID)
-
-                    if let chatWidget = appSettings.chatWidget,
+                    // If single threaded is not enabled for this conversation,
+                    // then check in global app settings.
+                    if !conversation.useLastConversation,
+                        let chatWidget = appSettings.chatWidget,
                         let isSingleThreaded = chatWidget.isSingleThreaded {
                         conversation.useLastConversation = isSingleThreaded
                     }

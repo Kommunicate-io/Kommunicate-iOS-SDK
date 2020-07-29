@@ -67,7 +67,7 @@ import Applozic
 
     /// If you pass useLastConversation as false, then a new conversation will be created everytime. If you pass useLastConversation as true, then it will use old conversation which is already created with this data.
     /// - Parameter useLastConversation: Pass  useLastConversation
-    ///     @discardableResult
+    @discardableResult
     @objc public func useLastConversation(_ useLastConversation: Bool) ->  KMConversationBuilder {
         conversation.useLastConversation = useLastConversation
         return self
