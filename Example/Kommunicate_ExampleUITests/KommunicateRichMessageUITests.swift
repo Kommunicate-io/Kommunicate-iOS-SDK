@@ -46,70 +46,76 @@ class KommunicateRichMessageUITests: XCTestCase {
     func testSuggestedRepliesTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
-        app.typeText(GroupData.typeText1) // typeing message
+        app.typeText(GroupData.typeText1) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.button].tap()
-        
+        let _ = app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageResponseText.suggestedButtonResponse].exists
     }
     
     func testLinkbuttonTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
-        app.typeText(GroupData.typeText2) // typeing message
+        app.typeText(GroupData.typeText2) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.goToGoogle].tap()
+        let _ = app.statusBars.buttons[RichMessageResponseText.linkButtonResponse].exists
     }
     
     func testSubmitButtonTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
-        app.typeText(GroupData.typeText3) // typeing message
+        app.typeText(GroupData.typeText3) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.pay].tap()
+        let _ = app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageResponseText.submitButtonResponse].exists
     }
     
     func testDifferentButtonTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
-        app.typeText(GroupData.typeText4) // typeing message
+        app.typeText(GroupData.typeText4) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.submitButton].tap()
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.suggestedReplyButton].tap()
+        let _ =  app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageResponseText.differentButtonResponse1].exists
+        let _ = app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageResponseText.differentButtonResponse2].exists
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.linkButton].tap()
+        let _ = app.statusBars.buttons[RichMessageResponseText.linkButtonResponse].exists
     }
     
     func testImageTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
-        app.typeText(GroupData.typeText5) // typeing message
+        app.typeText(GroupData.typeText5) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         let ironManStaticText = XCUIApplication().tables[AppScreen.innerChatScreenTableView]
-        ironManStaticText.staticTexts["IRON MAN"].tap()
         waitFor(object: ironManStaticText) { $0.exists }
-        
+        ironManStaticText.staticTexts[RichMessageResponseText.imageResponse].tap()
     }
     
-    func testListTemplateTemplate() {
+    func testListTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
-        app.typeText(GroupData.typeText6) // typeing message
+        app.typeText(GroupData.typeText6) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.seeUsOnFacebook].tap()
+        let _ = app.statusBars.buttons[RichMessageResponseText.linkButtonResponse].exists
     }
     
     func testSingleCardTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
-        app.typeText(GroupData.typeText7) // typeing message
+        app.typeText(GroupData.typeText7) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.linkButton].tap()
+        let _ = app.statusBars.buttons[RichMessageResponseText.linkButtonResponse].exists
     }
     
     func testCardCarouselTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
-        app.typeText(GroupData.typeText8) // typeing message
+        app.typeText(GroupData.typeText8) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
     }
     
