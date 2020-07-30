@@ -219,23 +219,21 @@ open class Kommunicate: NSObject,Localizable{
                         let isSingleThreaded = chatWidget.isSingleThreaded {
                         conversation.useLastConversation = isSingleThreaded
                     }
-
                 case .failure(let error):
                     completion(.failure(KMConversationError.api(error)))
                     return
                 }
-
                 allAgentIds = allAgentIds.uniqueElements
                 conversation.agentIds = allAgentIds
                 conversation.botIds = allBotIds
 
-                if conversation.useLastConversation {
+                let isClientIdEmpty = (conversation.clientConversationId ?? "").isEmpty
+                if isClientIdEmpty && conversation.useLastConversation {
                     conversation.clientConversationId = service.createClientIdFrom(
                         userId: conversation.userId,
                         agentIds: conversation.agentIds,
                         botIds: conversation.botIds ?? [])
                 }
-
                 service.createConversation(conversation: conversation, completion: { response in
                     guard let conversationId = response.clientChannelKey else {
                         completion(.failure(KMConversationError.api(response.error)))
