@@ -49,7 +49,9 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.typeText(GroupData.typeText1) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.button].tap()
-        let _ = app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageResponseText.suggestedButtonResponse].exists
+        let suggestedRepliesResponse = app.tables[AppScreen.innerChatScreenTableView]
+            .staticTexts[RichMessageResponseText.suggestedButtonResponse]
+        waitFor(object: suggestedRepliesResponse) { $0.exists }
     }
     
     func testLinkbuttonTemplate() {
@@ -57,8 +59,10 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText2) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
+        let linkResponse = app.tables[AppScreen.innerChatScreenTableView]
+            .staticTexts[RichMessageResponseText.linkButtonResponse]
+        waitFor(object: linkResponse) { $0.exists }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.goToGoogle].tap()
-        let _ = app.statusBars.buttons[RichMessageResponseText.linkButtonResponse].exists
     }
     
     func testSubmitButtonTemplate() {
@@ -67,7 +71,9 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.typeText(GroupData.typeText3) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.pay].tap()
-        let _ = app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageResponseText.submitButtonResponse].exists
+        let submitResponse = app.tables[AppScreen.innerChatScreenTableView]
+            .staticTexts[RichMessageResponseText.submitButtonResponse]
+        waitFor(object: submitResponse) { $0.exists }
     }
     
     func testDifferentButtonTemplate() {
@@ -78,10 +84,13 @@ class KommunicateRichMessageUITests: XCTestCase {
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.submitButton].tap()
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.suggestedReplyButton].tap()
-        let _ =  app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageResponseText.differentButtonResponse1].exists
-        let _ = app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageResponseText.differentButtonResponse2].exists
+        let submitResponse =  app.tables[AppScreen.innerChatScreenTableView]
+            .staticTexts[RichMessageResponseText.differentButtonResponse2]
+        waitFor(object: submitResponse) { $0.exists }
+        let suggestedReplyResponse = app.tables[AppScreen.innerChatScreenTableView]
+            .staticTexts[RichMessageResponseText.differentButtonResponse1]
+        waitFor(object: suggestedReplyResponse) { $0.exists }
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.linkButton].tap()
-        let _ = app.statusBars.buttons[RichMessageResponseText.linkButtonResponse].exists
     }
     
     func testImageTemplate() {
@@ -89,9 +98,9 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText5) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
-        let ironManStaticText = XCUIApplication().tables[AppScreen.innerChatScreenTableView]
-        waitFor(object: ironManStaticText) { $0.exists }
-        ironManStaticText.staticTexts[RichMessageResponseText.imageResponse].tap()
+        let imageTemplateResponse = app.tables[AppScreen.innerChatScreenTableView]
+            .staticTexts[RichMessageResponseText.imageResponse]
+        waitFor(object: imageTemplateResponse) { $0.exists }
     }
     
     func testListTemplate() {
@@ -99,8 +108,10 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText6) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
+        let listResponse = app.tables[AppScreen.innerChatScreenTableView]
+            .staticTexts[RichMessageResponseText.listTemplateResponse]
+        waitFor(object: listResponse) { $0.exists }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.seeUsOnFacebook].tap()
-        let _ = app.statusBars.buttons[RichMessageResponseText.linkButtonResponse].exists
     }
     
     func testSingleCardTemplate() {
@@ -108,8 +119,10 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText7) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
+        let singleCardResponse = app.tables[AppScreen.innerChatScreenTableView]
+            .staticTexts[RichMessageResponseText.singleCardResponse]
+        waitFor(object: singleCardResponse) { $0.exists }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.linkButton].tap()
-        let _ = app.statusBars.buttons[RichMessageResponseText.linkButtonResponse].exists
     }
     
     func testCardCarouselTemplate() {
@@ -117,6 +130,9 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText8) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
+        let cardCarouselResponse = app.tables[AppScreen.innerChatScreenTableView]
+            .staticTexts[RichMessageResponseText.cardCarouselResponse]
+        waitFor(object: cardCarouselResponse) { $0.exists }
     }
     
     private func login() {

@@ -85,9 +85,12 @@ enum RichMessageButtons {
 
 enum RichMessageResponseText {
     static let suggestedButtonResponse = "Cool! send me more."
-    static let linkButtonResponse = "Return to KommunicateDemo"
+    static let linkButtonResponse = "Link Button Rich Message"
     static let differentButtonResponse1 = "optional- this message will be used as acknowledgement text when user clicks the button"
     static let differentButtonResponse2 = "text will be sent as message"
     static let submitButtonResponse = "optional, will be used as acknowledgement message to user in case of requestType JSON. Default value is same as name parameter"
     static let imageResponse = "IRON MAN"
+    static let listTemplateResponse = "List template Rich Message"
+    static let singleCardResponse = "Single card template"
+    static let cardCarouselResponse = "Carousel"
 }
