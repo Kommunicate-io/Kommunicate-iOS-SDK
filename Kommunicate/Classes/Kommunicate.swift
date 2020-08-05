@@ -212,7 +212,10 @@ open class Kommunicate: NSObject,Localizable{
                 result in
                 switch result {
                 case .success(let appSettings):
-                    allAgentIds.append(appSettings.agentID)
+
+                    if (allAgentIds.isEmpty) {
+                        allAgentIds.append(appSettings.agentID)
+                    }
                     // If single threaded is not enabled for this conversation,
                     // then check in global app settings.
                     if !conversation.useLastConversation,
