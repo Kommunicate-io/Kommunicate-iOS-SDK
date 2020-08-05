@@ -61,6 +61,7 @@ enum InAppButton {
 enum AppScreen {
     static let myChatScreen = "My Chats"
     static let chatBar = "chatBar"
+    static let innerChatScreenTableView = "InnerChatScreenTableView"
     static let kMConversationView = "Kommunicate.KMConversationView"
 }
 
@@ -70,4 +71,26 @@ enum AppTextFeild {
     static let chatTextView = "chatTextView"
     static let HeadlineText = "Hi, how can we help you?"
     static let Helpcenter = "Helpcenter | Helpcenter"
+}
+
+enum RichMessageButtons {
+    static let button = "Button"
+    static let goToGoogle = "Go To Google"
+    static let pay = "Pay"
+    static let suggestedReplyButton = "Suggested reply Button"
+    static let submitButton = "submit button"
+    static let seeUsOnFacebook = "See us on facebook"
+    static let linkButton = "Link Button"
+}
+
+enum RichMessageResponseText {
+    static let suggestedButtonResponse = "Cool! send me more."
+    static let linkButtonResponse = "Link Button Rich Message"
+    static let differentButtonResponse1 = "optional- this message will be used as acknowledgement text when user clicks the button"
+    static let differentButtonResponse2 = "text will be sent as message"
+    static let submitButtonResponse = "optional, will be used as acknowledgement message to user in case of requestType JSON. Default value is same as name parameter"
+    static let imageResponse = "IRON MAN"
+    static let listTemplateResponse = "List template Rich Message"
+    static let singleCardResponse = "Single card template"
+    static let cardCarouselResponse = "Carousel"
 }

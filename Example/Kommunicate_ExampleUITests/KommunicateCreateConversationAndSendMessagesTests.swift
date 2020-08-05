@@ -29,9 +29,6 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
             app.launchArguments = ["-appId", appId]
         }
         app.launch()
-        if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
-            app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
-                 }
         sleep(5)
         guard !XCUIApplication().scrollViews.otherElements.buttons[InAppButton.LaunchScreen.getStarted].exists else {
             login()
@@ -63,7 +60,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         waitFor(object: doneButton) { $0.exists }
         doneButton.tap()
     }
-
+    
     func testSendImageThroughCamera() {
         let app = beforeTest_Launch_NewConversation() // Click on launch conversation and then create a group
         let openCamera =
@@ -129,7 +126,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         launchConversationButton.tap()
         let createConversationButton = app.navigationBars[AppScreen.myChatScreen]
         waitFor(object: createConversationButton) { $0.exists }
-            createConversationButton.buttons[InAppButton.CreatingGroup.startNewIcon].tap()
+        createConversationButton.buttons[InAppButton.CreatingGroup.startNewIcon].tap()
         return app
     }
     
