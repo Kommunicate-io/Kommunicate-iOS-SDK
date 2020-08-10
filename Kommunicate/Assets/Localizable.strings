@@ -79,3 +79,6 @@ WaitMessage = "Please wait...";
 NoConversationsLabelText = "No conversations";
 /* Title of the previous conversation view shown to the user */
 PreviousConversationFeedbackTitle = "You rated the conversation";
+BotCharLimit = "Keep your message within %01d characters to help the bot understand easily | ( %@ )";
+RemoveCharMessage = "Remove %01d characters";
+RemainingCharMessage = "%01d characters remaining";

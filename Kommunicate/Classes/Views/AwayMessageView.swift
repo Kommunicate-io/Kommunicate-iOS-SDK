@@ -11,6 +11,10 @@ import ApplozicSwift
 /// A view to show away message. It has message label and dotted line view.
 class AwayMessageView: UIView {
 
+    enum ConstraintIdentifier: String {
+         case awayMessageViewViewHeight
+    }
+
     struct Padding {
         struct DottedLineView {
             static let leading: CGFloat = 12.0

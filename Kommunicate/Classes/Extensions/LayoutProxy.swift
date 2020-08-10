@@ -69,6 +69,10 @@ extension UIView {
         translatesAutoresizingMaskIntoConstraints = false
         closure(LayoutProxy(view: self))
     }
+
+    func constraint(withIdentifier: String) -> NSLayoutConstraint? {
+        return constraints.filter { $0.identifier == withIdentifier }.first
+    }
 }
 
 func +<A: LayoutAnchor>(lhs: A, rhs: CGFloat) -> (A, CGFloat) {
@@ -105,4 +109,5 @@ func <=<A: LayoutAnchor>(lhs: LayoutProperty<A>,
 func <=<A: LayoutAnchor>(lhs: LayoutProperty<A>, rhs: A) {
     lhs.lessThanOrEqual(to: rhs)
 }
+
 
