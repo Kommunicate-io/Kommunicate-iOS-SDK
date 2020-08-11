@@ -7,10 +7,8 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 ## [5.6.0] - 2020-08-14
 
 ### Enhancements
-- [CM-289]Add restriction for adding more than 256 chars in case the conversation is assigned to a Dialogflow bot.
-
-### Enhancements
 - [CM-327] Added support for showing Agent's away status.
+- [CM-289]Add restriction for adding more than 256 chars in case the conversation is assigned to a Dialogflow bot.
 ### Fixes
 
 - [CM-376] Use clientConversationId if present when single threaded option is enabled.
