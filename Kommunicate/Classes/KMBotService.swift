@@ -7,11 +7,12 @@
 
 import Foundation
 import Applozic
+
 /// `KMBotService` will have all the API releated to bots
 public struct KMBotService {
     var channelService: ALChannelService
     var channelDBService : ALChannelDBService
-    static let ConversationAssignee = "CONVERSATION_ASSIGNEE"
+    static let conversationAssignee = "CONVERSATION_ASSIGNEE"
 
     public init() {
         channelService = ALChannelService()
@@ -22,8 +23,7 @@ public struct KMBotService {
     /// - Parameters:
     ///   - applicationKey: Application key of the kommunicate
     ///   - botId: Bot id of the detail that you would like to fetch
-    ///   - completion: completion description
-    /// - Returns: A Result of type `BotDetai` or `KMBotError'`
+    ///   - completion: A Result of type `BotDetail` or `KMBotError`
 
     public func botDetail(applicationKey: String = KMUserDefaultHandler.getApplicationKey(),
                           botId: String,
@@ -69,15 +69,22 @@ public struct KMBotService {
         })
     }
 
+    /// This method is used for fetchnig the assignee userId for groupId.
+    /// - Parameter groupId: GroupId of the channel
+    /// - Returns: Assignee userId of this channel groupId.
     func assigneeUserIdFor(groupId: NSNumber) -> String? {
         guard let channel = channelService.getChannelByKey(groupId),
             channel.type == Int16(SUPPORT_GROUP.rawValue),
-            let assigneeId = channel.metadata?[KMBotService.ConversationAssignee] as? String else {
+            let assigneeId = channel.metadata?[KMBotService.conversationAssignee] as? String else {
                 return nil
         }
         return assigneeId
     }
 
+    /// This method is used for fetching bot type is assigned to bot.
+    /// - Parameters:
+    ///   - groupId: GroupId of the channel.
+    ///   - completion: If Assigned to bot completion handler will have true.
     func fetchBotTypeIfAssignedToBot(groupId: NSNumber,  completion: @escaping (Bool) -> ()) {
         guard let assigneeId = self .assigneeUserIdFor(groupId: groupId),
             let channelUserX = channelDBService.loadChannelUserX(byUserId: groupId, andUserId: assigneeId), channelUserX.role == 2 else {

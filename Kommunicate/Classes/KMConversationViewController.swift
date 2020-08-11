@@ -111,6 +111,7 @@ open class KMConversationViewController: ALKConversationViewController {
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         awayMessageView.drawDottedLines()
+        botCharLimitView.drawDottedLines()
     }
 
     open override func viewWillDisappear(_ animated: Bool) {
@@ -181,19 +182,21 @@ open class KMConversationViewController: ALKConversationViewController {
         refreshViewController()
     }
 
-    func addViewConstraints() {
-        let appSettingsUserDefaults = ALKAppSettingsUserDefaults()
-        botCharLimitView.setBackgroundColor(color:appSettingsUserDefaults.getAppPrimaryColor())
-        chatBar.headerView.addViewsForAutolayout(views: [awayMessageView, botCharLimitView])
+    func addViewConstraints() {        chatBar.headerView.addViewsForAutolayout(views: [awayMessageView, botCharLimitView])
 
-        botCharLimitView.bottomAnchor.constraint(equalTo: chatBar.headerView.bottomAnchor).isActive = true
-        botCharLimitView.leadingAnchor.constraint(equalTo: chatBar.headerView.leadingAnchor).isActive = true
-        botCharLimitView.trailingAnchor.constraint(equalTo: chatBar.headerView.trailingAnchor).isActive = true
+        botCharLimitView.layout {
+            $0.leading == chatBar.headerView.leadingAnchor
+            $0.trailing == chatBar.headerView.trailingAnchor
+            $0.bottom == chatBar.headerView.bottomAnchor
+        }
+
         botCharLimitView.heightAnchor.constraintEqualToAnchor(constant: 0, identifier: BotCharacterLimitView.ConstraintIdentifier.botCharacterLimitViewHeight.rawValue).isActive = true
 
-        awayMessageView.bottomAnchor.constraint(equalTo:botCharLimitView.topAnchor).isActive = true
-        awayMessageView.leadingAnchor.constraint(equalTo: chatBar.headerView.leadingAnchor).isActive = true
-        awayMessageView.trailingAnchor.constraint(equalTo: chatBar.headerView.trailingAnchor).isActive = true
+        awayMessageView.layout {
+            $0.leading == chatBar.headerView.leadingAnchor
+            $0.trailing == chatBar.headerView.trailingAnchor
+            $0.bottom == botCharLimitView.topAnchor
+        }
         awayMessageView.heightAnchor.constraintEqualToAnchor(constant: 0, identifier: AwayMessageView.ConstraintIdentifier.awayMessageViewViewHeight.rawValue).isActive = true
     }
 
@@ -211,12 +214,14 @@ open class KMConversationViewController: ALKConversationViewController {
                     weakSelf.checkCharLimitAndShowLimitView(characterCount: weakSelf.chatBar.textView.text.count)
                 } else {
                     weakSelf.botCharLimitViewHeight(hide: true)
+                    weakSelf.chatBar.disableSendButton(isSendButtonDisabled: false)
                 }
             }
         }
     }
 
     func messageStatusAndFetchBotType() {
+        self.botCharLimitViewHeight(hide: true)
         guard let channelKey = viewModel.channelKey, !isClosedConversation else { return }
         conversationService.awayMessageFor(groupId: channelKey, completion: {
             result in
@@ -226,10 +231,12 @@ open class KMConversationViewController: ALKConversationViewController {
                     guard !message.isEmpty else { return }
                     self.isAwayMessageViewHidden = false
                     self.awayMessageView.set(message: message)
+                    /// Fetch the bot type
                     self.fetchBotType()
                 case .failure(let error):
                     print("Message status error: \(error)")
                     self.isAwayMessageViewHidden = true
+                    /// Fetch the bot type
                     self.fetchBotType()
                     return
                 }
@@ -367,7 +374,7 @@ open class KMConversationViewController: ALKConversationViewController {
 
         awayMessageView.constraint(withIdentifier: AwayMessageView.ConstraintIdentifier.awayMessageViewViewHeight.rawValue)?.constant = CGFloat(flag ? awayMessageheight : 0)
 
-        chatBar.headerViewHeight = flag ? awayMessageheight:0
+        chatBar.headerViewHeight = flag ? awayMessageheight: !self.botCharLimitView.isHidden ? charLimitForBotViewHeight : 0
         awayMessageView.showMessage(flag)
     }
 
@@ -497,6 +504,8 @@ extension KMConversationViewController {
 
 extension KMConversationViewController {
 
+    /// This method will check character limit and show the bot character limit UI.
+    /// - Parameter characterCount:Count of the character  from the text view
     func checkCharLimitAndShowLimitView(characterCount: Int) {
         if characterCount == 0 {
             self.botCharLimitView.isHidden = true
@@ -507,6 +516,7 @@ extension KMConversationViewController {
         let warningCount = BotCharacterLimitView.CharacterLimit.charLimitForDialogFlowBot - BotCharacterLimitView.CharacterLimit.charLimitWarningForDialogFlowBot
         let isWarning = characterCount >= warningCount
         let diffCount = characterCount - BotCharacterLimitView.CharacterLimit.charLimitForDialogFlowBot
+
         let isTextExceed = diffCount > 0
         if  isWarning || isTextExceed {
             self.botCharLimitView.isHidden = false
@@ -531,9 +541,12 @@ extension KMConversationViewController {
         }
     }
 
+    /// This method is used for hide and show the bot char limit view and based on the away message is hidden or not increase or decrease the height of the header View.
+    /// - Parameter hide: Pass true for hide the view of bot character limit
     func botCharLimitViewHeight(hide: Bool) {
         botCharLimitView.constraint(withIdentifier: BotCharacterLimitView.ConstraintIdentifier.botCharacterLimitViewHeight.rawValue)?.constant = CGFloat(hide ?  0 : charLimitForBotViewHeight)
         botCharLimitView.hideView(hide: hide)
+        botCharLimitView.showDottedLine(!hide)
         if (hide) {
             chatBar.headerViewHeight  = isAwayMessageViewHidden ? 0 :  awayMessageheight
         } else {
@@ -542,7 +555,6 @@ extension KMConversationViewController {
     }
 
 }
-
 extension KMConversationViewController : UITextViewDelegate {
 
     public func textViewDidChange(_ textView: UITextView) {
