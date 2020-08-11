@@ -12,7 +12,7 @@ import ApplozicSwift
 class AwayMessageView: UIView {
 
     enum ConstraintIdentifier: String {
-         case awayMessageViewViewHeight
+         case awayMessageViewHeight
     }
 
     struct Padding {

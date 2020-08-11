@@ -117,7 +117,6 @@ class BotCharacterLimitView: UIView {
 extension BotCharacterLimitView: Localizable {
     enum LocalizedText {
         static private let filename = Kommunicate.defaultConfiguration.localizedStringFileName
-
         static let botCharLimit = localizedString(forKey: "BotCharLimit", fileName: filename)
         static let removeCharMessage = localizedString(forKey: "RemoveCharMessage", fileName: filename)
         static let remainingCharMessage = localizedString(forKey: "RemainingCharMessage", fileName: filename)
