@@ -8,11 +8,6 @@
 import Foundation
 class BotCharacterLimitView: UIView {
 
-    enum CharacterLimit {
-        static let charLimitForDialogFlowBot = 256
-        static let charLimitWarningForDialogFlowBot = 55
-    }
-
     enum ConstraintIdentifier: String {
         case botCharacterLimitViewHeight
     }
@@ -106,6 +101,7 @@ class BotCharacterLimitView: UIView {
     }
 
     func hideView(hide:Bool) {
+        showDottedLine(!hide)
         messageLabelHeightAnchor.constant = hide ? 0 : height()
     }
 

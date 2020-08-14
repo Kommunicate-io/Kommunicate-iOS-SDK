@@ -32,6 +32,15 @@ open class KMConversationViewController: ALKConversationViewController {
         return closedView
     }()
 
+    lazy var botCharLimitManager: BotCharLimitManager = {
+        let manager = BotCharLimitManager(
+            chatBar: chatBar,
+            botCharLimitView: botCharLimitView
+        )
+        manager.delegate = self
+        return manager
+    }()
+
     var topConstraintClosedView: NSLayoutConstraint?
     var conversationService = KMConversationService()
     var conversationDetail = ConversationDetail()
@@ -40,11 +49,6 @@ open class KMConversationViewController: ALKConversationViewController {
     private var channelMetadataUpdateToken: NotificationToken? = nil
 
     private let awayMessageheight = 80.0
-
-    private let charLimitForBotViewHeight = 80.0
-
-    private var isBotAssignedToDialogflow = false
-
     private var isClosedConversation: Bool {
         guard let channelId = viewModel.channelKey,
             !ALChannelService.isChannelDeleted(channelId),
@@ -78,7 +82,6 @@ open class KMConversationViewController: ALKConversationViewController {
                          individualLaunch : Bool = true) {
         self.kmConversationViewConfiguration = conversationViewConfiguration
         super.init(configuration: configuration)
-        self.chatBar.addTextView(delegate: self)
         self.individualLaunch = individualLaunch
         addNotificationCenterObserver()
     }
@@ -117,9 +120,8 @@ open class KMConversationViewController: ALKConversationViewController {
     open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         hideAwayAndClosedView()
-        self.isBotAssignedToDialogflow = false
-        botCharLimitViewHeight(hide: true)
-        self.chatBar.disableSendButton(isSendButtonDisabled: false)
+        botCharLimitManager.isConversationAssignedToDialogflowBot = false
+        self.botCharLimitManager.showDialogFlowBotView(false)
     }
 
     override open func newMessagesAdded() {
@@ -201,48 +203,32 @@ open class KMConversationViewController: ALKConversationViewController {
         awayMessageView.heightAnchor.constraintEqualToAnchor(constant: 0, identifier: AwayMessageView.ConstraintIdentifier.awayMessageViewHeight.rawValue).isActive = true
     }
 
-    func fetchBotType()  {
-        guard let channelKey = viewModel.channelKey else { return }
-        kmBotService.fetchBotTypeIfAssignedToBot(groupId: channelKey) { [weak self] (isDialogflowBot)  in
-            self?.isBotAssignedToDialogflow = isDialogflowBot
-            guard let weakSelf = self,
-                channelKey == weakSelf.viewModel.channelKey,
-                !weakSelf.isClosedConversation else {
-                    return
-            }
-            DispatchQueue.main.async {
-                if weakSelf.isBotAssignedToDialogflow {
-                    weakSelf.checkCharLimitAndShowLimitView(characterCount: weakSelf.chatBar.textView.text.count)
-                } else {
-                    weakSelf.botCharLimitViewHeight(hide: true)
-                    weakSelf.chatBar.disableSendButton(isSendButtonDisabled: false)
-                }
-            }
-        }
-    }
-
     func messageStatusAndFetchBotType() {
-        self.botCharLimitViewHeight(hide: true)
-        guard let channelKey = viewModel.channelKey, !isClosedConversation else { return }
-        conversationService.awayMessageFor(groupId: channelKey, completion: {
-            result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let message):
-                    guard !message.isEmpty else { return }
-                    self.isAwayMessageViewHidden = false
-                    self.awayMessageView.set(message: message)
-                    /// Fetch the bot type
-                    self.fetchBotType()
-                case .failure(let error):
-                    print("Message status error: \(error)")
-                    self.isAwayMessageViewHidden = true
-                    /// Fetch the bot type
-                    self.fetchBotType()
-                    return
+        self.botCharLimitManager.showDialogFlowBotView(false)
+        if isClosedConversation {
+            self.conversationAssignedToDialogflowBot()
+        } else {
+            guard let channelKey = viewModel.channelKey else { return }
+            conversationService.awayMessageFor(groupId: channelKey, completion: {
+                result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let message):
+                        guard !message.isEmpty else { return }
+                        self.isAwayMessageViewHidden = false
+                        self.awayMessageView.set(message: message)
+                        /// Fetch the bot type
+                        self.conversationAssignedToDialogflowBot()
+                    case .failure(let error):
+                        print("Message status error: \(error)")
+                        self.isAwayMessageViewHidden = true
+                        /// Fetch the bot type
+                        self.conversationAssignedToDialogflowBot()
+                        return
+                    }
                 }
-            }
-        })
+            })
+        }
     }
 
     func sendConversationOpenNotification(channelId: String) {
@@ -278,9 +264,14 @@ open class KMConversationViewController: ALKConversationViewController {
     @objc func onChannelMetadataUpdate() {
         guard viewModel != nil, viewModel.isGroup else { return }
         updateAssigneeDetails()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.fetchBotType()
+
+        if isClosedConversation {
+            botCharLimitManager.showDialogFlowBotView(false)
         }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.conversationAssignedToDialogflowBot()
+        }
+
         // If the user was typing when the status changed
         view.endEditing(true)
         guard isClosedConversationViewHidden == isClosedConversation else { return }
@@ -305,8 +296,8 @@ open class KMConversationViewController: ALKConversationViewController {
         clearAndReloadTable()
         configureChatBar()
         hideAwayAndClosedView()
-        updateAssigneeDetails()
         // Fetch Assignee details every time view is launched.
+        updateAssigneeDetails()
         messageStatusAndFetchBotType()
         // Check for group left
         isChannelLeft()
@@ -322,19 +313,11 @@ open class KMConversationViewController: ALKConversationViewController {
 
     private func setupConversationClosedView() {
         conversationClosedView.restartTapped = {[weak self] in
-
             guard let weakSelf = self else {
                 return;
             }
             weakSelf.isClosedConversationViewHidden = true
-            if (weakSelf.isBotAssignedToDialogflow) {
-                weakSelf.checkCharLimitAndShowLimitView(characterCount: weakSelf.chatBar.textView.text.count)
-            } else {
-                if weakSelf.isAwayMessageViewHidden {
-                    weakSelf.botCharLimitView.isHidden = true
-                    weakSelf.chatBar.headerViewHeight = 0
-                }
-            }
+            weakSelf.botCharLimitManager.showDialogFlowBotView(weakSelf.botCharLimitManager.isConversationAssignedToDialogflowBot)
         }
         view.addViewsForAutolayout(views: [conversationClosedView])
         var bottomAnchor = view.bottomAnchor
@@ -362,20 +345,20 @@ open class KMConversationViewController: ALKConversationViewController {
                 print("Failed to sync the account package status")
                 return
             }
-            print("Successfuly synced the account package status")
+            print("Successfully synced the account package status")
         }
     }
 
     private func showAwayMessage(_ flag: Bool) {
-
-        if self.botCharLimitView.isHidden {
-            botCharLimitView.constraint(withIdentifier: BotCharacterLimitView.ConstraintIdentifier.botCharacterLimitViewHeight.rawValue)?.constant = 0
-            botCharLimitView.hideView(hide: true)
-        }
-
         awayMessageView.constraint(withIdentifier: AwayMessageView.ConstraintIdentifier.awayMessageViewHeight.rawValue)?.constant = CGFloat(flag ? awayMessageheight : 0)
+        /// Check if the away message is going to hide make sure to keep the height of the bot view header height
+        /// in case of bot view is not hidden
+        /// one case can be on new message received the handler  new messages added will be called in that away
+        /// message is going to hide if away message is visible.
 
-        chatBar.headerViewHeight = flag ? awayMessageheight: !self.botCharLimitView.isHidden ? charLimitForBotViewHeight : 0
+        let botCharLimitViewHeight = self.botCharLimitView.isHidden ?  0 : BotCharLimitManager.charLimitForBotViewHeight
+
+        chatBar.headerViewHeight = flag ? awayMessageheight: botCharLimitViewHeight
         awayMessageView.showMessage(flag)
     }
 
@@ -503,73 +486,28 @@ extension KMConversationViewController {
     }
 }
 
-extension KMConversationViewController {
-
-    /// This method will check character limit and show the bot character limit UI.
-    /// - Parameter characterCount:Count of the character from the text view
-    func checkCharLimitAndShowLimitView(characterCount: Int) {
-        if characterCount == 0 {
-            self.botCharLimitView.isHidden = true
-            chatBar.disableSendButton(isSendButtonDisabled: false)
-            botCharLimitViewHeight(hide: true)
-            return
+extension KMConversationViewController: BotCharLimitDelegate {
+    func didBotCharacterLimitViewHide(_ isHidden: Bool) {
+        if (isHidden) {
+            chatBar.headerViewHeight = self.isAwayMessageViewHidden ? 0 :  awayMessageheight
+        } else {
+            chatBar.headerViewHeight = isAwayMessageViewHidden ?  BotCharLimitManager.charLimitForBotViewHeight : awayMessageheight + BotCharLimitManager.charLimitForBotViewHeight
         }
-        let warningCount = BotCharacterLimitView.CharacterLimit.charLimitForDialogFlowBot - BotCharacterLimitView.CharacterLimit.charLimitWarningForDialogFlowBot
-        let isWarning = characterCount >= warningCount
-        let diffCount = characterCount - BotCharacterLimitView.CharacterLimit.charLimitForDialogFlowBot
+    }
+    
+    private func conversationAssignedToDialogflowBot() {
+        guard let channelKey = viewModel.channelKey else { return }
+        kmBotService.conversationAssignedToBotForBotType(type: BotDetailResponse.BotType.DIALOGFLOW.rawValue,groupId: channelKey) {[weak self] (isDialogflowBot) in
 
-        let isTextExceed = diffCount > 0
-        if  isWarning || isTextExceed {
-            self.botCharLimitView.isHidden = false
-            let botCharLimitText = BotCharacterLimitView.LocalizedText.botCharLimit
-            var charInfoText = ""
-
-            if (isTextExceed) {
-                let removeCharMessage = BotCharacterLimitView.LocalizedText.removeCharMessage
-                charInfoText =  String(format: removeCharMessage, diffCount)
-            } else {
-                let remainingCharMessage = BotCharacterLimitView.LocalizedText.remainingCharMessage
-                charInfoText =  String(format: remainingCharMessage, -diffCount)
+            self?.botCharLimitManager.isConversationAssignedToDialogflowBot = isDialogflowBot
+            guard let weakSelf = self,
+                channelKey == weakSelf.viewModel.channelKey,
+                !weakSelf.isClosedConversation else {
+                    return
             }
-            chatBar.disableSendButton(isSendButtonDisabled: isTextExceed)
-            let botLimitmessage = String(format: botCharLimitText, BotCharacterLimitView.CharacterLimit.charLimitForDialogFlowBot, charInfoText)
-            botCharLimitView.set(message: botLimitmessage)
-            botCharLimitViewHeight(hide: false)
-        } else {
-            self.botCharLimitView.isHidden = true
-            botCharLimitViewHeight(hide: true)
-            chatBar.disableSendButton(isSendButtonDisabled: false)
+            DispatchQueue.main.async {
+                weakSelf.botCharLimitManager.showDialogFlowBotView(isDialogflowBot)
+            }
         }
-    }
-
-    /// This method is used to hide and show the bot char limit view and based on the away message is hidden or not.
-    /// Then increase or decrease the height of the header view.
-    /// - Parameter hide: Pass true  hide the view of bot character limit
-    func botCharLimitViewHeight(hide: Bool) {
-        botCharLimitView.constraint(withIdentifier: BotCharacterLimitView.ConstraintIdentifier.botCharacterLimitViewHeight.rawValue)?.constant = CGFloat(hide ?  0 : charLimitForBotViewHeight)
-        botCharLimitView.hideView(hide: hide)
-        botCharLimitView.showDottedLine(!hide)
-        if (hide) {
-            chatBar.headerViewHeight  = isAwayMessageViewHidden ? 0 :  awayMessageheight
-        } else {
-            chatBar.headerViewHeight = isAwayMessageViewHidden ?  charLimitForBotViewHeight : awayMessageheight + charLimitForBotViewHeight
-        }
-    }
-}
-extension KMConversationViewController : UITextViewDelegate {
-
-    public func textViewDidChange(_ textView: UITextView) {
-        guard self.isBotAssignedToDialogflow else {
-            return
-        }
-        checkCharLimitAndShowLimitView(characterCount: textView.text.count)
-    }
-
-    public func textViewDidEndEditing(_ textView: UITextView) {
-
-    }
-
-    public func textViewDidBeginEditing(_ textView: UITextView) {
-
     }
 }

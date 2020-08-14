@@ -23,7 +23,7 @@ public struct KMBotService {
     /// - Parameters:
     ///   - applicationKey: Application key of the kommunicate
     ///   - botId: Bot id of the detail that you would like to fetch
-    ///   - completion: A Result of type `BotDetail` or `KMBotError`
+    ///   - completion: A result of type `BotDetail` or `KMBotError`
 
     public func botDetail(applicationKey: String = KMUserDefaultHandler.getApplicationKey(),
                           botId: String,
@@ -32,17 +32,14 @@ public struct KMBotService {
             completion(.failure(.api(.urlBuilding)))
             return
         }
-
         DataLoader.request(url: url, completion: {
             result in
             switch result {
             case .success(let data):
-
                 guard let botDetailResponse = try? BotDetailResponse(data: data) else {
                     completion(.failure(.api(.jsonConversion)))
                     return
                 }
-
                 do {
                     let botDetailArray = try botDetailResponse.botDetail()
                     guard botDetailArray.count > 0,
@@ -53,7 +50,7 @@ public struct KMBotService {
                     print("Bot detail fetched successfully for botId:\(botId) And Bot platform:",botDetail.aiPlatform as Any)
                     /// Add the botType and botId in user defaults
                     DispatchQueue.main.async {
-                        KMUserDefaultHandler.setBotType(botType, botId: botId)
+                        KMAppUserDefaultHandler.setBotType(botType, botId: botId)
                         completion(.success(botDetail))
                     }
                 } catch let error as KMBotError {
@@ -62,14 +59,13 @@ public struct KMBotService {
                 } catch {
                     completion(.failure(.notFound))
                 }
-
             case .failure(let error):
                 completion(.failure(.api(.network(error))))
             }
         })
     }
 
-    /// This method is used for fetchnig the assignee userId for groupId.
+    /// This method is used for fetching the assignee userId for groupId.
     /// - Parameter groupId: GroupId of the channel
     /// - Returns: Assignee userId of this channel groupId.
     func assigneeUserIdFor(groupId: NSNumber) -> String? {
@@ -81,29 +77,48 @@ public struct KMBotService {
         return assigneeId
     }
 
-    /// This method is used for fetching bot type is assigned to bot.
+    /// This method is used for checking conversation is assigned to particular bot type
     /// - Parameters:
-    ///   - groupId: GroupId of the channel.
-    ///   - completion: If Assigned to bot completion handler will have true.
-    func fetchBotTypeIfAssignedToBot(groupId: NSNumber,  completion: @escaping (Bool) -> ()) {
-        guard let assigneeId = self .assigneeUserIdFor(groupId: groupId),
-            let channelUserX = channelDBService.loadChannelUserX(byUserId: groupId, andUserId: assigneeId), channelUserX.role == 2 else {
+    ///   - type: type of the bot  from enum `BotType`
+    ///   - groupId: groupId of conversation
+    ///   - completion: true in case if the passed  bot type and response bot type are same..
+    func conversationAssignedToBotForBotType(type:String, groupId: NSNumber,  completion: @escaping (Bool) -> ()) {
+        guard let assigneeId = self.assigneeUserIdFor(groupId: groupId),
+            let channelUserX = channelDBService.loadChannelUserX(byUserId: groupId, andUserId: assigneeId),
+            channelUserX.role == 2 else {
                 completion(false)
                 return
         }
-
-        if let botType = KMUserDefaultHandler.getBotType(botId: assigneeId) {
-            completion(botType == BotDetailResponse.BotType.dialogflow)
-        } else {
-            self.botDetail(botId: assigneeId) { (result) in
-                switch result {
-                case .success(let botDetail) :
-                    completion(botDetail.aiPlatform == BotDetailResponse.BotType.dialogflow)
-                case .failure(_) :
-                    completion(false)
-                }
+        self.fetchBotType(assigneeId) { (result) in
+            switch result {
+            case.success(let botType):
+                completion(botType == type)
+            case .failure(_):
+                completion(false)
             }
         }
     }
 
+    /// Fetch the bot type for given botId.
+    /// - Parameters:
+    ///   - botId: Pass the botId for fetching bot type
+    ///   - completion: Result with botType or `KMBotError`
+    func fetchBotType(_ botId: String, completion: @escaping (Result<String, KMBotError>) -> ()) {
+        if let botType = KMAppUserDefaultHandler.getBotType(botId: botId) {
+            completion(.success(botType))
+        } else {
+            self.botDetail(botId: botId) { (result) in
+                switch result {
+                case .success(let botDetail) :
+                    guard let aiPlatform = botDetail.aiPlatform else {
+                        completion(.failure(.notFound))
+                        return
+                    }
+                    completion(.success(aiPlatform))
+                case .failure(let error) :
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
 }

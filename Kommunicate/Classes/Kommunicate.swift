@@ -172,9 +172,8 @@ open class Kommunicate: NSObject,Localizable{
     /// Logs out the current logged in user and clears all the cache.
     open class func logoutUser(completion: @escaping (Result<String, KMError>) -> ()) {
         let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
-        let kmAppSetting = KMAppSettingService()
         applozicClient?.logoutUser(completion: { (error, apiResponse) in
-            kmAppSetting.clearAppSettingsData()
+            Kommunicate.shared.clearUserDefaults()
             guard error == nil else {
                 completion(.failure(KMError.api(error)))
                 return
@@ -474,13 +473,18 @@ open class Kommunicate: NSObject,Localizable{
     @available(*, deprecated, message: "Use logoutUser(completion:)")
     @objc open class func logoutUser() {
         let registerUserClientService = ALRegisterUserClientService()
-        let kmAppSetting = KMAppSettingService()
         if let _ = ALUserDefaultsHandler.getDeviceKeyString() {
             registerUserClientService.logout(completionHandler: {
                 _, _ in
-                kmAppSetting.clearAppSettingsData()
+                Kommunicate.shared.clearUserDefaults()
                 NSLog("Applozic logout")
             })
         }
+    }
+
+    private func clearUserDefaults() {
+        let kmAppSetting = KMAppSettingService()
+        KMAppUserDefaultHandler.clear()
+        kmAppSetting.clearAppSettingsData()
     }
 }

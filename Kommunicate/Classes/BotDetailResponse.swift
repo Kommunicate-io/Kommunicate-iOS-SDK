@@ -28,9 +28,13 @@ public struct BotDetail: Decodable {
 }
 
 extension BotDetailResponse {
-
-    enum BotType {
-       static let dialogflow = "dialogflow"
+    enum BotType: String {
+        case DIALOGFLOW = "dialogflow"
+        case APIAI = "api.ai"
+        case HELPDOCS = "helpdocs.io"
+        case RASA = "rasa"
+        case SMARTREPLY = "smartreply"
+        case CUSTOM = "custom"
     }
     init(data: Data) throws {
         self = try JSONDecoder().decode(BotDetailResponse.self, from: data)
