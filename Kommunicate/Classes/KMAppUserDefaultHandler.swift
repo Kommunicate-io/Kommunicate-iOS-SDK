@@ -6,7 +6,7 @@
 //
 
 import Foundation
-/// `KMAppUserDefaultHandler` will have user defaults to kommunicate sdk
+/// `KMAppUserDefaultHandler` will have all the user defaults related to kommunicate sdk
 class KMAppUserDefaultHandler : NSObject {
     static let DEFAULT_SUITE_NAME =  "group.kommunicate.sdk"
 
@@ -17,7 +17,7 @@ class KMAppUserDefaultHandler : NSObject {
     static func setBotType(_ botType: String, botId: String) {
         KMAppUserDefaultHandler.sharedUserDefaults?.setValue(botType, forKey: botId)
     }
-
+    
     static func getBotType(botId: String) -> String? {
         return KMAppUserDefaultHandler.sharedUserDefaults?.value(forKey: botId) as? String
     }

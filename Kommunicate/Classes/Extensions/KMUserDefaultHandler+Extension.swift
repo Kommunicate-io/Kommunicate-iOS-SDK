@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Applozic
 
 extension KMUserDefaultHandler {
     static var isAppIdEmpty: Bool {

@@ -24,7 +24,6 @@ public struct KMBotService {
     ///   - applicationKey: Application key of the kommunicate
     ///   - botId: Bot id of the detail that you would like to fetch
     ///   - completion: A result of type `BotDetail` or `KMBotError`
-
     public func botDetail(applicationKey: String = KMUserDefaultHandler.getApplicationKey(),
                           botId: String,
                           completion: @escaping (Result<BotDetail, KMBotError>)->()) {

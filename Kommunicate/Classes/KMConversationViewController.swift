@@ -17,7 +17,7 @@ open class KMConversationViewController: ALKConversationViewController {
     private let kmConversationViewConfiguration: KMConversationViewConfiguration
     private weak var ratingVC: RatingViewController?
     private let registerUserClientService = ALRegisterUserClientService()
-    private let kmBotService  = KMBotService()
+    private let kmBotService = KMBotService()
 
     lazy var customNavigationView = ConversationVCNavBar(
         delegate: self,
@@ -317,6 +317,7 @@ open class KMConversationViewController: ALKConversationViewController {
                 return;
             }
             weakSelf.isClosedConversationViewHidden = true
+            /// Once the restart conversation button tapped we will check if there is text in textview and show the bot limit
             weakSelf.botCharLimitManager.showDialogFlowBotView(weakSelf.botCharLimitManager.isConversationAssignedToDialogflowBot)
         }
         view.addViewsForAutolayout(views: [conversationClosedView])
@@ -351,11 +352,7 @@ open class KMConversationViewController: ALKConversationViewController {
 
     private func showAwayMessage(_ flag: Bool) {
         awayMessageView.constraint(withIdentifier: AwayMessageView.ConstraintIdentifier.awayMessageViewHeight.rawValue)?.constant = CGFloat(flag ? awayMessageheight : 0)
-        /// Check if the away message is going to hide make sure to keep the height of the bot view header height
-        /// in case of bot view is not hidden
-        /// one case can be on new message received the handler  new messages added will be called in that away
-        /// message is going to hide if away message is visible.
-
+        /// Check if the away message is going to hide make sure to keep the height of the bot character limit view in header vuew height.
         let botCharLimitViewHeight = self.botCharLimitView.isHidden ?  0 : BotCharLimitManager.charLimitForBotViewHeight
 
         chatBar.headerViewHeight = flag ? awayMessageheight: botCharLimitViewHeight
