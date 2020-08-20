@@ -352,8 +352,9 @@ open class KMConversationViewController: ALKConversationViewController {
 
     private func showAwayMessage(_ flag: Bool) {
         awayMessageView.constraint(withIdentifier: AwayMessageView.ConstraintIdentifier.awayMessageViewHeight.rawValue)?.constant = CGFloat(flag ? awayMessageheight : 0)
-        /// Check if the away message is going to hide make sure to keep the height of the bot character limit view in header vuew height.
-        let botCharLimitViewHeight = self.botCharLimitView.isHidden ?  0 : BotCharLimitManager.charLimitForBotViewHeight
+
+        /// Make sure to keep the height of bot character limit view if it's visible.
+        let botCharLimitViewHeight = self.botCharLimitView.isHidden ? 0 : BotCharLimitManager.charLimitForBotViewHeight
 
         chatBar.headerViewHeight = flag ? awayMessageheight: botCharLimitViewHeight
         awayMessageView.showMessage(flag)
