@@ -4,6 +4,8 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+## [5.6.1] - 2020-08-21
+
 ### Enhancements
 - [CM-289]Add restriction for adding more than 256 chars in case the conversation is assigned to a Dialogflow bot.
 
@@ -156,6 +158,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 - [AL-2853]Added support for showing Away message.
 - [AL-3062]While creating a conversation, a default agent will be fetched and added. Now it's not required  to pass the agent Ids.
+- [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
