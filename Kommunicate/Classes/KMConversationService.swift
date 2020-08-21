@@ -118,7 +118,7 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                 do {
                     guard
                         let awayMessageJson = try JSONSerialization.jsonObject(with: data, options: [])
-                        as? [String: Any]
+                            as? [String: Any]
                         else {
                             print("error trying to convert data to JSON")
                             completion(.failure(APIError.jsonConversion))
