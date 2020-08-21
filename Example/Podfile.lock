@@ -1,14 +1,14 @@
 PODS:
-  - Applozic (7.9.0):
+  - Applozic (7.9.1):
     - SDWebImage (~> 5.7.2)
-  - ApplozicSwift (5.9.0):
-    - ApplozicSwift/Complete (= 5.9.0)
-  - ApplozicSwift/Complete (5.9.0):
-    - Applozic (~> 7.9.0)
+  - ApplozicSwift (5.9.2):
+    - ApplozicSwift/Complete (= 5.9.2)
+  - ApplozicSwift/Complete (5.9.2):
+    - Applozic (~> 7.9.1)
     - ApplozicSwift/RichMessageKit
     - Kingfisher (~> 5.14.0)
     - MGSwipeTableCell (~> 1.6.11)
-  - ApplozicSwift/RichMessageKit (5.9.0)
+  - ApplozicSwift/RichMessageKit (5.9.2)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
   - FBSnapshotTestCase/Core (2.1.4)
@@ -23,7 +23,7 @@ PODS:
     - Kingfisher/Core (= 5.14.1)
   - Kingfisher/Core (5.14.1)
   - Kommunicate (5.6.0):
-    - ApplozicSwift (~> 5.9.0)
+    - ApplozicSwift (~> 5.9.2)
   - MGSwipeTableCell (1.6.11)
   - Nimble (8.1.1)
   - Nimble-Snapshots (8.2.1):
@@ -37,7 +37,6 @@ PODS:
   - SDWebImage/Core (5.7.4)
 
 DEPENDENCIES:
-  - ApplozicSwift (from `https://github.com/AppLozic/ApplozicSwift.git`, branch `CM-289`)
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - Nimble
@@ -47,6 +46,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Applozic
+    - ApplozicSwift
     - FBSnapshotTestCase
     - iOSSnapshotTestCase
     - Kingfisher
@@ -57,30 +57,22 @@ SPEC REPOS:
     - SDWebImage
 
 EXTERNAL SOURCES:
-  ApplozicSwift:
-    :branch: CM-289
-    :git: https://github.com/AppLozic/ApplozicSwift.git
   Kommunicate:
     :path: "../"
 
-CHECKOUT OPTIONS:
-  ApplozicSwift:
-    :commit: a0b1d1c33eb2e2e56270cf2cf113a58455a4e6a4
-    :git: https://github.com/AppLozic/ApplozicSwift.git
-
 SPEC CHECKSUMS:
-  Applozic: 5817caeaf33b9a0bd602e785755590ba364d2af3
-  ApplozicSwift: 5b10ff3d7822f4a07278207964ae228ee39538ba
+  Applozic: 588efdaa6588549a17431e49372666a005cec49a
+  ApplozicSwift: e4c3bd60bd27bc0c329b9cce0453f9a32a35a996
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
   Kingfisher: 8050bc6f7f68cbf3908bd04df7ccbac188f6d6d6
-  Kommunicate: a8dde3b34104505e66740d5fbcee5c332f682c72
+  Kommunicate: 846ad616de40dc21ffae7e8bf01f11f97d77009d
   MGSwipeTableCell: b804e4e450dee439c42250be90bd50458bf67fce
   Nimble: 5f8a2fb6fa343a7242dfdd9d42f7267419d464b2
   Nimble-Snapshots: 3a4750d83752625c8ebfdc588da105303ee2201e
   Quick: 6d9559f40647bc4d510103842ef2fdd882d753e2
   SDWebImage: 48b88379b798fd1e4298f95bb25d2cdabbf4deb3
 
-PODFILE CHECKSUM: c9547f8d4e12204e78fbf530db71e4f2f5cdb376
+PODFILE CHECKSUM: e39f6f2c1d97f249b7280f0024c79ebf0275b2df
 
 COCOAPODS: 1.9.3
