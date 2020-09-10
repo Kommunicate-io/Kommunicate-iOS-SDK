@@ -68,4 +68,45 @@ platform :ios do
     sh("git", "push", "origin", "--tags", "master")
     sh("git", "push", "origin", "dev")
   end
+
+  desc "Bump ApplozicSwift version"
+  lane :applozicswift_version_update do |options|
+    depUpdateBranchName = git_branch
+    unless depUpdateBranchName.partition('/').first == "als-dep-update"
+      raise "Incorrect branch, expected als-dep-update branch".red
+    end
+    sh("git", "fetch")
+    sh("git", "checkout", depUpdateBranchName)
+
+    version = depUpdateBranchName.partition('/').last
+    dependency = "ApplozicSwift"
+    change_podspec_dependency_version(
+      podspec: "Kommunicate.podspec",
+      dependency: dependency,
+      version: "~> #{version}"
+    )
+    cocoapods(clean: false, podfile: "Example/Podfile", repo_update: true)
+    push_dependecy_update(version: version, depUpdateBranchName: depUpdateBranchName, dependency: dependency)
+
+    create_pull_request(
+      api_token: ENV["DANGER_GITHUB_API_TOKEN"],
+      repo: "Kommunicate-io/Kommunicate-iOS-SDK",
+      title: "Update #{dependency} to #{version} #trivial",
+      base: "dev",
+      body: "✅ Updated #{dependency} to #{version}. \n✅ Updated Podfile.lock.",
+      labels: "dependencies"
+    )
+  end
+
+  desc "Commit and push dependency update changes"
+  lane :push_dependecy_update do |options|
+    version = options[:version]
+    depUpdateBranchName = options[:depUpdateBranchName]
+    dependency = options[:dependency]
+    sh("git", "add", "-u")
+    sh("git", "commit", "-m", "Bump #{dependency} to #{version} [ci skip]")
+    sh("git", "fetch", "origin", "dev")
+    sh("git", "rebase", "origin/dev")
+    sh("git", "push", "origin", depUpdateBranchName)
+  end
 end
