@@ -14,7 +14,7 @@ platform :ios do
 
     version = releaseBranchName.partition('/').last
     version_bump_podspec(path: "Kommunicate.podspec", version_number: version)
-    cocoapods(clean: true, podfile: "Example/Podfile", repo_update: true)
+    cocoapods(clean_install: true, podfile: "Example/Podfile", repo_update: true)
 
     pod_lib_lint
     update_changelog_tag(version: version)
@@ -85,7 +85,7 @@ platform :ios do
       dependency: dependency,
       version: "~> #{version}"
     )
-    cocoapods(clean: false, podfile: "Example/Podfile", repo_update: true)
+    cocoapods(podfile: "Example/Podfile", repo_update: true)
     push_dependecy_update(version: version, depUpdateBranchName: depUpdateBranchName, dependency: dependency)
 
     create_pull_request(
