@@ -49,7 +49,7 @@ public struct KMBotService {
                     print("Bot detail fetched successfully for botId:\(botId) And Bot platform:",botDetail.aiPlatform as Any)
                     /// Add the botType and botId in user defaults
                     DispatchQueue.main.async {
-                        KMAppUserDefaultHandler.setBotType(botType, botId: botId)
+                        KMAppUserDefaultHandler.shared.setBotType(botType, botId: botId)
                         completion(.success(botDetail))
                     }
                 } catch let error as KMBotError {
@@ -103,7 +103,7 @@ public struct KMBotService {
     ///   - botId: Pass the botId for fetching bot type
     ///   - completion: Result with botType or `KMBotError`
     func fetchBotType(_ botId: String, completion: @escaping (Result<String, KMBotError>) -> ()) {
-        if let botType = KMAppUserDefaultHandler.getBotType(botId: botId) {
+        if let botType = KMAppUserDefaultHandler.shared.getBotType(botId: botId) {
             completion(.success(botType))
         } else {
             self.botDetail(botId: botId) { (result) in

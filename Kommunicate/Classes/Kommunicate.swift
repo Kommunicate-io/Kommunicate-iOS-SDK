@@ -157,6 +157,8 @@ open class Kommunicate: NSObject,Localizable{
                     case .success(let appSetting):
                         DispatchQueue.main.async {
                             kmAppSetting.updateAppsettings(chatWidgetResponse: appSetting.chatWidget)
+                            KMAppUserDefaultHandler.shared.isCSATEnabled
+                                = appSetting.collectFeedback ?? false
                             completion(response , error as NSError?)
                         }
                     case .failure( _) :
@@ -484,7 +486,7 @@ open class Kommunicate: NSObject,Localizable{
 
     private func clearUserDefaults() {
         let kmAppSetting = KMAppSettingService()
-        KMAppUserDefaultHandler.clear()
+        KMAppUserDefaultHandler.shared.clear()
         kmAppSetting.clearAppSettingsData()
     }
 }

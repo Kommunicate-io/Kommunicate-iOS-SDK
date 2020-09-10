@@ -44,6 +44,7 @@ open class KMConversationViewController: ALKConversationViewController {
     var topConstraintClosedView: NSLayoutConstraint?
     var conversationService = KMConversationService()
     var conversationDetail = ConversationDetail()
+    var userDefaults = KMAppUserDefaultHandler.shared
 
     private var converastionNavBarItemToken: NotificationToken? = nil
     private var channelMetadataUpdateToken: NotificationToken? = nil
@@ -388,10 +389,9 @@ extension KMConversationViewController {
         }
         conversationClosedView.clearFeedback()
         isClosedConversationViewHidden = false
-        guard let channelId = viewModel.channelKey,
-            !kmConversationViewConfiguration.isCSATOptionDisabled else {
-                return
-        }
+        let isCSATEnabled =
+            !kmConversationViewConfiguration.isCSATOptionDisabled && userDefaults.isCSATEnabled
+        guard let channelId = viewModel.channelKey, isCSATEnabled else { return }
         conversationDetail.feedbackFor(channelId: channelId.intValue) { [weak self] feedback in
             DispatchQueue.main.async {
                 guard let previousFeedback = feedback else {

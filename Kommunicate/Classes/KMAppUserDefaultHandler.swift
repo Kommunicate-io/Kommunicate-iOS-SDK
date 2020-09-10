@@ -10,20 +10,40 @@ import Foundation
 class KMAppUserDefaultHandler : NSObject {
     static let DEFAULT_SUITE_NAME =  "group.kommunicate.sdk"
 
-    static var sharedUserDefaults: UserDefaults? {
-        return UserDefaults(suiteName: DEFAULT_SUITE_NAME)
+    static let shared = KMAppUserDefaultHandler(
+        userDefaultSuite: UserDefaults(suiteName: DEFAULT_SUITE_NAME) ?? .standard
+    )
+
+    var isCSATEnabled: Bool {
+        set {
+            userDefaultSuite.set(newValue, forKey: Key.CSATEnabled)
+        }
+        get {
+            return userDefaultSuite.bool(forKey: Key.CSATEnabled)
+        }
     }
 
-    static func setBotType(_ botType: String, botId: String) {
-        KMAppUserDefaultHandler.sharedUserDefaults?.setValue(botType, forKey: botId)
+    private let userDefaultSuite: UserDefaults
+
+    init(userDefaultSuite: UserDefaults) {
+        self.userDefaultSuite = userDefaultSuite
+    }
+
+    func setBotType(_ botType: String, botId: String) {
+        userDefaultSuite.setValue(botType, forKey: botId)
     }
     
-    static func getBotType(botId: String) -> String? {
-        return KMAppUserDefaultHandler.sharedUserDefaults?.value(forKey: botId) as? String
+    func getBotType(botId: String) -> String? {
+        return userDefaultSuite.value(forKey: botId) as? String
     }
 
-    static func clear() {
-        let userDefaults = KMAppUserDefaultHandler.sharedUserDefaults
-        userDefaults?.removePersistentDomain(forName: KMAppUserDefaultHandler.DEFAULT_SUITE_NAME)
+    func clear() {
+        userDefaultSuite.removePersistentDomain(forName: KMAppUserDefaultHandler.DEFAULT_SUITE_NAME)
+    }
+}
+
+private extension KMAppUserDefaultHandler {
+    enum Key {
+        static let CSATEnabled = "CSAT_ENABLED"
     }
 }
