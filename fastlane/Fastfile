@@ -85,7 +85,7 @@ platform :ios do
       dependency: dependency,
       version: "~> #{version}"
     )
-    cocoapods(podfile: "Example/Podfile", repo_update: true)
+    sh("pod", "update", dependency)
     push_dependecy_update(version: version, depUpdateBranchName: depUpdateBranchName, dependency: dependency)
 
     create_pull_request(
