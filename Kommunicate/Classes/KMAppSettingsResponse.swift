@@ -26,11 +26,11 @@ struct AppSetting: Decodable {
     let agentID: String
     let agentName, userName: String?
     let chatWidget: ChatWidgetResponse?
+    let collectFeedback: Bool?
 
     enum CodingKeys: String, CodingKey {
         case agentID = "agentId"
-        case agentName, userName
-        case chatWidget
+        case agentName, userName, chatWidget, collectFeedback
     }
 }
 

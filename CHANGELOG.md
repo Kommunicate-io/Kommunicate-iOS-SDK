@@ -4,6 +4,10 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Enhancements
+
+- [CM-410] Added support for enabling CSAT from the Dashboard.
+
 ## [5.6.1] - 2020-08-21
 
 ### Enhancements
