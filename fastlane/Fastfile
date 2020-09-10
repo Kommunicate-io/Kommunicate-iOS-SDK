@@ -85,8 +85,7 @@ platform :ios do
       dependency: dependency,
       version: "~> #{version}"
     )
-    sh("cd", "../Example")
-    sh("pod", "update", dependency)
+    sh("cd ../Example && pod update #{dependency}")
     push_dependecy_update(version: version, depUpdateBranchName: depUpdateBranchName, dependency: dependency)
 
     create_pull_request(
