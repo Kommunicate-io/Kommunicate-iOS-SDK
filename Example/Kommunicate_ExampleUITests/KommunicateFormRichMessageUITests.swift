@@ -36,7 +36,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         }
     }
     
-    func testSuggestedRepliesTemplate() {
+    func testFormTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText) // typing message
@@ -44,7 +44,9 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         let cell = app.tables[AppScreen.innerChatScreenTableView].children(matching: .cell).element(boundBy: 2)
         cell.otherElements[AppScreen.inneritemListView].staticTexts[RichMessageButtons.male].tap()
         cell.otherElements[AppScreen.inneritemListView].staticTexts[RichMessageButtons.metal].tap()
+        cell.otherElements[AppScreen.inneritemListView].staticTexts[RichMessageButtons.pop].tap()
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
+        app.tables[AppScreen.innerChatScreenTableView].textViews.staticTexts[RichMessageResponseText.formTemplateResponse].tap()
         
     }
     
