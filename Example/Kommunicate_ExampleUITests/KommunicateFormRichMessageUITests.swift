@@ -41,13 +41,12 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
-        let cell = app.tables[AppScreen.innerChatScreenTableView].children(matching: .cell).element(boundBy: 2)
-        cell.otherElements[AppScreen.inneritemListView].staticTexts[RichMessageButtons.male].tap()
-        cell.otherElements[AppScreen.inneritemListView].staticTexts[RichMessageButtons.metal].tap()
-        cell.otherElements[AppScreen.inneritemListView].staticTexts[RichMessageButtons.pop].tap()
+        let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
+        innerchatscreentableviewTable.staticTexts[RichMessageButtons.male].tap()
+        innerchatscreentableviewTable.staticTexts[RichMessageButtons.metal].tap()
+        innerchatscreentableviewTable.staticTexts[RichMessageButtons.pop].tap()
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
         app.tables[AppScreen.innerChatScreenTableView].textViews.staticTexts[RichMessageResponseText.formTemplateResponse].tap()
-        
     }
     
     private func login() {
