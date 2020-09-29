@@ -83,6 +83,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
             style: .plain,
             target: self, action: #selector(compose)
         )
+        barButton.accessibilityIdentifier = "startNewIcon"
         return barButton
     }()
 

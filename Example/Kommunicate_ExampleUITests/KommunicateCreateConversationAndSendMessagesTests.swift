@@ -42,8 +42,8 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         waitFor(object: openPhotos) { $0.exists }
         app.buttons[InAppButton.ConversationScreen.openPhotos].tap() // Click on photo button
         addUIInterruptionMonitor(withDescription: AppPermission.AlertMessage.accessPhoto) { (alerts) -> Bool in
-            if alerts.buttons[AppPermission.AlertButton.ok].exists {
-                alerts.buttons[AppPermission.AlertButton.ok].tap()
+            if alerts.buttons[AppPermission.AlertButton.allowAllPhotos].exists {
+                alerts.buttons[AppPermission.AlertButton.allowAllPhotos].tap()
                 return true
             }
             return false
@@ -68,8 +68,8 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         waitFor(object: openCamera) { $0.exists }
         app.buttons[InAppButton.ConversationScreen.openCamera].tap()
         addUIInterruptionMonitor(withDescription: AppPermission.AlertMessage.accessPhoto) { (alerts) -> Bool in
-            if alerts.buttons[AppPermission.AlertButton.ok].exists {
-                alerts.buttons[AppPermission.AlertButton.ok].tap()
+            if alerts.buttons[AppPermission.AlertButton.allowAllPhotos].exists {
+                alerts.buttons[AppPermission.AlertButton.allowAllPhotos].tap()
                 return true
             }
             return false

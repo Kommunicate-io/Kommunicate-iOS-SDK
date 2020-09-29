@@ -18,6 +18,7 @@ enum AppPermission {
     }
     
     enum AlertButton {
+        static let allowAllPhotos = "Allow Access to All Photos"
         static let allow = "Allow"
         static let ok = "OK"
         static let allowLoation = "Allow While Using App"
@@ -50,7 +51,7 @@ enum InAppButton {
         static let sendLocation = "Send Location"
         static let done = "Done"
         static let back = "Back"
-        static let backButton = "icon back"
+        static let backButton = "BackButton"
         static let faqButton = "FAQ"
         static let loadingIndicator = "loadingIndicator"
         static let activityIndicator = "activityIndicator"

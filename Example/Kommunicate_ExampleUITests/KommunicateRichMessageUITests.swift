@@ -50,7 +50,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.button].tap()
         let suggestedRepliesResponse = app.tables[AppScreen.innerChatScreenTableView]
-            .staticTexts[RichMessageResponseText.suggestedButtonResponse]
+            .textViews[RichMessageResponseText.suggestedButtonResponse]
         waitFor(object: suggestedRepliesResponse) { $0.exists }
     }
     
@@ -72,7 +72,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.pay].tap()
         let submitResponse = app.tables[AppScreen.innerChatScreenTableView]
-            .staticTexts[RichMessageResponseText.submitButtonResponse]
+            .textViews[RichMessageResponseText.submitButtonResponse]
         waitFor(object: submitResponse) { $0.exists }
     }
     
@@ -85,10 +85,10 @@ class KommunicateRichMessageUITests: XCTestCase {
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.submitButton].tap()
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.suggestedReplyButton].tap()
         let submitResponse =  app.tables[AppScreen.innerChatScreenTableView]
-            .staticTexts[RichMessageResponseText.differentButtonResponse2]
+            .textViews[RichMessageResponseText.differentButtonResponse2]
         waitFor(object: submitResponse) { $0.exists }
         let suggestedReplyResponse = app.tables[AppScreen.innerChatScreenTableView]
-            .staticTexts[RichMessageResponseText.differentButtonResponse1]
+            .textViews[RichMessageResponseText.differentButtonResponse1]
         waitFor(object: suggestedReplyResponse) { $0.exists }
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.linkButton].tap()
     }
