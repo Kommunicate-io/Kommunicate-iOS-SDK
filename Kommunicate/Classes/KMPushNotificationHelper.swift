@@ -113,6 +113,11 @@ public class KMPushNotificationHelper {
     ///   - notification: notification that is tapped.
     public func refreshConversation(_ viewController: KMConversationViewController, with notification: NotificationData) {
         viewController.unsubscribingChannel()
+        if !self.isChatThreadIsOpen(notification,
+                                    userId: viewController.viewModel.contactId,
+                                    groupId: viewController.viewModel.channelKey) {
+            viewController.viewModel.prefilledMessage = nil
+        }
         viewController.viewModel.contactId = nil
         viewController.viewModel.channelKey = notification.groupId
         viewController.viewModel.conversationProxy = nil

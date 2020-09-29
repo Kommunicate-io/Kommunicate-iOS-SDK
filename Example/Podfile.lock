@@ -25,7 +25,7 @@ PODS:
   - Kommunicate (5.7.1):
     - ApplozicSwift (~> 5.10.2)
   - MGSwipeTableCell (1.6.11)
-  - Nimble (8.1.1)
+  - Nimble (8.1.2)
   - Nimble-Snapshots (8.2.1):
     - Nimble-Snapshots/Core (= 8.2.1)
   - Nimble-Snapshots/Core (8.2.1):
@@ -37,6 +37,7 @@ PODS:
   - SDWebImage/Core (5.7.4)
 
 DEPENDENCIES:
+  - ApplozicSwift (from `https://github.com/AppLozic/ApplozicSwift.git`, branch `CM-451`)
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - Nimble
@@ -46,7 +47,6 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Applozic
-    - ApplozicSwift
     - FBSnapshotTestCase
     - iOSSnapshotTestCase
     - Kingfisher
@@ -57,8 +57,16 @@ SPEC REPOS:
     - SDWebImage
 
 EXTERNAL SOURCES:
+  ApplozicSwift:
+    :branch: CM-451
+    :git: https://github.com/AppLozic/ApplozicSwift.git
   Kommunicate:
     :path: "../"
+
+CHECKOUT OPTIONS:
+  ApplozicSwift:
+    :commit: baf6c21af00b7ffa8281c87c82c86d67f01d49bb
+    :git: https://github.com/AppLozic/ApplozicSwift.git
 
 SPEC CHECKSUMS:
   Applozic: e4c3d4a50d9feaa105608d9d8219686b6639b55b
@@ -68,11 +76,11 @@ SPEC CHECKSUMS:
   Kingfisher: 8050bc6f7f68cbf3908bd04df7ccbac188f6d6d6
   Kommunicate: a82fb7684c48eaae073f5f621a7fd6176bab5727
   MGSwipeTableCell: b804e4e450dee439c42250be90bd50458bf67fce
-  Nimble: 5f8a2fb6fa343a7242dfdd9d42f7267419d464b2
+  Nimble: 3864815b4703c7ebffba875973c70e854489fbae
   Nimble-Snapshots: 3a4750d83752625c8ebfdc588da105303ee2201e
   Quick: 6d9559f40647bc4d510103842ef2fdd882d753e2
   SDWebImage: 48b88379b798fd1e4298f95bb25d2cdabbf4deb3
 
-PODFILE CHECKSUM: 0125fc433bf6d78b66627354de780554f7c16124
+PODFILE CHECKSUM: 1f8150cbf5a0aa06465dcae9c852c92901a33aec
 
 COCOAPODS: 1.9.3
