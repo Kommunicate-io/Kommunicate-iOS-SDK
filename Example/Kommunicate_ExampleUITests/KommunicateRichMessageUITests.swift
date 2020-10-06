@@ -60,7 +60,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.typeText(GroupData.typeText2) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         let linkResponse = app.tables[AppScreen.innerChatScreenTableView]
-            .staticTexts[RichMessageResponseText.linkButtonResponse]
+            .textViews[RichMessageResponseText.linkButtonResponse]
         waitFor(object: linkResponse) { $0.exists }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.goToGoogle].tap()
     }
@@ -109,7 +109,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.typeText(GroupData.typeText6) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         let listResponse = app.tables[AppScreen.innerChatScreenTableView]
-            .staticTexts[RichMessageResponseText.listTemplateResponse]
+            .textViews[RichMessageResponseText.listTemplateResponse]
         waitFor(object: listResponse) { $0.exists }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.seeUsOnFacebook].tap()
     }
@@ -120,7 +120,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.typeText(GroupData.typeText7) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         let singleCardResponse = app.tables[AppScreen.innerChatScreenTableView]
-            .staticTexts[RichMessageResponseText.singleCardResponse]
+            .textViews[RichMessageResponseText.singleCardResponse]
         waitFor(object: singleCardResponse) { $0.exists }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.linkButton].tap()
     }
@@ -131,7 +131,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.typeText(GroupData.typeText8) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         let cardCarouselResponse = app.tables[AppScreen.innerChatScreenTableView]
-            .staticTexts[RichMessageResponseText.cardCarouselResponse]
+            .textViews[RichMessageResponseText.cardCarouselResponse]
         waitFor(object: cardCarouselResponse) { $0.exists }
     }
     
