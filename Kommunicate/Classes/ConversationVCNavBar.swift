@@ -32,6 +32,7 @@ class ConversationVCNavBar: UIView, Localizable {
         image = image?.withRenderingMode(.alwaysTemplate)
         button.setImage(image, for: .normal)
         button.isUserInteractionEnabled = true
+        button.accessibilityIdentifier = "BackButton"
         return button
     }()
 

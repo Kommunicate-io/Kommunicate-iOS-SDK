@@ -46,7 +46,8 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.metal].tap()
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.pop].tap()
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
-        app.tables[AppScreen.innerChatScreenTableView].textViews.staticTexts[RichMessageResponseText.formTemplateResponse].tap()
+        let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse]
+        waitFor(object: submitResponse) { $0.exists }
     }
     
     private func login() {
