@@ -175,10 +175,11 @@ open class KMConversationViewController: ALKConversationViewController {
             self.view.window != nil,
             let notificationData = notifData,
             !pushNotificationHelper.isNotificationForActiveThread(notificationData)
-            else { return }
+        else { return }
 
         unsubscribingChannel()
         viewModel.contactId = nil
+        viewModel.prefilledMessage = nil
         viewModel.channelKey = notificationData.groupId
         viewModel.conversationProxy = nil
         viewWillLoadFromTappingOnNotification()

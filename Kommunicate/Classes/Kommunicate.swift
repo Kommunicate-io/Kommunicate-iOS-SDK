@@ -280,18 +280,22 @@ open class Kommunicate: NSObject,Localizable{
      - Parameters:
      - clientGroupId: clientChannelKey of the Group.
      - viewController: ViewController from which the group chat will be launched.
+     - prefilledMessage: Prefilled message for chatbox.
      - completionHandler: Called with the information whether the conversation was
      shown or not.
 
      */
-    @objc open class func showConversationWith(groupId clientGroupId: String, from viewController: UIViewController, completionHandler: @escaping (Bool) -> Void) {
+    @objc open class func showConversationWith(groupId clientGroupId: String,
+                                               from viewController: UIViewController,
+                                               prefilledMessage: String? = nil,
+                                               completionHandler: @escaping (Bool) -> Void) {
         let alChannelService = ALChannelService()
         alChannelService.getChannelInformation(nil, orClientChannelKey: clientGroupId) { (channel) in
             guard let channel = channel, let key = channel.key else {
                 completionHandler(false)
                 return
             }
-            self.openChatWith(groupId: key, from: viewController, completionHandler: { result in
+            self.openChatWith(groupId: key, from: viewController, prefilledMessage: prefilledMessage, completionHandler: { result in
                 completionHandler(result)
             })
         }
@@ -367,8 +371,11 @@ open class Kommunicate: NSObject,Localizable{
         vc.conversationViewController = conversationViewController
     }
 
-    class func openChatWith(groupId: NSNumber, from viewController: UIViewController, completionHandler: @escaping (Bool) -> Void) {
-        let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName)
+    class func openChatWith(groupId: NSNumber,
+                            from viewController: UIViewController,
+                            prefilledMessage: String? = nil,
+                            completionHandler: @escaping (Bool) -> Void) {
+        let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName, prefilledMessage: prefilledMessage)
         let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration)
         conversationViewController.viewModel = convViewModel
         let navigationController = KMBaseNavigationViewController(rootViewController: conversationViewController)
