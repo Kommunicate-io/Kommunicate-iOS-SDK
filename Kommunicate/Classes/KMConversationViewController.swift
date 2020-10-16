@@ -366,6 +366,25 @@ open class KMConversationViewController: ALKConversationViewController {
         isAwayMessageViewHidden = true
         isClosedConversationViewHidden = true
     }
+
+    open override func sendQuickReply(_ text: String, metadata: [String : Any]?, _ language: String?) {
+        do {
+            var customMetadata = metadata ?? [String: Any]()
+
+            if let updatedLanguage = language {
+                try configuration.updateUserLanguage(tag: updatedLanguage)
+            }
+
+            guard let messageMetadata = configuration.messageMetadata as? [String: Any] else {
+                viewModel.send(message: text, metadata: customMetadata)
+                return
+            }
+            customMetadata.merge(messageMetadata) { $1 }
+            viewModel.send(message: text, metadata: customMetadata)
+        } catch {
+            print("Error while sending quick reply message %@", error.localizedDescription)
+        }
+    }
 }
 
 extension KMConversationViewController: NavigationBarCallbacks {
