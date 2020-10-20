@@ -367,7 +367,9 @@ open class KMConversationViewController: ALKConversationViewController {
         isClosedConversationViewHidden = true
     }
 
-    open override func sendQuickReply(_ text: String, metadata: [String : Any]?, _ language: String?) {
+    open override func sendQuickReply(_ text: String,
+                                      metadata: [String : Any]?,
+                                      languageCode language: String?) {
         do {
             var customMetadata = metadata ?? [String: Any]()
 
