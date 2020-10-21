@@ -6,6 +6,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ### Enhancements
 - [CM-451] Add support for setting a prefilled message to send before launching a chat.
+- [CM-356] Add support for language change rich message.
 
 ## [5.7.0] - 2020-09-10
 
