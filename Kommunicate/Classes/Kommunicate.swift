@@ -356,6 +356,32 @@ open class Kommunicate: NSObject,Localizable{
         vc.present(navVC, animated: true, completion: nil)
     }
 
+    /// Sends a new message from the logged-in user.
+    /// - Parameter message: An instance of `KMMessage` object.
+    /// - Parameter completion: If there's any error while sending this message, then it will be returned in this block.
+    open class func sendMessage(
+        message: KMMessage,
+        completion: @escaping (Error?) -> ()) {
+
+        let alChannelService = ALChannelService()
+        alChannelService.getChannelInformation(nil, orClientChannelKey: message.conversationId) { channel in
+            guard let channel = channel, let key = channel.key else {
+                let noConversationError = NSError(domain:"No conversation found", code:0, userInfo:nil)
+                completion(noConversationError)
+                return
+            }
+            let alMessage = message.toALMessage()
+            alMessage.groupId = key
+            ALMessageService.sharedInstance().sendMessages(alMessage) { _, error in
+                guard error == nil else {
+                    completion(error)
+                    return
+                }
+                completion(nil)
+            }
+        }
+    }
+
     //MARK: - Internal methods
 
     class func configureListVC(_ vc: KMConversationListViewController) {
