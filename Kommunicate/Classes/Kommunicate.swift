@@ -362,7 +362,11 @@ open class Kommunicate: NSObject,Localizable{
     open class func sendMessage(
         message: KMMessage,
         completion: @escaping (Error?) -> ()) {
-
+        guard !message.conversationId.isEmpty else {
+            let emptyConversationId = NSError(domain:"Empty conversation ID", code:0, userInfo:nil)
+            completion(emptyConversationId)
+            return
+        }
         let alChannelService = ALChannelService()
         alChannelService.getChannelInformation(nil, orClientChannelKey: message.conversationId) { channel in
             guard let channel = channel, let key = channel.key else {
