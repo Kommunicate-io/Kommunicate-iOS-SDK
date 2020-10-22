@@ -66,7 +66,7 @@ open class Kommunicate: NSObject,Localizable{
         config.navigationItemsForConversationList = navigationItemsForConversationList
         config.navigationItemsForConversationView = navigationItemsForConversationView
         config.disableSwipeInChatCell = true
-        config.chatBar.optionsToShow = .some([.camera, .location, .gallery, .video])
+        config.chatBar.optionsToShow = .some([.camera, .location, .gallery, .video, .document])
         return config
     }()
 
