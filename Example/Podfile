@@ -12,7 +12,6 @@ target 'Kommunicate_Example' do
     pod 'Nimble'
     pod 'Quick'
     pod 'Nimble-Snapshots'
-    pod 'ApplozicSwift', :git => 'https://github.com/AppLozic/ApplozicSwift.git', :branch => 'CM-356'
   end
 end
 target 'Kommunicate_ExampleUITests' do
