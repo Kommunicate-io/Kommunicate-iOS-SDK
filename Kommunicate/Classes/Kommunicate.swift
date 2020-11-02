@@ -27,6 +27,7 @@ public typealias KMConfiguration = ALKConfiguration
 public typealias KMMessageStyle = ALKMessageStyle
 public typealias KMStyle = ApplozicSwift.Style
 public typealias KMBaseNavigationViewController = ALKBaseNavigationViewController
+public typealias KMChatBarConfiguration = ALKChatBarConfiguration
 let faqIdentifier =  11223346
 
 enum KMLocalizationKey {
