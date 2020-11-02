@@ -7,11 +7,11 @@ target 'Kommunicate_Example' do
   pod 'Kommunicate', :path => '../'
   target 'Kommunicate_Tests' do
     inherit! :search_paths
-
     pod 'FBSnapshotTestCase' , '~> 2.1.4'
     pod 'Nimble'
     pod 'Quick'
     pod 'Nimble-Snapshots'
+    pod 'ApplozicSwift', :git => 'https://github.com/AppLozic/ApplozicSwift.git', :branch => 'conversationSwitchingFix'
   end
 end
 target 'Kommunicate_ExampleUITests' do
