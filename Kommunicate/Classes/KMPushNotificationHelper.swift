@@ -209,13 +209,13 @@ public class KMPushNotificationHelper {
         }
         guard
             vc.navigationController != nil,
-            vc.navigationController?.popViewController(animated: false) == nil else {
-                vc.dismiss(animated: false) {
+            vc.navigationController?.popViewController(animated: true) == nil else {
+                vc.dismiss(animated: true) {
                     completion(true)
                 }
                 return
         }
-        vc.dismiss(animated: false) {
+        vc.dismiss(animated: true) {
             completion(true)
         }
     }

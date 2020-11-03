@@ -271,7 +271,7 @@ open class Kommunicate: NSObject,Localizable{
         let conversationVC = conversationListViewController()
         let navVC = KMBaseNavigationViewController(rootViewController: conversationVC)
         navVC.modalPresentationStyle = .fullScreen
-        viewController.present(navVC, animated: false, completion: nil)
+        viewController.present(navVC, animated: true, completion: nil)
     }
 
     /**
@@ -410,7 +410,7 @@ open class Kommunicate: NSObject,Localizable{
         conversationViewController.viewModel = convViewModel
         let navigationController = KMBaseNavigationViewController(rootViewController: conversationViewController)
         navigationController.modalPresentationStyle = .fullScreen
-        viewController.present(navigationController, animated: false, completion: nil)
+        viewController.present(navigationController, animated: true, completion: nil)
         completionHandler(true)
     }
 

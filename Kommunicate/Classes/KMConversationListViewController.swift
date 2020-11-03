@@ -418,7 +418,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
 
     override public func showAccountSuspensionView() {
         let accountVC = ALKAccountSuspensionController()
-        present(accountVC, animated: false, completion: nil)
+        present(accountVC, animated: true, completion: nil)
         accountVC.closePressed = { [weak self] in
             let popVC = self?.navigationController?.popViewController(animated: true)
             if popVC == nil {
@@ -443,7 +443,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         } else {
             // push conversation VC
             conversationVC.viewWillLoadFromTappingOnNotification()
-            navigationController?.pushViewController(conversationVC, animated: false)
+            navigationController?.pushViewController(conversationVC, animated: true)
         }
     }
 
@@ -526,7 +526,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     private func checkPlanAndShowSuspensionScreen() {
         let accountVC = ALKAccountSuspensionController()
         guard PricingPlan.shared.showSuspensionScreen() else { return }
-        self.present(accountVC, animated: false, completion: nil)
+        self.present(accountVC, animated: true, completion: nil)
         accountVC.closePressed = {[weak self] in
             self?.dismiss(animated: true, completion: nil)
         }
@@ -706,7 +706,7 @@ extension KMConversationListViewController: ALKConversationListTableViewDelegate
         let viewController = conversationViewController ?? KMConversationViewController(configuration: configuration, conversationViewConfiguration: kmConversationViewConfiguration, individualLaunch: false)
         viewController.viewModel = convViewModel
         viewController.individualLaunch = false
-        navigationController?.pushViewController(viewController, animated: false)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 
     public func emptyChatCellTapped() {
