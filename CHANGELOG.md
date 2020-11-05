@@ -4,6 +4,8 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Fixes
+- Fixed an issue where back arrow as showing wrong in RTL languages
 ## [5.8.0] - 2020-11-02
 
 ### Enhancements
