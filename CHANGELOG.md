@@ -4,6 +4,10 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Enhancements
+- [CM-507] Enable screen transition animations in all screens.
+- [CM-516] Add typing indicator for bot.
+
 ### Fixes
 - Fixed an issue where back button was not changing in RTL.
 
@@ -14,7 +18,6 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 - [CM-356] Added support for language change rich message.
 - [CM-474] Added send message API for sending text and rich messages.
 - [CM-519] Enabled document sharing in the default configuration.
-- [CM-507] Enable screen transition animations in all screens.
 
 ## [5.7.0] - 2020-09-10
 

@@ -166,6 +166,33 @@ open class KMConversationViewController: ALKConversationViewController {
         }
     }
 
+    open override func addMessagesToList(_ messageList: [Any]) {
+        guard let messages = messageList as? [ALMessage] else { return }
+        var filteredArray = [ALMessage]()
+
+        for message in messages {
+            if viewModel.channelKey != nil, viewModel.channelKey == message.groupId {
+                let contactService = ALContactService()
+                let alContact = contactService.loadContact(byKey: "userId", value:  message.to)
+                let delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval
+                if delayInterval > 0, alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue) {
+                    updateTyingStatus(status: true, userId: message.to)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.milliseconds(delayInterval)) {
+                        self.viewModel.addMessagesToList([message])
+                    }
+                } else {
+                    filteredArray.append(message)
+                }
+            } else if message.channelKey == nil, viewModel.channelKey == nil, viewModel.contactId == message.to {
+                filteredArray.append(message)
+            }
+        }
+
+        if !filteredArray.isEmpty {
+            self.viewModel.addMessagesToList([filteredArray])
+        }
+    }
+
     @objc func pushNotification(notification: NSNotification) {
         print("Push notification received in KMConversationViewController: ", notification.object ?? "")
         let pushNotificationHelper = KMPushNotificationHelper(configuration, kmConversationViewConfiguration)

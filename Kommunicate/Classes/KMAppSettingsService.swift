@@ -42,10 +42,15 @@ class KMAppSettingService {
     }
 
     func updateAppsettings(chatWidgetResponse: ChatWidgetResponse?) {
-        guard let chatWidget = chatWidgetResponse,
-            var primaryColor = chatWidget.primaryColor
-            else {
-                return
+
+        guard let chatWidget = chatWidgetResponse else {
+            return
+        }
+
+        KMAppUserDefaultHandler.shared.botMessageDelayInterval = chatWidget.botMessageDelayInterval ?? 0
+        
+        guard var primaryColor = chatWidget.primaryColor else {
+            return
         }
         primaryColor = primaryColor.replacingOccurrences(of: "#", with: "")
         let appSettings = ALKAppSettings(primaryColor: primaryColor)
