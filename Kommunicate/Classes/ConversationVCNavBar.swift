@@ -29,7 +29,7 @@ class ConversationVCNavBar: UIView, Localizable {
     let backButton: UIButton = {
         let button = UIButton(type: .custom)
         var image = UIImage(named: "icon_back", in: Bundle.kommunicate, compatibleWith: nil)
-        image = image?.withRenderingMode(.alwaysTemplate)
+        image = image?.withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
         button.setImage(image, for: .normal)
         button.isUserInteractionEnabled = true
         button.accessibilityIdentifier = "BackButton"
@@ -57,7 +57,7 @@ class ConversationVCNavBar: UIView, Localizable {
         view.clipsToBounds = true
         return view
     }()
-    
+
     var onlineStatusIcon: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(165, green: 170, blue: 165)
@@ -175,7 +175,7 @@ class ConversationVCNavBar: UIView, Localizable {
         guard let image = configuration.imageForBackButton else {
             return
         }
-        backButton.setImage(image, for: .normal)
+        backButton.setImage(image.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
     }
     
     private func setupProfile(_ contact: ALContact?,_ channel:ALChannel) {

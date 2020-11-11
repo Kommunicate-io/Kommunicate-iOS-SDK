@@ -4,6 +4,9 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Fixes
+- Fixed an issue where back button was not changing in RTL.
+
 ## [5.8.0] - 2020-11-02
 
 ### Enhancements
