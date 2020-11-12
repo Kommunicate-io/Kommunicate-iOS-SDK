@@ -417,20 +417,20 @@ open class Kommunicate: NSObject,Localizable{
         completionHandler: @escaping (Bool) -> Void
     ) {
         if showListOnBack {
-            let conversationVC = conversationListViewController()
-            conversationVC.channelKey = groupId
-            let navVC = KMBaseNavigationViewController(rootViewController: conversationVC)
+            let conversationListVC = conversationListViewController()
+            conversationListVC.channelKey = groupId
+            let navVC = KMBaseNavigationViewController(rootViewController: conversationListVC)
             navVC.modalPresentationStyle = .fullScreen
-            viewController.present(navVC, animated: false) {
+            viewController.present(navVC, animated: true) {
                 completionHandler(true)
             }
         } else {
             let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName, prefilledMessage: prefilledMessage)
-            let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration)
-            conversationViewController.viewModel = convViewModel
-            let navigationController = KMBaseNavigationViewController(rootViewController: conversationViewController)
-            navigationController.modalPresentationStyle = .fullScreen
-            viewController.present(navigationController, animated: false) {
+            let conversationVC = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration)
+            conversationVC.viewModel = convViewModel
+            let navVC = KMBaseNavigationViewController(rootViewController: conversationVC)
+            navVC.modalPresentationStyle = .fullScreen
+            viewController.present(navVC, animated: true) {
                 completionHandler(true)
             }
         }
