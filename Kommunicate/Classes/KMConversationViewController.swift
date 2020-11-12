@@ -169,16 +169,19 @@ open class KMConversationViewController: ALKConversationViewController {
     open override func addMessagesToList(_ messageList: [Any]) {
         guard let messages = messageList as? [ALMessage] else { return }
         var filteredArray = [ALMessage]()
-
+        let contactService = ALContactService()
         for message in messages {
             if viewModel.channelKey != nil, viewModel.channelKey == message.groupId {
-                let contactService = ALContactService()
-                let alContact = contactService.loadContact(byKey: "userId", value:  message.to)
                 let delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval
-                if delayInterval > 0, alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue) {
-                    updateTyingStatus(status: true, userId: message.to)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.milliseconds(delayInterval)) {
-                        self.viewModel.addMessagesToList([message])
+                if delayInterval > 0 {
+                    let alContact = contactService.loadContact(byKey: "userId", value:  message.to)
+                    if alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue) {
+                        updateTyingStatus(status: true, userId: message.to)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.milliseconds(delayInterval)) {
+                            self.viewModel.addMessagesToList([message])
+                        }
+                    } else {
+                        filteredArray.append(message)
                     }
                 } else {
                     filteredArray.append(message)
