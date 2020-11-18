@@ -11,9 +11,14 @@ public enum CharacterLimit: Localizable {
     public struct Limit {
         public let soft: Int
         public let hard: Int
+
+        public init(soft: Int, hard: Int) {
+            self.soft = soft
+            self.hard = hard
+        }
     }
-    public static let charlimit = Limit(soft: 1800, hard: 2000)
-    public static let botCharLimit = Limit(soft: 55, hard: 256)
+    public static var charlimit = Limit(soft: 1800, hard: 2000)
+    public static var botCharLimit = Limit(soft: 55, hard: 256)
 
     enum LocalizedText {
         static private let filename = Kommunicate.defaultConfiguration.localizedStringFileName
