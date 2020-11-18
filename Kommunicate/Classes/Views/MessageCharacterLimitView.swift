@@ -1,15 +1,15 @@
 //
-//  BotCharacterLimitView.swift
+//  MessageCharacterLimitView.swift
 //  Kommunicate
 //
 //  Created by Sunil on 05/08/20.
 //
 
 import Foundation
-class BotCharacterLimitView: UIView {
+class MessageCharacterLimitView: UIView {
 
     enum ConstraintIdentifier: String {
-        case botCharacterLimitViewHeight
+        case messageCharacterLimitViewHeight
     }
 
     struct Padding {
@@ -107,15 +107,5 @@ class BotCharacterLimitView: UIView {
 
     func height() -> CGFloat {
         return Padding.MessageLabel.height + Padding.MessageLabel.top
-    }
-}
-
-extension BotCharacterLimitView: Localizable {
-    enum LocalizedText {
-        static private let filename = Kommunicate.defaultConfiguration.localizedStringFileName
-        static let botCharLimit = localizedString(forKey: "BotCharLimit", fileName: filename)
-        static let removeCharMessage = localizedString(forKey: "RemoveCharMessage", fileName: filename)
-        static let remainingCharMessage = localizedString(forKey: "RemainingCharMessage", fileName: filename)
-
     }
 }
