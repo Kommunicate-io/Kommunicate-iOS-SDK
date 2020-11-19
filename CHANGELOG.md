@@ -7,6 +7,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 ### Enhancements
 
 - [CM-502] Added an option to launch a conversation with conversation list in the background.
+- [CM-500] Added message character limit to limit the number of characters in a message.
 
 ### Fixes
 - Fixed an issue where back button was not changing in RTL.

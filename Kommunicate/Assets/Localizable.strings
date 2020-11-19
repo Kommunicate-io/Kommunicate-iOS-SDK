@@ -82,3 +82,4 @@ PreviousConversationFeedbackTitle = "You rated the conversation";
 BotCharLimit = "Keep your message within %01d characters to help the bot understand easily | ( %@ )";
 RemoveCharMessage = "Remove %01d characters";
 RemainingCharMessage = "%01d characters remaining";
+CharLimit = "Keep your message within %01d characters | ( %@ )";
