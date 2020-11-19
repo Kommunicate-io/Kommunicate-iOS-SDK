@@ -115,8 +115,8 @@ open class KMConversationViewController: ALKConversationViewController {
 
         checkPlanAndShowSuspensionScreen()
         addViewConstraints()
-        botCharLimitManager.delegate = self
         messageCharLimitManager.delegate = self
+        botCharLimitManager.delegate = self
         guard let channelId = viewModel.channelKey else { return }
         sendConversationOpenNotification(channelId: String(describing: channelId))
         setupConversationClosedView()
