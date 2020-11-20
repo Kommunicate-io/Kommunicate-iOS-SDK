@@ -92,17 +92,12 @@ open class KMConversationViewController: ALKConversationViewController {
                          conversationViewConfiguration: KMConversationViewConfiguration,
                          individualLaunch : Bool = true) {
         self.kmConversationViewConfiguration = conversationViewConfiguration
-        super.init(configuration: configuration)
-        self.individualLaunch = individualLaunch
+        super.init(configuration: configuration, individualLaunch: individualLaunch)
         addNotificationCenterObserver()
     }
 
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    required public init(configuration: ALKConfiguration) {
-        fatalError("init(configuration:) has not been implemented")
     }
 
     open override func viewDidLoad() {
@@ -169,13 +164,9 @@ open class KMConversationViewController: ALKConversationViewController {
             using: { [weak self] notification in
                 self?.onChannelMetadataUpdate()
         })
-
-        if individualLaunch {
-            NotificationCenter.default.addObserver(self, selector: #selector(pushNotification(notification:)), name: Notification.Name.pushNotification, object: nil)
-        }
     }
 
-    @objc func pushNotification(notification: NSNotification) {
+    @objc override open func pushNotification(notification: NSNotification) {
         print("Push notification received in KMConversationViewController: ", notification.object ?? "")
         let pushNotificationHelper = KMPushNotificationHelper(configuration, kmConversationViewConfiguration)
         let (notifData, _) = pushNotificationHelper.notificationInfo(notification as Notification)
