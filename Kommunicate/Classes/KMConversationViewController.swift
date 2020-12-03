@@ -18,6 +18,7 @@ open class KMConversationViewController: ALKConversationViewController {
     private weak var ratingVC: RatingViewController?
     private let registerUserClientService = ALRegisterUserClientService()
     let kmBotService = KMBotService()
+    private var assigneeUserId: String?
 
     lazy var customNavigationView = ConversationVCNavBar(
         delegate: self,
@@ -259,6 +260,7 @@ open class KMConversationViewController: ALKConversationViewController {
                 return
             }
             self.customNavigationView.updateView(assignee: contact,channel: alChannel)
+            self.assigneeUserId = contact?.userId
         }
     }
 
@@ -286,6 +288,7 @@ open class KMConversationViewController: ALKConversationViewController {
             return
         }
         customNavigationView.updateView(assignee:contact ,channel: alChannel)
+        assigneeUserId = contact?.userId
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
     }
 
@@ -450,7 +453,11 @@ extension KMConversationViewController {
         guard let channelId = viewModel.channelKey else { return }
         conversationService.submitFeedback(
             groupId: channelId.intValue,
-            feedback: feedback
+            feedback: feedback,
+            userId: KMUserDefaultHandler.getUserId(),
+            userName: KMUserDefaultHandler.getDisplayName() ?? "",
+            assigneeId: assigneeUserId ?? "",
+            applicationId: KMUserDefaultHandler.getApplicationKey()
         ) { [weak self] result in
             switch result {
             case .success(let conversationFeedback):

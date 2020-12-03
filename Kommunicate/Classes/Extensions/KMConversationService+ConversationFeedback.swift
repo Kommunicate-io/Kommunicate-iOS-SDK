@@ -13,6 +13,11 @@ extension KMConversationService {
         static let groupId = "groupId"
         static let comment = "comments"
         static let rating = "rating"
+        static let applicationId = "applicationId"
+        static let assigneeId = "supportAgentName"
+        static let userName = "name"
+        static let userId = "userId"
+        static let userInfo = "userInfo"
     }
 
     /// Fetches conversation feedback for the given group id.
@@ -58,15 +63,26 @@ extension KMConversationService {
     func submitFeedback(
         groupId: Int,
         feedback: Feedback,
+        userId: String,
+        userName: String,
+        assigneeId: String,
+        applicationId: String,
         completion: @escaping (Result<ConversationFeedback, FeedbackError>)->()
     ) {
         guard let url = URLBuilder.feedbackURLForSubmission().url else {
             completion(.failure(.api(.urlBuilding)))
             return
         }
+        let userInfo: [String: Any] = [
+            FeedbackParamKey.userName: userName,
+            FeedbackParamKey.userId: userId
+        ]
         var params: [String: Any] = [
             FeedbackParamKey.groupId: groupId,
-            FeedbackParamKey.rating: feedback.rating.rawValue
+            FeedbackParamKey.rating: feedback.rating.rawValue,
+            FeedbackParamKey.applicationId: applicationId,
+            FeedbackParamKey.assigneeId: assigneeId,
+            FeedbackParamKey.userInfo: userInfo
         ]
         if let comment = feedback.comment, !comment.isEmpty {
             params[FeedbackParamKey.comment] = [comment]
