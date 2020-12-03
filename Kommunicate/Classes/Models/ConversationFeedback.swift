@@ -79,11 +79,7 @@ extension ConversationFeedbackSubmissionResponse: Decodable {
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         code = try values.decode(String.self, forKey: .code)
-        let feedbackResponse = try values.nestedContainer(
-            keyedBy: FeedbackResponseKeys.self,
-            forKey: .data
-        )
-        data = try feedbackResponse.decode(ConversationFeedback.self, forKey: .data)
+        data = try values.decode(ConversationFeedback.self, forKey: .data)
     }
 }
 

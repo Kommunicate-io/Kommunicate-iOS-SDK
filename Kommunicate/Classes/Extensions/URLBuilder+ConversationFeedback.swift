@@ -14,7 +14,9 @@ extension URLBuilder {
     }
 
     static func feedbackURLForSubmission() -> URLBuilder {
-        let url = URLBuilder.kommunicateApi.add(path: "feedback")
+        let url = URLBuilder.kommunicateApi
+            .add(paths: ["feedback", "v2"])
+            .add(item: "sendAsMessage", value: true)
         return url
     }
 }
