@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>TestAppId</key>
-	<string>3cb7d6df32a8d19a1350955eadb0af569</string>
+	<string>$(TestAppId)</string>
 	<key>TestUserId</key>
-	<string>Jain1</string>
+	<string>$(TestUserId)</string>
 	<key>TestUserPassword</key>
-	<string>123</string>
+	<string>$(TestUserPassword)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
