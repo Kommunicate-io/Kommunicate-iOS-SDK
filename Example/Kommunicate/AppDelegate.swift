@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var window: UIWindow?
 
     // Pass your App Id here. You can get the App Id from install section in the dashboard.
-    var appId = ""
+    var appId = "3cb7d6df32a8d19a1350955eadb0af569"
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
