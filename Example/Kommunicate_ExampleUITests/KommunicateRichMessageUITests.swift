@@ -48,6 +48,10 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText1) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
+        guard app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.button].isEnabled else {
+            XCTFail("Button is disabled or not visible")
+            return
+        }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.button].tap()
         let suggestedRepliesResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.suggestedButtonResponse]
@@ -62,7 +66,12 @@ class KommunicateRichMessageUITests: XCTestCase {
         let linkResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.linkButtonResponse]
         waitFor(object: linkResponse) { $0.exists }
+        guard app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.goToGoogle].isEnabled else {
+            XCTFail("Button is disabled or not visible")
+            return
+        }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.goToGoogle].tap()
+            print("Link button Rich message pass")
     }
     
     func testSubmitButtonTemplate() {
@@ -70,7 +79,12 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText3) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
+        guard app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.pay].isEnabled else {
+            XCTFail("Button is disabled or not visible")
+            return
+        }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.pay].tap()
+            print("Submit button Rich message Pass")
         let submitResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.submitButtonResponse]
         waitFor(object: submitResponse) { $0.exists }
@@ -82,15 +96,30 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.typeText(GroupData.typeText4) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
-        innerchatscreentableviewTable.staticTexts[RichMessageButtons.submitButton].tap()
+        guard innerchatscreentableviewTable.staticTexts[RichMessageButtons.submitButton].isEnabled else {
+            XCTFail("Button is disabled or not visible")
+            return
+        }
+            innerchatscreentableviewTable.staticTexts[RichMessageButtons.submitButton].tap()
+            print("Different button 1 Rich message Pass")
+        guard innerchatscreentableviewTable.staticTexts[RichMessageButtons.suggestedReplyButton].isEnabled else {
+            XCTFail("Button is disabled or not visible")
+            return
+        }
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.suggestedReplyButton].tap()
+            print("Different button 2 Rich message Pass")
         let submitResponse =  app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.differentButtonResponse2]
         waitFor(object: submitResponse) { $0.exists }
         let suggestedReplyResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.differentButtonResponse1]
         waitFor(object: suggestedReplyResponse) { $0.exists }
+        guard innerchatscreentableviewTable.staticTexts[RichMessageButtons.linkButton].isEnabled else {
+            XCTFail("Button is disabled or not visible")
+            return
+        }
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.linkButton].tap()
+            print("Different button 3 Rich message Pass")
     }
     
     func testImageTemplate() {
@@ -111,7 +140,12 @@ class KommunicateRichMessageUITests: XCTestCase {
         let listResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.listTemplateResponse]
         waitFor(object: listResponse) { $0.exists }
+        guard app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.seeUsOnFacebook].isEnabled else {
+            XCTFail("Button is disabled or not visible")
+            return
+        }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.seeUsOnFacebook].tap()
+            print("List Template Rich message Pass")
     }
     
     func testSingleCardTemplate() {
@@ -122,7 +156,12 @@ class KommunicateRichMessageUITests: XCTestCase {
         let singleCardResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.singleCardResponse]
         waitFor(object: singleCardResponse) { $0.exists }
+        guard         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.linkButton].isEnabled else {
+            XCTFail("Button is disabled or not visible")
+            return
+        }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.linkButton].tap()
+            print("Single card Rich message pass")
     }
     
     func testCardCarouselTemplate() {
