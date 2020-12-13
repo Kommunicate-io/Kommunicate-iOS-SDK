@@ -71,7 +71,7 @@ class KommunicateRichMessageUITests: XCTestCase {
             return
         }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.goToGoogle].tap()
-            print("Link button Rich message pass")
+        print("Link button Rich message pass")
     }
     
     func testSubmitButtonTemplate() {
@@ -84,7 +84,7 @@ class KommunicateRichMessageUITests: XCTestCase {
             return
         }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.pay].tap()
-            print("Submit button Rich message Pass")
+        print("Submit button Rich message Pass")
         let submitResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.submitButtonResponse]
         waitFor(object: submitResponse) { $0.exists }
@@ -100,14 +100,14 @@ class KommunicateRichMessageUITests: XCTestCase {
             XCTFail("Button is disabled or not visible")
             return
         }
-            innerchatscreentableviewTable.staticTexts[RichMessageButtons.submitButton].tap()
-            print("Different button 1 Rich message Pass")
+        innerchatscreentableviewTable.staticTexts[RichMessageButtons.submitButton].tap()
+        print("Different button 1 Rich message Pass")
         guard innerchatscreentableviewTable.staticTexts[RichMessageButtons.suggestedReplyButton].isEnabled else {
             XCTFail("Button is disabled or not visible")
             return
         }
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.suggestedReplyButton].tap()
-            print("Different button 2 Rich message Pass")
+        print("Different button 2 Rich message Pass")
         let submitResponse =  app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.differentButtonResponse2]
         waitFor(object: submitResponse) { $0.exists }
@@ -119,7 +119,7 @@ class KommunicateRichMessageUITests: XCTestCase {
             return
         }
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.linkButton].tap()
-            print("Different button 3 Rich message Pass")
+        print("Different button 3 Rich message Pass")
     }
     
     func testImageTemplate() {
@@ -145,7 +145,7 @@ class KommunicateRichMessageUITests: XCTestCase {
             return
         }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.seeUsOnFacebook].tap()
-            print("List Template Rich message Pass")
+        print("List Template Rich message Pass")
     }
     
     func testSingleCardTemplate() {
@@ -161,7 +161,7 @@ class KommunicateRichMessageUITests: XCTestCase {
             return
         }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.linkButton].tap()
-            print("Single card Rich message pass")
+        print("Single card Rich message pass")
     }
     
     func testCardCarouselTemplate() {
