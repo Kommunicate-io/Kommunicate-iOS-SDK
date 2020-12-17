@@ -88,35 +88,6 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: submitResponse) { $0.exists }
     }
     
-//    func testDifferentButtonTemplate() {
-//        let app = beforeTest_Launch_NewConversation()
-//        waitFor(object: app) { $0.exists }
-//        app.typeText(GroupData.typeText4) // typing message
-//        app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
-//        let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
-//        guard innerchatscreentableviewTable.staticTexts[RichMessageButtons.submitButton].isEnabled else {
-//            XCTFail("Submit button in multiple button template is disabled or not visible")
-//            return
-//        }
-//        innerchatscreentableviewTable.staticTexts[RichMessageButtons.submitButton].tap()
-//        guard innerchatscreentableviewTable.staticTexts[RichMessageButtons.suggestedReplyButton].isEnabled else {
-//            XCTFail("suggested Reply button in multiple button template is disabled or not visible")
-//            return
-//        }
-//        innerchatscreentableviewTable.staticTexts[RichMessageButtons.suggestedReplyButton].tap()
-//        let submitResponse =  app.tables[AppScreen.innerChatScreenTableView]
-//            .textViews[RichMessageResponseText.differentButtonResponse2]
-//        waitFor(object: submitResponse) { $0.exists }
-//        let suggestedReplyResponse = app.tables[AppScreen.innerChatScreenTableView]
-//            .textViews[RichMessageResponseText.differentButtonResponse1]
-//        waitFor(object: suggestedReplyResponse) { $0.exists }
-//        guard innerchatscreentableviewTable.staticTexts[RichMessageButtons.linkButton].isEnabled else {
-//            XCTFail("Link button in multiple button template is disabled or not visible")
-//            return
-//        }
-//        innerchatscreentableviewTable.staticTexts[RichMessageButtons.linkButton].tap()
-//    }
-    
     func testImageTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
