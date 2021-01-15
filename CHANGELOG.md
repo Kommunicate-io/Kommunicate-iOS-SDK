@@ -4,6 +4,10 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Enhancements
+
+- [CM-545] Added a check for whitespace and newline characters in the user ID.
+
 ## [5.9.0] - 2020-12-04
 
 ### Enhancements

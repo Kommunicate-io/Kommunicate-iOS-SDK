@@ -41,3 +41,9 @@ extension String {
         return emailPredicate.evaluate(with: self)
     }
 }
+
+extension String {
+    var containsWhitespace: Bool {
+        return(self.rangeOfCharacter(from: .whitespacesAndNewlines) != nil)
+    }
+}

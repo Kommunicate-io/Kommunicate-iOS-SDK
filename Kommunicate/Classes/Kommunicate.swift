@@ -134,24 +134,29 @@ open class Kommunicate: NSObject,Localizable{
     @objc open class func registerUser(
         _ kmUser: KMUser,
         completion : @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
+        let validationError = validateUserData(user: kmUser)
+        guard validationError == nil else {
+            print("Error while registering the user to Kommunicate: ", validationError!.localizedDescription)
+            completion(nil, validationError)
+            return
+        }
         let registerUserClientService: ALRegisterUserClientService = ALRegisterUserClientService()
-
         registerUserClientService.initWithCompletion(kmUser, withCompletion: { (response, error) in
-
             if (error != nil)
             {
-                print("Error while registering to applozic");
-                let errorPass = NSError(domain:"Error while registering to applozic", code:0, userInfo:nil)
-                completion(response , errorPass as NSError?)
+                print("Error while registering the user to Kommunicate")
+                let errorPass = NSError(domain:"Error while registering the user to Kommunicate", code:0, userInfo:nil)
+                completion(response, errorPass as NSError?)
             }
             else if(!(response?.isRegisteredSuccessfully())!)
             {
                 let errorPass = NSError(domain:"Invalid Password", code:0, userInfo:nil)
+                print("Error while registering the user to Kommunicate: ", errorPass.localizedDescription)
                 completion(response , errorPass as NSError?)
             }
             else
             {
-                print("registered")
+                print("Registered the user to Kommunicate")
                 let kmAppSetting = KMAppSettingService()
                 kmAppSetting.appSetting { (result) in
                     switch result {
@@ -548,5 +553,15 @@ open class Kommunicate: NSObject,Localizable{
         let kmAppSetting = KMAppSettingService()
         KMAppUserDefaultHandler.shared.clear()
         kmAppSetting.clearAppSettingsData()
+    }
+
+    private static func validateUserData(user: KMUser) -> NSError? {
+        guard let userId = user.userId, !userId.isEmpty else {
+            return NSError(domain:"User ID is not present", code:0, userInfo:nil)
+        }
+        guard !userId.containsWhitespace else {
+            return NSError(domain:"User ID contains whitespace or newline characters", code:0, userInfo:nil)
+        }
+        return nil
     }
 }
