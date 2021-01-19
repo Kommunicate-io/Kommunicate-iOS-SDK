@@ -6,8 +6,6 @@ Pod::Spec.new do |s|
   s.license = { :type => 'BSD-3-Clause', :file => 'LICENSE' }
   s.author = { 'Mukesh Thawani' => 'mukesh@applozic.com' }
   s.source = { :git => 'https://github.com/Kommunicate-io/Kommunicate-iOS-SDK.git', :tag => s.version }
-
-  s.social_media_url = 'https://twitter.com/kommunicateio'
   s.ios.deployment_target = '10.0'
   s.swift_version = '5.0'
   s.source_files = 'Kommunicate/Classes/**/*.{swift}'
