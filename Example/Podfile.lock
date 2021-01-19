@@ -1,14 +1,14 @@
 PODS:
   - Applozic (7.11.1):
     - SDWebImage (~> 5.9.2)
-  - ApplozicSwift (5.11.1):
-    - ApplozicSwift/Complete (= 5.11.1)
-  - ApplozicSwift/Complete (5.11.1):
+  - ApplozicSwift (5.12.0):
+    - ApplozicSwift/Complete (= 5.12.0)
+  - ApplozicSwift/Complete (5.12.0):
     - Applozic (~> 7.11.0)
     - ApplozicSwift/RichMessageKit
     - Kingfisher (~> 5.14.0)
     - MGSwipeTableCell (~> 1.6.11)
-  - ApplozicSwift/RichMessageKit (5.11.1)
+  - ApplozicSwift/RichMessageKit (5.12.0)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
   - FBSnapshotTestCase/Core (2.1.4)
@@ -23,7 +23,7 @@ PODS:
     - Kingfisher/Core (= 5.14.1)
   - Kingfisher/Core (5.14.1)
   - Kommunicate (5.9.0):
-    - ApplozicSwift (~> 5.11.1)
+    - ApplozicSwift (~> 5.12.0)
   - MGSwipeTableCell (1.6.11)
   - Nimble (9.0.0)
   - Nimble-Snapshots (9.1.0):
@@ -62,11 +62,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Applozic: 673eba55f167f1b06004ec8f959b356d3a59af66
-  ApplozicSwift: 3fd390c1d7b7187de5700e9fe900d1bffc61080d
+  ApplozicSwift: 63e0819fa009a9501d681d42d0ad1a6cb31e54d7
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
   Kingfisher: 8050bc6f7f68cbf3908bd04df7ccbac188f6d6d6
-  Kommunicate: 56d8635f5b460e1c88068b0a182c3ae9587b4d57
+  Kommunicate: bdc23133e9dbd68d58a78aa72de9f882de78fb3b
   MGSwipeTableCell: b804e4e450dee439c42250be90bd50458bf67fce
   Nimble: 3b4ec3fd40f1dc178058e0981107721c615643d8
   Nimble-Snapshots: 6605431525245f967ca9d558bb12a49da3d040e3
@@ -75,4 +75,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 04606b9a34e092208cf4fffc1fc90d102b10cf45
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1
