@@ -17,7 +17,11 @@ class TabBarController: UITabBarController {
         title = "TabBar View"
         let firstViewController = CustomViewController()
 
-        firstViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 0)
+        if #available(iOS 13.0, *) {
+            firstViewController.tabBarItem = UITabBarItem(title: "Conversations", image: UIImage(systemName: "person")!, tag: 0)
+        } else {
+            // Fallback on earlier versions
+        }
 
         let secondViewController = UIViewController()
         secondViewController.view.backgroundColor = .white
