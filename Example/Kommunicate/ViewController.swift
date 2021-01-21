@@ -22,18 +22,12 @@ class ViewController: UIViewController {
     }
 
     @IBAction func launchConversation(_ sender: Any) {
-        activityIndicator.startAnimating()
-        view.isUserInteractionEnabled = false
-
-        Kommunicate.createAndShowConversation(from: self, completion: {
-            error in
-            self.activityIndicator.stopAnimating()
-            self.view.isUserInteractionEnabled = true
-            if error != nil {
-                print("Error while launching")
-            }
-        })
+        let navVC = KMBaseNavigationViewController(rootViewController: TabBarController())
+        navVC.modalTransitionStyle = .crossDissolve
+        navVC.modalPresentationStyle = .fullScreen
+        self.present(navVC, animated: false, completion: nil)
     }
+
     @IBAction func logoutAction(_ sender: Any) {
         Kommunicate.logoutUser { (result) in
             switch result {
