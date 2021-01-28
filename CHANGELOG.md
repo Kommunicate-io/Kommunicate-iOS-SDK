@@ -4,6 +4,10 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Enhancements
+
+- [CM-579] Set default primary color and sent message's text color.
+
 ## [5.10.0] - 2021-01-19
 
 ### Enhancements

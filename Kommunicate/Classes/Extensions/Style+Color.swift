@@ -10,6 +10,7 @@ import Foundation
 extension Style {
     enum Color {
         enum Background: Int {
+            case primary = 0x5553B7
             case mediumGrey = 0xf0f0f0
             case lightGreyOne = 0xf9f9f9
             case darkYellow = 0xD6A64D
