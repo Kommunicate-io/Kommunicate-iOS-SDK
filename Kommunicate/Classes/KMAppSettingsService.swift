@@ -43,9 +43,10 @@ class KMAppSettingService {
 
     func updateAppsettings(chatWidgetResponse: ChatWidgetResponse?) {
         guard let chatWidget = chatWidgetResponse,
-            var primaryColor = chatWidget.primaryColor
-            else {
-                return
+              var primaryColor = chatWidget.primaryColor
+        else {
+            setupDefaultSettings()
+            return
         }
         primaryColor = primaryColor.replacingOccurrences(of: "#", with: "")
         let appSettings = ALKAppSettings(primaryColor: primaryColor)
@@ -73,4 +74,11 @@ class KMAppSettingService {
         navigationBarProxy.barTintColor = nil
     }
 
+    private func setupDefaultSettings(primaryColor: String = UIColor.background(.primary).toHexString()) {
+        let appSettings = ALKAppSettings(primaryColor: primaryColor)
+        appSettings.sentMessageBackgroundColor = primaryColor
+        appSettings.attachmentIconsTintColor = primaryColor
+        appSettings.buttonPrimaryColor = primaryColor
+        appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
+    }
 }

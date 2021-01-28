@@ -122,6 +122,7 @@ open class Kommunicate: NSObject,Localizable{
         self.applicationId = applicationId
         ALUserDefaultsHandler.setApplicationKey(applicationId)
         Kommunicate.shared.defaultChatViewSettings()
+        Kommunicate.shared.setupDefaultStyle()
     }
 
     /**
@@ -498,6 +499,14 @@ open class Kommunicate: NSObject,Localizable{
         ALUserDefaultsHandler.setDebugLogsRequire(true)
         ALApplozicSettings.setSwiftFramework(true)
         ALApplozicSettings.hideMessages(withMetadataKeys: ["KM_ASSIGN", "KM_STATUS"])
+    }
+
+    func setupDefaultStyle() {
+        let navigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [ALKBaseNavigationViewController.self])
+        navigationBarProxy.tintColor = navigationBarProxy.tintColor ?? UIColor.white
+        navigationBarProxy.titleTextAttributes =
+            navigationBarProxy.titleTextAttributes ?? [NSAttributedString.Key.foregroundColor: UIColor.white]
+        KMMessageStyle.sentMessage = KMStyle(font: KMMessageStyle.sentMessage.font, text: .white)
     }
 
     /**
