@@ -21,6 +21,7 @@ import Applozic
     public var conversationTitle : String?
     public var conversationMetadata =  [AnyHashable : Any]()
     public var conversationAssignee : String?
+    public var teamId: String?
 
     public init(userId: String){
         self.userId = userId
@@ -102,6 +103,14 @@ import Applozic
     @discardableResult
     @objc public func withConversationAssignee(_ conversationAssignee: String) -> KMConversationBuilder {
         conversation.conversationAssignee = conversationAssignee
+        return self
+    }
+
+    /// To assign the conversation to a team, pass a team Id.
+    /// - Parameter teamId: Pass a team ID
+    @discardableResult
+    @objc public func withTeamId(_ teamId: String) -> KMConversationBuilder {
+        conversation.teamId = teamId
         return self
     }
 
