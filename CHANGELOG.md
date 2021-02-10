@@ -4,6 +4,10 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Enhancements
+
+- [CM-581] Added an option to set the team ID when creating a new conversation.
+
 ## [5.11.0] - 2021-02-01
 
 ### Enhancements
