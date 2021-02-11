@@ -16,6 +16,7 @@ public struct ChannelMetadataKeys {
     static let kmOriginalTitle = "KM_ORIGINAL_TITLE"
     static let chatContext = "KM_CHAT_CONTEXT"
     static let languageTag = "kmUserLanguageCode"
+    static let teamId = "KM_TEAM_ID"
 }
 
 struct LocalizationKey {
@@ -296,6 +297,10 @@ public class KMConversationService: KMConservationServiceable,Localizable {
 
         if conversation.useOriginalTitle {
             metadata.setValue("true", forKey: ChannelMetadataKeys.kmOriginalTitle)
+        }
+
+        if let teamId = conversation.teamId, !teamId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            metadata.setValue(teamId, forKey: ChannelMetadataKeys.teamId)
         }
 
         guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
