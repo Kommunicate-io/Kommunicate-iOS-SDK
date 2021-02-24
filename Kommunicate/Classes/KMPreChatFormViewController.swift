@@ -14,12 +14,32 @@ public protocol KMPreChatFormViewControllerDelegate: class {
 
 open class KMPreChatFormViewController: UIViewController {
 
-    public weak var delegate: KMPreChatFormViewControllerDelegate!
+    public struct PreChatConfiguration {
+        public enum InfoOption: Equatable, CaseIterable {
+            case email
+            case phoneNumber
+            case name
+        }
+        /// A list of fields to show.
+        public var optionsToShow: [InfoOption] = [.email, .phoneNumber, .name]
 
-    /// The regular expression pattern that will be used to match the phone number
-    /// user has submitted. By default, it's nil.
-    /// When it's nil, we use `NSDataDetector` to validate the phone number.
-    public var phoneNumberRegexPattern: String?
+        /// A list of mandatory fields.
+        public var mandatoryOptions: [InfoOption] = [.email, .phoneNumber]
+
+        /// If this is true, only one of the email or phone number fields is mandatory, not both.
+        /// By default its value is true.
+        public var allowEmailOrPhoneNumber = true
+
+        /// The regular expression pattern that will be used to match the phone number
+        /// user has submitted. By default, it's nil.
+        /// When it's nil, we use `NSDataDetector` to validate the phone number.
+        public var phoneNumberRegexPattern: String?
+
+        public init() {}
+    }
+
+    public weak var delegate: KMPreChatFormViewControllerDelegate!
+    public var preChatConfiguration: PreChatConfiguration!
 
     var configuration: KMConfiguration!
     var formView: KMPreChatUserFormView!
@@ -40,6 +60,9 @@ open class KMPreChatFormViewController: UIViewController {
         case emailAndPhoneNumberEmpty
         case invalidEmailAddress
         case invalidPhoneNumber
+        case emptyName
+        case emptyEmailAddress
+        case emptyPhoneNumber
 
         // NOTE: If any key-value pairs are not present in the given fileName
         // then it will be fetched from the default file.
@@ -51,6 +74,12 @@ open class KMPreChatFormViewController: UIViewController {
                 return localizedString(forKey: "PreChatViewEmailInvalidError", fileName: fileName)
             case .invalidPhoneNumber:
                 return localizedString(forKey: "PreChatViewPhoneNumberInvalidError", fileName: fileName)
+            case .emptyName:
+                return localizedString(forKey: "PreChatViewNameEmptyError", fileName: fileName)
+            case .emptyEmailAddress:
+                return localizedString(forKey: "PreChatViewEmailEmptyError", fileName: fileName)
+            case .emptyPhoneNumber:
+                return localizedString(forKey: "PreChatViewPhoneNumberEmptyError", fileName: fileName)
             }
         }
     }
@@ -65,8 +94,9 @@ open class KMPreChatFormViewController: UIViewController {
         setupViews()
     }
 
-    required public init(configuration: KMConfiguration) {
+    required public init(configuration: KMConfiguration, preChatConfiguration: PreChatConfiguration = PreChatConfiguration()) {
         self.configuration = configuration
+        self.preChatConfiguration = preChatConfiguration
         super.init(nibName: nil, bundle: nil)
         self.addObservers()
     }
@@ -81,9 +111,31 @@ open class KMPreChatFormViewController: UIViewController {
     }
 
     func setupViews() {
+        PreChatConfiguration.InfoOption.allCases.forEach { option in
+            if !preChatConfiguration.optionsToShow.contains(option) && preChatConfiguration.mandatoryOptions.contains(option) {
+                preChatConfiguration.mandatoryOptions.removeAll(where: { $0 == option })
+            }
+        }
+        if preChatConfiguration.allowEmailOrPhoneNumber,
+           (!preChatConfiguration.mandatoryOptions.contains(.email)
+                || !preChatConfiguration.mandatoryOptions.contains(.phoneNumber)) {
+            preChatConfiguration.allowEmailOrPhoneNumber = false
+        }
         formView = KMPreChatUserFormView(
             frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height),
             localizationFileName: configuration.localizedStringFileName)
+        PreChatConfiguration.InfoOption.allCases
+            .filter{ !preChatConfiguration.optionsToShow.contains($0) }
+            .forEach { option in
+                switch option {
+                case .email:
+                    formView.hideField(.email)
+                case .name:
+                    formView.hideField(.name)
+                case .phoneNumber:
+                    formView.hideField(.phoneNumber)
+                }
+            }
         let closeButton = closeButtonOf(frame: CGRect(x: 20, y: 20, width: 30, height: 30))
         view.addSubview(formView)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
@@ -190,29 +242,56 @@ open class KMPreChatFormViewController: UIViewController {
         delegate.closeButtonTapped()
     }
 
-    func validate(emailTextField: UITextField, phoneNumberTextField: UITextField, nameTextField: UITextField) -> Result<TextFieldValidationError>{
-        // Return error if both email and phone number fields are empty.
-        guard let emailText = emailTextField.text,
-            let phoneNumberText = phoneNumberTextField.text, (!emailText.isEmpty || !phoneNumberText.isEmpty) else {
-            // Show error
+    func validate(
+        emailTextField: UITextField,
+        phoneNumberTextField: UITextField,
+        nameTextField: UITextField
+    ) -> Result<TextFieldValidationError>{
+        var validationError: TextFieldValidationError?
+
+        outerLoop: for mandatoryOption in preChatConfiguration.mandatoryOptions {
+            switch mandatoryOption {
+            case .email:
+                if let emailText = emailTextField.text,
+                   !emailText.isEmpty, !emailText.isValidEmail {
+                    validationError = TextFieldValidationError.invalidEmailAddress
+                    break outerLoop
+                }
+            case .name:
+                if let nameText = nameTextField.text, nameText.isEmpty {
+                    validationError = TextFieldValidationError.emptyName
+                    break outerLoop
+                }
+            case .phoneNumber:
+                let isValidNumber: ((String) -> Bool) = { number in
+                    return self.preChatConfiguration.phoneNumberRegexPattern != nil ?
+                        number.matchesWithPattern(self.preChatConfiguration.phoneNumberRegexPattern ?? ""):number.isValidPhoneNumber
+                }
+
+                if let phoneNumberText = phoneNumberTextField.text,
+                   !phoneNumberText.isEmpty, !isValidNumber(phoneNumberText) {
+                    validationError = TextFieldValidationError.invalidPhoneNumber
+                    break outerLoop
+                }
+            }
+        }
+
+        if preChatConfiguration.allowEmailOrPhoneNumber,
+           let emailText = emailTextField.text,
+           let phoneNumberText = phoneNumberTextField.text,
+           (emailText.isEmpty && phoneNumberText.isEmpty) {
             return Result.failure(TextFieldValidationError.emailAndPhoneNumberEmpty)
+        } else {
+            if let emailText = emailTextField.text,
+               emailText.isEmpty && preChatConfiguration.mandatoryOptions.contains(.email) {
+                validationError = TextFieldValidationError.emptyEmailAddress
+            } else if let phoneNumberText = phoneNumberTextField.text,
+                      phoneNumberText.isEmpty && preChatConfiguration.mandatoryOptions.contains(.phoneNumber) {
+                validationError = TextFieldValidationError.emptyPhoneNumber
+            }
         }
 
-        // Return invalidEmailAddress error if email is present and not valid
-        if !emailText.isEmpty, !emailText.isValidEmail {
-            return Result.failure(TextFieldValidationError.invalidEmailAddress)
-        }
-
-        let isValidNumber: ((String) -> Bool) = { number in
-            return self.phoneNumberRegexPattern != nil ?
-                number.matchesWithPattern(self.phoneNumberRegexPattern ?? ""):number.isValidPhoneNumber
-        }
-
-        // Return invalidPhoneNumber error if phone number is present and not valid
-        if !phoneNumberText.isEmpty, !isValidNumber(phoneNumberText) {
-            return Result.failure(TextFieldValidationError.invalidPhoneNumber)
-        }
-        return Result.success
+        return validationError != nil ? .failure(validationError!):.success
     }
 
     @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {

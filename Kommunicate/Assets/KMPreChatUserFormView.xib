@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,12 +11,15 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="KMPreChatUserFormView" customModule="Kommunicate">
             <connections>
                 <outlet property="contentView" destination="iN0-l3-epB" id="rFl-fk-GLg"/>
+                <outlet property="emailStackView" destination="t3r-om-1is" id="1xB-cj-yMV"/>
                 <outlet property="emailTextField" destination="xcQ-oy-Jwa" id="Brf-Be-KOA"/>
                 <outlet property="emailTitleLabel" destination="ULe-o9-1SU" id="s74-lv-IMG"/>
                 <outlet property="errorMessageLabel" destination="WpO-nN-HX8" id="nwZ-Vv-pBl"/>
                 <outlet property="getStartedDescriptionLabel" destination="Ijs-Lv-CvG" id="gaB-MX-3SP"/>
+                <outlet property="nameStackView" destination="Icb-Fy-uj3" id="9LI-d0-66x"/>
                 <outlet property="nameTextField" destination="gfW-Jp-MRP" id="7Sf-OE-rsN"/>
                 <outlet property="nameTitleLabel" destination="mWE-0n-IEe" id="HWI-NL-cBX"/>
+                <outlet property="phoneNumberStackView" destination="Ubk-LH-Oxf" id="KIi-Zt-Ne2"/>
                 <outlet property="phoneNumberTextField" destination="V4C-hM-4bB" id="AZ6-oX-xHt"/>
                 <outlet property="phoneNumberTitle" destination="PiS-E8-Yb5" id="YOh-0Z-JDD"/>
                 <outlet property="sendInstructionsButton" destination="Mqs-QW-CcI" id="oSa-8E-BzT"/>
@@ -189,7 +192,7 @@
                                     <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mqs-QW-CcI">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mqs-QW-CcI">
                                     <rect key="frame" x="0.0" y="40" width="345" height="36"/>
                                     <color key="backgroundColor" red="0.36078431372549019" green="0.3529411764705882" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
@@ -217,13 +220,13 @@
                     </constraints>
                 </stackView>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="5K0-aw-Fs0" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="Ts0-yl-L3J"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="5K0-aw-Fs0" secondAttribute="trailing" constant="15" id="TsP-Fe-Tpj"/>
                 <constraint firstItem="5K0-aw-Fs0" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="86" id="jfM-1x-0yx"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <point key="canvasLocation" x="110.5" y="252.5"/>
         </view>
     </objects>
