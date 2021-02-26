@@ -4,6 +4,9 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Enhancements
+
+- [CM-635] Added an option to set the regex for validating phone number in the pre-chat view.
 ## [5.12.0] - 2021-02-16
 
 ### Enhancements

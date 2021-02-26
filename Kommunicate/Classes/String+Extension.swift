@@ -40,6 +40,11 @@ extension String {
         let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
         return emailPredicate.evaluate(with: self)
     }
+
+    func matchesWithPattern(_ pattern: String) -> Bool {
+        let numberPredicate = NSPredicate(format:"SELF MATCHES %@", pattern)
+        return numberPredicate.evaluate(with: self)
+    }
 }
 
 extension String {

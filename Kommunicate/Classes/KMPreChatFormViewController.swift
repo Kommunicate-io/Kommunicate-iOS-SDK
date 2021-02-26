@@ -16,6 +16,11 @@ open class KMPreChatFormViewController: UIViewController {
 
     public weak var delegate: KMPreChatFormViewControllerDelegate!
 
+    /// The regular expression pattern that will be used to match the phone number
+    /// user has submitted. By default, it's nil.
+    /// When it's nil, we use `NSDataDetector` to validate the phone number.
+    public var phoneNumberRegexPattern: String?
+
     var configuration: KMConfiguration!
     var formView: KMPreChatUserFormView!
     var sendInstructionsTapped:(()->())?
@@ -198,8 +203,13 @@ open class KMPreChatFormViewController: UIViewController {
             return Result.failure(TextFieldValidationError.invalidEmailAddress)
         }
 
+        let isValidNumber: ((String) -> Bool) = { number in
+            return self.phoneNumberRegexPattern != nil ?
+                number.matchesWithPattern(self.phoneNumberRegexPattern ?? ""):number.isValidPhoneNumber
+        }
+
         // Return invalidPhoneNumber error if phone number is present and not valid
-        if !phoneNumberText.isEmpty, !phoneNumberText.isValidPhoneNumber {
+        if !phoneNumberText.isEmpty, !isValidNumber(phoneNumberText) {
             return Result.failure(TextFieldValidationError.invalidPhoneNumber)
         }
         return Result.success
