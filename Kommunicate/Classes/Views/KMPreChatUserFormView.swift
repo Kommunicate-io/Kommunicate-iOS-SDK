@@ -21,6 +21,11 @@ class CircleView: UIView {
 }
 
 class KMPreChatUserFormView: UIView, Localizable {
+    enum InputField {
+        case name
+        case email
+        case phoneNumber
+    }
 
     var localizationFileName: String!
 
@@ -39,6 +44,9 @@ class KMPreChatUserFormView: UIView, Localizable {
     @IBOutlet weak var topStackView: UIStackView!
 
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
+    @IBOutlet weak var emailStackView: UIStackView!
+    @IBOutlet weak var nameStackView: UIStackView!
+    @IBOutlet weak var phoneNumberStackView: UIStackView!
 
     struct LocalizationKey {
         private static let prefix = "PreChatView"
@@ -82,6 +90,17 @@ class KMPreChatUserFormView: UIView, Localizable {
 
     func hideErrorLabel() {
         errorMessageLabel.text = ""
+    }
+
+    func hideField(_ field: InputField) {
+        switch field {
+        case .name:
+            nameStackView.isHidden = true
+        case.email:
+            emailStackView.isHidden = true
+        case .phoneNumber:
+            phoneNumberStackView.isHidden = true
+        }
     }
 
     private func placeholderWith(text: String) -> NSAttributedString {

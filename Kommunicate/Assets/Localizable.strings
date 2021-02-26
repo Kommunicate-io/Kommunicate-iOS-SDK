@@ -26,6 +26,12 @@ PreChatViewEmailAndPhoneNumberEmptyError = "Please fill email or the phone numbe
 PreChatViewEmailInvalidError = "Please enter correct email address";
 /* Invalid Phone number error message */
 PreChatViewPhoneNumberInvalidError = "Please enter correct phone number";
+/* Empty Name error message */
+PreChatViewNameEmptyError = "Please enter your name";
+/* Empty Email error message */
+PreChatViewEmailEmptyError = "Please enter your email address";
+/* Empty Phone number error message */
+PreChatViewPhoneNumberEmptyError = "Please enter your phone number";
 /* Send instructions button title */
 PreChatViewSendInstructionsButtonTitle = "SUBMIT";
 /* Get Started description on top */
