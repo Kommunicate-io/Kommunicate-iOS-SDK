@@ -4,6 +4,10 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Enhancements
+
+- [TD-1611] Now, we'll show/hide away message on agent change.
+
 ## [5.13.0] - 2021-02-27
 
 ### Enhancements

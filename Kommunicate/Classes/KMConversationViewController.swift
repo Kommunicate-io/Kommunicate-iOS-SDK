@@ -270,7 +270,7 @@ open class KMConversationViewController: ALKConversationViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.conversationAssignedToDialogflowBot()
         }
-
+        messageStatusAndFetchBotType()
         // If the user was typing when the status changed
         view.endEditing(true)
         guard isClosedConversationViewHidden == isClosedConversation else { return }
@@ -352,10 +352,14 @@ open class KMConversationViewController: ALKConversationViewController {
         awayMessageView.constraint(withIdentifier: AwayMessageView.ConstraintIdentifier.awayMessageViewHeight.rawValue)?.constant = CGFloat(flag ? awayMessageheight : 0)
 
         /// Make sure to keep the height of bot character limit view if it's visible.
-        let botCharLimitViewHeight = self.charLimitView.isHidden ? 0 : MessageCharacterLimitManager.charLimitViewHeight
+        let charLimitViewHeight = charLimitView.constraint(withIdentifier: MessageCharacterLimitView.ConstraintIdentifier.messageCharacterLimitViewHeight.rawValue)?.constant ?? 0
+        let isChatLimitViewVisible = charLimitViewHeight > 0 && !charLimitView.isHidden
+        let botCharLimitViewHeight = isChatLimitViewVisible ? MessageCharacterLimitManager.charLimitViewHeight:0
 
         chatBar.headerViewHeight = flag ? awayMessageheight: botCharLimitViewHeight
         awayMessageView.showMessage(flag)
+        let indexPath = IndexPath(row: 0, section: viewModel.messageModels.count - 1)
+        moveTableViewToBottom(indexPath: indexPath)
     }
 
     private func hideAwayAndClosedView() {
