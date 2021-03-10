@@ -13,11 +13,12 @@ An Open Source iOS Live Chat SDK for Customer Support
 
 Kommunicate provides open source live chat SDK in iOS. The Kommunicate SDK is flexible, lightweight and easily integrable. It lets you easily add real-time live chat and in-app messaging in your mobile applications and websites for customer support. The SDK is equipped with advance messaging options such as sending attachments, sharing location and rich messaging. 
 
-![support-ios](https://user-images.githubusercontent.com/24476344/43457761-7d26b452-94e5-11e8-891d-ca765d589f30.gif)
 
 Kommunicate SDK lets you integrate custom chatbots in your mobile apps for automating tasks. It comes with multiple features to make it a full-fledged customer support SDK. 
 
-![bot-ios](https://user-images.githubusercontent.com/24476344/43457795-9e019cfa-94e5-11e8-8824-5d2cfd073a94.gif)
+
+![ios-gif-1](https://user-images.githubusercontent.com/5956714/110640363-c3080800-81d6-11eb-97c9-6af53ac865d0.gif)![ios-gif-2](https://user-images.githubusercontent.com/5956714/110640375-c602f880-81d6-11eb-80e3-c45ab805c324.gif)![ios-gif-3](https://user-images.githubusercontent.com/5956714/110640378-c7342580-81d6-11eb-93fe-96c408858c95.gif)
+
 
 ## Get Started
 
