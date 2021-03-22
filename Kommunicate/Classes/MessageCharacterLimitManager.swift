@@ -20,6 +20,7 @@ class MessageCharacterLimitManager: NSObject {
     static let charLimitViewHeight = 80.0
     weak var delegate: MessageCharacterLimitDelegate?
     var messageToShow: String = ""
+    var isCharLimitCheckEnabled = true
 
     private let chatBar: ALKChatBar
     private let charLimitView: MessageCharacterLimitView
@@ -43,6 +44,7 @@ class MessageCharacterLimitManager: NSObject {
     /// This method will check the character limit.
     /// - Parameter text: Entered text in the text view
     func checkCharLimit(_ text: String) {
+        guard isCharLimitCheckEnabled else { return }
         let extraCharacters = text.count - limit
         let limitExceeded = extraCharacters > 0
         guard !text.isEmpty && limitExceeded else {

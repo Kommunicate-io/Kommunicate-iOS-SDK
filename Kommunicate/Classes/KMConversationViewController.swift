@@ -55,7 +55,17 @@ open class KMConversationViewController: ALKConversationViewController {
     var conversationService = KMConversationService()
     var conversationDetail = ConversationDetail()
     var userDefaults = KMAppUserDefaultHandler.shared
-    var isConversationAssignedToDialogflowBot = false
+    var isConversationAssignedToDialogflowBot = false {
+        didSet {
+            if isConversationAssignedToDialogflowBot {
+                botCharLimitManager.isCharLimitCheckEnabled = true
+                messageCharLimitManager.isCharLimitCheckEnabled = false
+            } else {
+                messageCharLimitManager.isCharLimitCheckEnabled = true
+                botCharLimitManager.isCharLimitCheckEnabled = false
+            }
+        }
+    }
     let awayMessageheight = 80.0
 
     private var converastionNavBarItemToken: NotificationToken? = nil

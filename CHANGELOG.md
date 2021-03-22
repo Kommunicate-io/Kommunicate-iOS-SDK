@@ -7,6 +7,9 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 ### Enhancements
 
 - [TD-1611] Now, we'll show/hide away message on agent change.
+### Fixes
+
+- [TD-1606] Fixed an issue where character limit was not shown when a conversation is assigned to a Dialogflow bot.
 
 ## [5.13.0] - 2021-02-27
 
