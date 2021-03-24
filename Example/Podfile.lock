@@ -1,14 +1,14 @@
 PODS:
   - Applozic (7.11.1):
     - SDWebImage (~> 5.9.2)
-  - ApplozicSwift (5.14.0):
-    - ApplozicSwift/Complete (= 5.14.0)
-  - ApplozicSwift/Complete (5.14.0):
+  - ApplozicSwift (5.15.0):
+    - ApplozicSwift/Complete (= 5.15.0)
+  - ApplozicSwift/Complete (5.15.0):
     - Applozic (~> 7.11.0)
     - ApplozicSwift/RichMessageKit
     - Kingfisher (~> 5.14.0)
     - MGSwipeTableCell (~> 1.6.11)
-  - ApplozicSwift/RichMessageKit (5.14.0)
+  - ApplozicSwift/RichMessageKit (5.15.0)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
   - FBSnapshotTestCase/Core (2.1.4)
@@ -23,7 +23,7 @@ PODS:
     - Kingfisher/Core (= 5.14.1)
   - Kingfisher/Core (5.14.1)
   - Kommunicate (5.13.0):
-    - ApplozicSwift (~> 5.14.0)
+    - ApplozicSwift (~> 5.15.0)
   - MGSwipeTableCell (1.6.11)
   - Nimble (9.0.0)
   - Nimble-Snapshots (9.1.0):
@@ -37,7 +37,6 @@ PODS:
   - SDWebImage/Core (5.9.5)
 
 DEPENDENCIES:
-  - ApplozicSwift (from `https://github.com/mukeshthawani/ApplozicSwift.git`, branch `tv-move`)
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - Nimble
@@ -47,6 +46,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Applozic
+    - ApplozicSwift
     - FBSnapshotTestCase
     - iOSSnapshotTestCase
     - Kingfisher
@@ -57,30 +57,22 @@ SPEC REPOS:
     - SDWebImage
 
 EXTERNAL SOURCES:
-  ApplozicSwift:
-    :branch: tv-move
-    :git: https://github.com/mukeshthawani/ApplozicSwift.git
   Kommunicate:
     :path: "../"
 
-CHECKOUT OPTIONS:
-  ApplozicSwift:
-    :commit: 666819236ab7ffe740749f5f0d79be3ab4abb109
-    :git: https://github.com/mukeshthawani/ApplozicSwift.git
-
 SPEC CHECKSUMS:
   Applozic: 673eba55f167f1b06004ec8f959b356d3a59af66
-  ApplozicSwift: b3512b839f2c6b3a046592263377938de780b3da
+  ApplozicSwift: 1c9b934d109141922e3815d881350f1d2cdcb55d
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
   Kingfisher: 8050bc6f7f68cbf3908bd04df7ccbac188f6d6d6
-  Kommunicate: 68208b56455416c456a92f9b13286768da769eab
+  Kommunicate: 0238dc9d33a364819645e10d04f593bf3d10f465
   MGSwipeTableCell: b804e4e450dee439c42250be90bd50458bf67fce
   Nimble: 3b4ec3fd40f1dc178058e0981107721c615643d8
   Nimble-Snapshots: 6605431525245f967ca9d558bb12a49da3d040e3
   Quick: 6d9559f40647bc4d510103842ef2fdd882d753e2
   SDWebImage: 0b2ba0d56479bf6a45ecddbfd5558bea93150d25
 
-PODFILE CHECKSUM: db01f2c73a423ef05b0c51863363a22c78a1afe7
+PODFILE CHECKSUM: 04606b9a34e092208cf4fffc1fc90d102b10cf45
 
 COCOAPODS: 1.10.1
