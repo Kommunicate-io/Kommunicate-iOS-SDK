@@ -16,6 +16,8 @@ public struct KMConversationViewConfiguration {
     public var isCSATOptionDisabled: Bool = false
      /// Start new conversation icon in conversation list.
     public var startNewButtonIcon : UIImage? = UIImage(named: "icon_new_chat_red", in: Bundle.kommunicate, compatibleWith: nil)
+    /// If enabled, the user can't send a message when a conversation is assigned to a bot.
+    public var restrictMessageTypingWithBots = false
 
     public init() { }
 }
