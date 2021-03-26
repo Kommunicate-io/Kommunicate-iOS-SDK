@@ -37,6 +37,7 @@ PODS:
   - SDWebImage/Core (5.9.5)
 
 DEPENDENCIES:
+  - ApplozicSwift (from `https://github.com/mukeshthawani/ApplozicSwift.git`, branch `chatbar-hide`)
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - Nimble
@@ -46,7 +47,6 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Applozic
-    - ApplozicSwift
     - FBSnapshotTestCase
     - iOSSnapshotTestCase
     - Kingfisher
@@ -57,8 +57,16 @@ SPEC REPOS:
     - SDWebImage
 
 EXTERNAL SOURCES:
+  ApplozicSwift:
+    :branch: chatbar-hide
+    :git: https://github.com/mukeshthawani/ApplozicSwift.git
   Kommunicate:
     :path: "../"
+
+CHECKOUT OPTIONS:
+  ApplozicSwift:
+    :commit: 045c7fe10297e658d90f0b8d7d0dc74c3c916d5f
+    :git: https://github.com/mukeshthawani/ApplozicSwift.git
 
 SPEC CHECKSUMS:
   Applozic: 673eba55f167f1b06004ec8f959b356d3a59af66
@@ -73,6 +81,6 @@ SPEC CHECKSUMS:
   Quick: 6d9559f40647bc4d510103842ef2fdd882d753e2
   SDWebImage: 0b2ba0d56479bf6a45ecddbfd5558bea93150d25
 
-PODFILE CHECKSUM: 04606b9a34e092208cf4fffc1fc90d102b10cf45
+PODFILE CHECKSUM: 01647b4d2c8bb748b4ab07816f294214dd3f68f7
 
 COCOAPODS: 1.10.1
