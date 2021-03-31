@@ -138,6 +138,7 @@ open class KMConversationViewController: ALKConversationViewController {
         super.viewWillDisappear(animated)
         hideAwayAndClosedView()
         isConversationAssignedToDialogflowBot = false
+        isChatBarHidden = false
     }
 
     override open func newMessagesAdded() {
@@ -271,6 +272,7 @@ open class KMConversationViewController: ALKConversationViewController {
             }
             self.customNavigationView.updateView(assignee: contact,channel: alChannel)
             self.assigneeUserId = contact?.userId
+            self.hideInputBarIfAssignedToBot()
         }
     }
 
@@ -375,6 +377,15 @@ open class KMConversationViewController: ALKConversationViewController {
     private func hideAwayAndClosedView() {
         isAwayMessageViewHidden = true
         isClosedConversationViewHidden = true
+    }
+
+    private func hideInputBarIfAssignedToBot() {
+        guard kmConversationViewConfiguration.restrictMessageTypingWithBots,
+              let groupId = viewModel.channelKey else {
+            return
+        }
+        let isAssignedToBot = conversationDetail.isAssignedToBot(groupID: Int(truncating: groupId))
+        isChatBarHidden = isAssignedToBot
     }
 
     open override func sendQuickReply(_ text: String,
