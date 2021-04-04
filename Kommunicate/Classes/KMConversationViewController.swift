@@ -442,7 +442,11 @@ extension KMConversationViewController {
                     self?.showRatingView()
                     return
                 }
-                self?.show(feedback: previousFeedback)
+                if (self?.conversationClosedView.restartTapped != nil) {
+                    self?.showRatingView()
+                } else {
+                    self?.show(feedback: previousFeedback)
+                }
             }
         }
     }
