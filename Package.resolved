@@ -9,6 +9,33 @@
           "revision": "2081b0b1dcc6f0f1dd839c6d40f15f2304484031",
           "version": null
         }
+      },
+      {
+        "package": "ApplozicSwift",
+        "repositoryURL": "https://github.com/AppLozic/ApplozicSwift.git",
+        "state": {
+          "branch": "SPM-Support-changes",
+          "revision": "f25940ebb07e5173f490724429599de9a55c9195",
+          "version": null
+        }
+      },
+      {
+        "package": "Kingfisher",
+        "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
+        "state": {
+          "branch": null,
+          "revision": "1339ebea9498ef6c3fc75cc195d7163d7c7167f9",
+          "version": "5.14.1"
+        }
+      },
+      {
+        "package": "SwipeCellKit",
+        "repositoryURL": "https://github.com/SwipeCellKit/SwipeCellKit.git",
+        "state": {
+          "branch": null,
+          "revision": "7219cad3098637176ace311510d11467dbfb9bb0",
+          "version": "2.7.1"
+        }
       }
     ]
   },

@@ -14,7 +14,7 @@ let package = Package(
             targets: ["Kommunicate-iOS-SDK"]),
     ],
     dependencies: [
-        .package(name: "Applozic", url: "https://github.com/AppLozic/Applozic-Chat-iOS-Framework.git", .branch("spm-test-core")),
+        .package(name: "ApplozicSwift", url: "https://github.com/AppLozic/ApplozicSwift.git", .branch("SPM-Support-changes")),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
