@@ -13,6 +13,7 @@ class ConversationDetail {
     let channelService = ALChannelService()
     let userService = ALUserService()
     let contactDbService = ALContactDBService()
+    let channelDbService = ALChannelDBService()
 
     func conversationAssignee(groupId: NSNumber?, userId: String?) -> (ALContact?,ALChannel?) {
         // Check if group conversation.
@@ -86,6 +87,23 @@ class ConversationDetail {
         })
     }
 
+    func isAssignedToBot(groupID: Int) -> Bool {
+        guard let assigneeId = assigneeUserIdFor(groupID: groupID),
+              let channelUserX = channelDbService.loadChannelUserX(byUserId: groupID as NSNumber, andUserId: assigneeId),
+              let userRole = channelUserX.role as? Int else {
+            return false
+        }
+        return userRole == KMGroupUser.RoleType.bot.rawValue
+    }
+
+    private func assigneeUserIdFor(groupID: Int) -> String? {
+        guard let channel = channelService.getChannelByKey(groupID as NSNumber),
+              channel.type == Int16(SUPPORT_GROUP.rawValue),
+              let assigneeId = channel.metadata?[KMBotService.conversationAssignee] as? String else {
+            return nil
+        }
+        return assigneeId
+    }
 }
 
 extension ALChannel {

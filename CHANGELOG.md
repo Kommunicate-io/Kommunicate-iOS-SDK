@@ -4,6 +4,9 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Enhancements
+
+- [TD-1667] Added a configuration option that prevents the user from sending a message when a conversation is assigned to a bot.
 ## [5.14.0] - 2021-03-24Z
 
 ### Enhancements
