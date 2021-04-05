@@ -1,4 +1,0 @@
-module Kommunicate_iOS_SDK {
-    header "/Users/rentomojo/Documents/Kommunicate-iOS-SDK/.build/x86_64-apple-macosx/debug/Kommunicate_iOS_SDK.build/Kommunicate-iOS-SDK-Swift.h"
-    requires objc
-}
