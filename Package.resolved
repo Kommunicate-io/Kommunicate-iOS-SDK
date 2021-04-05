@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Applozic",
+        "repositoryURL": "https://github.com/AppLozic/Applozic-Chat-iOS-Framework.git",
+        "state": {
+          "branch": "spm-test-core",
+          "revision": "2081b0b1dcc6f0f1dd839c6d40f15f2304484031",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

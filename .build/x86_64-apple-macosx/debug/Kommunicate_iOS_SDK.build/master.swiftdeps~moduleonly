@@ -1,0 +1,8 @@
+version: "Apple Swift version 5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)"
+options: "5e943a7b4fb2138b64f24466a849d86c"
+build_time: [1617601517, 292637000]
+inputs:
+  "/Users/rentomojo/Documents/Kommunicate-iOS-SDK/Example/Kommunicate/AppDelegate.swift": [1617601513, 942223728]
+  "/Users/rentomojo/Documents/Kommunicate-iOS-SDK/Example/Kommunicate/LoginViewController.swift": [1617601507, 275462240]
+  "/Users/rentomojo/Documents/Kommunicate-iOS-SDK/Example/Kommunicate/ViewController.swift": [1617601504, 856706473]
+  "/Users/rentomojo/Documents/Kommunicate-iOS-SDK/.build/x86_64-apple-macosx/debug/Kommunicate_iOS_SDK.build/DerivedSources/resource_bundle_accessor.swift": [1617601453, 158752714]

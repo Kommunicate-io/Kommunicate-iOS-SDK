@@ -1,0 +1,158 @@
+/* 
+  Localizable.strings
+  Kommunicate
+
+  Created by Mukesh on 29/01/19.
+  Copyright © 2019 CocoaPods. All rights reserved.
+*/
+
+/* PreChatView */
+
+/* Name textfield's title label*/
+PreChatViewNameTitle = "Name";
+/* Email textfield's title label*/
+PreChatViewEmailTitle = "Email";
+/* Phone number textfield's title label*/
+PreChatViewPhoneNumberTitle = "Phone number";
+/* Name textfield's placeholder*/
+PreChatViewNamePlaceholder = "Name";
+/* Email textfield's placeholder*/
+PreChatViewEmailPlaceholder = "Email";
+/* Phone number textfield title placeholder*/
+PreChatViewPhoneNumberPlaceholder = "Phone number";
+/* Email and Phone number empty error message */
+PreChatViewEmailAndPhoneNumberEmptyError = "Please fill email or the phone number";
+/* Invalid Email error message */
+PreChatViewEmailInvalidError = "Please enter correct email address";
+/* Invalid Phone number error message */
+PreChatViewPhoneNumberInvalidError = "Please enter correct phone number";
+/* Empty Name error message */
+PreChatViewNameEmptyError = "Please enter your name";
+/* Empty Email error message */
+PreChatViewEmailEmptyError = "Please enter your email address";
+/* Empty Phone number error message */
+PreChatViewPhoneNumberEmptyError = "Please enter your phone number";
+/* Send instructions button title */
+PreChatViewSendInstructionsButtonTitle = "SUBMIT";
+/* Get Started description on top */
+PreChatViewGetStartedDescription = "We just need a few details to help you get started";
+
+/* User's connection status */
+online = "Online";
+offline = "Offline";
+awayMode = "Away";
+
+/* Will be shown when the user's display name is not set */
+noName = "No Name";
+
+/* Navigation title for faq view controller */
+FaqTitle = "FAQ";
+
+/* ApplozicSwift framework's key-value pairs */
+
+Back = "Back";
+ChatHere = "Type something...";
+DeleteSingleConversation = "Are you sure you want to remove the chat with";
+LeaveGroupConversation = "Are you sure you want to leave the group";
+DeleteGroupConversation = "Are you sure you want to remove the group";
+ButtonCancel = "Cancel";
+CamNotAvaiable = "Unable to start your camera";
+PleaseAllowCamera = "Please change Settings to allow to access your camera";
+UnspecifiedLocation = "Unspecified Location";
+PhotoAlbumSuccessTitle = "Done";
+PhotoAlbumSuccess = "Photo saved";
+PhotoAlbumOk = "Ok";
+PhotoAlbumFailureTitle = "Error";
+PhotoAlbumFail = "Save failed";
+DownloadOriginalImageFail = "Fail to download the original image";
+IsTypingForRTL = "typing is %@";
+ButtonDiscard = "Discard";
+
+LocationTitle = "Location";
+DoneButton = "Done";
+AddToGroupTitle = "Add to Group";
+InviteButton = "INVITE";
+CreateGroupTitle = "Create Group";
+EditGroupTitle = "Edit Group";
+SaveButtonTitle = "Save";
+InviteMessage = "Invite";
+DiscardChangeTitle = "Discard Change";
+DiscardChangeMessage = "If you go back now, your change will be discarded";
+Edit = "Edit";
+Camera = "Camera";
+CropImage = "Crop Image";
+ResetPhotoButton = "Reset Photo";
+SelectButton = "Select";
+SendPhoto = "Send Photo";
+PhotosTitle = "Photos";
+CameraNotAvailableMessage = "Camera is not Available !!!";
+GalleryNotAvailableMessage = "Gallery is not available";
+ImageCroppedMessage = "Image cropped";
+ImageResetMessage = "Image reset";
+CameraNotAvailableTitle = "OOPS !!!";
+ShareLocationTitle = "Share Location";
+SendLocationButton = "Send Location";
+Participants = "Participants";
+TypeGroupName = "Type group name";
+NewChatTitle = "New Chat";
+SearchPlaceholder = "Search";
+HoldToTalkMessage = "Hold to Talk / Tap to Type";
+
+RecordingMessage = "Recording";
+MicrophoneNotAvailableMessage = "Microphone is not available";
+AllowSoundRecordingMessage = "Please change Settings to allow sound recording";
+SlideToCancelMessage = "Slide to cancel";
+TurnGPSOnMessage = "Cannot detects current location, please turn on GPS";
+MapLoadingMessage = "Map is loading, please wait";
+AllowGPSMessage = "Please change Settings to allow GPS";
+CheckImageAndNameField = "Please input display name and profile image";
+UpdateProfileSuccessMessage = "Update Profile success";
+FailedToUpdateMessage = "Failed to update";
+
+EnterEmailMessage = "Please enter email address";
+InvalidEmailMessage = "Invalid email address";
+FillAllFieldsMessage = "Please fill-in all fields";
+FillPasswordMessage = "Please fill-in password";
+PasswordNotMatchedMessage = "Password does not match the confirm password";
+CancelMessage = "Cancelled";
+ConnectionFailedMessage = "Connection failed. Please retry again";
+FetchFailedMessage = "Fetch data failed. Please retry again";
+OperationFailedMessage = "Operation could not be completed. Please retry again";
+RemoveMessage = "Are you sure you want to remove";
+UploadingImageMessage = "The image is being uploaded";
+SignOutMessage = "Are you sure you want to sign out?";
+SignOutButtonName = "Sign out";
+RetryButtonName = "Retry";
+RemoveButtonName = "Remove";
+LeaveButtonName = "Leave";
+NoNameMessage = "No Name";
+ConversationListVCTitle = "My Chats";
+Somebody = "Somebody";
+EnableCameraPermissionMessage = "Enable Camera Permission";
+Settings = "Settings";
+Cancel = "Cancel";
+SendVideo = "Send Video";
+TurnOnLocationService = "Turn On Location Services";
+LocationAlertMessage = "1. Tap Settings\n2. Tap Location\n 3. Tap 'While Using the App'";
+NotNow = "Not Now";
+IsTyping = "%@ is typing";
+AreTyping = " are typing";
+Copy = "Copy";
+Reply = "Reply";
+You = "You";
+
+NotPartOfGroup = "You are not part of this group";
+MuteChannel = "Mute group %@";
+MuteUser = "Mute user %@";
+UnmuteChannel = "Are you sure you want to unmute group %@";
+UnmuteUser = "Are you sure you want to unmute user %@";
+ConfirmButton = "Confirm";
+EightHour = "8 Hours";
+OneWeek = "1 Week";
+OneYear = "1 Year";
+MuteButton = "Mute";
+UnmuteButton = "Unmute";
+NoConversationsLabelText = "No conversations";
+UnableToCreateConversationError = "Unable to create conversation";
+OkButton = "Okay";
+WaitMessage = "Please wait...";

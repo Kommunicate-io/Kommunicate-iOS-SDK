@@ -1,0 +1,144 @@
+{
+  "builtTestProducts" : [
+    {
+      "binaryPath" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Kommunicate-iOS-SDKPackageTests.xctest\/Contents\/MacOS\/Kommunicate-iOS-SDKPackageTests",
+      "packageName" : "Kommunicate-iOS-SDK",
+      "productName" : "Kommunicate-iOS-SDKPackageTests"
+    }
+  ],
+  "copyCommands" : {
+    "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Applozic_ApplozicCore.bundle\/AppLozic.xcdatamodeld" : {
+      "inputs" : [
+        {
+          "kind" : "directory",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/checkouts\/Applozic-Chat-iOS-Framework\/ApplozicCore\/database\/AppLozic.xcdatamodeld"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "directory",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Applozic_ApplozicCore.bundle\/AppLozic.xcdatamodeld"
+        }
+      ]
+    },
+    "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Applozic_ApplozicCore.bundle\/Info.plist" : {
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/ApplozicCore.build\/Info.plist"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Applozic_ApplozicCore.bundle\/Info.plist"
+        }
+      ]
+    },
+    "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Applozic_ApplozicCore.bundle\/MQTTClient.xcdatamodeld" : {
+      "inputs" : [
+        {
+          "kind" : "directory",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/checkouts\/Applozic-Chat-iOS-Framework\/ApplozicCore\/MQTT\/MQTTClient.xcdatamodeld"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "directory",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Applozic_ApplozicCore.bundle\/MQTTClient.xcdatamodeld"
+        }
+      ]
+    },
+    "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Applozic_ApplozicCore.bundle\/TSMessagesDefaultDesign.json" : {
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/checkouts\/Applozic-Chat-iOS-Framework\/ApplozicCore\/push\/TSMessagesDefaultDesign.json"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Applozic_ApplozicCore.bundle\/TSMessagesDefaultDesign.json"
+        }
+      ]
+    },
+    "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Kommunicate-iOS-SDK_Kommunicate-iOS-SDK.bundle\/Base.lproj\/LaunchScreen.xib" : {
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/Example\/Kommunicate\/Base.lproj\/LaunchScreen.xib"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Kommunicate-iOS-SDK_Kommunicate-iOS-SDK.bundle\/Base.lproj\/LaunchScreen.xib"
+        }
+      ]
+    },
+    "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Kommunicate-iOS-SDK_Kommunicate-iOS-SDK.bundle\/Base.lproj\/Localizable.strings" : {
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/Example\/Kommunicate\/Base.lproj\/Localizable.strings"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Kommunicate-iOS-SDK_Kommunicate-iOS-SDK.bundle\/Base.lproj\/Localizable.strings"
+        }
+      ]
+    },
+    "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Kommunicate-iOS-SDK_Kommunicate-iOS-SDK.bundle\/Base.lproj\/Main.storyboard" : {
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/Example\/Kommunicate\/Base.lproj\/Main.storyboard"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Kommunicate-iOS-SDK_Kommunicate-iOS-SDK.bundle\/Base.lproj\/Main.storyboard"
+        }
+      ]
+    },
+    "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Kommunicate-iOS-SDK_Kommunicate-iOS-SDK.bundle\/Images.xcassets" : {
+      "inputs" : [
+        {
+          "kind" : "directory",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/Example\/Kommunicate\/Images.xcassets"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "directory",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Kommunicate-iOS-SDK_Kommunicate-iOS-SDK.bundle\/Images.xcassets"
+        }
+      ]
+    },
+    "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Kommunicate-iOS-SDK_Kommunicate-iOS-SDK.bundle\/Info.plist" : {
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Kommunicate_iOS_SDK.build\/Info.plist"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "\/Users\/rentomojo\/Documents\/Kommunicate-iOS-SDK\/.build\/x86_64-apple-macosx\/debug\/Kommunicate-iOS-SDK_Kommunicate-iOS-SDK.bundle\/Info.plist"
+        }
+      ]
+    }
+  },
+  "swiftTargetMap" : {
+    "C.Kommunicate-iOS-SDK-debug.module" : "Kommunicate-iOS-SDK",
+    "C.Kommunicate-iOS-SDKTests-debug.module" : "Kommunicate-iOS-SDKTests"
+  },
+  "testDiscoveryCommands" : {
+
+  }
+}

@@ -1,0 +1,4 @@
+module ApplozicCore {
+    umbrella header "/Users/rentomojo/Documents/Kommunicate-iOS-SDK/.build/checkouts/Applozic-Chat-iOS-Framework/ApplozicCore/include/ApplozicCore.h"
+    export *
+}
