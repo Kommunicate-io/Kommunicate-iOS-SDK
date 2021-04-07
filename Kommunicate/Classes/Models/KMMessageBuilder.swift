@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Applozic
+import ApplozicCore
 
 public class KMMessage: NSObject {
     public var conversationId : String = ""

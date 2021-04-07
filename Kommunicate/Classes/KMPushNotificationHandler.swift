@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Applozic
+import ApplozicCore
 import ApplozicSwift
 
 public class KMPushNotificationHandler: Localizable {

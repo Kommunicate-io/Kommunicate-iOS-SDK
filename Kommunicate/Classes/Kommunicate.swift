@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import Applozic
+import ApplozicCore
 import ApplozicSwift
 
 var TYPE_CLIENT : Int16 = 0

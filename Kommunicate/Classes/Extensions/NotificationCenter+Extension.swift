@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Applozic
+import ApplozicCore
 
 /// Wraps the observer token received from
 /// NotificationCenter.addObserver(forName:object:queue:using:)

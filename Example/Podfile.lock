@@ -1,10 +1,9 @@
 PODS:
-  - Applozic (7.11.1):
-    - SDWebImage (~> 5.9.2)
+  - ApplozicCore (8.0.0)
   - ApplozicSwift (5.15.0):
     - ApplozicSwift/Complete (= 5.15.0)
   - ApplozicSwift/Complete (5.15.0):
-    - Applozic (~> 7.11.0)
+    - ApplozicCore (~> 8.0.0)
     - ApplozicSwift/RichMessageKit
     - Kingfisher (~> 5.14.0)
     - MGSwipeTableCell (~> 1.6.11)
@@ -32,12 +31,9 @@ PODS:
     - iOSSnapshotTestCase (~> 6.0)
     - Nimble
   - Quick (3.0.0)
-  - SDWebImage (5.9.5):
-    - SDWebImage/Core (= 5.9.5)
-  - SDWebImage/Core (5.9.5)
 
 DEPENDENCIES:
-  - ApplozicSwift (from `https://github.com/mukeshthawani/ApplozicSwift.git`, branch `chatbar-hide`)
+  - ApplozicSwift (from `https://github.com/shilwantk/ApplozicSwift.git`, branch `dateFormatFix`)
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - Nimble
@@ -46,7 +42,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
-    - Applozic
+    - ApplozicCore
     - FBSnapshotTestCase
     - iOSSnapshotTestCase
     - Kingfisher
@@ -54,23 +50,22 @@ SPEC REPOS:
     - Nimble
     - Nimble-Snapshots
     - Quick
-    - SDWebImage
 
 EXTERNAL SOURCES:
   ApplozicSwift:
-    :branch: chatbar-hide
-    :git: https://github.com/mukeshthawani/ApplozicSwift.git
+    :branch: dateFormatFix
+    :git: https://github.com/shilwantk/ApplozicSwift.git
   Kommunicate:
     :path: "../"
 
 CHECKOUT OPTIONS:
   ApplozicSwift:
-    :commit: 045c7fe10297e658d90f0b8d7d0dc74c3c916d5f
-    :git: https://github.com/mukeshthawani/ApplozicSwift.git
+    :commit: 8639ac1240b9be7e27f2e6400c1fdd15dfc93786
+    :git: https://github.com/shilwantk/ApplozicSwift.git
 
 SPEC CHECKSUMS:
-  Applozic: 673eba55f167f1b06004ec8f959b356d3a59af66
-  ApplozicSwift: 1c9b934d109141922e3815d881350f1d2cdcb55d
+  ApplozicCore: 4b510e13ba44772f168c8900af0811a7e651e723
+  ApplozicSwift: 7c37f63b7496fc357806eb9aed58325514bd012c
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
   Kingfisher: 8050bc6f7f68cbf3908bd04df7ccbac188f6d6d6
@@ -79,8 +74,7 @@ SPEC CHECKSUMS:
   Nimble: 3b4ec3fd40f1dc178058e0981107721c615643d8
   Nimble-Snapshots: 6605431525245f967ca9d558bb12a49da3d040e3
   Quick: 6d9559f40647bc4d510103842ef2fdd882d753e2
-  SDWebImage: 0b2ba0d56479bf6a45ecddbfd5558bea93150d25
 
-PODFILE CHECKSUM: 01647b4d2c8bb748b4ab07816f294214dd3f68f7
+PODFILE CHECKSUM: 749926356ea7080c8581f297352740d92caa3bee
 
 COCOAPODS: 1.10.1

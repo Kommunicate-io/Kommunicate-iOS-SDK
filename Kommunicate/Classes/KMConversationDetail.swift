@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Applozic
+import ApplozicCore
 
 public protocol KMConversationDetailType {
     var groupId: Int {get}

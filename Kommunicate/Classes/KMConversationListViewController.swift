@@ -7,7 +7,7 @@
 
 import Foundation
 import ApplozicSwift
-import Applozic
+import ApplozicCore
 
 public class KMConversationListViewController : ALKBaseViewController, Localizable {
 

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Applozic
+import ApplozicCore
 @testable import Kommunicate
 
 class ConversationDetailMock: ConversationDetail {

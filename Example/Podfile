@@ -7,7 +7,7 @@ target 'Kommunicate_Example' do
   pod 'Kommunicate', :path => '../'
   target 'Kommunicate_Tests' do
     inherit! :search_paths
-    pod 'ApplozicSwift', :git => 'https://github.com/mukeshthawani/ApplozicSwift.git', :branch => 'chatbar-hide'
+    pod 'ApplozicSwift', :git => 'https://github.com/shilwantk/ApplozicSwift.git', :branch => 'dateFormatFix'
     pod 'FBSnapshotTestCase' , '~> 2.1.4'
     pod 'Nimble'
     pod 'Quick'
