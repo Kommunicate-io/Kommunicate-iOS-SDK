@@ -227,8 +227,8 @@ open class Kommunicate: NSObject,Localizable{
                     // If single threaded is not enabled for this conversation,
                     // then check in global app settings.
                     if !conversation.useLastConversation,
-                        let chatWidget = appSettings.chatWidget,
-                        let isSingleThreaded = chatWidget.isSingleThreaded {
+                       let chatWidget = appSettings.chatWidget,
+                       let isSingleThreaded = chatWidget.isSingleThreaded {
                         conversation.useLastConversation = isSingleThreaded
                     }
                 case .failure(let error):
@@ -247,11 +247,13 @@ open class Kommunicate: NSObject,Localizable{
                         botIds: conversation.botIds ?? [])
                 }
                 service.createConversation(conversation: conversation, completion: { response in
-                    guard let conversationId = response.clientChannelKey else {
-                        completion(.failure(KMConversationError.api(response.error)))
-                        return;
+                    DispatchQueue.main.async {
+                        guard let conversationId = response.clientChannelKey else {
+                            completion(.failure(KMConversationError.api(response.error)))
+                            return;
+                        }
+                        completion(.success(conversationId))
                     }
-                    completion(.success(conversationId))
                 })
             }
         } else {
