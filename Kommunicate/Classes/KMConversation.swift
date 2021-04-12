@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Applozic
+import ApplozicCore
 
 /// KMConversation is used for creating conversation
 @objc public class KMConversation : NSObject {

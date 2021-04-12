@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Applozic
+import ApplozicCore
 
 extension ALContact {
     static let AwayMode: Int = 2

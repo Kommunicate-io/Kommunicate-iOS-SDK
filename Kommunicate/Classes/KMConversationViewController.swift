@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Applozic
+import ApplozicCore
 import ApplozicSwift
 
 /// Before pushing this view Controller. Use this
