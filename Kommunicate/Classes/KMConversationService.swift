@@ -83,12 +83,13 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                     let groupID = Int(truncating: channel?.key ?? 0)
                     let response = Response(success: true, clientChannelKey: clientId, error: nil)
                     guard let currentAssignee = self.assigneeUserIdFor(groupId: groupID),
-                          conversation.conversationAssignee != nil,
-                          conversation.conversationAssignee != currentAssignee else {
+                          let newAssignee = conversation.conversationAssignee,
+                          !newAssignee.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                          newAssignee != currentAssignee else {
                         completion(response)
                         return
                     }
-                    self.assignConversation(groupId: groupID, to: conversation.conversationAssignee ?? "") { result in
+                    self.assignConversation(groupId: groupID, to: newAssignee) { result in
                         switch result {
                         case .success:
                             completion(response)
