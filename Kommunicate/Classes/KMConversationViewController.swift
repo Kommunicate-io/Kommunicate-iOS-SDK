@@ -443,7 +443,6 @@ extension KMConversationViewController {
                     return
                 }
                 self?.showRatingView()
-                self?.show(feedback: previousFeedback)
             }
         }
     }
