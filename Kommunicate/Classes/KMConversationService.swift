@@ -42,6 +42,12 @@ public class KMConversationService: KMConservationServiceable,Localizable {
         public var error: Error? = nil
     }
 
+    enum ServiceError: Error {
+        case urlCreation
+        case jsonConversion
+        case api(error: Error?)
+    }
+
     let groupMetadata: NSMutableDictionary = {
         let metadata = NSMutableDictionary(
             dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
@@ -54,6 +60,7 @@ public class KMConversationService: KMConservationServiceable,Localizable {
         metadata.addEntries(from: messageMetadata)
         return metadata
     }()
+    let channelService = ALChannelService()
 
     //MARK: - Initialization
 
@@ -71,11 +78,26 @@ public class KMConversationService: KMConservationServiceable,Localizable {
         completion: @escaping (Response)->()) {
 
         if let clientId = conversation.clientConversationId, !clientId.isEmpty {
-            self.isGroupPresent(clientId: clientId, completion: {
-                present in
+            self.isGroupPresent(clientId: clientId, completion: { present, channel in
                 if present {
+                    let groupID = Int(truncating: channel?.key ?? 0)
                     let response = Response(success: true, clientChannelKey: clientId, error: nil)
-                    completion(response)
+                    guard let currentAssignee = self.assigneeUserIdFor(groupId: groupID),
+                          let newAssignee = conversation.conversationAssignee,
+                          !newAssignee.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                          newAssignee != currentAssignee else {
+                        completion(response)
+                        return
+                    }
+                    self.assignConversation(groupId: groupID, to: newAssignee) { result in
+                        switch result {
+                        case .success:
+                            completion(response)
+                        case .failure(let error):
+                            let errorResponse = Response(success: false, clientChannelKey: clientId, error: error)
+                            completion(errorResponse)
+                        }
+                    }
                 } else {
                     self.createNewChannelAndConversation(conversation: conversation, completion: { response in
                         completion(response)
@@ -181,7 +203,7 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                 }
                 clientId = newClientId
                 self.isGroupPresent(clientId: newClientId, completion: {
-                    present in
+                    present, channel in
                     if present {
                         let response = Response(success: true, clientChannelKey: newClientId, error: nil)
                         completion(response)
@@ -333,15 +355,15 @@ public class KMConversationService: KMConservationServiceable,Localizable {
         return agentIds.map { createAgentGroupUserFrom(agentId: $0) }
     }
 
-    private func isGroupPresent(clientId: String, completion:@escaping (_ isPresent: Bool)->()){
+    private func isGroupPresent(clientId: String, completion:@escaping (_ isPresent: Bool, _ channel: ALChannel?)->()){
         let client = ALChannelService()
         client.getChannelInformation(byResponse: nil, orClientChannelKey: clientId, withCompletion: {
             error, channel, response in
-            guard channel != nil else {
-                completion(false)
+            guard let channel = channel else {
+                completion(false, nil)
                 return
             }
-            completion(true)
+            completion(true, channel)
         })
     }
 
@@ -413,5 +435,54 @@ public class KMConversationService: KMConservationServiceable,Localizable {
         }
         return allBotIds
     }
+
+    private func assignConversation(
+        groupId: Int,
+        to user: String,
+        completion: @escaping(Result<[String: Any], ServiceError>) -> ()
+    ) {
+        guard let url = URLBuilder
+                .assigneeChangeURL(groupId: groupId, assigneeUserId: user).url else {
+            completion(.failure(.urlCreation))
+            return
+        }
+
+        let theRequest: NSMutableURLRequest? =
+            ALRequestHandler.createPatchRequest(
+                withUrlString: url.absoluteString,
+                paramString: nil
+            )
+        ALResponseHandler.authenticateAndProcessRequest(theRequest, andTag: "KM-ASSIGNEE-CHANGE") {
+            (json, error) in
+            guard error == nil else {
+                completion(.failure(.api(error: error)))
+                return
+            }
+            guard let dict = json as? [String: Any] else {
+                completion(.failure(.jsonConversion))
+                return
+            }
+            completion(.success(dict))
+        }
+    }
+
+    private func assigneeUserIdFor(groupId: Int) -> String? {
+        guard let channel = channelService.getChannelByKey(groupId as NSNumber),
+              let assigneeUserId = channel.assigneeUserId else {
+            return nil
+        }
+        return assigneeUserId
+    }
 }
 
+extension ALChannel {
+    static let ConversationAssignee = "CONVERSATION_ASSIGNEE"
+
+    var assigneeUserId: String? {
+        guard type == Int16(SUPPORT_GROUP.rawValue),
+              let assigneeId = metadata?[ALChannel.ConversationAssignee] as? String else {
+            return nil
+        }
+        return assigneeId
+    }
+}

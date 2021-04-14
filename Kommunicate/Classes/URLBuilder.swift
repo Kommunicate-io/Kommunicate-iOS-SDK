@@ -21,6 +21,14 @@ final class URLBuilder {
         return URLBuilder(host: "api.kommunicate.io")
     }
 
+    static var chatApi: URLBuilder {
+        guard let baseURL = URL(string: ALUserDefaultsHandler.getBASEURL()),
+              let host = baseURL.host else {
+            return URLBuilder(host: "")
+        }
+        return URLBuilder(host: host)
+    }
+
     static var helpcenterApi: URLBuilder {
         guard let baseUrl = ALUserDefaultsHandler.getBASEURL() else {
             return URLBuilder(host: "helpcenter.kommunicate.io")
