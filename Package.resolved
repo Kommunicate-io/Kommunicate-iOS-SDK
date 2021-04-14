@@ -5,18 +5,18 @@
         "package": "Applozic",
         "repositoryURL": "https://github.com/AppLozic/Applozic-Chat-iOS-Framework.git",
         "state": {
-          "branch": "spm-test-core",
-          "revision": "2081b0b1dcc6f0f1dd839c6d40f15f2304484031",
-          "version": null
+          "branch": null,
+          "revision": "ba28f9ddcd713ecde8d546fdd727b8fdc1b26cc1",
+          "version": "8.1.0"
         }
       },
       {
         "package": "ApplozicSwift",
         "repositoryURL": "https://github.com/AppLozic/ApplozicSwift.git",
         "state": {
-          "branch": "SPM-Support-changes",
-          "revision": "f25940ebb07e5173f490724429599de9a55c9195",
-          "version": null
+          "branch": null,
+          "revision": "c2f805dcf84c842f85dff1869e15671f9b78aa04",
+          "version": "6.0.0"
         }
       },
       {
