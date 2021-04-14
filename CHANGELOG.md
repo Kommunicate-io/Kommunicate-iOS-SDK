@@ -7,6 +7,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 ### Enhancements
 
 - [TD-1667] Added a configuration option that prevents the user from sending a message when a conversation is assigned to a bot.
+- [TD-1718]  Feedback input view now shows up when a resolved conversation is reopened and resolved again
 ## [5.14.0] - 2021-03-24Z
 
 ### Enhancements
