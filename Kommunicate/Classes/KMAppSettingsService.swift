@@ -7,6 +7,7 @@
 
 import Foundation
 import ApplozicSwift
+import UIKit
 
 class KMAppSettingService {
 

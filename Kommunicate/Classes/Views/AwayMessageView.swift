@@ -7,6 +7,7 @@
 
 import Foundation
 import ApplozicSwift
+import UIKit
 
 /// A view to show away message. It has message label and dotted line view.
 class AwayMessageView: UIView {

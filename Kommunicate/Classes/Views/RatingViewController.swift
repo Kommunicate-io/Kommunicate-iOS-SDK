@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum RatingType: Int, CaseIterable {
     case sad = 1

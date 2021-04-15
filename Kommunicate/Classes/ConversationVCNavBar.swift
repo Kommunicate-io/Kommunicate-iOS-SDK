@@ -47,7 +47,7 @@ class ConversationVCNavBar: UIView, Localizable {
     var profileName: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "HelveticaNeue", size: 16) ?? UIFont.systemFont(ofSize: 16)
-        label.textColor = UIColor(96, green: 94, blue: 94)
+        label.textColor = UIColor(red: 96, green: 94, blue: 94)
         return label
     }()
     
@@ -60,7 +60,7 @@ class ConversationVCNavBar: UIView, Localizable {
 
     var onlineStatusIcon: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(165, green: 170, blue: 165)
+        view.backgroundColor = UIColor(red: 165, green: 170, blue: 165)
         view.layer.cornerRadius = 5
         view.clipsToBounds = true
         return view
@@ -69,7 +69,7 @@ class ConversationVCNavBar: UIView, Localizable {
     var onlineStatusText: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "HelveticaNeue", size: 12) ?? UIFont.systemFont(ofSize: 12)
-        label.textColor = UIColor(113, green: 110, blue: 110)
+        label.textColor = UIColor(red: 113, green: 110, blue: 110)
         return label
     }()
     
@@ -232,12 +232,12 @@ class ConversationVCNavBar: UIView, Localizable {
             onlineStatusText.text = localizedString(
                 forKey: LocalizationKey.online,
                 fileName: localizationFileName)
-            onlineStatusIcon.backgroundColor = UIColor(28, green: 222, blue: 20)
+            onlineStatusIcon.backgroundColor = UIColor(red: 28, green: 222, blue: 20)
         } else {
             onlineStatusText.text = localizedString(
                 forKey: LocalizationKey.offline,
                 fileName: localizationFileName)
-            onlineStatusIcon.backgroundColor = UIColor(165, green: 170, blue: 165)
+            onlineStatusIcon.backgroundColor = UIColor(red: 165, green: 170, blue: 165)
         }
     }
 
