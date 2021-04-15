@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import ApplozicCore
 import ApplozicSwift
+import RichMessageKit
 
 var TYPE_CLIENT : Int16 = 0
 var TYPE_APPLOZIC : Int16 = 1
@@ -25,7 +26,7 @@ public typealias KMDbHandler = ALDBHandler
 public typealias KMRegisterUserClientService = ALRegisterUserClientService
 public typealias KMConfiguration = ALKConfiguration
 public typealias KMMessageStyle = ALKMessageStyle
-public typealias KMStyle = ApplozicSwift.Style
+public typealias KMStyle = RichMessageKit.Style
 public typealias KMBaseNavigationViewController = ALKBaseNavigationViewController
 public typealias KMChatBarConfiguration = ALKChatBarConfiguration
 let faqIdentifier =  11223346
@@ -410,8 +411,8 @@ open class Kommunicate: NSObject,Localizable{
             (messageModel, tableCell) in
             let cell = tableCell as! ALKChatCell
             let message = ChatMessage(message: messageModel)
-            cell.update(viewModel: message, identity: nil, disableSwipe: Kommunicate.defaultConfiguration.disableSwipeInChatCell)
-            cell.chatCellDelegate = vc.conversationListTableViewController.self
+            cell.update(viewModel: message, identity: nil)
+            cell.delegate = vc.conversationListTableViewController.self
         }
         let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration, individualLaunch: false)
         conversationViewController.viewModel = ALKConversationViewModel(contactId: nil, channelKey: nil, localizedStringFileName: defaultConfiguration.localizedStringFileName)
@@ -508,7 +509,7 @@ open class Kommunicate: NSObject,Localizable{
         navigationBarProxy.tintColor = navigationBarProxy.tintColor ?? UIColor.white
         navigationBarProxy.titleTextAttributes =
             navigationBarProxy.titleTextAttributes ?? [NSAttributedString.Key.foregroundColor: UIColor.white]
-        KMMessageStyle.sentMessage = KMStyle(font: KMMessageStyle.sentMessage.font, text: .white)
+        KMMessageStyle.sentMessage = KMStyle(font: KMMessageStyle.sentMessage.font, text: UIColor.white)
     }
 
     /**
