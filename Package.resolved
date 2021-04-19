@@ -14,9 +14,9 @@
         "package": "ApplozicSwift",
         "repositoryURL": "https://github.com/AppLozic/ApplozicSwift.git",
         "state": {
-          "branch": null,
-          "revision": "c2f805dcf84c842f85dff1869e15671f9b78aa04",
-          "version": "6.0.0"
+          "branch": "SPM-Support-changes",
+          "revision": "98870917c57c4ec91f681374378d35f19e7beb50",
+          "version": null
         }
       },
       {

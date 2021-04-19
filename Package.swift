@@ -12,7 +12,7 @@ let package = Package(
             targets: ["Kommunicate"]),
     ],
     dependencies: [
-        .package(name: "ApplozicSwift", url: "https://github.com/AppLozic/ApplozicSwift.git", from: "6.0.0")
+        .package(name: "ApplozicSwift", url: "https://github.com/AppLozic/ApplozicSwift.git", .branch("SPM-Support-changes"))
     ],
     targets: [
         .target(
