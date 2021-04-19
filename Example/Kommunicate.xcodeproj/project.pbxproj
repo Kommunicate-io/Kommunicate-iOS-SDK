@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1107CF5C262D190B00E02ECF /* Bundle+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1107CF5B262D190B00E02ECF /* Bundle+Extension.swift */; };
 		1AD224B3222E92DE00184112 /* ConversationDetailMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD224B2222E92DE00184112 /* ConversationDetailMock.swift */; };
 		1AFB913121A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB913021A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
@@ -50,6 +51,7 @@
 /* Begin PBXFileReference section */
 		02A5491CCF26CCAE37134836 /* Pods_Kommunicate_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Kommunicate_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		03D5240E5A3F426BFD6675BB /* Pods-Kommunicate_ExampleUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kommunicate_ExampleUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Kommunicate_ExampleUITests/Pods-Kommunicate_ExampleUITests.release.xcconfig"; sourceTree = "<group>"; };
+		1107CF5B262D190B00E02ECF /* Bundle+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extension.swift"; sourceTree = "<group>"; };
 		1AD224B2222E92DE00184112 /* ConversationDetailMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDetailMock.swift; sourceTree = "<group>"; };
 		1AD224B4222E935900184112 /* KMConversationViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KMConversationViewControllerTests.swift; sourceTree = "<group>"; };
 		1AFB913021A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationVCNavBarSnapshotTests.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				8B33037D2226A43B003BF306 /* Login & Launch */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
+				1107CF5B262D190B00E02ECF /* Bundle+Extension.swift */,
 			);
 			name = "Example for Kommunicate";
 			path = Kommunicate;
@@ -562,6 +565,7 @@
 				8B33037F2226A494003BF306 /* LoginViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				1107CF5C262D190B00E02ECF /* Bundle+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
