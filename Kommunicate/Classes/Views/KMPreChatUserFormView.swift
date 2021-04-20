@@ -69,7 +69,7 @@ class KMPreChatUserFormView: UIView, Localizable {
     }
 
     func commonInit() {
-        Bundle.kommunicate.loadNibNamed("KMPreChatUserFormView", owner: self, options: nil)
+        Bundle.kommunicateTarget.loadNibNamed("KMPreChatUserFormView", owner: self, options: nil)
         guard let contentView = contentView else {
             return
         }
