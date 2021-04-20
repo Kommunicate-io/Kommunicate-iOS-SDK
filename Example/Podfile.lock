@@ -1,14 +1,13 @@
 PODS:
-  - Applozic (7.11.1):
-    - SDWebImage (~> 5.9.2)
-  - ApplozicSwift (5.15.0):
-    - ApplozicSwift/Complete (= 5.15.0)
-  - ApplozicSwift/Complete (5.15.0):
-    - Applozic (~> 7.11.0)
+  - ApplozicCore (8.1.0)
+  - ApplozicSwift (6.0.0):
+    - ApplozicSwift/Complete (= 6.0.0)
+  - ApplozicSwift/Complete (6.0.0):
+    - ApplozicCore (~> 8.1.0)
     - ApplozicSwift/RichMessageKit
     - Kingfisher (~> 5.14.0)
-    - MGSwipeTableCell (~> 1.6.11)
-  - ApplozicSwift/RichMessageKit (5.15.0)
+    - SwipeCellKit (~> 2.7.1)
+  - ApplozicSwift/RichMessageKit (6.0.0)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
   - FBSnapshotTestCase/Core (2.1.4)
@@ -23,21 +22,17 @@ PODS:
     - Kingfisher/Core (= 5.14.1)
   - Kingfisher/Core (5.14.1)
   - Kommunicate (5.14.0):
-    - ApplozicSwift (~> 5.15.0)
-  - MGSwipeTableCell (1.6.11)
+    - ApplozicSwift (~> 6.0.0)
   - Nimble (9.0.0)
   - Nimble-Snapshots (9.1.0):
     - Nimble-Snapshots/Core (= 9.1.0)
   - Nimble-Snapshots/Core (9.1.0):
     - iOSSnapshotTestCase (~> 6.0)
     - Nimble
-  - Quick (3.0.0)
-  - SDWebImage (5.9.5):
-    - SDWebImage/Core (= 5.9.5)
-  - SDWebImage/Core (5.9.5)
+  - Quick (3.1.2)
+  - SwipeCellKit (2.7.1)
 
 DEPENDENCIES:
-  - ApplozicSwift (from `https://github.com/mukeshthawani/ApplozicSwift.git`, branch `chatbar-hide`)
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - Nimble
@@ -45,42 +40,33 @@ DEPENDENCIES:
   - Quick
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
-    - Applozic
+  trunk:
+    - ApplozicCore
+    - ApplozicSwift
     - FBSnapshotTestCase
     - iOSSnapshotTestCase
     - Kingfisher
-    - MGSwipeTableCell
     - Nimble
     - Nimble-Snapshots
     - Quick
-    - SDWebImage
+    - SwipeCellKit
 
 EXTERNAL SOURCES:
-  ApplozicSwift:
-    :branch: chatbar-hide
-    :git: https://github.com/mukeshthawani/ApplozicSwift.git
   Kommunicate:
     :path: "../"
 
-CHECKOUT OPTIONS:
-  ApplozicSwift:
-    :commit: 045c7fe10297e658d90f0b8d7d0dc74c3c916d5f
-    :git: https://github.com/mukeshthawani/ApplozicSwift.git
-
 SPEC CHECKSUMS:
-  Applozic: 673eba55f167f1b06004ec8f959b356d3a59af66
-  ApplozicSwift: 1c9b934d109141922e3815d881350f1d2cdcb55d
+  ApplozicCore: db1ccbf9e98788a7a32550486831b13019f29dad
+  ApplozicSwift: cd0f2f23df075d0ea2f48806e33394cf4b17c121
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
   Kingfisher: 8050bc6f7f68cbf3908bd04df7ccbac188f6d6d6
-  Kommunicate: f4ab5cbb4ef9422f374846f80490a367e5a37793
-  MGSwipeTableCell: b804e4e450dee439c42250be90bd50458bf67fce
+  Kommunicate: a12d0181a9266cdd61d7fc543354ddaef580f35b
   Nimble: 3b4ec3fd40f1dc178058e0981107721c615643d8
   Nimble-Snapshots: 6605431525245f967ca9d558bb12a49da3d040e3
-  Quick: 6d9559f40647bc4d510103842ef2fdd882d753e2
-  SDWebImage: 0b2ba0d56479bf6a45ecddbfd5558bea93150d25
+  Quick: 60f0ea3b8e0cfc0df3259a5c06a238ad8b3c46e0
+  SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: 01647b4d2c8bb748b4ab07816f294214dd3f68f7
+PODFILE CHECKSUM: 5a14c1d5f446d0f7e95f9df42e3c1eb7b57c04e4
 
 COCOAPODS: 1.10.1
