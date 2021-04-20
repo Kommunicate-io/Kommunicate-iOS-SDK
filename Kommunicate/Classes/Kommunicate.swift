@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import ApplozicCore
 import ApplozicSwift
+import RichMessageKit
 
 var TYPE_CLIENT : Int16 = 0
 var TYPE_APPLOZIC : Int16 = 1
@@ -25,7 +26,7 @@ public typealias KMDbHandler = ALDBHandler
 public typealias KMRegisterUserClientService = ALRegisterUserClientService
 public typealias KMConfiguration = ALKConfiguration
 public typealias KMMessageStyle = ALKMessageStyle
-public typealias KMStyle = ApplozicSwift.Style
+public typealias KMStyle = RichMessageKit.Style
 public typealias KMBaseNavigationViewController = ALKBaseNavigationViewController
 public typealias KMChatBarConfiguration = ALKChatBarConfiguration
 let faqIdentifier =  11223346
