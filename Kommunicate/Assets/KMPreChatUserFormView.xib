@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="KMPreChatUserFormView" customModule="Kommunicate">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="KMPreChatUserFormView">
             <connections>
                 <outlet property="contentView" destination="iN0-l3-epB" id="rFl-fk-GLg"/>
                 <outlet property="emailStackView" destination="t3r-om-1is" id="1xB-cj-yMV"/>
