@@ -138,7 +138,7 @@ open class KMConversationViewController: ALKConversationViewController {
         super.viewWillDisappear(animated)
         hideAwayAndClosedView()
         isConversationAssignedToDialogflowBot = false
-        self.isChatBarHidden = false
+        isChatBarHidden = false
     }
 
     override open func newMessagesAdded() {
@@ -385,7 +385,7 @@ open class KMConversationViewController: ALKConversationViewController {
             return
         }
         let isAssignedToBot = conversationDetail.isAssignedToBot(groupID: Int(truncating: groupId))
-        self.isChatBarHidden = isAssignedToBot
+        isChatBarHidden = isAssignedToBot
     }
 
     open override func sendQuickReply(_ text: String,
