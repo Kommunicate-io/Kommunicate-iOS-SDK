@@ -14,8 +14,8 @@
         "package": "ApplozicSwift",
         "repositoryURL": "https://github.com/AppLozic/ApplozicSwift.git",
         "state": {
-          "branch": "SPM-Support-changes",
-          "revision": "98870917c57c4ec91f681374378d35f19e7beb50",
+          "branch": "dev",
+          "revision": "c2f805dcf84c842f85dff1869e15671f9b78aa04",
           "version": null
         }
       },
@@ -24,7 +24,7 @@
         "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
         "state": {
           "branch": null,
-          "revision": "1339ebea9498ef6c3fc75cc195d7163d7c7167f9",
+          "revision": "fd6aee6d3774db191b22e331cc88f00041a2ca85",
           "version": "5.14.1"
         }
       },
