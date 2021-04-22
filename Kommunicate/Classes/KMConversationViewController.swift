@@ -489,7 +489,7 @@ extension KMConversationViewController {
                 print("feedback submit response success: \(conversationFeedback)")
                 guard let conversationFeedback = conversationFeedback.feedback else { return }
                 DispatchQueue.main.async {
-                    self?.show(feedback: conversationFeedback)
+                    self?.show(feedback: feedback)
                 }
             case .failure(let error):
                 print("feedback submit response failure: \(error)")
