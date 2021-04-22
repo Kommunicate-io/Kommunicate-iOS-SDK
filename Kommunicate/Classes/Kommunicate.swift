@@ -12,6 +12,8 @@ import ApplozicSwift
 #if canImport(RichMessageKit)
     import RichMessageKit
     public typealias KMStyle = RichMessageKit.Style
+#else
+    public typealias KMStyle = ApplozicSwift.Style
 #endif
 
 var TYPE_CLIENT : Int16 = 0
@@ -511,9 +513,7 @@ open class Kommunicate: NSObject,Localizable{
         navigationBarProxy.tintColor = navigationBarProxy.tintColor ?? UIColor.white
         navigationBarProxy.titleTextAttributes =
             navigationBarProxy.titleTextAttributes ?? [NSAttributedString.Key.foregroundColor: UIColor.white]
-#if canImport(RichMessageKit)
         KMMessageStyle.sentMessage = KMStyle(font: KMMessageStyle.sentMessage.font, text: UIColor.white)
-#endif
     }
 
     /**
