@@ -9,7 +9,7 @@
 import Foundation
 
 extension Bundle {
-    public static var kommunicateTarget: Bundle {
+    public static var kommunicate: Bundle {
         #if SWIFT_PACKAGE
             return Bundle.module
         #else

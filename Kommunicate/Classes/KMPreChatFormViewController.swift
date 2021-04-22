@@ -377,10 +377,3 @@ extension KMPreChatFormViewController: UITextFieldDelegate {
         return true
     }
 }
-
-
-extension Bundle {
-    static var kommunicate: Bundle {
-        return Bundle(for: Kommunicate.self)
-    }
-}
