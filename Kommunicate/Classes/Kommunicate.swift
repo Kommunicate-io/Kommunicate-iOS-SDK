@@ -9,7 +9,10 @@ import Foundation
 import UIKit
 import ApplozicCore
 import ApplozicSwift
-import RichMessageKit
+#if canImport(RichMessageKit)
+    import RichMessageKit
+    public typealias KMStyle = RichMessageKit.Style
+#endif
 
 var TYPE_CLIENT : Int16 = 0
 var TYPE_APPLOZIC : Int16 = 1
@@ -26,7 +29,6 @@ public typealias KMDbHandler = ALDBHandler
 public typealias KMRegisterUserClientService = ALRegisterUserClientService
 public typealias KMConfiguration = ALKConfiguration
 public typealias KMMessageStyle = ALKMessageStyle
-public typealias KMStyle = RichMessageKit.Style
 public typealias KMBaseNavigationViewController = ALKBaseNavigationViewController
 public typealias KMChatBarConfiguration = ALKChatBarConfiguration
 let faqIdentifier =  11223346
@@ -509,7 +511,9 @@ open class Kommunicate: NSObject,Localizable{
         navigationBarProxy.tintColor = navigationBarProxy.tintColor ?? UIColor.white
         navigationBarProxy.titleTextAttributes =
             navigationBarProxy.titleTextAttributes ?? [NSAttributedString.Key.foregroundColor: UIColor.white]
+#if canImport(RichMessageKit)
         KMMessageStyle.sentMessage = KMStyle(font: KMMessageStyle.sentMessage.font, text: UIColor.white)
+#endif
     }
 
     /**
