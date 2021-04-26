@@ -19,6 +19,7 @@ let package = Package(
             name: "Kommunicate",
             dependencies: [.product(name: "ApplozicSwift", package: "ApplozicSwift")],
             path: "Kommunicate",
+            exclude: ["Example"],
             resources: [.process("Kommunicate/Assets")]
         ),
     ]
