@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.source = { :git => 'https://github.com/Kommunicate-io/Kommunicate-iOS-SDK.git', :tag => s.version }
   s.ios.deployment_target = '10.0'
   s.swift_version = '5.0'
-  s.source_files = 'Kommunicate/Classes/**/*.{swift}'
-  s.resources = 'Kommunicate/Assets/**/*{lproj,storyboard,xib,xcassets,json,strings}'
+  s.source_files = 'Sources/Kommunicate/Classes/**/*.{swift}'
+  s.resources = 'Sources/Resources/**/*{lproj,storyboard,xib,xcassets,json,strings}'
   s.dependency 'ApplozicSwift', '~> 6.0.0'
 end
