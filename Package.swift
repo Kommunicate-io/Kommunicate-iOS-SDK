@@ -18,8 +18,8 @@ let package = Package(
         .target(
             name: "Kommunicate",
             dependencies: [.product(name: "ApplozicSwift", package: "ApplozicSwift")],
-            path: "Kommunicate",
-            resources: [.process("Assets/Localizable.strings")]
+            path: "Sources",
+            resources: [.process("Resources")]
         ),
     ]
 )
