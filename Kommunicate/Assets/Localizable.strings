@@ -21,7 +21,7 @@ PreChatViewEmailPlaceholder = "Email";
 /* Phone number textfield title placeholder*/
 PreChatViewPhoneNumberPlaceholder = "Phone number";
 /* Email and Phone number empty error message */
-PreChatViewEmailAndPhoneNumberEmptyError = "Please fill email and the phone number";
+PreChatViewEmailAndPhoneNumberEmptyError = "Please fill email or the phone number";
 /* Invalid Email error message */
 PreChatViewEmailInvalidError = "Please enter correct email address";
 /* Invalid Phone number error message */
@@ -36,9 +36,6 @@ PreChatViewPhoneNumberEmptyError = "Please enter your phone number";
 PreChatViewSendInstructionsButtonTitle = "SUBMIT";
 /* Get Started description on top */
 PreChatViewGetStartedDescription = "We just need a few details to help you get started";
-
-//Conversation List VC Title
-ConversationListVCTitle = "My Chats";
 
 /* User's connection status */
 online = "Online";
