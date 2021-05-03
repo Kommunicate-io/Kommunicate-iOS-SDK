@@ -5,7 +5,7 @@
 //  Created by mukeshthawani on 02/19/2018.
 //  Copyright (c) 2018 mukeshthawani. All rights reserved.
 //
-
+#if os(iOS)
 import UIKit
 import UserNotifications
 import Kommunicate
@@ -133,3 +133,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
 }
+#endif

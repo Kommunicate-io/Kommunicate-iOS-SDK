@@ -9,6 +9,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 - [TD-1667] Added a configuration option that prevents the user from sending a message when a conversation is assigned to a bot.
 - [TD-1673] Now, the conversation assignee can be updated in an existing conversation using `Kommunicate.createConversation()` method.
 - [TD-1718]  Feedback input view now shows up when a resolved conversation is reopened and resolved again
+- [TD-1678] Added Swift Package Manager support for Kommunicate
 ## [5.14.0] - 2021-03-24Z
 
 ### Enhancements

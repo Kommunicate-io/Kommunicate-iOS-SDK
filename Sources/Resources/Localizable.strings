@@ -1,0 +1,91 @@
+/*
+  Localizable.strings
+  Pods
+
+  Created by Mukesh on 24/01/19.
+
+*/
+
+/* PreChatView */
+
+/* Name textfield's title label*/
+PreChatViewNameTitle = "Name";
+/* Email textfield's title label*/
+PreChatViewEmailTitle = "Email";
+/* Phone number textfield's title label*/
+PreChatViewPhoneNumberTitle = "Phone number";
+/* Name textfield's placeholder*/
+PreChatViewNamePlaceholder = "Name";
+/* Email textfield's placeholder*/
+PreChatViewEmailPlaceholder = "Email";
+/* Phone number textfield title placeholder*/
+PreChatViewPhoneNumberPlaceholder = "Phone number";
+/* Email and Phone number empty error message */
+PreChatViewEmailAndPhoneNumberEmptyError = "Please fill email or the phone number";
+/* Invalid Email error message */
+PreChatViewEmailInvalidError = "Please enter correct email address";
+/* Invalid Phone number error message */
+PreChatViewPhoneNumberInvalidError = "Please enter correct phone number";
+/* Empty Name error message */
+PreChatViewNameEmptyError = "Please enter your name";
+/* Empty Email error message */
+PreChatViewEmailEmptyError = "Please enter your email address";
+/* Empty Phone number error message */
+PreChatViewPhoneNumberEmptyError = "Please enter your phone number";
+/* Send instructions button title */
+PreChatViewSendInstructionsButtonTitle = "SUBMIT";
+/* Get Started description on top */
+PreChatViewGetStartedDescription = "We just need a few details to help you get started";
+
+/* User's connection status */
+online = "Online";
+offline = "Offline";
+awayMode = "Away";
+
+/* Will be shown when the user's display name is not set */
+noName = "No Name";
+
+/* Navigation title for faq view controller */
+FaqTitle = "FAQ";
+
+/* Default Support channel name */
+SupportChannelName = "Support";
+
+/* No name text */
+NoName = "No Name";
+
+/* Closed Conversation */
+
+/* Conversation resolved label in restart conversation view */
+ConversationClosedDescription = "This conversation has been marked resolved";
+/* Restart conversation label */
+ConversationClosedOtherQueries = "Have other queries?";
+/* Restart conversation Button title */
+ConversationClosedRestartConversation = "Restart conversation";
+
+/* CSAT Rating */
+
+/* Main title */
+ConversationRatingTitle = "Rate the conversation";
+/* Placeholder for comments input bar */
+ConversationRatingCommentsPlaceholder = "Add a comment...";
+/* Submit button title */
+ConversationRatingSubmitButtonTitle = "Submit your rating";
+/* Poor rating label */
+ConversationRatingOptionPoor = "Poor";
+/* Average rating label */
+ConversationRatingOptionAverage = "Average";
+/* Great rating label */
+ConversationRatingOptionGreat = "Great";
+/* Create new conversation info */
+UnableToCreateConversationError = "Unable to create conversation";
+OkButton = "Okay";
+WaitMessage = "Please wait...";
+/* No conversations*/
+NoConversationsLabelText = "No conversations";
+/* Title of the previous conversation view shown to the user */
+PreviousConversationFeedbackTitle = "You rated the conversation";
+BotCharLimit = "Keep your message within %01d characters to help the bot understand easily | ( %@ )";
+RemoveCharMessage = "Remove %01d characters";
+RemainingCharMessage = "%01d characters remaining";
+CharLimit = "Keep your message within %01d characters | ( %@ )";

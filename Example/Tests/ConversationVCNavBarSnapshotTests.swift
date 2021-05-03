@@ -9,7 +9,7 @@
 import Quick
 import Nimble
 import Nimble_Snapshots
-import Applozic
+import ApplozicCore
 @testable import Kommunicate
 
 class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
