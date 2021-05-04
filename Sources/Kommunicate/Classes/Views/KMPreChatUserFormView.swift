@@ -105,7 +105,7 @@ class KMPreChatUserFormView: UIView, Localizable {
 
     private func placeholderWith(text: String) -> NSAttributedString {
         return NSAttributedString(string: text, attributes: [
-            .foregroundColor: UIColor(red: 173, green: 168, blue: 168) ?? UIColor.lightGray,
+            .foregroundColor: UIColor(red: 173, green: 168, blue: 168) ,
             .font: UIFont(name: "HelveticaNeue-Medium", size: 16.0) ?? UIFont.systemFont(ofSize: 16.0)
         ])
     }
