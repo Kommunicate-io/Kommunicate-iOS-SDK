@@ -21,7 +21,7 @@ PODS:
   - Kingfisher (5.14.1):
     - Kingfisher/Core (= 5.14.1)
   - Kingfisher/Core (5.14.1)
-  - Kommunicate (5.14.0):
+  - Kommunicate (6.0.0):
     - ApplozicSwift (~> 6.0.0)
   - Nimble (9.0.0)
   - Nimble-Snapshots (9.1.0):
@@ -40,7 +40,7 @@ DEPENDENCIES:
   - Quick
 
 SPEC REPOS:
-  trunk:
+  https://github.com/CocoaPods/Specs.git:
     - ApplozicCore
     - ApplozicSwift
     - FBSnapshotTestCase
@@ -61,12 +61,12 @@ SPEC CHECKSUMS:
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
   Kingfisher: 8050bc6f7f68cbf3908bd04df7ccbac188f6d6d6
-  Kommunicate: a12d0181a9266cdd61d7fc543354ddaef580f35b
+  Kommunicate: 57bf06f324c8127bdef60fe280dc57c5b26bad3f
   Nimble: 3b4ec3fd40f1dc178058e0981107721c615643d8
   Nimble-Snapshots: 6605431525245f967ca9d558bb12a49da3d040e3
   Quick: 60f0ea3b8e0cfc0df3259a5c06a238ad8b3c46e0
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: 5a14c1d5f446d0f7e95f9df42e3c1eb7b57c04e4
+PODFILE CHECKSUM: 04606b9a34e092208cf4fffc1fc90d102b10cf45
 
 COCOAPODS: 1.10.1
