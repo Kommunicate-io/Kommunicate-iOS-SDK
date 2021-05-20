@@ -7,7 +7,7 @@
 
 import UIKit
 
-public protocol KMPreChatFormViewControllerDelegate: AnyObject {
+public protocol KMPreChatFormViewControllerDelegate: class {
     func userSubmittedResponse(name: String, email: String, phoneNumber: String)
     func closeButtonTapped()
 }

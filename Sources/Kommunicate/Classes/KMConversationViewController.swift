@@ -438,7 +438,7 @@ extension KMConversationViewController {
         guard let channelId = viewModel.channelKey, isCSATEnabled else { return }
         conversationDetail.feedbackFor(channelId: channelId.intValue) { [weak self] feedback in
             DispatchQueue.main.async {
-                guard feedback != nil else {
+                guard let previousFeedback = feedback else {
                     self?.showRatingView()
                     return
                 }
@@ -487,7 +487,7 @@ extension KMConversationViewController {
             switch result {
             case .success(let conversationFeedback):
                 print("feedback submit response success: \(conversationFeedback)")
-                guard conversationFeedback.feedback != nil else { return }
+                guard let conversationFeedback = conversationFeedback.feedback else { return }
                 DispatchQueue.main.async {
                     self?.show(feedback: feedback)
                 }
