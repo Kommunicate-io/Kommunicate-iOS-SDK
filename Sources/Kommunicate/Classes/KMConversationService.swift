@@ -82,22 +82,24 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                 if present {
                     let groupID = Int(truncating: channel?.key ?? 0)
                     let response = Response(success: true, clientChannelKey: clientId, error: nil)
-                    guard let currentAssignee = self.assigneeUserIdFor(groupId: groupID),
-                          let newAssignee = conversation.conversationAssignee,
-                          !newAssignee.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-                          newAssignee != currentAssignee else {
-                        completion(response)
-                        return
-                    }
-                    self.assignConversation(groupId: groupID, to: newAssignee) { result in
-                        switch result {
-                        case .success:
-                            completion(response)
-                        case .failure(let error):
-                            let errorResponse = Response(success: false, clientChannelKey: clientId, error: error)
-                            completion(errorResponse)
+                    
+                    if let currentAssignee = self.assigneeUserIdFor(groupId: groupID), let newAssignee = conversation.conversationAssignee {
+                        if (!(newAssignee.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) && newAssignee != currentAssignee) {
+                            self.assignConversation(groupId: groupID, to: newAssignee) { result in
+                                switch result {
+                                case .success:
+                                    completion(response)
+                                case .failure(let error):
+                                    let errorResponse = Response(success: false, clientChannelKey: clientId, error: error)
+                                    completion(errorResponse)
+                                }
+                            }
                         }
                     }
+                    self.updateGroupMetadata(groupId: NSNumber(value: groupID), channelKey: "", metadata: self.groupMetadata) { response in
+                        completion(response)
+                    }
+                    completion(response)
                 } else {
                     self.createNewChannelAndConversation(conversation: conversation, completion: { response in
                         completion(response)
@@ -472,6 +474,21 @@ public class KMConversationService: KMConservationServiceable,Localizable {
             return nil
         }
         return assigneeUserId
+    }
+    
+    private func updateGroupMetadata(
+        groupId: NSNumber,
+        channelKey: String,
+        metadata: NSMutableDictionary,
+        completion: @escaping((Response) -> ())
+    ) {
+        ALChannelService().updateChannelMetaData(groupId, orClientChannelKey: channelKey, metadata: metadata) { error in
+            guard error != nil else {
+                completion(Response(success: false, clientChannelKey: nil, error: error))
+                return
+            }
+            completion(Response(success: true, clientChannelKey: channelKey, error: nil))
+        }
     }
 }
 
