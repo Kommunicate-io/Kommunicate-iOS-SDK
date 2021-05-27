@@ -76,6 +76,8 @@ public class KMConversationService: KMConservationServiceable,Localizable {
     public func createConversation(
         conversation: KMConversation,
         completion: @escaping (Response)->()) {
+        
+        let dispatchGroup = DispatchGroup()
 
         if let clientId = conversation.clientConversationId, !clientId.isEmpty {
             self.isGroupPresent(clientId: clientId, completion: { present, channel in
@@ -85,19 +87,24 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                     
                     if let currentAssignee = self.assigneeUserIdFor(groupId: groupID), let newAssignee = conversation.conversationAssignee {
                         if (!(newAssignee.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) && newAssignee != currentAssignee) {
+                            dispatchGroup.enter()
                             self.assignConversation(groupId: groupID, to: newAssignee) { result in
                                 switch result {
                                 case .success:
                                     completion(response)
+                                    dispatchGroup.leave()
                                 case .failure(let error):
                                     let errorResponse = Response(success: false, clientChannelKey: clientId, error: error)
                                     completion(errorResponse)
+                                    dispatchGroup.leave()
                                 }
                             }
                         }
                     }
+                    dispatchGroup.enter()
                     self.updateGroupMetadata(groupId: NSNumber(value: groupID), channelKey: "", metadata: self.groupMetadata) { response in
                         completion(response)
+                        dispatchGroup.leave()
                     }
                     completion(response)
                 } else {
