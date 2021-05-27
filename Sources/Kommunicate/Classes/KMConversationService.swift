@@ -106,7 +106,9 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                         completion(response)
                         dispatchGroup.leave()
                     }
-                    completion(response)
+                    dispatchGroup.notify(queue: .main) {
+                        completion(response)
+                    }
                 } else {
                     self.createNewChannelAndConversation(conversation: conversation, completion: { response in
                         completion(response)
