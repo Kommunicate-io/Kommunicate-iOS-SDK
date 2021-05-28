@@ -91,7 +91,6 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                             self.assignConversation(groupId: groupID, to: newAssignee) { result in
                                 switch result {
                                 case .success:
-                                    completion(response)
                                     dispatchGroup.leave()
                                 case .failure(let error):
                                     let errorResponse = Response(success: false, clientChannelKey: clientId, error: error)
@@ -102,8 +101,8 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                         }
                     }
                     dispatchGroup.enter()
+                    guard self.groupMetadata != nil else { return }
                     self.updateGroupMetadata(groupId: NSNumber(value: groupID), channelKey: "", metadata: self.groupMetadata) { response in
-                        completion(response)
                         dispatchGroup.leave()
                     }
                     dispatchGroup.notify(queue: .main) {
