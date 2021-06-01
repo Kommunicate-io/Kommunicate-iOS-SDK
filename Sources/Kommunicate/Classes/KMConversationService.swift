@@ -83,7 +83,7 @@ public class KMConversationService: KMConservationServiceable,Localizable {
             self.isGroupPresent(clientId: clientId, completion: { present, channel in
                 if present {
                     let groupID = Int(truncating: channel?.key ?? 0)
-                    let response = Response(success: true, clientChannelKey: clientId, error: nil)
+                    var response = Response(success: true, clientChannelKey: clientId, error: nil)
                     
                     if let currentAssignee = self.assigneeUserIdFor(groupId: groupID), let newAssignee = conversation.conversationAssignee {
                         if (!(newAssignee.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) && newAssignee != currentAssignee) {
@@ -93,17 +93,27 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                                 case .success:
                                     dispatchGroup.leave()
                                 case .failure(let error):
-                                    let errorResponse = Response(success: false, clientChannelKey: clientId, error: error)
-                                    completion(errorResponse)
+                                    response.error = error
+                                    response.success = false
                                     dispatchGroup.leave()
                                 }
                             }
                         }
                     }
                     dispatchGroup.enter()
-                    guard self.groupMetadata != nil else { return }
-                    self.updateGroupMetadata(groupId: NSNumber(value: groupID), channelKey: "", metadata: self.groupMetadata) { response in
+                    guard self.groupMetadata != nil else {
                         dispatchGroup.leave()
+                        return
+                    }
+                    self.updateGroupMetadata(groupId: NSNumber(value: groupID), channelKey: "", metadata: self.groupMetadata) { result in
+                        switch result.success {
+                        case true:
+                            dispatchGroup.leave()
+                        case false:
+                            response.error = result.error
+                            response.success = result.success
+                            dispatchGroup.leave()
+                        }
                     }
                     dispatchGroup.notify(queue: .main) {
                         completion(response)
