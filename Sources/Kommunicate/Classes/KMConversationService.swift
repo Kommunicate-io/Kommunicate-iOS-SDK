@@ -105,6 +105,7 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                         dispatchGroup.leave()
                     } else {
                         self.updateGroupMetadata(groupId: NSNumber(value: groupID), channelKey: "", metadata: self.groupMetadata) { result in
+                            response = result
                             dispatchGroup.leave()
                         }
                     }
