@@ -101,17 +101,10 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                         }
                     }
                     dispatchGroup.enter()
-                    guard self.groupMetadata != nil else {
+                    if self.groupMetadata == nil {
                         dispatchGroup.leave()
-                        return
-                    }
-                    self.updateGroupMetadata(groupId: NSNumber(value: groupID), channelKey: "", metadata: self.groupMetadata) { result in
-                        switch result.success {
-                        case true:
-                            dispatchGroup.leave()
-                        case false:
-                            response.error = result.error
-                            response.success = result.success
+                    } else {
+                        self.updateGroupMetadata(groupId: NSNumber(value: groupID), channelKey: "", metadata: self.groupMetadata) { result in
                             dispatchGroup.leave()
                         }
                     }
