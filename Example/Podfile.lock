@@ -1,13 +1,13 @@
 PODS:
   - ApplozicCore (8.1.0)
-  - ApplozicSwift (6.0.0):
-    - ApplozicSwift/Complete (= 6.0.0)
-  - ApplozicSwift/Complete (6.0.0):
+  - ApplozicSwift (6.1.1):
+    - ApplozicSwift/Complete (= 6.1.1)
+  - ApplozicSwift/Complete (6.1.1):
     - ApplozicCore (~> 8.1.0)
     - ApplozicSwift/RichMessageKit
-    - Kingfisher (~> 5.14.0)
+    - Kingfisher (~> 6.3.0)
     - SwipeCellKit (~> 2.7.1)
-  - ApplozicSwift/RichMessageKit (6.0.0)
+  - ApplozicSwift/RichMessageKit (6.1.1)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
   - FBSnapshotTestCase/Core (2.1.4)
@@ -18,15 +18,13 @@ PODS:
   - iOSSnapshotTestCase/Core (6.2.0)
   - iOSSnapshotTestCase/SwiftSupport (6.2.0):
     - iOSSnapshotTestCase/Core
-  - Kingfisher (5.14.1):
-    - Kingfisher/Core (= 5.14.1)
-  - Kingfisher/Core (5.14.1)
+  - Kingfisher (6.3.0)
   - Kommunicate (6.0.0):
-    - ApplozicSwift (~> 6.0.0)
+    - ApplozicSwift (~> 6.1.1)
   - Nimble (9.2.0)
-  - Nimble-Snapshots (9.1.0):
-    - Nimble-Snapshots/Core (= 9.1.0)
-  - Nimble-Snapshots/Core (9.1.0):
+  - Nimble-Snapshots (9.1.1):
+    - Nimble-Snapshots/Core (= 9.1.1)
+  - Nimble-Snapshots/Core (9.1.1):
     - iOSSnapshotTestCase (~> 6.0)
     - Nimble
   - Quick (4.0.0)
@@ -57,13 +55,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   ApplozicCore: db1ccbf9e98788a7a32550486831b13019f29dad
-  ApplozicSwift: cd0f2f23df075d0ea2f48806e33394cf4b17c121
+  ApplozicSwift: b0b31f534720ddb983bd1fee8953be1422a21002
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
-  Kingfisher: 8050bc6f7f68cbf3908bd04df7ccbac188f6d6d6
-  Kommunicate: 57bf06f324c8127bdef60fe280dc57c5b26bad3f
+  Kingfisher: 6c3df386db71d82c0817a429d2c9421a77396529
+  Kommunicate: 9235a567049e2e2c9aebd6d72adaac900cadd1da
   Nimble: 4f4a345c80b503b3ea13606a4f98405974ee4d0b
-  Nimble-Snapshots: 6605431525245f967ca9d558bb12a49da3d040e3
+  Nimble-Snapshots: 881d47f238c5462f38ffcccb1747b17c633b2c18
   Quick: 6473349e43b9271a8d43839d9ba1c442ed1b7ac4
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
