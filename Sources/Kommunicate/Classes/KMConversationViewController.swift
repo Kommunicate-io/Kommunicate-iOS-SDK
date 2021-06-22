@@ -227,7 +227,7 @@ open class KMConversationViewController: ALKConversationViewController {
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let message):
-                        guard !message.isEmpty else { return }
+                        guard type(of: message) == String.self, !message.isEmpty else { return }
                         self.isAwayMessageViewHidden = false
                         self.awayMessageView.set(message: message)
                         /// Fetch the bot type
