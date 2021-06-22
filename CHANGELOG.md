@@ -3,6 +3,11 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
+
+## [6.1.0] - 2021-06-22
+
+### Enhancements
+
 - Moved Kommunicate folder under Sources for SPM support
 - [TD-1700] Added support to update group metadata while creating a conversation
 
