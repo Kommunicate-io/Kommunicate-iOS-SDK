@@ -10,6 +10,7 @@ import ApplozicSwift
 import UIKit
 
 class ChatMessage: ALKChatViewModelProtocol,Localizable {
+    var messageMetadata: NSMutableDictionary?
     var messageType: ALKMessageType
     var avatar: URL?
     var avatarImage: UIImage?
