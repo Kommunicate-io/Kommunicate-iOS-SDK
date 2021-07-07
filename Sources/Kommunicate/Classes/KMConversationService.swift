@@ -101,7 +101,7 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                         }
                     }
                     dispatchGroup.enter()
-                    if self.groupMetadata == nil {
+                    if self.groupMetadata.count < 0 {
                         dispatchGroup.leave()
                     } else {
                         self.updateGroupMetadata(groupId: NSNumber(value: groupID), channelKey: "", metadata: self.groupMetadata) { result in
