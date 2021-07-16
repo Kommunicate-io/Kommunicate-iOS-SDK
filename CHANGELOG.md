@@ -4,6 +4,10 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Fixes
+
+- [TD-1943] Fix for launch conversation error
+
 ## [6.1.0] - 2021-06-22
 
 ### Enhancements
