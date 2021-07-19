@@ -63,6 +63,7 @@ class KMAppSettingService {
         }
         appSettings.buttonPrimaryColor = primaryColor
         appSettings.showPoweredBy = chatWidget.showPoweredBy ?? false
+        appSettings.hidePostCTAEnabled = chatWidget.hidePostCTAEnabled ?? false
         appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
     }
 

@@ -39,6 +39,7 @@ struct ChatWidgetResponse: Decodable {
     let secondaryColor : String?
     let showPoweredBy : Bool?
     let isSingleThreaded : Bool?
+    let hidePostCTAEnabled : Bool?
 }
 
 extension KMAppSettingsResponse {
