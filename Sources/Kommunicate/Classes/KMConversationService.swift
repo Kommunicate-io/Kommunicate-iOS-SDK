@@ -104,7 +104,7 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                     if self.groupMetadata.count < 0 {
                         dispatchGroup.leave()
                     } else {
-                        self.updateGroupMetadata(groupId: NSNumber(value: groupID), channelKey: "", metadata: self.groupMetadata) { result in
+                        self.updateGroupMetadata(groupId: NSNumber(value: groupID), channelKey: clientId, metadata: self.groupMetadata) { result in
                             response = result
                             dispatchGroup.leave()
                         }
@@ -495,7 +495,7 @@ public class KMConversationService: KMConservationServiceable,Localizable {
         completion: @escaping((Response) -> ())
     ) {
         ALChannelService().updateChannelMetaData(groupId, orClientChannelKey: channelKey, metadata: metadata) { error in
-            guard error != nil else {
+            guard error == nil else {
                 completion(Response(success: false, clientChannelKey: nil, error: error))
                 return
             }
