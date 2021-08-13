@@ -487,7 +487,6 @@ open class Kommunicate: NSObject,Localizable{
                             completion(KommunicateError.conversationNotPresent)
                             return
                         }
-                        ALMessageService.syncMessages()
                         print("Kommunicate: conversation was shown")
                         completion(nil)
                     })

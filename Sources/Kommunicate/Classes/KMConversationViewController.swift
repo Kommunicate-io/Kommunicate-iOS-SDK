@@ -316,6 +316,7 @@ open class KMConversationViewController: ALKConversationViewController {
         checkUserBlock()
         subscribeChannelToMqtt()
         viewModel.prepareController()
+        ALMessageService.syncMessages()
     }
 
     public override func loadingFinished(error _: Error?) {
