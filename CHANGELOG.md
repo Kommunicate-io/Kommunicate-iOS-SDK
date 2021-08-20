@@ -4,6 +4,12 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+## [6.2.1] - 2021-08-19
+
+### Enhancements
+
+- Added support to post rich message button notifications
+
 ## [6.2.0] - 2021-08-18Z
 
 ### Fixes
