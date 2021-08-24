@@ -13,10 +13,6 @@ final class URLBuilder {
     private var components = URLComponents()
     private var pathComponents = [String]()
 
-    static var kommunicateBotsApi: URLBuilder {
-        return URLBuilder(host: "bots.kommunicate.io")
-    }
-
     static var kommunicateApi: URLBuilder {
         return URLBuilder(host: "api.kommunicate.io")
     }
@@ -79,7 +75,7 @@ extension URLBuilder {
 
     /// Bot Detail url builder
     static func botDetail(for applicationKey: String, botId: String) -> URLBuilder {
-        return URLBuilder.kommunicateBotsApi.add(paths: ["application", applicationKey, "bot", botId])
+        return URLBuilder.kommunicateApi.add(paths: ["rest", "ws", "botdetails", botId])
     }
 }
 

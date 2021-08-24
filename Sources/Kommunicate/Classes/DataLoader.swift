@@ -16,7 +16,12 @@ class DataLoader {
 
     static func request(url: URL, completion: @escaping (Result<Data, LoadingError>) -> Void) {
 
-        let urlRequest = URLRequest(url: url)
+        var urlRequest = URLRequest(url: url)
+        
+        urlRequest.httpMethod = "GET"
+        urlRequest.timeoutInterval = 600
+        urlRequest.setValue("Application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.setValue(KMUserDefaultHandler.getAuthToken(), forHTTPHeaderField: "X-Authorization")
 
         // set up the session
         let config = URLSessionConfiguration.default
