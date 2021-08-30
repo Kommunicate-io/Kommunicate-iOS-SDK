@@ -502,6 +502,20 @@ public class KMConversationService: KMConservationServiceable,Localizable {
             completion(Response(success: true, clientChannelKey: channelKey, error: nil))
         }
     }
+    
+    public func updateTeam (
+        conversation: KMConversation,
+        completion: @escaping((Response) -> ())) {
+        
+        guard let groupID = conversation.clientConversationId else { return }
+        ALChannelService().updateChannelMetaData(NSNumber(value: Int(groupID)!), orClientChannelKey: String(groupID) , metadata: getMetaDataWith(conversation)) { error in
+            guard error == nil else {
+                completion(Response(success: false, clientChannelKey: nil, error: error))
+                return
+            }
+            completion(Response(success: true, clientChannelKey: groupID, error: nil))
+        }
+    }
 }
 
 extension ALChannel {
