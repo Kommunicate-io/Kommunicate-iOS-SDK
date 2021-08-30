@@ -357,6 +357,23 @@ open class Kommunicate: NSObject,Localizable{
             }
         })
     }
+    
+    open class func updateConversation(conversation: KMConversation, completion:@escaping (_ error: KommunicateError?) -> ()) {
+        
+        let service = KMConversationService()
+        let metaData = service.getMetaDataWith(conversation)
+        let groupID = conversation.clientConversationId
+        
+        if !String(describing: groupID).isEmpty {
+            service.updateTeam(groupID: groupID!, metadata: metaData) { response in
+                if (response.success) {
+                    completion(nil)
+                } else {
+                    completion(response.error as! Kommunicate.KommunicateError)
+                }
+            }
+        }
+    }
 
     /**
      Generates a random id that can be used as an `userId`

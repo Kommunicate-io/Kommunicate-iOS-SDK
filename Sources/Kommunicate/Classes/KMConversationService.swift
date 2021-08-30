@@ -503,17 +503,17 @@ public class KMConversationService: KMConservationServiceable,Localizable {
         }
     }
     
-    public func updateTeam (
-        conversation: KMConversation,
+    func updateTeam (
+        groupID: String,
+        metadata: NSMutableDictionary,
         completion: @escaping((Response) -> ())) {
         
-        guard let groupID = conversation.clientConversationId else { return }
-        ALChannelService().updateChannelMetaData(NSNumber(value: Int(groupID)!), orClientChannelKey: String(groupID) , metadata: getMetaDataWith(conversation)) { error in
+        ALChannelService().updateChannelMetaData(NSNumber(pointer: groupID), orClientChannelKey: groupID , metadata: metadata) { error in
             guard error == nil else {
                 completion(Response(success: false, clientChannelKey: nil, error: error))
                 return
             }
-            completion(Response(success: true, clientChannelKey: groupID, error: nil))
+            completion(Response(success: true, clientChannelKey: "somevalue", error: nil))
         }
     }
 }
