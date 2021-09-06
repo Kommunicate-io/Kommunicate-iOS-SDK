@@ -358,21 +358,27 @@ open class Kommunicate: NSObject,Localizable{
         })
     }
     
+    /**
+     Updates the conversation parameters.
+     
+     - Parameters:
+     - conversation: Conversation that needs to be updated
+     */
+    
     open class func updateConversation(conversation: KMConversation, completion:@escaping (_ error: KommunicateError?) -> ()) {
         
         let service = KMConversationService()
-        let metaData = service.getMetaDataWith(conversation)
-        let groupID = conversation.clientConversationId
-        
-        if !String(describing: groupID).isEmpty {
-            service.updateTeam(groupID: groupID!, metadata: metaData) { response in
-                if (response.success) {
-                    completion(nil)
-                } else {
-                    completion(response.error as! Kommunicate.KommunicateError)
+        if let groupID = conversation.clientConversationId, !groupID.isEmpty {
+            if let teamID = conversation.teamId, !teamID.isEmpty {
+                service.updateTeam(groupID: groupID, teamID: teamID) { response in
+                    if (response.success) {
+                        completion(nil)
+                    } else {
+                        completion(response.error as? Kommunicate.KommunicateError)
+                    }
                 }
-            }
-        }
+            } else { return }
+        } else { return}
     }
 
     /**
