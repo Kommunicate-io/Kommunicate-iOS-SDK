@@ -360,11 +360,12 @@ open class Kommunicate: NSObject,Localizable{
     
     /**
      Updates the conversation parameters.
-     
+     Requires the conversation ID and the specific parameters that need to be updated for the specified conversation ID.
+
      - Parameters:
      - conversation: Conversation that needs to be updated
+     - completion: Called with the status of the conversation update
      */
-    
     open class func updateConversation(conversation: KMConversation, completion:@escaping (_ error: KommunicateError?) -> ()) {
         
         let service = KMConversationService()
@@ -377,8 +378,8 @@ open class Kommunicate: NSObject,Localizable{
                         completion(response.error as? Kommunicate.KommunicateError)
                     }
                 }
-            } else { return }
-        } else { return}
+            } else { completion(Kommunicate.KommunicateError.conversationNotPresent) }
+        } else { completion(Kommunicate.KommunicateError.conversationNotPresent)}
     }
 
     /**
