@@ -4,6 +4,9 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Enhancements
+- [TD-2111] Added a password field to PreChat Form View.
+
 ## [6.2.0] - 2021-08-18Z
 
 ### Fixes
