@@ -86,7 +86,6 @@ open class Kommunicate: NSObject,Localizable{
         case conversationNotPresent
         case conversationCreateFailed
         case teamNotPresent
-        case groupNotPresent
         case conversationUpdateFailed
     }
 
@@ -372,17 +371,16 @@ open class Kommunicate: NSObject,Localizable{
     open class func updateConversation(conversation: KMConversation, completion:@escaping (Result<String, KommunicateError>) -> ()) {
         
         let service = KMConversationService()
-        if let groupID = conversation.clientConversationId, !groupID.isEmpty {
-            if let teamID = conversation.teamId, !teamID.isEmpty {
-                service.updateTeam(groupID: groupID, teamID: teamID) { response in
-                    if (response.success) {
-                        completion(.success(groupID))
-                    } else {
-                        completion(.failure(KommunicateError.conversationUpdateFailed))
-                    }
+        guard let groupID = conversation.clientConversationId, !groupID.isEmpty else { return }
+        if let teamID = conversation.teamId, !teamID.isEmpty {
+            service.updateTeam(groupID: groupID, teamID: teamID) { response in
+                if (response.success) {
+                    completion(.success(groupID))
+                } else {
+                    completion(.failure(KommunicateError.conversationUpdateFailed))
                 }
-            } else { completion(.failure(KommunicateError.teamNotPresent)) }
-        } else { completion(.failure(KommunicateError.groupNotPresent))}
+            }
+        } else { completion(.failure(KommunicateError.teamNotPresent)) }
     }
 
     /**
