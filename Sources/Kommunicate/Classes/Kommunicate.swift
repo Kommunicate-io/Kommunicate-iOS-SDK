@@ -85,6 +85,9 @@ open class Kommunicate: NSObject,Localizable{
         case notLoggedIn
         case conversationNotPresent
         case conversationCreateFailed
+        case teamNotPresent
+        case groupNotPresent
+        case conversationUpdateFailed
     }
 
     //MARK: - Private properties
@@ -366,20 +369,20 @@ open class Kommunicate: NSObject,Localizable{
      - conversation: Conversation that needs to be updated
      - completion: Called with the status of the conversation update
      */
-    open class func updateConversation(conversation: KMConversation, completion:@escaping (_ error: KommunicateError?) -> ()) {
+    open class func updateConversation(conversation: KMConversation, completion:@escaping (Result<String, KommunicateError>) -> ()) {
         
         let service = KMConversationService()
         if let groupID = conversation.clientConversationId, !groupID.isEmpty {
             if let teamID = conversation.teamId, !teamID.isEmpty {
                 service.updateTeam(groupID: groupID, teamID: teamID) { response in
                     if (response.success) {
-                        completion(nil)
+                        completion(.success(groupID))
                     } else {
-                        completion(response.error as? Kommunicate.KommunicateError)
+                        completion(.failure(KommunicateError.conversationUpdateFailed))
                     }
                 }
-            } else { completion(Kommunicate.KommunicateError.conversationNotPresent) }
-        } else { completion(Kommunicate.KommunicateError.conversationNotPresent)}
+            } else { completion(.failure(KommunicateError.teamNotPresent)) }
+        } else { completion(.failure(KommunicateError.groupNotPresent))}
     }
 
     /**
