@@ -201,7 +201,7 @@
                                             </constraints>
                                             <color key="textColor" red="0.2666666667" green="0.2666666667" blue="0.27450980390000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
-                                            <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" textContentType="email"/>
+                                            <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" secureTextEntry="YES" textContentType="email"/>
                                         </textField>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3eN-WQ-WwD">
                                             <rect key="frame" x="0.0" y="46" width="345" height="2"/>

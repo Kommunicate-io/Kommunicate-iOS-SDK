@@ -162,7 +162,7 @@ open class KMPreChatFormViewController: UIViewController {
         )
 
         formView.sendInstructionsButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
-        [formView.emailTitleLabel, formView.nameTitleLabel, formView.phoneNumberTitle].hideViews()
+        [formView.emailTitleLabel, formView.nameTitleLabel, formView.phoneNumberTitle, formView.passwordTitle].hideViews()
 
         formView.setPlaceHolder(
             for: formView.emailTextField,
@@ -401,6 +401,7 @@ extension KMPreChatFormViewController: UITextFieldDelegate {
             formView.phoneNumberTextField.becomeFirstResponder()
         } else if textField == formView.phoneNumberTextField {
             textField.resignFirstResponder()
+            formView.passwordTextField.becomeFirstResponder()
         } else if textField == formView.passwordTextField {
             textField.resignFirstResponder()
         }
