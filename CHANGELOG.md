@@ -4,6 +4,9 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+### Enhancements
+- Update ApplozicSwift to 6.3.0
+
 ## [6.2.0] - 2021-08-18Z
 ### Fixes
 
