@@ -16,7 +16,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         static let title = localizedString(forKey: "ConversationListVCTitle", fileName: filename)
         static let NoConversationsLabelText = localizedString(forKey: "NoConversationsLabelText", fileName: filename)
         static let leftBarBackButtonText = localizedString(forKey: "Back", fileName: filename)
-        static let UnableToCreateConversationError = localizedString(forKey: "UnableToCreateConversationError", fileName: filename)
+        static let unableToCreateConversationError = localizedString(forKey: "UnableToCreateConversationError", fileName: filename)
         static let okButton = localizedString(forKey: "OkButton", fileName: filename)
         static let waitMessage = localizedString(forKey: "WaitMessage", fileName: filename)
     }
