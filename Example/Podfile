@@ -1,4 +1,5 @@
-source 'https://github.com/CocoaPods/Specs.git'
+
+source ‘https://cdn.cocoapods.org/’
 
 use_frameworks!
 platform :ios, '10.0'
@@ -7,6 +8,7 @@ target 'Kommunicate_Example' do
   pod 'Kommunicate', :path => '../'
   target 'Kommunicate_Tests' do
     inherit! :search_paths
+    pod 'ApplozicSwift'
     pod 'FBSnapshotTestCase' , '~> 2.1.4'
     pod 'Nimble'
     pod 'Quick'

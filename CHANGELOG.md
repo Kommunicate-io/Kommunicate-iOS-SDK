@@ -6,9 +6,9 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ### Enhancements
 - [TD-2111] Added a password field to PreChat Form View.
+- [TD-2099] Add support to update team for existing conversation
 
 ## [6.2.0] - 2021-08-18Z
-
 ### Fixes
 
 - [TD-1943] Fix for launch conversation error
@@ -16,6 +16,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 ### Enhancements
 
 - [TD-1867] Updated bot detail API
+- [TD-1731] Added support to sync messages on chat screen opening
 
 ## [6.1.0] - 2021-06-22
 
