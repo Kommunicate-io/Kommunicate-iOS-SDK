@@ -466,7 +466,7 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                 withUrlString: url.absoluteString,
                 paramString: nil
             )
-        ALResponseHandler.authenticateAndProcessRequest(theRequest, andTag: "KM-ASSIGNEE-CHANGE") {
+        ALResponseHandler().authenticateAndProcessRequest(theRequest, andTag: "KM-ASSIGNEE-CHANGE") {
             (json, error) in
             guard error == nil else {
                 completion(.failure(.api(error: error)))
