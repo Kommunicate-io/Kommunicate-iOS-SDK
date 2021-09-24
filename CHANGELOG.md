@@ -6,6 +6,8 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ### Enhancements
 - Update ApplozicSwift to 6.3.0
+- [TD-2111] Added a password field to PreChat Form View.
+- [TD-2099] Add support to update team for existing conversation
 
 ## [6.2.0] - 2021-08-18Z
 ### Fixes
@@ -246,6 +248,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 - [AL-2853]Added support for showing Away message.
 - [AL-3062]While creating a conversation, a default agent will be fetched and added. Now it's not required  to pass the agent Ids.
+- [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.

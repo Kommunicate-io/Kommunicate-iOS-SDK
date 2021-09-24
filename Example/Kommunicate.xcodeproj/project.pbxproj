@@ -231,7 +231,6 @@
 				F60926CF23AD89BF0221423D /* Pods-Kommunicate_Tests.debug.xcconfig */,
 				4914F5CDD595D81E4D39F37C /* Pods-Kommunicate_Tests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
