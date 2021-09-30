@@ -85,6 +85,8 @@ open class Kommunicate: NSObject,Localizable{
         case notLoggedIn
         case conversationNotPresent
         case conversationCreateFailed
+        case teamNotPresent
+        case conversationUpdateFailed
     }
 
     //MARK: - Private properties
@@ -356,6 +358,29 @@ open class Kommunicate: NSObject,Localizable{
                 })
             }
         })
+    }
+    
+    /**
+     Updates the conversation parameters.
+     Requires the conversation ID and the specific parameters that need to be updated for the specified conversation ID.
+
+     - Parameters:
+     - conversation: Conversation that needs to be updated
+     - completion: Called with the status of the conversation update
+     */
+    open class func updateConversation(conversation: KMConversation, completion:@escaping (Result<String, KommunicateError>) -> ()) {
+        
+        let service = KMConversationService()
+        guard let groupID = conversation.clientConversationId, !groupID.isEmpty else { return }
+        if let teamID = conversation.teamId, !teamID.isEmpty {
+            service.updateTeam(groupID: groupID, teamID: teamID) { response in
+                if (response.success) {
+                    completion(.success(groupID))
+                } else {
+                    completion(.failure(KommunicateError.conversationUpdateFailed))
+                }
+            }
+        } else { completion(.failure(KommunicateError.teamNotPresent)) }
     }
 
     /**

@@ -25,6 +25,7 @@ class KMPreChatUserFormView: UIView, Localizable {
         case name
         case email
         case phoneNumber
+        case password
     }
 
     var localizationFileName: String!
@@ -33,9 +34,11 @@ class KMPreChatUserFormView: UIView, Localizable {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var phoneNumberTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var emailTitleLabel: UILabel!
     @IBOutlet weak var nameTitleLabel: UILabel!
     @IBOutlet weak var phoneNumberTitle: UILabel!
+    @IBOutlet weak var passwordTitle: UILabel!
     @IBOutlet weak var sendInstructionsButton: UIButton!
 
     @IBOutlet weak var getStartedDescriptionLabel: UILabel!
@@ -47,6 +50,7 @@ class KMPreChatUserFormView: UIView, Localizable {
     @IBOutlet weak var emailStackView: UIStackView!
     @IBOutlet weak var nameStackView: UIStackView!
     @IBOutlet weak var phoneNumberStackView: UIStackView!
+    @IBOutlet weak var passwordStackView: UIStackView!
 
     struct LocalizationKey {
         private static let prefix = "PreChatView"
@@ -55,6 +59,7 @@ class KMPreChatUserFormView: UIView, Localizable {
         static let nameTitle = prefix + "Name" + suffix
         static let emailTitle = prefix + "Email" + suffix
         static let phoneNumberTitle = prefix + "PhoneNumber" + suffix
+        static let passwordTitle = prefix + "Password" + suffix
         static let sendInstructionsButtonTitle = prefix + "SendInstructionsButton" + suffix
     }
 
@@ -100,6 +105,8 @@ class KMPreChatUserFormView: UIView, Localizable {
             emailStackView.isHidden = true
         case .phoneNumber:
             phoneNumberStackView.isHidden = true
+        case .password:
+            passwordStackView.isHidden = true
         }
     }
 
@@ -119,6 +126,8 @@ class KMPreChatUserFormView: UIView, Localizable {
             localizedString(forKey: LocalizationKey.emailTitle, fileName: localizationFileName)
         phoneNumberTitle.text =
             localizedString(forKey: LocalizationKey.phoneNumberTitle, fileName: localizationFileName)
+        passwordTitle.text =
+            localizedString(forKey: LocalizationKey.passwordTitle, fileName: localizationFileName)
         let buttonTitle =
             localizedString(forKey: LocalizationKey.sendInstructionsButtonTitle, fileName: localizationFileName)
         sendInstructionsButton.setTitle(buttonTitle, for: .normal)

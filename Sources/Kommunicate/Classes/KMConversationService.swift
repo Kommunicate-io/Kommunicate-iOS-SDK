@@ -466,7 +466,7 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                 withUrlString: url.absoluteString,
                 paramString: nil
             )
-        ALResponseHandler.authenticateAndProcessRequest(theRequest, andTag: "KM-ASSIGNEE-CHANGE") {
+        ALResponseHandler().authenticateAndProcessRequest(theRequest, andTag: "KM-ASSIGNEE-CHANGE") {
             (json, error) in
             guard error == nil else {
                 completion(.failure(.api(error: error)))
@@ -500,6 +500,26 @@ public class KMConversationService: KMConservationServiceable,Localizable {
                 return
             }
             completion(Response(success: true, clientChannelKey: channelKey, error: nil))
+        }
+    }
+    
+    public func updateTeam (
+        groupID: String,
+        teamID: String,
+        completion: @escaping((Response) -> ())) {
+        
+        let metadata = NSMutableDictionary(
+            dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
+        if !teamID.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            metadata.setValue(teamID, forKey: ChannelMetadataKeys.teamId)
+        }
+    
+        ALChannelService().updateChannelMetaData(NSNumber(pointer: groupID), orClientChannelKey: groupID , metadata: metadata) { error in
+            guard error == nil else {
+                completion(Response(success: false, clientChannelKey: nil, error: error))
+                return
+            }
+            completion(Response(success: true, clientChannelKey: groupID, error: nil))
         }
     }
 }
