@@ -433,6 +433,23 @@ open class Kommunicate: NSObject,Localizable{
         }
     }
 
+    open class func isPreChatEnabled(completion: @escaping(Bool?) -> ()) {
+        let kmAppSetting = KMAppSettingService()
+        kmAppSetting.appSetting { (result) in
+            switch result {
+            case .success(let appSetting):
+                guard let isPreChatEnable = appSetting.collectLead else { return }
+                if isPreChatEnable {
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            case .failure( _) :
+                completion(false)
+            }
+        }
+    }
+
     //MARK: - Internal methods
 
     class func configureListVC(_ vc: KMConversationListViewController) {

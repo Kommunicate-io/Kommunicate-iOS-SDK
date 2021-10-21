@@ -10,7 +10,7 @@
 import UIKit
 import Kommunicate
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, KMPreChatFormViewControllerDelegate {
 
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var userName: UITextField!
@@ -33,6 +33,20 @@ class LoginViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        checkForPreChatFormView()
+    }
+    
+    func checkForPreChatFormView() {
+        KMUserDefaultHandler.setApplicationKey((UIApplication.shared.delegate as! AppDelegate).appId)
+        Kommunicate.isPreChatEnabled { success in
+            if success! {
+                DispatchQueue.main.async {
+                    let preChatVC = KMPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
+                    preChatVC.delegate = self
+                    self.present(preChatVC, animated: false, completion: nil)
+                }
+            }
+        }
     }
 
     @IBAction func getStartedBtn(_ sender: AnyObject) {
@@ -109,6 +123,51 @@ class LoginViewController: UIViewController {
             self.scrollView.scrollIndicatorInsets = inset
             self.scrollView.contentOffset = CGPoint(x: 0, y: bottomInset - 60)
         })
+    }
+    
+    func userSubmittedResponse(name: String, email: String, phoneNumber: String, password: String) {
+        
+        self.dismiss(animated: false, completion: nil)
+
+        let applicationId = (UIApplication.shared.delegate as! AppDelegate).appId
+        let kmUser = KMUser.init()
+        kmUser.applicationId = applicationId
+        if(!email.isEmpty){
+            kmUser.userId = name
+            kmUser.email = email
+        }else if(!phoneNumber.isEmpty){
+            kmUser.contactNumber = phoneNumber
+        }
+        kmUser.contactNumber = phoneNumber
+        kmUser.displayName = name
+        Kommunicate.setup(applicationId: applicationId)
+        Kommunicate.registerUser(kmUser, completion:{
+            response, error in
+            guard error == nil else{
+                print("Unable to login")
+                return
+            }
+            Kommunicate.registerUser(kmUser, completion: {
+                response, error in
+                guard error == nil else {
+                    print("[REGISTRATION] Kommunicate user registration error: %@", error.debugDescription)
+                    return
+                }
+                print("User registration was successful: %@ \(String(describing: response?.isRegisteredSuccessfully()))")
+                Kommunicate.createAndShowConversation(from: self, completion: {
+                    error in
+                    self.activityIndicator.stopAnimating()
+                    self.view.isUserInteractionEnabled = true
+                    if error != nil {
+                        print("Error while launching")
+                    }
+                })
+            })
+        })
+    }
+    
+    func closeButtonTapped() {
+        self.dismiss(animated: false, completion: nil)
     }
 
     private func setupApplicationKey(_ applicationId: String) {
