@@ -40,7 +40,7 @@ enum KMLocalizationKey {
 }
 
 @objc
-open class Kommunicate: NSObject,Localizable{
+open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegate {
 
     //MARK: - Public properties
 
@@ -80,6 +80,7 @@ open class Kommunicate: NSObject,Localizable{
     public static var kmConversationViewConfiguration = KMConversationViewConfiguration()
 
     public static let shared = Kommunicate()
+    public static var presentingViewController = UIViewController()
 
     public enum KommunicateError: Error {
         case notLoggedIn
@@ -433,21 +434,70 @@ open class Kommunicate: NSObject,Localizable{
         }
     }
 
-    open class func isPreChatEnabled(completion: @escaping(Bool?) -> ()) {
+    open class func isPreChatEnabled(appID: String, viewController: UIViewController, completion: @escaping(Bool) -> ()) {
+        
+        KMUserDefaultHandler.setApplicationKey(appID)
+        Kommunicate.presentingViewController = viewController
+    
         let kmAppSetting = KMAppSettingService()
         kmAppSetting.appSetting { (result) in
             switch result {
             case .success(let appSetting):
                 guard let isPreChatEnable = appSetting.collectLead else { return }
                 if isPreChatEnable {
+                    if !KMUserDefaultHandler.isLoggedIn() {
+                        DispatchQueue.main.async {
+                            let preChatVC = KMPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
+                            preChatVC.delegate = Kommunicate()
+                            viewController.present(preChatVC, animated: false, completion: nil)
+                        }
+                    }
                     completion(true)
                 } else {
+                    print("Pre-Chat Lead Collection is not enabled. Register as a user to continue")
                     completion(false)
                 }
-            case .failure( _) :
+            case .failure(let error) :
+                print("Error in fetching Kommunicate app settings: %@", error)
                 completion(false)
             }
         }
+    }
+    
+    public func userSubmittedResponse(name: String, email: String, phoneNumber: String, password: String) {
+        
+        Kommunicate.presentingViewController.dismiss(animated: false, completion: nil)
+        
+        let appID = KMUserDefaultHandler.getApplicationKey()
+        let kmUser = KMUser.init()
+        kmUser.applicationId = appID
+        if(!email.isEmpty){
+            kmUser.userId = name
+            kmUser.email = email
+        }else if(!phoneNumber.isEmpty){
+            kmUser.contactNumber = phoneNumber
+        }
+        kmUser.contactNumber = phoneNumber
+        kmUser.displayName = name
+        Kommunicate.setup(applicationId: appID!)
+        Kommunicate.registerUser(kmUser, completion: {
+            response, error in
+            guard error == nil else {
+                print("[REGISTRATION] Kommunicate user registration error: %@", error.debugDescription)
+                return
+            }
+            print("User registration was successful: %@ \(String(describing: response?.isRegisteredSuccessfully()))")
+            Kommunicate.createAndShowConversation(from: Kommunicate.presentingViewController, completion: {
+                error in
+                if error != nil {
+                    print("Error while launching conversation")
+                }
+            })
+        })
+    }
+    
+    public func closeButtonTapped() {
+        Kommunicate.presentingViewController.dismiss(animated: true, completion: nil)
     }
 
     //MARK: - Internal methods

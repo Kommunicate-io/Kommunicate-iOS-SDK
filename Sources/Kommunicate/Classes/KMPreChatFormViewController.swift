@@ -39,7 +39,7 @@ open class KMPreChatFormViewController: UIViewController {
         public init() {}
     }
 
-    public weak var delegate: KMPreChatFormViewControllerDelegate!
+    public var delegate: KMPreChatFormViewControllerDelegate!
     public var preChatConfiguration: PreChatConfiguration!
 
     var configuration: KMConfiguration!
