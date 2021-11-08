@@ -88,6 +88,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
         case conversationCreateFailed
         case teamNotPresent
         case conversationUpdateFailed
+        case appSettingsFetchFailed
     }
 
     //MARK: - Private properties
@@ -434,7 +435,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
         }
     }
 
-    open class func isPreChatEnabled(appID: String, viewController: UIViewController, completion: @escaping(Bool) -> ()) {
+    open class func createConversationWithPreChatWith(appID: String, conversation: KMConversation?, viewController: UIViewController, completion: @escaping(KommunicateError?) -> ()) {
         
         KMUserDefaultHandler.setApplicationKey(appID)
         Kommunicate.presentingViewController = viewController
@@ -452,14 +453,70 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                             viewController.present(preChatVC, animated: false, completion: nil)
                         }
                     }
-                    completion(true)
+                    completion(nil)
                 } else {
-                    print("Pre-Chat Lead Collection is not enabled. Register as a user to continue")
-                    completion(false)
+                    print("Pre-Chat Lead Collection is not enabled.")
+                    
+                    let applozicClient = applozicClientType.init(applicationKey: appID)
+                    let kmUser = KMUser()
+                    kmUser.userId = Kommunicate.randomId()
+                    kmUser.applicationId = applicationId
+                    
+                    Kommunicate.registerUser(kmUser, completion: {
+                        response, error in
+                        guard error == nil else {
+                            print("[REGISTRATION] Kommunicate user registration error: %@", error.debugDescription)
+                            return
+                        }
+                        print("User registration was successful: %@ \(String(describing: response?.isRegisteredSuccessfully()))")
+                        
+                        if conversation != nil {
+                            createConversation(conversation: conversation!) { (result) in
+                                switch result {
+                                case .success(let conversationId):
+                                    DispatchQueue.main.async {
+                                        showConversationWith(groupId: conversationId, from: viewController, completionHandler: { success in
+                                            guard success else {
+                                                completion(KommunicateError.conversationNotPresent)
+                                                return
+                                            }
+                                            print("Kommunicate: conversation was shown")
+                                            completion(nil)
+                                        })
+                                    }
+                                case .failure(_):
+                                    completion(KommunicateError.conversationCreateFailed)
+                                    return
+                                }
+                            }
+                        } else {
+                            let kommunicateConversationBuilder = KMConversationBuilder()
+                                .useLastConversation(false)
+                            let conversation = kommunicateConversationBuilder.build()
+                            createConversation(conversation: conversation) { (result) in
+                                switch result {
+                                case .success(let conversationId):
+                                    DispatchQueue.main.async {
+                                        showConversationWith(groupId: conversationId, from: viewController, completionHandler: { success in
+                                            guard success else {
+                                                completion(KommunicateError.conversationNotPresent)
+                                                return
+                                            }
+                                            print("Kommunicate: conversation was shown")
+                                            completion(nil)
+                                        })
+                                    }
+                                case .failure(_):
+                                    completion(KommunicateError.conversationCreateFailed)
+                                    return
+                                }
+                            }
+                        }
+                    })
                 }
             case .failure(let error) :
                 print("Error in fetching Kommunicate app settings: %@", error)
-                completion(false)
+                completion(KommunicateError.appSettingsFetchFailed)
             }
         }
     }
