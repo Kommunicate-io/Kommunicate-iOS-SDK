@@ -435,6 +435,15 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
             }
         }
     }
+    
+    /**
+     Creates and launches the conversation with PreChat Lead Collection.
+
+     - Parameters:
+     - appID: User's application ID.
+     - conversation: Instance of a KMConversation object, can be set to nil or customized as required.
+     - viewController: ViewController from which the pre-chat form view will be launched.
+     */
 
     open class func createConversationWithPreChat(appID: String, conversation: KMConversation?, viewController: UIViewController, completion: @escaping(KommunicateError?) -> ()) {
         
