@@ -106,6 +106,12 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
 
     public override init() {
         super.init()
+        Kommunicate.preChatVC.submitButtonTapped = {
+            Kommunicate().userSubmittedResponse(name: Kommunicate.preChatVC.formView.nameTextField.text!, email: Kommunicate.preChatVC.formView.emailTextField.text!, phoneNumber: Kommunicate.preChatVC.formView.phoneNumberTextField.text!, password: "")
+        }
+        Kommunicate.preChatVC.closeButtonTapped = {
+            Kommunicate().closeButtonTapped()
+        }
     }
 
     //MARK: - Public methods

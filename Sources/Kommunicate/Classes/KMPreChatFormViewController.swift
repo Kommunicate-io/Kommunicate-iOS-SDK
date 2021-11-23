@@ -44,7 +44,8 @@ open class KMPreChatFormViewController: UIViewController {
 
     var configuration: KMConfiguration!
     var formView: KMPreChatUserFormView!
-    var sendInstructionsTapped:(()->())?
+    public var submitButtonTapped:(() -> Void)?
+    public var closeButtonTapped:(() -> Void)?
 
     struct LocalizationKey {
 
@@ -162,9 +163,6 @@ open class KMPreChatFormViewController: UIViewController {
         )
 
         formView.sendInstructionsButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
-        formView.sendInstructionsButton.addAction {
-            Kommunicate.shared.userSubmittedResponse(name: (self.formView?.nameTextField.text)!, email: (self.formView?.emailTextField.text)!, phoneNumber: (self.formView?.phoneNumberTextField.text)!, password: (self.formView?.passwordTextField.text)!)
-        }
         [formView.emailTitleLabel, formView.nameTitleLabel, formView.phoneNumberTitle, formView.passwordTitle].hideViews()
 
         formView.setPlaceHolder(
@@ -253,6 +251,7 @@ open class KMPreChatFormViewController: UIViewController {
             // Display error message
             formView.showErrorLabelWith(message: error.localizationDescription(fromFileName: configuration.localizedStringFileName))
         case .success:
+            submitButtonTapped?()
             guard let delegate = delegate else { return }
             delegate.userSubmittedResponse(
                 name: formView.nameTextField.text ?? "",
@@ -263,6 +262,7 @@ open class KMPreChatFormViewController: UIViewController {
     }
 
     @objc func closeButtonAction(_ button: UIButton) {
+        closeButtonTapped?()
         guard let delegate = delegate else { return }
         delegate.closeButtonTapped()
     }
@@ -379,9 +379,6 @@ open class KMPreChatFormViewController: UIViewController {
         let button = UIButton(type: .system)
         button.frame = frame
         button.addTarget(self, action: #selector(closeButtonAction(_:)), for: .touchUpInside)
-        button.addAction {
-            Kommunicate.shared.closeButtonTapped()
-        }
         let closeImage = UIImage(named: "closeIcon", in: Bundle.kommunicate, compatibleWith: nil)
         button.setImage(closeImage, for: .normal)
         button.tintColor = UIColor.black
