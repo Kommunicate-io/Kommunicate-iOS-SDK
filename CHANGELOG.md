@@ -4,6 +4,10 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+## [6.3.1] - 2021-11-30
+
+## [6.3.0] - 2021-09-30
+
 ### Enhancements
 - Update ApplozicSwift to 6.3.0
 - [TD-2111] Added a password field to PreChat Form View.
