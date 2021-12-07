@@ -81,6 +81,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
 
     public static let shared = Kommunicate()
     public static var presentingViewController = UIViewController()
+    public static var leadArray = [LeadCollectionFields]()
 
     public enum KommunicateError: Error {
         case notLoggedIn
@@ -103,6 +104,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
 
     static var applozicClientType: ApplozicClient.Type = ApplozicClient.self
     static let preChatVC = KMPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
+    static let customPreChatVC = CustomPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
 
     public override init() {
         super.init()
@@ -110,6 +112,12 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
             Kommunicate().userSubmittedResponse(name: Kommunicate.preChatVC.formView.nameTextField.text!, email: Kommunicate.preChatVC.formView.emailTextField.text!, phoneNumber: Kommunicate.preChatVC.formView.phoneNumberTextField.text!, password: "")
         }
         Kommunicate.preChatVC.closeButtonTapped = {
+            Kommunicate().closeButtonTapped()
+        }
+        Kommunicate.customPreChatVC.submitButtonTapped = {
+            Kommunicate().userSubmittedResponse(name: Kommunicate.customPreChatVC.formView.name, email: Kommunicate.customPreChatVC.formView.email, phoneNumber: Kommunicate.customPreChatVC.formView.phoneNumber, password: "")
+        }
+        Kommunicate.customPreChatVC.closeButtonTapped = {
             Kommunicate().closeButtonTapped()
         }
     }
@@ -462,9 +470,15 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
             case .success(let appSetting):
                 guard let isPreChatEnable = appSetting.collectLead else { return }
                 if isPreChatEnable {
+                    UserDefaults.standard.set(isPreChatEnable, forKey: "leadColleactionEnabled")
+                    leadArray = appSetting.leadCollection!
                     if !KMUserDefaultHandler.isLoggedIn() {
                         DispatchQueue.main.async {
-                            viewController.present(Kommunicate.preChatVC, animated: false, completion: nil)
+                            if !Kommunicate.leadArray.isEmpty {
+                                viewController.present(Kommunicate.customPreChatVC, animated: false, completion: nil)
+                            } else {
+                                viewController.present(Kommunicate.preChatVC, animated: false, completion: nil)
+                            }
                         }
                     }
                     completion(nil)

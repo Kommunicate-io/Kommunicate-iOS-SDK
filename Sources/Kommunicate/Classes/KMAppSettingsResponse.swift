@@ -22,16 +22,17 @@ struct KMAppSettingsResponse: Decodable, KMAppSettingsResponseProtocol {
     }
 }
 
-struct AppSetting: Decodable {
+public struct AppSetting: Decodable {
     let agentID: String
     let agentName, userName: String?
     let chatWidget: ChatWidgetResponse?
     let collectFeedback: Bool?
     let collectLead: Bool?
+    let leadCollection: [LeadCollectionFields]?
 
     enum CodingKeys: String, CodingKey {
         case agentID = "agentId"
-        case agentName, userName, chatWidget, collectFeedback, collectLead
+        case agentName, userName, chatWidget, collectFeedback, collectLead, leadCollection
     }
 }
 
@@ -41,6 +42,13 @@ struct ChatWidgetResponse: Decodable {
     let showPoweredBy : Bool?
     let isSingleThreaded : Bool?
     let hidePostCTAEnabled : Bool?
+}
+
+public struct LeadCollectionFields : Decodable {
+    let type: String
+    let field: String
+    let required: Bool
+    let placeholder: String
 }
 
 extension KMAppSettingsResponse {

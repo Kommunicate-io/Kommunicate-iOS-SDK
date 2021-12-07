@@ -332,21 +332,24 @@ open class KMPreChatFormViewController: UIViewController {
     }
 
     @objc func keyboardWillHide() {
-        let defaultTopPadding = CGFloat(86)
-        formView.topConstraint.constant = defaultTopPadding
+        if Kommunicate.leadArray.isEmpty {
+            let defaultTopPadding = CGFloat(86)
+            formView.topConstraint.constant = defaultTopPadding
+        }
     }
 
     @objc func keyboardWillChange(notification: NSNotification) {
+        if Kommunicate.leadArray.isEmpty {
+            if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                if formView.emailTextField.isFirstResponder || formView.nameTextField.isFirstResponder || formView.phoneNumberTextField.isFirstResponder || formView.passwordTextField.isFirstResponder  {
 
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            if formView.emailTextField.isFirstResponder || formView.nameTextField.isFirstResponder || formView.phoneNumberTextField.isFirstResponder || formView.passwordTextField.isFirstResponder  {
+                    let defaultTopPadding = CGFloat(86)
+                    let bottomPadding = self.view.frame.height - defaultTopPadding - formView.topStackView.frame.height
 
-                let defaultTopPadding = CGFloat(86)
-                let bottomPadding = self.view.frame.height - defaultTopPadding - formView.topStackView.frame.height
-
-                let updatedTopPadding = -1*(keyboardSize.height - bottomPadding)
-                if formView.topConstraint.constant == updatedTopPadding { return }
-                formView.topConstraint.constant = updatedTopPadding
+                    let updatedTopPadding = -1*(keyboardSize.height - bottomPadding)
+                    if formView.topConstraint.constant == updatedTopPadding { return }
+                    formView.topConstraint.constant = updatedTopPadding
+                }
             }
         }
     }
