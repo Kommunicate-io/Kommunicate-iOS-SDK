@@ -470,7 +470,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
             case .success(let appSetting):
                 guard let isPreChatEnable = appSetting.collectLead else { return }
                 if isPreChatEnable {
-                    UserDefaults.standard.set(isPreChatEnable, forKey: "leadColleactionEnabled")
+                    UserDefaults.standard.set(appSetting.chatWidget?.preChatGreetingMsg!, forKey: "leadCollectionTitle")
                     leadArray = appSetting.leadCollection!
                     if !KMUserDefaultHandler.isLoggedIn() {
                         DispatchQueue.main.async {

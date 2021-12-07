@@ -17,6 +17,7 @@ class CustomPreChatFormView: UIView, UITextFieldDelegate {
     @IBOutlet weak var sendInstructionsButton: UIButton!
     @IBOutlet weak var errorMessageLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var titleLabel: UILabel!
     
     public var name = String()
     public var email = String()
@@ -44,6 +45,12 @@ class CustomPreChatFormView: UIView, UITextFieldDelegate {
     }
     
     func setUpView() {
+        
+        guard let title = UserDefaults.standard.string(forKey: "leadCollectionTitle") else {
+            titleLabel.text = "Pre-Chat Lead Collection"
+            return
+        }
+        titleLabel.text = title
         
         for (index,element) in Kommunicate.leadArray.enumerated() {
             let textLabel = UILabel()

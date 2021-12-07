@@ -42,6 +42,7 @@ struct ChatWidgetResponse: Decodable {
     let showPoweredBy : Bool?
     let isSingleThreaded : Bool?
     let hidePostCTAEnabled : Bool?
+    let preChatGreetingMsg : String?
 }
 
 public struct LeadCollectionFields : Decodable {
