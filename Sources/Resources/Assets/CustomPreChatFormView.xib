@@ -96,7 +96,7 @@
                                         <constraint firstAttribute="width" constant="353" id="SJj-WH-zba"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
-                                    <state key="normal" title="SEND INSTRUCTIONS">
+                                    <state key="normal" title="Start Conversation">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </state>
                                 </button>
