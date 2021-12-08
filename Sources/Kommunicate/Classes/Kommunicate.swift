@@ -108,18 +108,6 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
 
     public override init() {
         super.init()
-        Kommunicate.preChatVC.submitButtonTapped = {
-            Kommunicate().userSubmittedResponse(name: Kommunicate.preChatVC.formView.nameTextField.text!, email: Kommunicate.preChatVC.formView.emailTextField.text!, phoneNumber: Kommunicate.preChatVC.formView.phoneNumberTextField.text!, password: "")
-        }
-        Kommunicate.preChatVC.closeButtonTapped = {
-            Kommunicate().closeButtonTapped()
-        }
-        Kommunicate.customPreChatVC.submitButtonTapped = {
-            Kommunicate().userSubmittedResponse(name: Kommunicate.customPreChatVC.formView.name, email: Kommunicate.customPreChatVC.formView.email, phoneNumber: Kommunicate.customPreChatVC.formView.phoneNumber, password: "")
-        }
-        Kommunicate.customPreChatVC.closeButtonTapped = {
-            Kommunicate().closeButtonTapped()
-        }
     }
 
     //MARK: - Public methods
@@ -475,8 +463,20 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                     if !KMUserDefaultHandler.isLoggedIn() {
                         DispatchQueue.main.async {
                             if !Kommunicate.leadArray.isEmpty {
+                                Kommunicate.customPreChatVC.submitButtonTapped = {
+                                    Kommunicate().userSubmittedResponse(name: Kommunicate.customPreChatVC.formView.name, email: Kommunicate.customPreChatVC.formView.email, phoneNumber: Kommunicate.customPreChatVC.formView.phoneNumber, password: "")
+                                }
+                                Kommunicate.customPreChatVC.closeButtonTapped = {
+                                    Kommunicate().closeButtonTapped()
+                                }
                                 viewController.present(Kommunicate.customPreChatVC, animated: false, completion: nil)
                             } else {
+                                Kommunicate.preChatVC.submitButtonTapped = {
+                                    Kommunicate().userSubmittedResponse(name: Kommunicate.preChatVC.formView.nameTextField.text!, email: Kommunicate.preChatVC.formView.emailTextField.text!, phoneNumber: Kommunicate.preChatVC.formView.phoneNumberTextField.text!, password: "")
+                                }
+                                Kommunicate.preChatVC.closeButtonTapped = {
+                                    Kommunicate().closeButtonTapped()
+                                }
                                 viewController.present(Kommunicate.preChatVC, animated: false, completion: nil)
                             }
                         }
@@ -556,9 +556,6 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
     }
     
     public func userSubmittedResponse(name: String, email: String, phoneNumber: String, password: String) {
-        
-        //checking for the mandatory values only.
-        if !email.isEmpty && !phoneNumber.isEmpty {
             
             guard let appID = KMUserDefaultHandler.getApplicationKey() else { return }
             Kommunicate.presentingViewController.dismiss(animated: false, completion: nil)
@@ -587,7 +584,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                     }
                 })
             })
-        }
+
     }
     
     public func closeButtonTapped() {

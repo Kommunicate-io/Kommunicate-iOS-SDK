@@ -65,7 +65,7 @@ class CustomPreChatFormView: UIView, UITextFieldDelegate {
             let textField = UITextField()
             textField.borderStyle = .none
             textField.textAlignment = .left
-            textField.attributedPlaceholder = placeholderWith(text: element.placeholder)
+            textField.attributedPlaceholder = placeholderForTextField(text: element.placeholder)
             textLabel.font = UIFont(name: "HelveticaNeue", size: 16)
             textLabel.textColor = UIColor(68, green: 68, blue: 70)
             textField.widthAnchor.constraint(equalToConstant: contentView.frame.width).isActive = true
@@ -82,7 +82,7 @@ class CustomPreChatFormView: UIView, UITextFieldDelegate {
             stackView.axis  = NSLayoutConstraint.Axis.vertical
             stackView.distribution  = UIStackView.Distribution.equalSpacing
             stackView.alignment = UIStackView.Alignment.leading
-            stackView.spacing   = 5
+            stackView.spacing   = -10
             stackView.tag = index
             
             stackView.addArrangedSubview(textLabel)
@@ -94,13 +94,20 @@ class CustomPreChatFormView: UIView, UITextFieldDelegate {
             stackView.leadingAnchor.constraint(equalTo: formStackView.leadingAnchor, constant: 15).isActive = true
             stackView.trailingAnchor.constraint(equalTo: formStackView.trailingAnchor, constant: -15).isActive = true
         }
-        formStackView.heightAnchor.constraint(equalToConstant: CGFloat((70*Kommunicate.leadArray.count))).isActive = true
+        formStackView.heightAnchor.constraint(equalToConstant: CGFloat((50*Kommunicate.leadArray.count))).isActive = true
+    }
+    
+    func placeholderForTextField(text: String) -> NSAttributedString {
+        return NSAttributedString(string: text, attributes: [
+            .foregroundColor: UIColor(red: 173, green: 168, blue: 168) ,
+            .font: UIFont(name: "HelveticaNeue-Medium", size: 16.0) ?? UIFont.systemFont(ofSize: 16.0)
+        ])
     }
     
     func placeholderWith(text: String) -> NSAttributedString {
         return NSAttributedString(string: text, attributes: [
             .foregroundColor: UIColor(red: 173, green: 168, blue: 168) ,
-            .font: UIFont(name: "HelveticaNeue-Medium", size: 16.0) ?? UIFont.systemFont(ofSize: 16.0)
+            .font: UIFont(name: "HelveticaNeue-Medium", size: 13.0) ?? UIFont.systemFont(ofSize: 13.0)
         ])
     }
     

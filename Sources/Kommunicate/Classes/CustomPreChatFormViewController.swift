@@ -268,7 +268,7 @@ open class CustomPreChatFormViewController: UIViewController {
     }
     
     private func setPlaceholder(for textField: UITextField) {
-        textField.attributedPlaceholder = formView.placeholderWith(text: Kommunicate.leadArray[textField.tag].placeholder)
+        textField.attributedPlaceholder = formView.placeholderForTextField(text: Kommunicate.leadArray[textField.tag].placeholder)
         for stackView in formView.formStackView.arrangedSubviews {
             if stackView.tag == textField.tag {
                 (stackView.subviews[0] as? UILabel)?.hide()
