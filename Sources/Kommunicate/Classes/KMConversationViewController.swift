@@ -449,6 +449,7 @@ extension KMConversationViewController {
     }
 
     private func showRatingView() {
+        ALKCustomEventHandler.trackEvent(trackingevent: ALKCustomEventHandler.ON_RATE_CONVERSATION_CLICK, value: nil)
         guard self.ratingVC == nil else { return }
         let ratingVC = RatingViewController()
         ratingVC.closeButtontapped = { [weak self] in
@@ -456,9 +457,12 @@ extension KMConversationViewController {
         }
         ratingVC.feedbackSubmitted = { [weak self] feedback in
             print("feedback submitted with rating: \(feedback.rating)")
+            ALKCustomEventHandler.trackEvent(trackingevent: ALKCustomEventHandler.ON_RATE_CONVERSATION_CLICK, value: String(feedback.rating.rawValue))
             self?.hideRatingView()
+            
             self?.submitFeedback(feedback: feedback)
         }
+       
         self.present(ratingVC, animated: true, completion: {[weak self] in
             self?.ratingVC = ratingVC
         })

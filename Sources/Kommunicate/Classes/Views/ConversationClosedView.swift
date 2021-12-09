@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import ApplozicSwift
 class ConversationClosedView: UIView {
 
     var restartTapped: (()->(Void))?
@@ -79,6 +79,7 @@ class ConversationClosedView: UIView {
     }
 
     @objc func restartConversationTapped() {
+        ALKCustomEventHandler.trackEvent(trackingevent: ALKCustomEventHandler.ON_RESTART_CONVERSATION_CLICK, value: nil)
         restartTapped?()
     }
 

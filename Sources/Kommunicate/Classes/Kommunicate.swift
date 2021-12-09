@@ -204,7 +204,7 @@ open class Kommunicate: NSObject,Localizable{
     open class func createConversation (
         conversation: KMConversation = KMConversationBuilder().build(),
         completion: @escaping (Result<String, KMConversationError>) -> ()) {
-
+        ALKCustomEventHandler.trackEvent(trackingevent: ALKCustomEventHandler.ON_START_NEW_CONVERSATION_CLICK, value: nil)
         guard ALDataNetworkConnection.checkDataNetworkAvailable() else {
             completion(.failure(KMConversationError.internet))
             return
@@ -604,5 +604,9 @@ open class Kommunicate: NSObject,Localizable{
             return NSError(domain:"User ID contains whitespace or newline characters", code:0, userInfo:nil)
         }
         return nil
+    }
+    
+    public static func subscribeCustomEvents(events: [ALKCustomEvent]){
+        ALKCustomEventHandler.setSubscribedEvents(eventsList: events)
     }
 }

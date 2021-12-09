@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import ApplozicSwift
 
 class FeedbackRatingView: UIView {
 
@@ -72,6 +73,7 @@ class FeedbackRatingView: UIView {
     private func setupView() {
         onRatingTap = { [weak self] tag in
             self?.selectedRatingTag = tag
+            ALKCustomEventHandler.trackEvent(trackingevent: ALKCustomEventHandler.ON_RATE_CONVERSATION_EMOTIONS_CLICK, value: String(tag))
         }
         ratingButtons.forEach { $0.ratingTapped = onRatingTap }
     }

@@ -8,7 +8,8 @@ target 'Kommunicate_Example' do
   pod 'Kommunicate', :path => '../'
   target 'Kommunicate_Tests' do
     inherit! :search_paths
-    pod 'ApplozicSwift'
+    pod 'ApplozicSwift', :git => 'https://github.com/Sathyan-Elangovan/ApplozicSwift.git', :branch => 'CM_709_iOS_Listner’
+
     pod 'FBSnapshotTestCase' , '~> 2.1.4'
     pod 'Nimble'
     pod 'Quick'

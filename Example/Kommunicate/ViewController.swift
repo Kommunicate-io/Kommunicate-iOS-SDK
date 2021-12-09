@@ -9,8 +9,14 @@
 #if os(iOS)
 import UIKit
 import Kommunicate
+import ApplozicSwift
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, ALKCustomEventCallback {
+   
+    func eventTriggered(eventType: String, data: ALKCustomEventData) {
+        print("Custom Event \(eventType) Event Data\(data)")
+    }
+    
 
     let activityIndicator = UIActivityIndicatorView(style: .gray)
 
@@ -25,7 +31,25 @@ class ViewController: UIViewController {
     @IBAction func launchConversation(_ sender: Any) {
         activityIndicator.startAnimating()
         view.isUserInteractionEnabled = false
-
+        let events = [
+            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_ATTACHMENT_ICON_CLICK, eventData: nil, eventCallBack: self),
+            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_FAQ_CLICK, eventData: nil, eventCallBack: self),
+            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_LOCATION_ICON_CLICK, eventData: nil, eventCallBack: self),
+            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_MESSAGE_SEND, eventData: nil, eventCallBack: self),
+            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_RESOLVE_CLICK, eventData: nil, eventCallBack: self),
+            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_NOTIFICATION_CLICK, eventData: nil, eventCallBack: self),
+            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_CHAT_OPEN_CLICK, eventData: nil, eventCallBack: self),
+            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_VOICE_ICON_CLICK, eventData: nil, eventCallBack: self),
+            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_RICH_MESSAGE_CLICK, eventData: nil, eventCallBack: self),
+            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_CHAT_CLOSE_CLICK, eventData: nil, eventCallBack: self),
+            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_SUBMIT_RATING_CLICK, eventData: nil, eventCallBack: self),
+            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_RATE_CONVERSATION_CLICK, eventData: nil, eventCallBack: self),
+            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_RESTART_CONVERSATION_CLICK, eventData: nil, eventCallBack: self),
+            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_START_NEW_CONVERSATION_CLICK, eventData: nil, eventCallBack: self),
+            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_RATE_CONVERSATION_EMOTIONS_CLICK, eventData: nil, eventCallBack: self),
+            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_GREETING_MESSAGE_NOTIFICATION_CLICK, eventData: nil, eventCallBack: self)
+        ]
+        Kommunicate.subscribeCustomEvents(events: events)
         Kommunicate.createAndShowConversation(from: self, completion: {
             error in
             self.activityIndicator.stopAnimating()

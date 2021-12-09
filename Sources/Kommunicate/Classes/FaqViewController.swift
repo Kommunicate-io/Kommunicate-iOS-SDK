@@ -18,6 +18,7 @@ public class FaqViewController: UIViewController, Localizable {
         self.url = url
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
+        ALKCustomEventHandler.trackEvent(trackingevent: ALKCustomEventHandler.ON_FAQ_CLICK, value: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
