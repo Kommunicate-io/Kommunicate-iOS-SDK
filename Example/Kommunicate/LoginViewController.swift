@@ -6,6 +6,7 @@
 //  Copyright © 2019 CocoaPods. All rights reserved.
 //
 
+#if os(iOS)
 import UIKit
 import Kommunicate
 
@@ -158,3 +159,4 @@ class LoginViewController: UIViewController {
         appDelegate?.appId = appId
     }
 }
+#endif

@@ -4,9 +4,81 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+## [6.3.1] - 2021-11-30
+
+## [6.3.0] - 2021-09-30
+
 ### Enhancements
-- [CM-507] Enable screen transition animations in all screens.
-- [CM-516] Add typing indicator for bot.
+- Update ApplozicSwift to 6.3.0
+- [TD-2111] Added a password field to PreChat Form View.
+- [TD-2099] Add support to update team for existing conversation
+
+## [6.2.0] - 2021-08-18Z
+### Fixes
+
+- [TD-1943] Fix for launch conversation error
+
+### Enhancements
+
+- [TD-1867] Updated bot detail API
+- [TD-1731] Added support to sync messages on chat screen opening
+
+## [6.1.0] - 2021-06-22
+
+### Enhancements
+
+- Moved Kommunicate folder under Sources for SPM support
+- [TD-1700] Added support to update group metadata while creating a conversation
+
+## [6.0.0] - 2021-05-04Z
+
+### Enhancements
+
+- [TD-1667] Added a configuration option that prevents the user from sending a message when a conversation is assigned to a bot.
+- [TD-1673] Now, the conversation assignee can be updated in an existing conversation using `Kommunicate.createConversation()` method.
+- [TD-1718]  Feedback input view now shows up when a resolved conversation is reopened and resolved again
+- [TD-1678] Added Swift Package Manager support for Kommunicate
+## [5.14.0] - 2021-03-24Z
+
+### Enhancements
+
+- [TD-1611] Now, we'll show/hide away message on agent change.
+### Fixes
+
+- [TD-1606] Fixed an issue where character limit was not shown when a conversation is assigned to a Dialogflow bot.
+
+## [5.13.0] - 2021-02-27
+
+### Enhancements
+
+- [CM-635] Added an option to set the regex for validating phone number in the pre-chat view.
+- [CM-633] Added config options to show and make certain fields mandatory in the pre-chat view.
+
+## [5.12.0] - 2021-02-16
+
+### Enhancements
+
+- [CM-581] Added an option to set the team ID when creating a new conversation.
+
+## [5.11.0] - 2021-02-01
+
+### Enhancements
+
+- [CM-579] Set default primary color and sent message's text color.
+
+## [5.10.0] - 2021-01-19
+
+### Enhancements
+
+- [CM-545] Added a check for whitespace and newline characters in the user ID.
+
+## [5.9.0] - 2020-12-04
+
+### Enhancements
+
+- [CM-502] Added an option to launch a conversation with conversation list in the background.
+- [CM-500] Added message character limit to limit the number of characters in a message.
+- [CM-557] Now, conversation feedback from the SDK will be shown in the Dashboard.
 
 ### Fixes
 - Fixed an issue where back button was not changing in RTL.
@@ -18,6 +90,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 - [CM-356] Added support for language change rich message.
 - [CM-474] Added send message API for sending text and rich messages.
 - [CM-519] Enabled document sharing in the default configuration.
+- [CM-507] Enable screen transition animations in all screens.
 
 ## [5.7.0] - 2020-09-10
 
@@ -179,6 +252,14 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 - [AL-2853]Added support for showing Away message.
 - [AL-3062]While creating a conversation, a default agent will be fetched and added. Now it's not required  to pass the agent Ids.
+- [AL-3188]Send notification when conversation view is launched and closed.
+- [AL-3188]Send notification when conversation view is launched and closed.
+- [AL-3188]Send notification when conversation view is launched and closed.
+- [AL-3188]Send notification when conversation view is launched and closed.
+- [AL-3188]Send notification when conversation view is launched and closed.
+- [AL-3188]Send notification when conversation view is launched and closed.
+- [AL-3188]Send notification when conversation view is launched and closed.
+- [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.

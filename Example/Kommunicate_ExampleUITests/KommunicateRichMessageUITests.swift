@@ -48,6 +48,10 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText1) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
+        guard app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.button].isEnabled else {
+            XCTFail("Button in Suggested Replies Template is disabled or not visible")
+            return
+        }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.button].tap()
         let suggestedRepliesResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.suggestedButtonResponse]
@@ -62,6 +66,10 @@ class KommunicateRichMessageUITests: XCTestCase {
         let linkResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.linkButtonResponse]
         waitFor(object: linkResponse) { $0.exists }
+        guard app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.goToGoogle].isEnabled else {
+            XCTFail("Link button is disabled or not visible")
+            return
+        }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.goToGoogle].tap()
     }
     
@@ -70,27 +78,14 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText3) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
+        guard app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.pay].isEnabled else {
+            XCTFail("Submit Button is disabled or not visible")
+            return
+        }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.pay].tap()
         let submitResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.submitButtonResponse]
         waitFor(object: submitResponse) { $0.exists }
-    }
-    
-    func testDifferentButtonTemplate() {
-        let app = beforeTest_Launch_NewConversation()
-        waitFor(object: app) { $0.exists }
-        app.typeText(GroupData.typeText4) // typing message
-        app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
-        let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
-        innerchatscreentableviewTable.staticTexts[RichMessageButtons.submitButton].tap()
-        innerchatscreentableviewTable.staticTexts[RichMessageButtons.suggestedReplyButton].tap()
-        let submitResponse =  app.tables[AppScreen.innerChatScreenTableView]
-            .textViews[RichMessageResponseText.differentButtonResponse2]
-        waitFor(object: submitResponse) { $0.exists }
-        let suggestedReplyResponse = app.tables[AppScreen.innerChatScreenTableView]
-            .textViews[RichMessageResponseText.differentButtonResponse1]
-        waitFor(object: suggestedReplyResponse) { $0.exists }
-        innerchatscreentableviewTable.staticTexts[RichMessageButtons.linkButton].tap()
     }
     
     func testImageTemplate() {
@@ -111,6 +106,10 @@ class KommunicateRichMessageUITests: XCTestCase {
         let listResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.listTemplateResponse]
         waitFor(object: listResponse) { $0.exists }
+        guard app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.seeUsOnFacebook].isEnabled else {
+            XCTFail("Button in List Template is disabled or not visible")
+            return
+        }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.seeUsOnFacebook].tap()
     }
     
@@ -122,6 +121,10 @@ class KommunicateRichMessageUITests: XCTestCase {
         let singleCardResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.singleCardResponse]
         waitFor(object: singleCardResponse) { $0.exists }
+        guard         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.linkButton].isEnabled else {
+            XCTFail("Button in Single card template is disabled or not visible")
+            return
+        }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.linkButton].tap()
     }
     

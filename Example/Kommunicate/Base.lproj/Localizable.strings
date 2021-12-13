@@ -14,18 +14,30 @@ PreChatViewNameTitle = "Name";
 PreChatViewEmailTitle = "Email";
 /* Phone number textfield's title label*/
 PreChatViewPhoneNumberTitle = "Phone number";
+/* Password textfield's title label*/
+PreChatViewPasswordTitle = "Password";
 /* Name textfield's placeholder*/
 PreChatViewNamePlaceholder = "Name";
 /* Email textfield's placeholder*/
 PreChatViewEmailPlaceholder = "Email";
 /* Phone number textfield title placeholder*/
 PreChatViewPhoneNumberPlaceholder = "Phone number";
+/* Password textfield title placeholder*/
+PreChatViewPasswordPlaceholder = "Password";
 /* Email and Phone number empty error message */
 PreChatViewEmailAndPhoneNumberEmptyError = "Please fill email or the phone number";
 /* Invalid Email error message */
 PreChatViewEmailInvalidError = "Please enter correct email address";
 /* Invalid Phone number error message */
 PreChatViewPhoneNumberInvalidError = "Please enter correct phone number";
+/* Empty Name error message */
+PreChatViewNameEmptyError = "Please enter your name";
+/* Empty Password error message */
+PreChatViewPasswordEmptyError = "Please enter your password";
+/* Empty Email error message */
+PreChatViewEmailEmptyError = "Please enter your email address";
+/* Empty Phone number error message */
+PreChatViewPhoneNumberEmptyError = "Please enter your phone number";
 /* Send instructions button title */
 PreChatViewSendInstructionsButtonTitle = "SUBMIT";
 /* Get Started description on top */

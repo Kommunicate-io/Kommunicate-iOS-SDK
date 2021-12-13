@@ -1,16 +1,14 @@
 Pod::Spec.new do |s|
   s.name = 'Kommunicate'
-  s.version = '5.8.0'
+  s.version = '6.3.1'
   s.summary = 'Kommunicate iOS SDK for customer support.'
   s.homepage = 'https://github.com/Kommunicate-io/Kommunicate-iOS-SDK'
   s.license = { :type => 'BSD-3-Clause', :file => 'LICENSE' }
   s.author = { 'Mukesh Thawani' => 'mukesh@applozic.com' }
   s.source = { :git => 'https://github.com/Kommunicate-io/Kommunicate-iOS-SDK.git', :tag => s.version }
-
-  s.social_media_url = 'https://twitter.com/kommunicateio'
-  s.ios.deployment_target = '10.0'
+  s.ios.deployment_target = '12.0'
   s.swift_version = '5.0'
-  s.source_files = 'Kommunicate/Classes/**/*.{swift}'
-  s.resources = 'Kommunicate/Assets/**/*{lproj,storyboard,xib,xcassets,json,strings}'
-  s.dependency 'ApplozicSwift', '~> 5.11.0'
+  s.source_files = 'Sources/Kommunicate/Classes/**/*.{swift}'
+  s.resources = 'Sources/Resources/**/*{lproj,storyboard,xib,xcassets,json,strings}'
+  s.dependency 'ApplozicSwift', '~> 6.4.0'
 end

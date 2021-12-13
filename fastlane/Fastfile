@@ -46,7 +46,7 @@ platform :ios do
     stamp_changelog(
       section_identifier: version,
       git_tag: version,
-      stamp_date: "true"
+      should_stamp_date: "true"
     )
   end
 

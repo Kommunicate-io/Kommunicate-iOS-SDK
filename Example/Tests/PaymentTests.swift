@@ -8,7 +8,7 @@
 
 import XCTest
 @testable import Kommunicate
-import Applozic
+import ApplozicCore
 
 class PaymentTests: XCTestCase {
 

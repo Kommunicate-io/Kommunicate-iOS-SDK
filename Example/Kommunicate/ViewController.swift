@@ -6,6 +6,7 @@
 //  Copyright (c) 2018 mukeshthawani. All rights reserved.
 //
 
+#if os(iOS)
 import UIKit
 import Kommunicate
 
@@ -60,3 +61,4 @@ class ViewController: UIViewController {
         }
     }
 }
+#endif
