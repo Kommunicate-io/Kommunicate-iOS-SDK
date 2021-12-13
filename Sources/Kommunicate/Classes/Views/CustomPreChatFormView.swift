@@ -71,6 +71,12 @@ class CustomPreChatFormView: UIView, UITextFieldDelegate {
             textField.widthAnchor.constraint(equalToConstant: contentView.frame.width).isActive = true
             textField.heightAnchor.constraint(equalToConstant: 22).isActive = true
             textField.tag = index
+            textField.autocapitalizationType = .none
+            textField.autocorrectionType = .no
+            textField.smartDashesType = .no
+            textField.smartInsertDeleteType = .no
+            textField.smartQuotesType = .no
+            textField.spellCheckingType = .no
             
             let view = UIView()
             view.backgroundColor = UIColor(218, green: 215, blue: 215)

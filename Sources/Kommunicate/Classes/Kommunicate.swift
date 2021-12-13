@@ -103,8 +103,6 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
     }
 
     static var applozicClientType: ApplozicClient.Type = ApplozicClient.self
-    static let preChatVC = KMPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
-    static let customPreChatVC = CustomPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
 
     public override init() {
         super.init()
@@ -463,21 +461,23 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                     if !KMUserDefaultHandler.isLoggedIn() {
                         DispatchQueue.main.async {
                             if !Kommunicate.leadArray.isEmpty {
-                                Kommunicate.customPreChatVC.submitButtonTapped = {
-                                    Kommunicate().userSubmittedResponse(name: Kommunicate.customPreChatVC.formView.name, email: Kommunicate.customPreChatVC.formView.email, phoneNumber: Kommunicate.customPreChatVC.formView.phoneNumber, password: "")
+                                let customPreChatVC = CustomPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
+                                customPreChatVC.submitButtonTapped = {
+                                    Kommunicate().userSubmittedResponse(name: customPreChatVC.formView.name, email: customPreChatVC.formView.email, phoneNumber: customPreChatVC.formView.phoneNumber, password: "")
                                 }
-                                Kommunicate.customPreChatVC.closeButtonTapped = {
+                                customPreChatVC.closeButtonTapped = {
                                     Kommunicate().closeButtonTapped()
                                 }
-                                viewController.present(Kommunicate.customPreChatVC, animated: false, completion: nil)
+                                viewController.present(customPreChatVC, animated: false, completion: nil)
                             } else {
-                                Kommunicate.preChatVC.submitButtonTapped = {
-                                    Kommunicate().userSubmittedResponse(name: Kommunicate.preChatVC.formView.nameTextField.text!, email: Kommunicate.preChatVC.formView.emailTextField.text!, phoneNumber: Kommunicate.preChatVC.formView.phoneNumberTextField.text!, password: "")
+                                let preChatVC = KMPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
+                                preChatVC.submitButtonTapped = {
+                                    Kommunicate().userSubmittedResponse(name: preChatVC.formView.nameTextField.text!, email: preChatVC.formView.emailTextField.text!, phoneNumber: preChatVC.formView.phoneNumberTextField.text!, password: "")
                                 }
-                                Kommunicate.preChatVC.closeButtonTapped = {
+                                preChatVC.closeButtonTapped = {
                                     Kommunicate().closeButtonTapped()
                                 }
-                                viewController.present(Kommunicate.preChatVC, animated: false, completion: nil)
+                                viewController.present(preChatVC, animated: false, completion: nil)
                             }
                         }
                     }
@@ -556,35 +556,38 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
     }
     
     public func userSubmittedResponse(name: String, email: String, phoneNumber: String, password: String) {
-            
-            guard let appID = KMUserDefaultHandler.getApplicationKey() else { return }
-            Kommunicate.presentingViewController.dismiss(animated: false, completion: nil)
-            let kmUser = KMUser.init()
-            kmUser.applicationId = appID
-            if(!email.isEmpty){
-                kmUser.userId = name
-                kmUser.email = email
-            }else if(!phoneNumber.isEmpty){
-                kmUser.contactNumber = phoneNumber
-            }
+        
+        guard let appID = KMUserDefaultHandler.getApplicationKey() else { return }
+        Kommunicate.presentingViewController.dismiss(animated: false, completion: nil)
+        let kmUser = KMUser.init()
+        kmUser.applicationId = appID
+        if !email.isEmpty {
+            kmUser.userId = email
+            kmUser.email = email
+        } else {
+            kmUser.userId = name
+        }
+        if !phoneNumber.isEmpty {
             kmUser.contactNumber = phoneNumber
-            kmUser.displayName = name
-            Kommunicate.setup(applicationId: appID)
-            Kommunicate.registerUser(kmUser, completion: {
-                response, error in
-                guard error == nil else {
-                    print("[REGISTRATION] Kommunicate user registration error: %@", error.debugDescription)
-                    return
+        }
+        kmUser.contactNumber = phoneNumber
+        kmUser.displayName = name
+        
+        Kommunicate.setup(applicationId: appID)
+        Kommunicate.registerUser(kmUser, completion: {
+            response, error in
+            guard error == nil else {
+                print("[REGISTRATION] Kommunicate user registration error: %@", error.debugDescription)
+                return
+            }
+            print("User registration was successful: %@ \(String(describing: response?.isRegisteredSuccessfully()))")
+            Kommunicate.createAndShowConversation(from: Kommunicate.presentingViewController, completion: {
+                error in
+                if error != nil {
+                    print("Error while launching conversation")
                 }
-                print("User registration was successful: %@ \(String(describing: response?.isRegisteredSuccessfully()))")
-                Kommunicate.createAndShowConversation(from: Kommunicate.presentingViewController, completion: {
-                    error in
-                    if error != nil {
-                        print("Error while launching conversation")
-                    }
-                })
             })
-
+        })
     }
     
     public func closeButtonTapped() {
