@@ -4,6 +4,8 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+- [CM-743] Updated reference images for snapshot tests
+
 ## [6.3.1] - 2021-11-30
 
 ## [6.3.0] - 2021-09-30
