@@ -185,30 +185,26 @@ open class KMConversationViewController: ALKConversationViewController {
         for message in messages {
             if viewModel.channelKey != nil, viewModel.channelKey == message.groupId {
                 let delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval
-                if delayInterval > 0 {
-                    let alContact = contactService.loadContact(byKey: "userId", value:  message.to)
-                    if alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue) {
-                        updateTyingStatus(status: true, userId: message.to)
-                        DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.milliseconds(delayInterval)) {
-                            self.viewModel.addMessagesToList([message])
-                        }
-                    } else {
-                        filteredArray.append(message)
+                UserDefaults.standard.set((delayInterval * messages.count), forKey: "botDelayInterval")
+                let alContact = contactService.loadContact(byKey: "userId", value:  message.to)
+                if delayInterval > 0 && alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue){
+                    showTypingLabel(status: true, userId: message.to)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.milliseconds(delayInterval * messages.count)) {
+                        self.viewModel.addMessagesToList([message])
                     }
                 } else {
                     filteredArray.append(message)
                 }
-            } else if message.channelKey == nil, viewModel.channelKey == nil, viewModel.contactId == message.to {
+            } else {
                 filteredArray.append(message)
             }
-        }
-
-        if !filteredArray.isEmpty {
-            self.viewModel.addMessagesToList([filteredArray])
+            if !filteredArray.isEmpty {
+                self.viewModel.addMessagesToList([filteredArray])
+            }
         }
     }
 
-    @objc func pushNotification(notification: NSNotification) {
+    @objc open override func pushNotification(notification: NSNotification) {
         print("Push notification received in KMConversationViewController: ", notification.object ?? "")
         let pushNotificationHelper = KMPushNotificationHelper(configuration, kmConversationViewConfiguration)
         let (notifData, _) = pushNotificationHelper.notificationInfo(notification as Notification)

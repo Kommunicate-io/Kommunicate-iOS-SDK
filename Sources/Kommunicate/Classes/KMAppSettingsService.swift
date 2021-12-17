@@ -43,7 +43,6 @@ class KMAppSettingService {
     }
 
     func updateAppsettings(chatWidgetResponse: ChatWidgetResponse?) {
-<<<<<<< HEAD:Kommunicate/Classes/KMAppSettingsService.swift
 
         guard let chatWidget = chatWidgetResponse else {
             return
@@ -52,12 +51,10 @@ class KMAppSettingService {
         KMAppUserDefaultHandler.shared.botMessageDelayInterval = chatWidget.botMessageDelayInterval ?? 0
         
         guard var primaryColor = chatWidget.primaryColor else {
-=======
         guard let chatWidget = chatWidgetResponse,
               var primaryColor = chatWidget.primaryColor
         else {
             setupDefaultSettings()
->>>>>>> 7099857a9f2391a6deef34f266a7c58d286790f3:Sources/Kommunicate/Classes/KMAppSettingsService.swift
             return
         }
         primaryColor = primaryColor.replacingOccurrences(of: "#", with: "")
@@ -76,6 +73,8 @@ class KMAppSettingService {
         appSettings.showPoweredBy = chatWidget.showPoweredBy ?? false
         appSettings.hidePostCTAEnabled = chatWidget.hidePostCTAEnabled ?? false
         appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
+            return
+    }
     }
 
     func clearAppSettingsData()  {
