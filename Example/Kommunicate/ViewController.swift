@@ -13,8 +13,8 @@ import ApplozicSwift
 
 class ViewController: UIViewController, ALKCustomEventCallback {
    
-    func eventTriggered(eventType: ALKCustomEventMap, data: [String : Any]?) {
-        print("Custom Event \(eventType.rawValue) data \(String(describing: data))")
+    func eventTriggered(eventName: ALKCustomEventMap, data: [String : Any]?) {
+        print("Custom Event \(eventName.rawValue) data \(String(describing: data))")
     }
     let activityIndicator = UIActivityIndicatorView(style: .gray)
 
