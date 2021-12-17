@@ -204,7 +204,8 @@ open class Kommunicate: NSObject,Localizable{
     open class func createConversation (
         conversation: KMConversation = KMConversationBuilder().build(),
         completion: @escaping (Result<String, KMConversationError>) -> ()) {
-        ALKCustomEventHandler.trackEvent(trackingevent: ALKCustomEventHandler.ON_START_NEW_CONVERSATION_CLICK, value: nil)
+//        ALKCustomEventHandler.trackEvent(trackingevent: ALKCustomEventHandler.ON_START_NEW_CONVERSATION_CLICK, value: nil)
+      
         guard ALDataNetworkConnection.checkDataNetworkAvailable() else {
             completion(.failure(KMConversationError.internet))
             return
@@ -259,6 +260,7 @@ open class Kommunicate: NSObject,Localizable{
                             completion(.failure(KMConversationError.api(response.error)))
                             return;
                         }
+                        ALKCustomEventHandler.publish(triggeredEvent: ALKCustomEventMap.EVENT_ON_START_NEW_CONVERSATION_CLICK, data: ["UserSelection":["ClientConversationId":conversation.clientConversationId]])
                         completion(.success(conversationId))
                     }
                 })

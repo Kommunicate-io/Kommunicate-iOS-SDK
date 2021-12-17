@@ -79,7 +79,7 @@ class ConversationClosedView: UIView {
     }
 
     @objc func restartConversationTapped() {
-        ALKCustomEventHandler.trackEvent(trackingevent: ALKCustomEventHandler.ON_RESTART_CONVERSATION_CLICK, value: nil)
+        ALKCustomEventHandler.publish(triggeredEvent: ALKCustomEventMap.EVENT_ON_RESTART_CONVERSATION_CLICK, data: nil)
         restartTapped?()
     }
 

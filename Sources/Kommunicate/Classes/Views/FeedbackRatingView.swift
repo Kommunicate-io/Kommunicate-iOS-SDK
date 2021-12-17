@@ -73,7 +73,18 @@ class FeedbackRatingView: UIView {
     private func setupView() {
         onRatingTap = { [weak self] tag in
             self?.selectedRatingTag = tag
-            ALKCustomEventHandler.trackEvent(trackingevent: ALKCustomEventHandler.ON_RATE_CONVERSATION_EMOTIONS_CLICK, value: String(tag))
+//
+            switch tag {
+            case 1:
+                ALKCustomEventHandler.publish(triggeredEvent: ALKCustomEventMap.EVENT_ON_RATE_CONVERSATION_EMOTIONS_CLICK, data: ["UserSelection":["Emoji Clicked": ALKCustomEventHandler.CSATRATING.POOR]])
+            case 5:
+                ALKCustomEventHandler.publish(triggeredEvent: ALKCustomEventMap.EVENT_ON_RATE_CONVERSATION_EMOTIONS_CLICK, data: ["UserSelection":["Emoji Clicked": ALKCustomEventHandler.CSATRATING.AVERAGE]])
+            case 10:
+                ALKCustomEventHandler.publish(triggeredEvent: ALKCustomEventMap.EVENT_ON_RATE_CONVERSATION_EMOTIONS_CLICK, data: ["UserSelection":["Emoji Clicked": ALKCustomEventHandler.CSATRATING.GREAT]])
+            default:
+                print("Emoji value is not registered!!")
+            }
+
         }
         ratingButtons.forEach { $0.ratingTapped = onRatingTap }
     }
