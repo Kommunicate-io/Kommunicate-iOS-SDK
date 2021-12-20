@@ -8,7 +8,7 @@ target 'Kommunicate_Example' do
   pod 'Kommunicate', :path => '../'
   target 'Kommunicate_Tests' do
     inherit! :search_paths
-    pod 'ApplozicSwift', :git => 'https://github.com/Sathyan-Elangovan/KommunicateChatUI-iOS-SDK.git', :branch => 'CM_709_iOS_Listner’, :commit => 'dc7eb65eb711d977fe4841997e877521a7db9382'
+    pod 'ApplozicSwift', :git => 'https://github.com/Sathyan-Elangovan/KommunicateChatUI-iOS-SDK.git', :branch => 'CM_709_iOS_Listner’, :commit => '1653c90774def6eb95166c74b6e2359c245f6d32'
 
     pod 'FBSnapshotTestCase' , '~> 2.1.4'
     pod 'Nimble'
