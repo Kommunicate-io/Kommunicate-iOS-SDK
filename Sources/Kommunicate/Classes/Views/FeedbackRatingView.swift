@@ -76,11 +76,11 @@ class FeedbackRatingView: UIView {
 //
             switch tag {
             case 1:
-                ALKCustomEventHandler.publish(triggeredEvent: ALKCustomEventMap.EVENT_ON_RATE_CONVERSATION_EMOTIONS_CLICK, data: ["UserSelection":["Emoji Clicked": ALKCustomEventHandler.CSATRATING.POOR]])
+                ALKCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.rateConversationEmotionsClick, data: ["UserSelection":["Emoji Clicked": ALKCustomEventHandler.CSATRating.poor]])
             case 5:
-                ALKCustomEventHandler.publish(triggeredEvent: ALKCustomEventMap.EVENT_ON_RATE_CONVERSATION_EMOTIONS_CLICK, data: ["UserSelection":["Emoji Clicked": ALKCustomEventHandler.CSATRATING.AVERAGE]])
+                ALKCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.rateConversationEmotionsClick, data: ["UserSelection":["Emoji Clicked": ALKCustomEventHandler.CSATRating.average]])
             case 10:
-                ALKCustomEventHandler.publish(triggeredEvent: ALKCustomEventMap.EVENT_ON_RATE_CONVERSATION_EMOTIONS_CLICK, data: ["UserSelection":["Emoji Clicked": ALKCustomEventHandler.CSATRATING.GREAT]])
+                ALKCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.rateConversationEmotionsClick, data: ["UserSelection":["Emoji Clicked": ALKCustomEventHandler.CSATRating.great]])
             default:
                 print("Emoji value is not registered!!")
             }

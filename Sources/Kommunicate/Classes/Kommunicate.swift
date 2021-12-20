@@ -260,7 +260,7 @@ open class Kommunicate: NSObject,Localizable{
                             completion(.failure(KMConversationError.api(response.error)))
                             return;
                         }
-                        ALKCustomEventHandler.publish(triggeredEvent: ALKCustomEventMap.EVENT_ON_START_NEW_CONVERSATION_CLICK, data: ["UserSelection":["ClientConversationId":conversation.clientConversationId]])
+                        ALKCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.newConversation, data: ["UserSelection":["ClientConversationId":conversation.clientConversationId]])
                         completion(.success(conversationId))
                     }
                 })
@@ -607,8 +607,13 @@ open class Kommunicate: NSObject,Localizable{
         }
         return nil
     }
-    
-    public static func subscribeCustomEvents(events: [ALKCustomEvent]){
-        ALKCustomEventHandler.setSubscribedEvents(eventsList: events)
+    /**
+     Subscribe Chat Events
+     - Parameters:
+     - events: list of events to subscribe.
+     - callback: ALKCustomEventCallback to send subscribed event's data
+     */
+    public static func subscribeCustomEvents(events: [CustomEvent],callback: ALKCustomEventCallback){
+        ALKCustomEventHandler.shared.setSubscribedEvents(eventsList: events,eventDelegate: callback)
     }
 }

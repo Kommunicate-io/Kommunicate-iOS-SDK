@@ -13,7 +13,7 @@ import ApplozicSwift
 
 class ViewController: UIViewController, ALKCustomEventCallback {
    
-    func eventTriggered(eventName: ALKCustomEventMap, data: [String : Any]?) {
+    func eventTriggered(eventName: CustomEvent, data: [String : Any]?) {
         print("Custom Event \(eventName.rawValue) data \(String(describing: data))")
     }
     let activityIndicator = UIActivityIndicatorView(style: .gray)
@@ -29,25 +29,23 @@ class ViewController: UIViewController, ALKCustomEventCallback {
     @IBAction func launchConversation(_ sender: Any) {
         activityIndicator.startAnimating()
         view.isUserInteractionEnabled = false
-        let events = [
-            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_ATTACHMENT_ICON_CLICK, eventCallBack: self),
-            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_FAQ_CLICK,  eventCallBack: self),
-            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_LOCATION_ICON_CLICK,  eventCallBack: self),
-            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_MESSAGE_SEND,  eventCallBack: self),
-            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_RESOLVE_CLICK,  eventCallBack: self),
-            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_NOTIFICATION_CLICK,  eventCallBack: self),
-            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_CHAT_OPEN_CLICK,  eventCallBack: self),
-            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_VOICE_ICON_CLICK,  eventCallBack: self),
-            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_RICH_MESSAGE_CLICK,  eventCallBack: self),
-            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_CHAT_CLOSE_CLICK,  eventCallBack: self),
-            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_SUBMIT_RATING_CLICK,  eventCallBack: self),
-            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_RATE_CONVERSATION_CLICK,  eventCallBack: self),
-            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_RESTART_CONVERSATION_CLICK,  eventCallBack: self),
-            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_START_NEW_CONVERSATION_CLICK,  eventCallBack: self),
-            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_RATE_CONVERSATION_EMOTIONS_CLICK,  eventCallBack: self),
-            ALKCustomEvent(eventName: ALKCustomEventMap.EVENT_ON_GREETING_MESSAGE_NOTIFICATION_CLICK,  eventCallBack: self)
-        ]
-        Kommunicate.subscribeCustomEvents(events: events)
+       
+        let eventList = [
+            CustomEvent.attachmentClick,
+            CustomEvent.faqClick,
+            CustomEvent.locationClick,
+            CustomEvent.messageSend,
+            CustomEvent.resolveClick,
+            CustomEvent.notificationClick,
+            CustomEvent.voiceClick,
+            CustomEvent.richMessageClick,
+            CustomEvent.submitRatingClick,
+            CustomEvent.rateConversationClick,
+            CustomEvent.restartConversationClick,
+            CustomEvent.newConversation,
+            CustomEvent.rateConversationEmotionsClick]
+            
+        Kommunicate.subscribeCustomEvents(events: eventList, callback: self)
       
         Kommunicate.createAndShowConversation(from: self, completion: {
             error in
