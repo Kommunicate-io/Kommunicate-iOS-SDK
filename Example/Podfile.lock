@@ -19,7 +19,7 @@ PODS:
   - iOSSnapshotTestCase/SwiftSupport (8.0.0):
     - iOSSnapshotTestCase/Core
   - Kingfisher (7.0.0)
-  - Kommunicate (6.3.0):
+  - Kommunicate (6.3.1):
     - ApplozicSwift (~> 6.4.0)
   - Nimble (9.2.1)
   - Nimble-Snapshots (9.3.0):
@@ -31,7 +31,7 @@ PODS:
   - SwipeCellKit (2.7.1)
 
 DEPENDENCIES:
-  - ApplozicSwift
+  - ApplozicSwift (from `https://github.com/Sathyan-Elangovan/KommunicateChatUI-iOS-SDK.git`, commit `1653c90774def6eb95166c74b6e2359c245f6d32`, branch `CM_709_iOS_Listner`)
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - Nimble
@@ -41,7 +41,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - ApplozicCore
-    - ApplozicSwift
     - FBSnapshotTestCase
     - iOSSnapshotTestCase
     - Kingfisher
@@ -51,8 +50,17 @@ SPEC REPOS:
     - SwipeCellKit
 
 EXTERNAL SOURCES:
+  ApplozicSwift:
+    :branch: CM_709_iOS_Listner
+    :commit: 1653c90774def6eb95166c74b6e2359c245f6d32
+    :git: https://github.com/Sathyan-Elangovan/KommunicateChatUI-iOS-SDK.git
   Kommunicate:
     :path: "../"
+
+CHECKOUT OPTIONS:
+  ApplozicSwift:
+    :commit: 1653c90774def6eb95166c74b6e2359c245f6d32
+    :git: https://github.com/Sathyan-Elangovan/KommunicateChatUI-iOS-SDK.git
 
 SPEC CHECKSUMS:
   ApplozicCore: 120b38ee62ae0edc54a7c40e7d5a5390d7d751b2
@@ -60,12 +68,12 @@ SPEC CHECKSUMS:
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: a670511f9ee3829c2b9c23e6e68f315fd7b6790f
   Kingfisher: 5efc54fec3980f92354898532e562cc17f31efb4
-  Kommunicate: b7e902088e632255c7d8062c754a2ac89dc692de
+  Kommunicate: d92210786b7fbf5575ca9e333d73dd4ba0d4b2b6
   Nimble: e7e615c0335ee4bf5b0d786685451e62746117d5
   Nimble-Snapshots: 97270cd48f0e6eebd6c80ccf7dd35d4e57fb9997
   Quick: 6473349e43b9271a8d43839d9ba1c442ed1b7ac4
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: af6bd5c367ca72410ceb8e60f1c01e497638a518
+PODFILE CHECKSUM: 29304ace93c02a9cd91fe700f2bb86c7d5142216
 
 COCOAPODS: 1.11.2

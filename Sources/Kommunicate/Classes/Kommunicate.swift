@@ -33,6 +33,8 @@ public typealias KMConfiguration = ALKConfiguration
 public typealias KMMessageStyle = ALKMessageStyle
 public typealias KMBaseNavigationViewController = ALKBaseNavigationViewController
 public typealias KMChatBarConfiguration = ALKChatBarConfiguration
+public typealias KMCustomEventHandler = ALKCustomEventHandler
+
 let faqIdentifier =  11223346
 
 enum KMLocalizationKey {
@@ -204,9 +206,8 @@ open class Kommunicate: NSObject,Localizable{
     open class func createConversation (
         conversation: KMConversation = KMConversationBuilder().build(),
         completion: @escaping (Result<String, KMConversationError>) -> ()) {
-//        ALKCustomEventHandler.trackEvent(trackingevent: ALKCustomEventHandler.ON_START_NEW_CONVERSATION_CLICK, value: nil)
-      
-        guard ALDataNetworkConnection.checkDataNetworkAvailable() else {
+        
+              guard ALDataNetworkConnection.checkDataNetworkAvailable() else {
             completion(.failure(KMConversationError.internet))
             return
         }
@@ -260,7 +261,7 @@ open class Kommunicate: NSObject,Localizable{
                             completion(.failure(KMConversationError.api(response.error)))
                             return;
                         }
-                        ALKCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.newConversation, data: ["UserSelection":["ClientConversationId":conversation.clientConversationId]])
+                        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.newConversation, data: ["UserSelection":["ClientConversationId":conversation.clientConversationId]])
                         completion(.success(conversationId))
                     }
                 })
@@ -614,6 +615,6 @@ open class Kommunicate: NSObject,Localizable{
      - callback: ALKCustomEventCallback to send subscribed event's data
      */
     public static func subscribeCustomEvents(events: [CustomEvent],callback: ALKCustomEventCallback){
-        ALKCustomEventHandler.shared.setSubscribedEvents(eventsList: events,eventDelegate: callback)
+        KMCustomEventHandler.shared.setSubscribedEvents(eventsList: events,eventDelegate: callback)
     }
 }
