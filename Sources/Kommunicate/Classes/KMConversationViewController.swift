@@ -393,21 +393,36 @@ open class KMConversationViewController: ALKConversationViewController {
                                       metadata: [String : Any]?,
                                       languageCode language: String?) {
         do {
-            var customMetadata = metadata ?? [String: Any]()
+                let customMetadata = metadata ?? [String: Any]()
 
-            if let updatedLanguage = language {
-                try configuration.updateUserLanguage(tag: updatedLanguage)
-            }
+                if let updatedLanguage = language {
+                    try configuration.updateUserLanguage(tag: updatedLanguage)
+                }
 
-            guard let messageMetadata = configuration.messageMetadata as? [String: Any] else {
-                viewModel.send(message: text, metadata: customMetadata)
-                return
+                guard let messageMetadata = configuration.messageMetadata as? [String: Any],let jsonData = messageMetadata["KM_CHAT_CONTEXT"] as? String, let data =  jsonData.data(using: .utf8) else {
+                    viewModel.send(message: text, metadata: customMetadata)
+                    return
+                }
+                   
+                let myJson = try JSONSerialization.jsonObject(with: data,options: JSONSerialization.ReadingOptions.allowFragments) as Any
+                var chatContextData: [String:Any]?
+
+                if let dict = myJson as? [String: Any] {
+                    chatContextData = dict
+                }
+            
+                if !customMetadata.isEmpty{
+                    var replyMetaData = customMetadata["KM_CHAT_CONTEXT"] as? [String: Any]
+                    replyMetaData?.merge(chatContextData ?? [String:Any]()) { $1 }
+                    let  metaDataToSend = ["KM_CHAT_CONTEXT":replyMetaData]
+                     viewModel.send(message: text, metadata: metaDataToSend)
+                }else{
+                    viewModel.send(message: text, metadata: chatContextData)
+                }
+                   
+            } catch {
+                print("Error while sending quick reply message %@", error.localizedDescription)
             }
-            customMetadata.merge(messageMetadata) { $1 }
-            viewModel.send(message: text, metadata: customMetadata)
-        } catch {
-            print("Error while sending quick reply message %@", error.localizedDescription)
-        }
     }
 }
 
