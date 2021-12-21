@@ -399,26 +399,23 @@ open class KMConversationViewController: ALKConversationViewController {
                     try configuration.updateUserLanguage(tag: updatedLanguage)
                 }
 
-                guard let messageMetadata = configuration.messageMetadata as? [String: Any],let jsonData = messageMetadata["KM_CHAT_CONTEXT"] as? String,!jsonData.isEmpty ,let data =  jsonData.data(using: .utf8) else {
+                guard let messageMetadata = configuration.messageMetadata as? [String: Any],
+                      let jsonData = messageMetadata[ChannelMetadataKeys.chatContext] as? String,!jsonData.isEmpty,
+                      let data =  jsonData.data(using: .utf8),
+                      let chatContextData = try JSONSerialization.jsonObject(with: data,options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any]
+                else {
                         viewModel.send(message: text, metadata: customMetadata)
                         return
                     }
-           
+        
                 if customMetadata.isEmpty {
                     viewModel.send(message: text, metadata: messageMetadata)
                     return
                 }
-            
-                guard  let chatContextData = try JSONSerialization.jsonObject(with: data,options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any] else {
-                    viewModel.send(message: text, metadata: customMetadata)
-                    return
-                }
-            
-                var replyMetaData = customMetadata["KM_CHAT_CONTEXT"] as? [String: Any]
+                var replyMetaData = customMetadata[ChannelMetadataKeys.chatContext] as? [String: Any]
                 replyMetaData?.merge(chatContextData) { $1 }
-                let  metaDataToSend = ["KM_CHAT_CONTEXT":replyMetaData]
+                let  metaDataToSend = [ChannelMetadataKeys.chatContext:replyMetaData]
                 viewModel.send(message: text, metadata: metaDataToSend)
-
         } catch {
             print("Error while sending quick reply message %@", error.localizedDescription)
         }
