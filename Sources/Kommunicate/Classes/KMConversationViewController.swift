@@ -399,30 +399,29 @@ open class KMConversationViewController: ALKConversationViewController {
                     try configuration.updateUserLanguage(tag: updatedLanguage)
                 }
 
-                guard let messageMetadata = configuration.messageMetadata as? [String: Any],let jsonData = messageMetadata["KM_CHAT_CONTEXT"] as? String, let data =  jsonData.data(using: .utf8) else {
+                guard let messageMetadata = configuration.messageMetadata as? [String: Any],let jsonData = messageMetadata["KM_CHAT_CONTEXT"] as? String,!jsonData.isEmpty ,let data =  jsonData.data(using: .utf8) else {
+                        viewModel.send(message: text, metadata: customMetadata)
+                        return
+                    }
+           
+                if customMetadata.isEmpty {
+                    viewModel.send(message: text, metadata: messageMetadata)
+                    return
+                }
+            
+                guard  let chatContextData = try JSONSerialization.jsonObject(with: data,options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any] else {
                     viewModel.send(message: text, metadata: customMetadata)
                     return
                 }
-                   
-                let myJson = try JSONSerialization.jsonObject(with: data,options: JSONSerialization.ReadingOptions.allowFragments) as Any
-                var chatContextData: [String:Any]?
-
-                if let dict = myJson as? [String: Any] {
-                    chatContextData = dict
-                }
             
-                if !customMetadata.isEmpty{
-                    var replyMetaData = customMetadata["KM_CHAT_CONTEXT"] as? [String: Any]
-                    replyMetaData?.merge(chatContextData ?? [String:Any]()) { $1 }
-                    let  metaDataToSend = ["KM_CHAT_CONTEXT":replyMetaData]
-                     viewModel.send(message: text, metadata: metaDataToSend)
-                }else{
-                    viewModel.send(message: text, metadata: chatContextData)
-                }
-                   
-            } catch {
-                print("Error while sending quick reply message %@", error.localizedDescription)
-            }
+                var replyMetaData = customMetadata["KM_CHAT_CONTEXT"] as? [String: Any]
+                replyMetaData?.merge(chatContextData) { $1 }
+                let  metaDataToSend = ["KM_CHAT_CONTEXT":replyMetaData]
+                viewModel.send(message: text, metadata: metaDataToSend)
+
+        } catch {
+            print("Error while sending quick reply message %@", error.localizedDescription)
+        }
     }
 }
 
