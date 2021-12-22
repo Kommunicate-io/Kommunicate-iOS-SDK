@@ -39,12 +39,13 @@ open class KMPreChatFormViewController: UIViewController {
         public init() {}
     }
 
-    public weak var delegate: KMPreChatFormViewControllerDelegate!
+    public weak var delegate: KMPreChatFormViewControllerDelegate?
     public var preChatConfiguration: PreChatConfiguration!
 
     var configuration: KMConfiguration!
     var formView: KMPreChatUserFormView!
-    var sendInstructionsTapped:(()->())?
+    public var submitButtonTapped:(() -> Void)?
+    public var closeButtonTapped:(() -> Void)?
 
     struct LocalizationKey {
 
@@ -250,6 +251,8 @@ open class KMPreChatFormViewController: UIViewController {
             // Display error message
             formView.showErrorLabelWith(message: error.localizationDescription(fromFileName: configuration.localizedStringFileName))
         case .success:
+            submitButtonTapped?()
+            guard let delegate = delegate else { return }
             delegate.userSubmittedResponse(
                 name: formView.nameTextField.text ?? "",
                 email: formView.emailTextField.text ?? "",
@@ -259,6 +262,8 @@ open class KMPreChatFormViewController: UIViewController {
     }
 
     @objc func closeButtonAction(_ button: UIButton) {
+        closeButtonTapped?()
+        guard let delegate = delegate else { return }
         delegate.closeButtonTapped()
     }
 
@@ -327,21 +332,24 @@ open class KMPreChatFormViewController: UIViewController {
     }
 
     @objc func keyboardWillHide() {
-        let defaultTopPadding = CGFloat(86)
-        formView.topConstraint.constant = defaultTopPadding
+        if Kommunicate.leadArray.isEmpty {
+            let defaultTopPadding = CGFloat(86)
+            formView.topConstraint.constant = defaultTopPadding
+        }
     }
 
     @objc func keyboardWillChange(notification: NSNotification) {
+        if Kommunicate.leadArray.isEmpty {
+            if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                if formView.emailTextField.isFirstResponder || formView.nameTextField.isFirstResponder || formView.phoneNumberTextField.isFirstResponder || formView.passwordTextField.isFirstResponder  {
 
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            if formView.emailTextField.isFirstResponder || formView.nameTextField.isFirstResponder || formView.phoneNumberTextField.isFirstResponder || formView.passwordTextField.isFirstResponder  {
+                    let defaultTopPadding = CGFloat(86)
+                    let bottomPadding = self.view.frame.height - defaultTopPadding - formView.topStackView.frame.height
 
-                let defaultTopPadding = CGFloat(86)
-                let bottomPadding = self.view.frame.height - defaultTopPadding - formView.topStackView.frame.height
-
-                let updatedTopPadding = -1*(keyboardSize.height - bottomPadding)
-                if formView.topConstraint.constant == updatedTopPadding { return }
-                formView.topConstraint.constant = updatedTopPadding
+                    let updatedTopPadding = -1*(keyboardSize.height - bottomPadding)
+                    if formView.topConstraint.constant == updatedTopPadding { return }
+                    formView.topConstraint.constant = updatedTopPadding
+                }
             }
         }
     }
@@ -406,5 +414,13 @@ extension KMPreChatFormViewController: UITextFieldDelegate {
             textField.resignFirstResponder()
         }
         return true
+    }
+}
+
+extension UIControl {
+    func addAction(for controlEvents: UIControl.Event = .touchUpInside, _ closure: @escaping()->()) {
+        if #available(iOS 14.0, *) {
+            addAction(UIAction { (action: UIAction) in closure() }, for: controlEvents)
+        }
     }
 }

@@ -32,6 +32,8 @@ PreChatViewNameEmptyError = "Please enter your name";
 PreChatViewEmailEmptyError = "Please enter your email address";
 /* Empty Phone number error message */
 PreChatViewPhoneNumberEmptyError = "Please enter your phone number";
+/* Empty Fields error message */
+PreChatViewFieldEmpty = "Please fill in all required fields";
 /* Send instructions button title */
 PreChatViewSendInstructionsButtonTitle = "SUBMIT";
 /* Get Started description on top */
