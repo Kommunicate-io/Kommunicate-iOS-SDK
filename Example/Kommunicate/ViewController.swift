@@ -9,13 +9,8 @@
 #if os(iOS)
 import UIKit
 import Kommunicate
-import ApplozicSwift
 
-class ViewController: UIViewController, ALKCustomEventCallback {
-   
-    func eventTriggered(eventName: CustomEvent, data: [String : Any]?) {
-        print("Custom Event \(eventName.rawValue) data \(String(describing: data))")
-    }
+class ViewController: UIViewController {
     let activityIndicator = UIActivityIndicatorView(style: .gray)
 
     override func viewDidLoad() {
@@ -30,23 +25,6 @@ class ViewController: UIViewController, ALKCustomEventCallback {
         activityIndicator.startAnimating()
         view.isUserInteractionEnabled = false
        
-        let eventList = [
-            CustomEvent.attachmentClick,
-            CustomEvent.faqClick,
-            CustomEvent.locationClick,
-            CustomEvent.messageSend,
-            CustomEvent.resolveClick,
-            CustomEvent.notificationClick,
-            CustomEvent.voiceClick,
-            CustomEvent.richMessageClick,
-            CustomEvent.submitRatingClick,
-            CustomEvent.rateConversationClick,
-            CustomEvent.restartConversationClick,
-            CustomEvent.newConversation,
-            CustomEvent.rateConversationEmotionsClick]
-            
-        Kommunicate.subscribeCustomEvents(events: eventList, callback: self)
-      
         Kommunicate.createAndShowConversation(from: self, completion: {
             error in
             self.activityIndicator.stopAnimating()
