@@ -3,7 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
-
+- [CM-709] Added Event Listeners 
 - [CM-743] Updated reference images for snapshot tests
 
 ## [6.3.1] - 2021-11-30
