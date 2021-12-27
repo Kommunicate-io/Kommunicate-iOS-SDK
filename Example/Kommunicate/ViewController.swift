@@ -11,7 +11,6 @@ import UIKit
 import Kommunicate
 
 class ViewController: UIViewController {
-
     let activityIndicator = UIActivityIndicatorView(style: .gray)
 
     override func viewDidLoad() {
@@ -25,7 +24,7 @@ class ViewController: UIViewController {
     @IBAction func launchConversation(_ sender: Any) {
         activityIndicator.startAnimating()
         view.isUserInteractionEnabled = false
-
+       
         Kommunicate.createAndShowConversation(from: self, completion: {
             error in
             self.activityIndicator.stopAnimating()

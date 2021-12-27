@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ApplozicSwift
 
 class ConversationClosedView: UIView {
 
@@ -79,6 +80,7 @@ class ConversationClosedView: UIView {
     }
 
     @objc func restartConversationTapped() {
+        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.restartConversationClick, data: nil)
         restartTapped?()
     }
 

@@ -33,6 +33,8 @@ public typealias KMConfiguration = ALKConfiguration
 public typealias KMMessageStyle = ALKMessageStyle
 public typealias KMBaseNavigationViewController = ALKBaseNavigationViewController
 public typealias KMChatBarConfiguration = ALKChatBarConfiguration
+public typealias KMCustomEventHandler = ALKCustomEventHandler
+
 let faqIdentifier =  11223346
 
 enum KMLocalizationKey {
@@ -207,8 +209,8 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
     open class func createConversation (
         conversation: KMConversation = KMConversationBuilder().build(),
         completion: @escaping (Result<String, KMConversationError>) -> ()) {
-
-        guard ALDataNetworkConnection.checkDataNetworkAvailable() else {
+        
+              guard ALDataNetworkConnection.checkDataNetworkAvailable() else {
             completion(.failure(KMConversationError.internet))
             return
         }
@@ -262,6 +264,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                             completion(.failure(KMConversationError.api(response.error)))
                             return;
                         }
+                        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.newConversation, data: ["UserSelection":["ClientConversationId":conversation.clientConversationId]])
                         completion(.success(conversationId))
                     }
                 })
@@ -765,5 +768,14 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
             return NSError(domain:"User ID contains whitespace or newline characters", code:0, userInfo:nil)
         }
         return nil
+    }
+    /**
+     Subscribe Chat Events
+     - Parameters:
+     - events: list of events to subscribe.
+     - callback: ALKCustomEventCallback to send subscribed event's data
+     */
+    public static func subscribeCustomEvents(events: [CustomEvent],callback: ALKCustomEventCallback){
+        KMCustomEventHandler.shared.setSubscribedEvents(eventsList: events,eventDelegate: callback)
     }
 }

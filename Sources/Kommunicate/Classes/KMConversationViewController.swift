@@ -460,6 +460,7 @@ extension KMConversationViewController {
     }
 
     private func showRatingView() {
+        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.rateConversationClick, data: nil)
         guard self.ratingVC == nil else { return }
         let ratingVC = RatingViewController()
         ratingVC.closeButtontapped = { [weak self] in
@@ -467,9 +468,12 @@ extension KMConversationViewController {
         }
         ratingVC.feedbackSubmitted = { [weak self] feedback in
             print("feedback submitted with rating: \(feedback.rating)")
+            KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.submitRatingClick, data: ["UserSelection":["SubmittedFeedback":feedback]])
             self?.hideRatingView()
+            
             self?.submitFeedback(feedback: feedback)
         }
+       
         self.present(ratingVC, animated: true, completion: {[weak self] in
             self?.ratingVC = ratingVC
         })

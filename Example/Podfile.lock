@@ -31,7 +31,7 @@ PODS:
   - SwipeCellKit (2.7.1)
 
 DEPENDENCIES:
-  - ApplozicSwift
+  - ApplozicSwift (from `https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git`, branch `CM_709_iOS_Event_Listener`)
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - Nimble
@@ -41,7 +41,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - ApplozicCore
-    - ApplozicSwift
     - FBSnapshotTestCase
     - iOSSnapshotTestCase
     - Kingfisher
@@ -51,8 +50,16 @@ SPEC REPOS:
     - SwipeCellKit
 
 EXTERNAL SOURCES:
+  ApplozicSwift:
+    :branch: CM_709_iOS_Event_Listener
+    :git: https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git
   Kommunicate:
     :path: "../"
+
+CHECKOUT OPTIONS:
+  ApplozicSwift:
+    :commit: 1b3897263f02a1ce49154b137bcd5a8b35f841c6
+    :git: https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git
 
 SPEC CHECKSUMS:
   ApplozicCore: 120b38ee62ae0edc54a7c40e7d5a5390d7d751b2
@@ -66,6 +73,6 @@ SPEC CHECKSUMS:
   Quick: 6473349e43b9271a8d43839d9ba1c442ed1b7ac4
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: af6bd5c367ca72410ceb8e60f1c01e497638a518
+PODFILE CHECKSUM: e1facd59349b0cabde3f0f2acfa819f46e8e0500
 
 COCOAPODS: 1.11.2
