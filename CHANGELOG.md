@@ -3,6 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
+- [CM-759] Fix for reply meta not reaching webhook when default chatContextData exists.
 - [CM-709] Added Event Listeners 
 - [CM-743] Updated reference images for snapshot tests
 
