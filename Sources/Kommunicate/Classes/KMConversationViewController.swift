@@ -19,6 +19,10 @@ open class KMConversationViewController: ALKConversationViewController {
     private let registerUserClientService = ALRegisterUserClientService()
     let kmBotService = KMBotService()
     private var assigneeUserId: String?
+    var messageArray = [ALMessage]()
+    var timer = Timer()
+    var count = 0
+    var currentMessage = ALMessage()
 
     lazy var customNavigationView = ConversationVCNavBar(
         delegate: self,
@@ -180,27 +184,45 @@ open class KMConversationViewController: ALKConversationViewController {
 
     open override func addMessagesToList(_ messageList: [Any]) {
         guard let messages = messageList as? [ALMessage] else { return }
+        messageArray = messages
+        count = 0
+        timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(loopOverMessageArray), userInfo: nil, repeats: true)
+        timer.fire()
+    }
+    
+    @objc func loopOverMessageArray() {
+        
+        if count >= messageArray.count {
+            timer.invalidate()
+            return
+        }
         var filteredArray = [ALMessage]()
         let contactService = ALContactService()
-        for message in messages {
-            if viewModel.channelKey != nil, viewModel.channelKey == message.groupId {
-                let delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval
-                UserDefaults.standard.set((delayInterval * messages.count), forKey: "botDelayInterval")
-                let alContact = contactService.loadContact(byKey: "userId", value:  message.to)
-                if delayInterval > 0 && alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue){
-                    showTypingLabel(status: true, userId: message.to)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.milliseconds(delayInterval * messages.count)) {
-                        self.viewModel.addMessagesToList([message])
-                    }
-                } else {
-                    filteredArray.append(message)
-                }
+        if viewModel.channelKey != nil, viewModel.channelKey == messageArray[count].groupId {
+            let delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval
+            UserDefaults.standard.set((delayInterval/1000), forKey: "botDelayInterval")
+            let alContact = contactService.loadContact(byKey: "userId", value:  messageArray[count].to)
+            if delayInterval > 0 && alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue){
+                showTypingLabel(status: true, userId: messageArray[count].to)
+                currentMessage = messageArray[count]
+                Timer.scheduledTimer(timeInterval: TimeInterval(UserDefaults.standard.integer(forKey: "botDelayInterval")*2), target: self, selector: #selector(self.addMessagesToViewModel), userInfo: nil, repeats: false)
             } else {
-                filteredArray.append(message)
+                filteredArray.append(messageArray[count])
             }
-            if !filteredArray.isEmpty {
-                self.viewModel.addMessagesToList([filteredArray])
-            }
+        } else {
+            filteredArray.append(messageArray[count])
+        }
+        if !filteredArray.isEmpty {
+            self.viewModel.addMessagesToList([filteredArray])
+        }
+    }
+    
+    @objc func addMessagesToViewModel() {
+        self.viewModel.addMessagesToList([currentMessage])
+        if count >= messageArray.count {
+            count = 0
+        } else {
+            count = count + 1
         }
     }
 
