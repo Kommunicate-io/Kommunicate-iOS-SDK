@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import ApplozicCore
+import KommunicateCore_iOS_SDK
 
 extension ALContact {
     static let AwayMode: Int = 2

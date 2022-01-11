@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import ApplozicSwift
+import KommunicateChatUI_iOS_SDK
 import UIKit
 
 /// A view to show away message. It has message label and dotted line view.

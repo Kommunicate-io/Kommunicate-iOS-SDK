@@ -7,7 +7,8 @@
 
 import Foundation
 import UIKit
-import ApplozicSwift
+import KommunicateChatUI_iOS_SDK
+
 
 class FeedbackRatingView: UIView {
 

@@ -1,7 +1,7 @@
 import UIKit
 import XCTest
 @testable import Kommunicate
-import ApplozicCore
+import KommunicateCore_iOS_SDK
 
 class KommunicateTests: XCTestCase {
 

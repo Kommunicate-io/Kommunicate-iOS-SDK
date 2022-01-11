@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import ApplozicCore
-import ApplozicSwift
+import KommunicateChatUI_iOS_SDK
+import KommunicateCore_iOS_SDK
 import Kingfisher
 
 protocol NavigationBarCallbacks: AnyObject {

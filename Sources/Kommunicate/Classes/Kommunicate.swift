@@ -7,13 +7,13 @@
 
 import Foundation
 import UIKit
-import ApplozicCore
-import ApplozicSwift
+import KommunicateChatUI_iOS_SDK
+import KommunicateCore_iOS_SDK
 #if canImport(RichMessageKit)
     import RichMessageKit
     public typealias KMStyle = RichMessageKit.Style
 #else
-    public typealias KMStyle = ApplozicSwift.Style
+    public typealias KMStyle = KommunicateChatUI_iOS_SDK.Style
 #endif
 
 var TYPE_CLIENT : Int16 = 0

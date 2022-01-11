@@ -8,8 +8,7 @@
 
 import XCTest
 @testable import Kommunicate
-import ApplozicCore
-
+import KommunicateCore_iOS_SDK
 class PaymentTests: XCTestCase {
 
     override func setUp() {

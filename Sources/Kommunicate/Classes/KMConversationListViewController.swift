@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import ApplozicSwift
-import ApplozicCore
+import KommunicateChatUI_iOS_SDK
+import KommunicateCore_iOS_SDK
 
 public class KMConversationListViewController : ALKBaseViewController, Localizable {
 

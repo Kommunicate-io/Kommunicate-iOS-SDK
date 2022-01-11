@@ -1,13 +1,4 @@
 PODS:
-  - ApplozicCore (8.3.0)
-  - ApplozicSwift (6.4.0):
-    - ApplozicSwift/Complete (= 6.4.0)
-  - ApplozicSwift/Complete (6.4.0):
-    - ApplozicCore (~> 8.3.0)
-    - ApplozicSwift/RichMessageKit
-    - Kingfisher (~> 7.0.0)
-    - SwipeCellKit (~> 2.7.1)
-  - ApplozicSwift/RichMessageKit (6.4.0)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
   - FBSnapshotTestCase/Core (2.1.4)
@@ -20,7 +11,16 @@ PODS:
     - iOSSnapshotTestCase/Core
   - Kingfisher (7.0.0)
   - Kommunicate (6.3.1):
-    - ApplozicSwift (~> 6.4.0)
+    - KommunicateChatUI-iOS-SDK (~> 0.1.1)
+  - KommunicateChatUI-iOS-SDK (0.1.1):
+    - KommunicateChatUI-iOS-SDK/Complete (= 0.1.1)
+  - KommunicateChatUI-iOS-SDK/Complete (0.1.1):
+    - Kingfisher (~> 7.0.0)
+    - KommunicateChatUI-iOS-SDK/RichMessageKit
+    - KommunicateCore-iOS-SDK (~> 0.0.2)
+    - SwipeCellKit (~> 2.7.1)
+  - KommunicateChatUI-iOS-SDK/RichMessageKit (0.1.1)
+  - KommunicateCore-iOS-SDK (0.0.2)
   - Nimble (9.2.1)
   - Nimble-Snapshots (9.3.0):
     - Nimble-Snapshots/Core (= 9.3.0)
@@ -31,7 +31,6 @@ PODS:
   - SwipeCellKit (2.7.1)
 
 DEPENDENCIES:
-  - ApplozicSwift (from `https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git`, branch `CM_709_iOS_Event_Listener`)
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - Nimble
@@ -40,39 +39,32 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - ApplozicCore
     - FBSnapshotTestCase
     - iOSSnapshotTestCase
     - Kingfisher
+    - KommunicateChatUI-iOS-SDK
+    - KommunicateCore-iOS-SDK
     - Nimble
     - Nimble-Snapshots
     - Quick
     - SwipeCellKit
 
 EXTERNAL SOURCES:
-  ApplozicSwift:
-    :branch: CM_709_iOS_Event_Listener
-    :git: https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git
   Kommunicate:
     :path: "../"
 
-CHECKOUT OPTIONS:
-  ApplozicSwift:
-    :commit: 1b3897263f02a1ce49154b137bcd5a8b35f841c6
-    :git: https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git
-
 SPEC CHECKSUMS:
-  ApplozicCore: 120b38ee62ae0edc54a7c40e7d5a5390d7d751b2
-  ApplozicSwift: c2d53a93dadf1f477f51d86f313236c5cc626d62
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: a670511f9ee3829c2b9c23e6e68f315fd7b6790f
   Kingfisher: 5efc54fec3980f92354898532e562cc17f31efb4
-  Kommunicate: d92210786b7fbf5575ca9e333d73dd4ba0d4b2b6
+  Kommunicate: 1b59dce3a79f939a890408a0dd35edefb3f133b8
+  KommunicateChatUI-iOS-SDK: 5b8cd8aec561f771c748376315ab78141a8ed956
+  KommunicateCore-iOS-SDK: 131dadd51633c417f6a6b947168dd0aff1b3400c
   Nimble: e7e615c0335ee4bf5b0d786685451e62746117d5
   Nimble-Snapshots: 97270cd48f0e6eebd6c80ccf7dd35d4e57fb9997
   Quick: 6473349e43b9271a8d43839d9ba1c442ed1b7ac4
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: e1facd59349b0cabde3f0f2acfa819f46e8e0500
+PODFILE CHECKSUM: 27fd5726ab9919e8734c825a72c8b7e45471b37b
 
 COCOAPODS: 1.11.2

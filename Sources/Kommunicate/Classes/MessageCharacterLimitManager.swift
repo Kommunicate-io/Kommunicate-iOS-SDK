@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import ApplozicSwift
+import KommunicateChatUI_iOS_SDK
 import UIKit
 
 // MARK: MessageCharacterLimitDelegate
