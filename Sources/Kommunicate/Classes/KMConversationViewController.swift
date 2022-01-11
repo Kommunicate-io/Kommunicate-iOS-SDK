@@ -186,16 +186,6 @@ open class KMConversationViewController: ALKConversationViewController {
         guard let messages = messageList as? [ALMessage] else { return }
         messageArray = messages
         count = 0
-        timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(loopOverMessageArray), userInfo: nil, repeats: true)
-        timer.fire()
-    }
-    
-    @objc func loopOverMessageArray() {
-        
-        if count >= messageArray.count {
-            timer.invalidate()
-            return
-        }
         var filteredArray = [ALMessage]()
         let contactService = ALContactService()
         if viewModel.channelKey != nil, viewModel.channelKey == messageArray[count].groupId {
@@ -203,9 +193,8 @@ open class KMConversationViewController: ALKConversationViewController {
             UserDefaults.standard.set((delayInterval/1000), forKey: "botDelayInterval")
             let alContact = contactService.loadContact(byKey: "userId", value:  messageArray[count].to)
             if delayInterval > 0 && alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue){
-                showTypingLabel(status: true, userId: messageArray[count].to)
-                currentMessage = messageArray[count]
-                Timer.scheduledTimer(timeInterval: TimeInterval(UserDefaults.standard.integer(forKey: "botDelayInterval")*2), target: self, selector: #selector(self.addMessagesToViewModel), userInfo: nil, repeats: false)
+                timer = Timer.scheduledTimer(timeInterval: TimeInterval((delayInterval/1000)), target: self, selector: #selector(loopOverMessageArray), userInfo: nil, repeats: true)
+                timer.fire()
             } else {
                 filteredArray.append(messageArray[count])
             }
@@ -214,6 +203,18 @@ open class KMConversationViewController: ALKConversationViewController {
         }
         if !filteredArray.isEmpty {
             self.viewModel.addMessagesToList([filteredArray])
+        }
+    }
+    
+    @objc func loopOverMessageArray() {
+        if count >= messageArray.count {
+            timer.invalidate()
+            return
+        }
+        if currentMessage == nil || currentMessage.message != messageArray[count].message {
+            showTypingLabel(status: true, userId: messageArray[count].to)
+            currentMessage = messageArray[count]
+            Timer.scheduledTimer(timeInterval: TimeInterval(UserDefaults.standard.integer(forKey: "botDelayInterval")+2), target: self, selector: #selector(self.addMessagesToViewModel), userInfo: nil, repeats: false)
         }
     }
     
