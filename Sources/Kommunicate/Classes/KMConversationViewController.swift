@@ -442,18 +442,29 @@ open class KMConversationViewController: ALKConversationViewController {
                                       metadata: [String : Any]?,
                                       languageCode language: String?) {
         do {
-            var customMetadata = metadata ?? [String: Any]()
+                let customMetadata = metadata ?? [String: Any]()
 
-            if let updatedLanguage = language {
-                try configuration.updateUserLanguage(tag: updatedLanguage)
-            }
+                if let updatedLanguage = language {
+                    try configuration.updateUserLanguage(tag: updatedLanguage)
+                }
 
-            guard let messageMetadata = configuration.messageMetadata as? [String: Any] else {
-                viewModel.send(message: text, metadata: customMetadata)
-                return
-            }
-            customMetadata.merge(messageMetadata) { $1 }
-            viewModel.send(message: text, metadata: customMetadata)
+                guard let messageMetadata = configuration.messageMetadata as? [String: Any],
+                      let jsonData = messageMetadata[ChannelMetadataKeys.chatContext] as? String,!jsonData.isEmpty,
+                      let data =  jsonData.data(using: .utf8),
+                      let chatContextData = try JSONSerialization.jsonObject(with: data,options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any]
+                else {
+                        viewModel.send(message: text, metadata: customMetadata)
+                        return
+                    }
+        
+                if customMetadata.isEmpty {
+                    viewModel.send(message: text, metadata: messageMetadata)
+                    return
+                }
+                var replyMetaData = customMetadata[ChannelMetadataKeys.chatContext] as? [String: Any]
+                replyMetaData?.merge(chatContextData) { $1 }
+                let  metaDataToSend = [ChannelMetadataKeys.chatContext:replyMetaData]
+                viewModel.send(message: text, metadata: metaDataToSend)
         } catch {
             print("Error while sending quick reply message %@", error.localizedDescription)
         }
@@ -498,6 +509,7 @@ extension KMConversationViewController {
     }
 
     private func showRatingView() {
+        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.rateConversationClick, data: nil)
         guard self.ratingVC == nil else { return }
         let ratingVC = RatingViewController()
         ratingVC.closeButtontapped = { [weak self] in
@@ -505,9 +517,12 @@ extension KMConversationViewController {
         }
         ratingVC.feedbackSubmitted = { [weak self] feedback in
             print("feedback submitted with rating: \(feedback.rating)")
+            KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.submitRatingClick, data: ["UserSelection":["SubmittedFeedback":feedback]])
             self?.hideRatingView()
+            
             self?.submitFeedback(feedback: feedback)
         }
+       
         self.present(ratingVC, animated: true, completion: {[weak self] in
             self?.ratingVC = ratingVC
         })

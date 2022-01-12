@@ -34,6 +34,20 @@ class LoginViewController: UIViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    
+    //to log out from prechat
+//    override func viewDidAppear(_ animated: Bool) {
+//        if Kommunicate.isLoggedIn {
+//          Kommunicate.logoutUser { (result) in
+//            switch result {
+//            case .success(_):
+//              print("Logout success")
+//            case .failure( _):
+//              print("Logout failure, now registering remote notifications(if not registered)")
+//            }
+//          }
+//        }
+//      }
 
     @IBAction func getStartedBtn(_ sender: AnyObject) {
         resignFields()
@@ -70,6 +84,10 @@ class LoginViewController: UIViewController {
 
         let kmUser = userWithUserId(Kommunicate.randomId(), andApplicationId: applicationId)
         registerUser(kmUser)
+//        let sampleConversationBuilder = KMConversationBuilder().useLastConversation(false).build()
+//        Kommunicate.createConversationWithPreChat(appID: (UIApplication.shared.delegate as! AppDelegate).appId, conversation: nil, viewController: self) { error in
+//            print(error as Any)
+//        }
     }
 
     @objc func keyboardWillHide(notification: NSNotification) {

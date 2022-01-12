@@ -159,6 +159,7 @@ public class KMPushNotificationHelper {
     /// - WARNING: Use this only when `isKommunicateVCAtTop` returns true.
     /// - Parameter notification: Contains details about arrived notification.
     public func handleNotificationTap(_ notification: NotificationData) {
+        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.notificationClick, data: ["UserSelection":["notificationdata":notification]])
         guard let topVC = ALPushAssist().topViewController else { return }
         switch topVC {
         case let vc as KMConversationListViewController:
