@@ -7,6 +7,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 - [CM-709] Added Event Listeners 
 - [CM-743] Updated reference images for snapshot tests
 - [CM-670] Update API endpoints
+- [CM-516] Added support for showing bot typing indicator
 
 ## [6.3.1] - 2021-11-30
 
