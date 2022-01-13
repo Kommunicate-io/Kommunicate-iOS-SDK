@@ -400,19 +400,23 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
 
      - completion: Called with the status of the Team ID update
      */
-    open class func udpateTeamId(conversation: KMConversation,teamId: String, completion:@escaping (Result<String, KommunicateError>) -> ()) {
+    open class func updateTeamId(conversation: KMConversation,teamId: String, completion:@escaping (Result<String, KommunicateError>) -> ()) {
         
         let service = KMConversationService()
         guard let groupID = conversation.clientConversationId, !groupID.isEmpty else { return }
-        if !teamId.isEmpty {
-            service.updateTeam(groupID: groupID, teamID: teamId) { response in
-                if (response.success) {
-                    completion(.success(groupID))
-                } else {
-                    completion(.failure(KommunicateError.conversationUpdateFailed))
-                }
+       
+        guard !teamId.isEmpty else {
+            return completion(.failure(KommunicateError.teamNotPresent))
+        }
+        
+        service.updateTeam(groupID: groupID, teamID: teamId) { response in
+            if (response.success) {
+                completion(.success(groupID))
+            } else {
+                completion(.failure(KommunicateError.conversationUpdateFailed))
             }
-        } else { completion(.failure(KommunicateError.teamNotPresent)) }
+        }
+        
     }
     
     

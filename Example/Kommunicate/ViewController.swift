@@ -45,7 +45,7 @@ let teamid = "67476167"
                         let teamid = "67476167"
 
 //
-                        Kommunicate.udpateTeamId(conversation: conversation, teamId: teamid){ (result) in
+                        Kommunicate.updateTeamId(conversation: conversation, teamId: teamid){ (result) in
                             switch result {
                             case .success(let groupId):
                                 print("Successfully to udpated the team id \(groupId)")
