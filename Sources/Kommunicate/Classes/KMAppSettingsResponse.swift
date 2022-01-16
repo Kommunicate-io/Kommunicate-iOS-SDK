@@ -50,8 +50,13 @@ public struct LeadCollectionFields : Decodable {
     let field: String
     let required: Bool
     let placeholder: String
+    let element: String?
+    let options: [LeadCollectionDropDownField]?
 }
 
+public struct LeadCollectionDropDownField: Decodable {
+    let value: String
+}
 extension KMAppSettingsResponse {
     init(data: Data) throws {
         self = try JSONDecoder().decode(KMAppSettingsResponse.self, from: data)

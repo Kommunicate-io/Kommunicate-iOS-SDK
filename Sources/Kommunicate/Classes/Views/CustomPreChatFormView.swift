@@ -11,6 +11,7 @@ class CustomPreChatFormView: UIView, UITextFieldDelegate {
     
     var localizationFileName: String!
     
+    
     @IBOutlet var contentView: UIView!
     @IBOutlet weak var headerStackView: UIStackView!
     @IBOutlet public var formStackView : UIStackView!
@@ -51,8 +52,27 @@ class CustomPreChatFormView: UIView, UITextFieldDelegate {
             return
         }
         titleLabel.text = title
+        var array = Kommunicate.leadArray
+        let option = [LeadCollectionDropDownField(value: "1"),
+                      LeadCollectionDropDownField(value: "2"),
+                      LeadCollectionDropDownField(value: "3")]
         
-        for (index,element) in Kommunicate.leadArray.enumerated() {
+        let dropDown = LeadCollectionFields(type:"" , field: "Lucky Number", required: true, placeholder: "Enter your luck number", element: "selection", options: option)
+        array.append(dropDown)
+        
+        for (index,element) in array.enumerated() {
+            if let type = element.element, type == "selection" {
+                let button = UIButton()
+                button.setTitle(element.placeholder, for: .normal)
+                button.widthAnchor.constraint(equalToConstant: contentView.frame.width).isActive = true
+                button.heightAnchor.constraint(equalToConstant: 14.0).isActive = true
+                formStackView.addArrangedSubview(button)
+                
+            }
+//            else{
+//
+//            }
+         
             let textLabel = UILabel()
             textLabel.text  = element.field
             textLabel.textAlignment = .left
