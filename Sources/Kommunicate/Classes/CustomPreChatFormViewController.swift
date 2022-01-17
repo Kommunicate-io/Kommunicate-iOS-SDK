@@ -7,6 +7,10 @@
 
 import UIKit
 
+class optionsCell : UITableViewCell {
+    
+}
+
 open class CustomPreChatFormViewController: UIViewController {
     
     public struct PreChatConfiguration {
@@ -76,8 +80,15 @@ open class CustomPreChatFormViewController: UIViewController {
     }
     
     func setUpView() {
+        leadArray = Kommunicate.leadArray
+        let option = [LeadCollectionDropDownField(value: "1"),
+                      LeadCollectionDropDownField(value: "2"),
+                      LeadCollectionDropDownField(value: "3")]
         
-        for item in Kommunicate.leadArray {
+        let dropDown = LeadCollectionFields(type:"dropdown" , field: "Lucky Number", required: true, placeholder: "Enter your luck number", element: "selection", options: option)
+        leadArray.append(dropDown)
+        
+        for item in leadArray {
             if item.required {
                 preChatConfiguration.mandatoryOptions.append(item.field)
             }
@@ -88,10 +99,18 @@ open class CustomPreChatFormViewController: UIViewController {
             localizationFileName: configuration.localizedStringFileName)
         view.backgroundColor = .red
         view.addSubview(formView)
-        
-        for subview in formView.formStackView.arrangedSubviews {
-            (subview.subviews[1] as? UITextField)?.delegate = self
+// ES
+        for (index,subview) in formView.formStackView.arrangedSubviews.enumerated() {
+//            (subview.subviews[1] as? UITextField)?.delegate = self
+            if index == 3 {
+//                (subview.subviews[0] as? UIButton)
+                tableView = subview.subviews[1] as! UITableView
+                
+                (subview.subviews[0] as? UIButton)?.addTarget(self, action: #selector(dropDownButtonTapped), for: .touchUpInside)
+
+            }
         }
+        
         
         let closeButton = closeButtonOf(frame: CGRect(x: 20, y: 20, width: 30, height: 30))
         view.addSubview(formView)
@@ -110,11 +129,15 @@ open class CustomPreChatFormViewController: UIViewController {
             ]
         )
         
-        formView.sendInstructionsButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
+        formView.sendInstructionsButton.addTarget(self, action: #selector(dropDownButtonTapped), for: .touchUpInside)
         
         let tapper = UITapGestureRecognizer(target: self.view, action:#selector(self.view.endEditing(_:)))
         tapper.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapper)
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(optionsCell.self, forCellReuseIdentifier: "cell")
     }
     
     @objc func sendButtonTapped() {
@@ -258,6 +281,52 @@ open class CustomPreChatFormViewController: UIViewController {
         }
     }
     
+    
+    var transparentView = UIView()
+    var tableView = UITableView()
+    var selectedButton = UIButton()
+    var selectedDataSource = [LeadCollectionDropDownField]()
+    private func addTransparent(_ rect: CGRect){
+        
+        let window = UIApplication.shared.keyWindow
+        transparentView.frame = window?.frame ?? self.view.frame
+        self.view.addSubview(transparentView)
+        
+        tableView.frame = CGRect(x: rect.origin.x, y: rect.origin.y + rect.height, width: rect.width, height: 0)
+        self.view.addSubview(tableView)
+        tableView.layer.cornerRadius = 5
+        
+        
+        transparentView.backgroundColor = UIColor.black.withAlphaComponent(0.9)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(removeTransparentView))
+        transparentView.addGestureRecognizer(tapGesture)
+        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
+            self.transparentView.alpha = 0.5
+            self.tableView.frame = CGRect(x: rect.origin.x, y: rect.origin.y+rect.height, width: rect.width, height: 200)
+        }, completion: nil)
+        
+    }
+    
+    @objc func removeTransparentView() {
+        let rect = selectedButton.frame
+        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
+            self.transparentView.alpha = 0
+            self.tableView.frame = CGRect(x: rect.origin.x, y: rect.origin.y+rect.height, width: rect.width, height: 0)
+        }, completion: nil)
+    }
+    
+    var leadArray = [LeadCollectionFields]()
+    
+    @objc func dropDownButtonTapped(_ sender: UIButton) {
+        guard let source = leadArray[sender.tag].options else{
+            return
+        }
+        selectedDataSource = source
+        selectedButton = sender
+
+        addTransparent(formView.sendInstructionsButton.frame)
+    }
+    
     private func setEmptyPlaceholder(for textField: UITextField) {
         textField.attributedPlaceholder = nil
         for stackView in formView.formStackView.arrangedSubviews {
@@ -296,4 +365,23 @@ extension CustomPreChatFormViewController: UITextFieldDelegate {
         }
         return true
     }
+}
+
+extension CustomPreChatFormViewController : UITableViewDelegate, UITableViewDataSource {
+   
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = selectedDataSource[indexPath.row].value
+        return cell
+    }
+    
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return selectedDataSource.count
+    }
+    
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Secledt \(selectedDataSource[indexPath.row])")
+    }
+    
+    
 }
