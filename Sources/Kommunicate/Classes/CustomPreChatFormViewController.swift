@@ -19,6 +19,11 @@ open class CustomPreChatFormViewController: UIViewController {
     static let phone = "Phone"
     static let dropDownType = "selection"
     
+    private var transparentView = UIView()
+    private var tableView = UITableView()
+    private var selectedButton = UIButton()
+    private var selectedDataSource = [String]()
+    
     public struct PreChatConfiguration {
         public var mandatoryOptions = [String]()
         public var phoneNumberRegexPattern: String?
@@ -310,10 +315,7 @@ open class CustomPreChatFormViewController: UIViewController {
     }
     
     
-    var transparentView = UIView()
-    var tableView = UITableView()
-    var selectedButton = UIButton()
-    var selectedDataSource = [String]()
+  
     private func addTransparent(_ rect: CGRect){
         
         let window = UIApplication.shared.keyWindow
@@ -343,8 +345,6 @@ open class CustomPreChatFormViewController: UIViewController {
         }, completion: nil)
     }
     
-    var leadArray = [LeadCollectionFields]()
-    
     @objc func dropDownButtonTapped(_ sender: UIButton) {
         let leadElement = Kommunicate.leadArray[sender.tag]
         
@@ -358,7 +358,6 @@ open class CustomPreChatFormViewController: UIViewController {
         }
         
         selectedButton = sender
-        
         guard let btnView = sender as? UIButton else {
             addTransparent(sender.frame)
             return
@@ -367,9 +366,7 @@ open class CustomPreChatFormViewController: UIViewController {
             addTransparent(sender.frame)
            return
         }
-
         let cvtRect = superview.convert(btnView.frame, to: view)
-
         addTransparent(cvtRect)
     }
     
