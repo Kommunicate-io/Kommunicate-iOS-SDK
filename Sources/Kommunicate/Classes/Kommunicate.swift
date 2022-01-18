@@ -461,12 +461,21 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                 if isPreChatEnable {
                     UserDefaults.standard.set(appSetting.chatWidget?.preChatGreetingMsg!, forKey: "leadCollectionTitle")
                     leadArray = appSetting.leadCollection!
+                    //test purpose
+                    let option = [LeadCollectionDropDownField(value: "1"),
+                                  LeadCollectionDropDownField(value: "2"),
+                                  LeadCollectionDropDownField(value: "3")]
+                    
+                    let dropDown = LeadCollectionFields(type:"" , field: "Lucky Number", required: true, placeholder: "Enter your luck number", element: "selection", options: option)
+                    
+                    leadArray.append(dropDown)
                     if !KMUserDefaultHandler.isLoggedIn() {
                         DispatchQueue.main.async {
                             if !Kommunicate.leadArray.isEmpty {
                                 let customPreChatVC = CustomPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
-                                customPreChatVC.submitButtonTapped = {
-                                    Kommunicate().userSubmittedResponse(name: customPreChatVC.formView.name, email: customPreChatVC.formView.email, phoneNumber: customPreChatVC.formView.phoneNumber, password: "")
+                                customPreChatVC.submitButtonTapped = {  (response:[String:String]) in
+                                                                    
+                                    Kommunicate().userSubmittedResponse(name: response[CustomPreChatFormViewController.name] ?? "", email: response[CustomPreChatFormViewController.email] ?? "", phoneNumber: response[CustomPreChatFormViewController.phone] ?? "", password: "")
                                 }
                                 customPreChatVC.closeButtonTapped = {
                                     Kommunicate().closeButtonTapped()
