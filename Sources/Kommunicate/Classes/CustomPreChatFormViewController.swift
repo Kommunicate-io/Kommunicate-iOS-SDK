@@ -7,7 +7,7 @@
 
 import UIKit
 
-class optionsCell : UITableViewCell {
+class OptionsCell : UITableViewCell {
     
 }
 
@@ -148,7 +148,7 @@ open class CustomPreChatFormViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(optionsCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(OptionsCell.self, forCellReuseIdentifier: "cell")
     }
     
     
