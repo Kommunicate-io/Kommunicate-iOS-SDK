@@ -4,6 +4,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 - [CM-766] Support for Drop Down in Prechat Lead Form 
+- [CM-780] Added Support for Updating team Id for a conversation
 - [CM-759] Fix for reply meta not reaching webhook when default chatContextData exists.
 - [CM-709] Added Event Listeners 
 - [CM-743] Updated reference images for snapshot tests

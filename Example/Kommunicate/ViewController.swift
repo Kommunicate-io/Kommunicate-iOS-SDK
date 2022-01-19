@@ -24,7 +24,7 @@ class ViewController: UIViewController {
     @IBAction func launchConversation(_ sender: Any) {
         activityIndicator.startAnimating()
         view.isUserInteractionEnabled = false
-       
+        
         Kommunicate.createAndShowConversation(from: self, completion: {
             error in
             self.activityIndicator.stopAnimating()
@@ -34,6 +34,7 @@ class ViewController: UIViewController {
             }
         })
     }
+    
     @IBAction func logoutAction(_ sender: Any) {
         Kommunicate.logoutUser { (result) in
             switch result {

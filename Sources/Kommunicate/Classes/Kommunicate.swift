@@ -388,6 +388,38 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
             }
         } else { completion(.failure(KommunicateError.teamNotPresent)) }
     }
+   
+    
+    /**
+     Updates the conversation teamid.
+     Requires the conversation  and the team ID to update
+
+     - Parameters:
+     - conversation: Conversation that needs to be updated
+     - teamId :  teamId that needs to be udpated in conversation
+
+     - completion: Called with the status of the Team ID update
+     */
+    open class func updateTeamId(conversation: KMConversation,teamId: String, completion:@escaping (Result<String, KommunicateError>) -> ()) {
+        
+        let service = KMConversationService()
+        guard let groupID = conversation.clientConversationId, !groupID.isEmpty else { return }
+       
+        guard !teamId.isEmpty else {
+            return completion(.failure(KommunicateError.teamNotPresent))
+        }
+        
+        service.updateTeam(groupID: groupID, teamID: teamId) { response in
+            if (response.success) {
+                completion(.success(groupID))
+            } else {
+                completion(.failure(KommunicateError.conversationUpdateFailed))
+            }
+        }
+        
+    }
+    
+    
 
     /**
      Generates a random id that can be used as an `userId`
@@ -664,6 +696,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
         }
     }
 
+
     private class func createAConversationAndLaunch(
         from viewController: UIViewController,
         completion:@escaping (_ error: KommunicateError?) -> ()) {
@@ -673,6 +706,8 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
         createConversation(conversation: conversation) { (result) in
             switch result {
             case .success(let conversationId):
+                let teamid = "67476167"
+                
                 DispatchQueue.main.async {
                     showConversationWith(groupId: conversationId, from: viewController, completionHandler: { success in
                         guard success else {
