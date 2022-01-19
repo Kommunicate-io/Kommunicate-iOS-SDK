@@ -7,7 +7,22 @@
 
 import UIKit
 
+class OptionsCell : UITableViewCell {
+    
+}
+
 open class CustomPreChatFormViewController: UIViewController {
+    
+    //Standard Value from Dashboard for the respective fields
+    static let email = "Email"
+    static let name = "Name"
+    static let phone = "Phone"
+    static let dropDownType = "selection"
+    
+    private var transparentView = UIView()
+    private var tableView = UITableView()
+    private var selectedButton = UIButton()
+    private var selectedDataSource = [String]()
     
     public struct PreChatConfiguration {
         public var mandatoryOptions = [String]()
@@ -21,7 +36,7 @@ open class CustomPreChatFormViewController: UIViewController {
     var configuration: KMConfiguration!
     var formView: CustomPreChatFormView!
     
-    public var submitButtonTapped:(() -> Void)?
+    public var submitButtonTapped:(([String: String]) -> Void)?
     public var closeButtonTapped:(() -> Void)?
     
     enum TextFieldValidationError: Error, Localizable {
@@ -76,22 +91,37 @@ open class CustomPreChatFormViewController: UIViewController {
     }
     
     func setUpView() {
-        
-        for item in Kommunicate.leadArray {
+        let leadArray = Kommunicate.leadArray
+    
+        for item in leadArray {
+           
             if item.required {
-                preChatConfiguration.mandatoryOptions.append(item.field)
+                guard let element = item.element, element == CustomPreChatFormViewController.dropDownType else{
+                    preChatConfiguration.mandatoryOptions.append(item.field)
+                    continue
+                }
+                preChatConfiguration.mandatoryOptions.append(item.placeholder)
             }
         }
+        
         
         formView = CustomPreChatFormView(
             frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height),
             localizationFileName: configuration.localizedStringFileName)
         view.backgroundColor = .red
         view.addSubview(formView)
-        
-        for subview in formView.formStackView.arrangedSubviews {
-            (subview.subviews[1] as? UITextField)?.delegate = self
+
+        for (index,subview) in formView.formStackView.arrangedSubviews.enumerated() {
+
+            guard let element = leadArray[index].element, element == CustomPreChatFormViewController.dropDownType else{
+                (subview.subviews[1] as? UITextField)?.delegate = self
+                continue
+            }
+            
+            (subview as? UIButton)?.addTarget(self, action: #selector(dropDownButtonTapped), for: .touchUpInside)
+
         }
+        
         
         let closeButton = closeButtonOf(frame: CGRect(x: 20, y: 20, width: 30, height: 30))
         view.addSubview(formView)
@@ -115,7 +145,14 @@ open class CustomPreChatFormViewController: UIViewController {
         let tapper = UITapGestureRecognizer(target: self.view, action:#selector(self.view.endEditing(_:)))
         tapper.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapper)
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(OptionsCell.self, forCellReuseIdentifier: "cell")
     }
+    
+    
+    
     
     @objc func sendButtonTapped() {
         let validation = validate()
@@ -123,16 +160,26 @@ open class CustomPreChatFormViewController: UIViewController {
         case .failure(let error):
             formView.showErrorLabelWith(message: error.localizationDescription(fromFileName: configuration.localizedStringFileName))
         case .success:
-            for subview in formView.formStackView.arrangedSubviews {
-                if (subview.subviews[0] as? UILabel)?.text == "Email" {
-                    formView.email = ((subview.subviews[1] as? UITextField)?.text)!
-                } else if (subview.subviews[0] as? UILabel)?.text == "Name" {
-                    formView.name = ((subview.subviews[1] as? UITextField)?.text)!
-                } else if (subview.subviews[0] as? UILabel)?.text == "Phone" {
-                    formView.phoneNumber = ((subview.subviews[1] as? UITextField)?.text)!
+            var resultDict = [String:String]()
+
+            for (index,subview) in formView.formStackView.arrangedSubviews.enumerated() {
+                let item = Kommunicate.leadArray[index]
+                
+                guard let element = item.element, element == CustomPreChatFormViewController.dropDownType else{
+                    if (subview.subviews[0] as? UILabel)?.text == Kommunicate.leadArray[index].field {
+                        resultDict[item.field] = ((subview.subviews[1] as? UITextField)?.text)!
+                    }
+                    continue
                 }
+                
+                guard let text = (subview as? UIButton)?.titleLabel?.text , text != item.placeholder else{
+                    resultDict[item.field] = ""
+                    continue
+                }
+                
+                resultDict[item.field] = text
             }
-            submitButtonTapped?()
+            submitButtonTapped?(resultDict)
         }
     }
     
@@ -142,8 +189,8 @@ open class CustomPreChatFormViewController: UIViewController {
         
     outerLoop: for mandatoryOption in preChatConfiguration.mandatoryOptions {
         
-        for (index, _) in Kommunicate.leadArray.enumerated() {
-            if mandatoryOption == "Email" {
+        for (index, element) in Kommunicate.leadArray.enumerated() {
+            if mandatoryOption == CustomPreChatFormViewController.email {
                 if let text = (formView.formStackView.arrangedSubviews[index].subviews[0] as? UILabel)?.text, text == mandatoryOption {
                     if let text2 = (formView.formStackView.arrangedSubviews[index].subviews[1] as? UITextField)?.text ,!text2.isValidEmail {
                         if text2.isEmpty {
@@ -157,7 +204,7 @@ open class CustomPreChatFormViewController: UIViewController {
                 }
             } else
             
-            if mandatoryOption == "Name" {
+            if mandatoryOption == CustomPreChatFormViewController.name {
                 if let text = (formView.formStackView.arrangedSubviews[index].subviews[0] as? UILabel)?.text, text == mandatoryOption {
                     if let text2 = (formView.formStackView.arrangedSubviews[index].subviews[1] as? UITextField)?.text, text2.isEmpty {
                         validationError = TextFieldValidationError.emptyName
@@ -166,7 +213,7 @@ open class CustomPreChatFormViewController: UIViewController {
                 }
             } else
             
-            if mandatoryOption == "Phone" {
+            if mandatoryOption == CustomPreChatFormViewController.phone {
                 let isValidNumber: ((String) -> Bool) = { number in
                     return self.preChatConfiguration.phoneNumberRegexPattern != nil ?
                     number.matchesWithPattern(self.preChatConfiguration.phoneNumberRegexPattern ?? ""):number.isValidPhoneNumber
@@ -183,7 +230,16 @@ open class CustomPreChatFormViewController: UIViewController {
                     }
                 }
             } else {
-                if let text = (formView.formStackView.arrangedSubviews[index].subviews[0] as? UILabel)?.text, text == mandatoryOption {
+                
+                if  let elementType = element.element,elementType == CustomPreChatFormViewController.dropDownType {
+                    
+                    if let title = (formView.formStackView.arrangedSubviews[index] as? UIButton)?.titleLabel?.text, title == mandatoryOption {
+                        validationError = TextFieldValidationError.emptyField
+                        break outerLoop
+                    }
+                        
+                }
+                else if let text = (formView.formStackView.arrangedSubviews[index].subviews[0] as? UILabel)?.text, text == mandatoryOption {
                     if let text2 = (formView.formStackView.arrangedSubviews[index].subviews[1] as? UITextField)?.text, text2.isEmpty {
                         validationError = TextFieldValidationError.emptyField
                         break outerLoop
@@ -258,6 +314,66 @@ open class CustomPreChatFormViewController: UIViewController {
         }
     }
     
+    
+  
+    private func addTransparent(_ rect: CGRect){
+        
+        let window = UIApplication.shared.keyWindow
+        transparentView.frame = window?.frame ?? self.view.frame
+        self.view.addSubview(transparentView)
+        
+        tableView.frame = CGRect(x: rect.origin.x, y: rect.origin.y + rect.height, width: rect.width, height: 0)
+        self.view.addSubview(tableView)
+        tableView.layer.cornerRadius = 5
+        tableView.reloadData()
+        
+        transparentView.backgroundColor = UIColor.black.withAlphaComponent(0.9)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(removeTransparentView))
+        transparentView.addGestureRecognizer(tapGesture)
+        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
+            self.transparentView.alpha = 0.5
+            self.tableView.frame = CGRect(x: rect.origin.x, y: rect.origin.y+rect.height, width: rect.width, height: CGFloat(self.selectedDataSource.count * 50))
+        }, completion: nil)
+        
+    }
+    
+    @objc func removeTransparentView() {
+        let rect = selectedButton.frame
+        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
+            self.transparentView.alpha = 0
+            self.tableView.frame = CGRect(x: rect.origin.x, y: rect.origin.y+rect.height, width: rect.width, height: 0)
+        }, completion: nil)
+    }
+    
+    @objc func dropDownButtonTapped(_ sender: UIButton) {
+        let leadElement = Kommunicate.leadArray[sender.tag]
+        
+        guard let source = leadElement.options, !source.isEmpty else{
+            return
+        }
+        selectedDataSource.removeAll()
+        selectedDataSource.append(leadElement.placeholder)
+        for item in source {
+            selectedDataSource.append(item.value)
+        }
+        
+        selectedButton = sender
+        guard let btnView = sender as? UIButton else {
+            addTransparent(sender.frame)
+            return
+        }
+        guard let superview = btnView.superview as? UIStackView else {
+            addTransparent(sender.frame)
+           return
+        }
+        let cvtRect = superview.convert(btnView.frame, to: view)
+        addTransparent(cvtRect)
+    }
+    
+    func updateDropDownLabel(_ value: String){
+        selectedButton.setTitle(value, for: .normal)
+    }
+    
     private func setEmptyPlaceholder(for textField: UITextField) {
         textField.attributedPlaceholder = nil
         for stackView in formView.formStackView.arrangedSubviews {
@@ -296,4 +412,24 @@ extension CustomPreChatFormViewController: UITextFieldDelegate {
         }
         return true
     }
+}
+
+extension CustomPreChatFormViewController : UITableViewDelegate, UITableViewDataSource {
+   
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = selectedDataSource[indexPath.row]
+        return cell
+    }
+    
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return selectedDataSource.count
+    }
+    
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        updateDropDownLabel(selectedDataSource[indexPath.row])
+        removeTransparentView()
+    }
+    
+    
 }

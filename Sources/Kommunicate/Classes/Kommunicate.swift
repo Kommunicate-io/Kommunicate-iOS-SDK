@@ -484,7 +484,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
         
         KMUserDefaultHandler.setApplicationKey(appID)
         Kommunicate.presentingViewController = viewController
-    
+
         let kmAppSetting = KMAppSettingService()
         kmAppSetting.appSetting { (result) in
             switch result {
@@ -493,12 +493,15 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                 if isPreChatEnable {
                     UserDefaults.standard.set(appSetting.chatWidget?.preChatGreetingMsg!, forKey: "leadCollectionTitle")
                     leadArray = appSetting.leadCollection!
+                    
+                        
                     if !KMUserDefaultHandler.isLoggedIn() {
                         DispatchQueue.main.async {
                             if !Kommunicate.leadArray.isEmpty {
                                 let customPreChatVC = CustomPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
-                                customPreChatVC.submitButtonTapped = {
-                                    Kommunicate().userSubmittedResponse(name: customPreChatVC.formView.name, email: customPreChatVC.formView.email, phoneNumber: customPreChatVC.formView.phoneNumber, password: "")
+                                customPreChatVC.submitButtonTapped = {  (response:[String:String]) in
+                                                                    
+                                    Kommunicate().userSubmittedResponse(name: response[CustomPreChatFormViewController.name] ?? "", email: response[CustomPreChatFormViewController.email] ?? "", phoneNumber: response[CustomPreChatFormViewController.phone] ?? "", password: "")
                                 }
                                 customPreChatVC.closeButtonTapped = {
                                     Kommunicate().closeButtonTapped()
