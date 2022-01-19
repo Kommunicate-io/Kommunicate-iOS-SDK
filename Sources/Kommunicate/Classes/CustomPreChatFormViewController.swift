@@ -332,7 +332,7 @@ open class CustomPreChatFormViewController: UIViewController {
         transparentView.addGestureRecognizer(tapGesture)
         UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
             self.transparentView.alpha = 0.5
-            self.tableView.frame = CGRect(x: rect.origin.x, y: rect.origin.y+rect.height, width: rect.width, height: 200)
+            self.tableView.frame = CGRect(x: rect.origin.x, y: rect.origin.y+rect.height, width: rect.width, height: CGFloat(self.selectedDataSource.count * 50))
         }, completion: nil)
         
     }

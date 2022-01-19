@@ -452,7 +452,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
         
         KMUserDefaultHandler.setApplicationKey(appID)
         Kommunicate.presentingViewController = viewController
-    
+
         let kmAppSetting = KMAppSettingService()
         kmAppSetting.appSetting { (result) in
             switch result {
@@ -461,14 +461,8 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                 if isPreChatEnable {
                     UserDefaults.standard.set(appSetting.chatWidget?.preChatGreetingMsg!, forKey: "leadCollectionTitle")
                     leadArray = appSetting.leadCollection!
-                    //test purpose
-                    let option = [LeadCollectionDropDownField(value: "1"),
-                                  LeadCollectionDropDownField(value: "2"),
-                                  LeadCollectionDropDownField(value: "3")]
                     
-                    let dropDown = LeadCollectionFields(type:"" , field: "Lucky Number", required: true, placeholder: "Enter your luck number", element: "selection", options: option)
-                    
-                    leadArray.append(dropDown)
+                        
                     if !KMUserDefaultHandler.isLoggedIn() {
                         DispatchQueue.main.async {
                             if !Kommunicate.leadArray.isEmpty {
