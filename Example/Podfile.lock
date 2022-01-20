@@ -12,14 +12,14 @@ PODS:
   - Kingfisher (7.0.0)
   - Kommunicate (6.3.1):
     - KommunicateChatUI-iOS-SDK (~> 0.1.1)
-  - KommunicateChatUI-iOS-SDK (0.1.1):
-    - KommunicateChatUI-iOS-SDK/Complete (= 0.1.1)
-  - KommunicateChatUI-iOS-SDK/Complete (0.1.1):
+  - KommunicateChatUI-iOS-SDK (0.1.2):
+    - KommunicateChatUI-iOS-SDK/Complete (= 0.1.2)
+  - KommunicateChatUI-iOS-SDK/Complete (0.1.2):
     - Kingfisher (~> 7.0.0)
     - KommunicateChatUI-iOS-SDK/RichMessageKit
     - KommunicateCore-iOS-SDK (~> 0.0.2)
     - SwipeCellKit (~> 2.7.1)
-  - KommunicateChatUI-iOS-SDK/RichMessageKit (0.1.1)
+  - KommunicateChatUI-iOS-SDK/RichMessageKit (0.1.2)
   - KommunicateCore-iOS-SDK (0.0.2)
   - Nimble (9.2.1)
   - Nimble-Snapshots (9.3.0):
@@ -58,7 +58,7 @@ SPEC CHECKSUMS:
   iOSSnapshotTestCase: a670511f9ee3829c2b9c23e6e68f315fd7b6790f
   Kingfisher: 5efc54fec3980f92354898532e562cc17f31efb4
   Kommunicate: 1b59dce3a79f939a890408a0dd35edefb3f133b8
-  KommunicateChatUI-iOS-SDK: 5b8cd8aec561f771c748376315ab78141a8ed956
+  KommunicateChatUI-iOS-SDK: 7531f5d49f7d75b6e538eefeb6d5d2a4b383bc0f
   KommunicateCore-iOS-SDK: 131dadd51633c417f6a6b947168dd0aff1b3400c
   Nimble: e7e615c0335ee4bf5b0d786685451e62746117d5
   Nimble-Snapshots: 97270cd48f0e6eebd6c80ccf7dd35d4e57fb9997
