@@ -5,7 +5,7 @@
 //  Created by Shivam Pokhriyal on 07/05/19.
 //
 
-import ApplozicSwift
+import KommunicateChatUI_iOS_SDK
 import WebKit
 
 public class FaqViewController: UIViewController, Localizable {

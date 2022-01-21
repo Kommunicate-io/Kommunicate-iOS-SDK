@@ -8,7 +8,7 @@
 
 import Quick
 import Nimble
-import ApplozicSwift
+import KommunicateChatUI_iOS_SDK
 @testable import Kommunicate
 
 class KMConversationViewControllerTests: QuickSpec {

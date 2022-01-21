@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import ApplozicCore
-import ApplozicSwift
+import KommunicateChatUI_iOS_SDK
+import KommunicateCore_iOS_SDK
 
 public class KMPushNotificationHelper {
     /// Stores information about the notification that arrives

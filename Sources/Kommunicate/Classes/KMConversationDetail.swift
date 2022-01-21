@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import ApplozicCore
+import KommunicateCore_iOS_SDK
 
 public protocol KMConversationDetailType {
     var groupId: Int {get}

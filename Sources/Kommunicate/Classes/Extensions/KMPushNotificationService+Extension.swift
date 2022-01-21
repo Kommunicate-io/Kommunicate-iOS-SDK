@@ -5,7 +5,7 @@
 //  Created by Shivam Pokhriyal on 21/08/19.
 //
 
-import ApplozicCore
+import KommunicateCore_iOS_SDK
 
 extension ALPushNotificationService {
     public func isKommunicateNotification(_ dict: [AnyHashable: Any]) -> Bool {

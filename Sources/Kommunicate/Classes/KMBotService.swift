@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import ApplozicCore
+import KommunicateCore_iOS_SDK
 
 /// `KMBotService` will have all the API releated to bots
 public struct KMBotService {
