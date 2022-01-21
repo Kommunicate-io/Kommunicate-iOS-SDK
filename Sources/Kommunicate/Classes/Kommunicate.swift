@@ -523,7 +523,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                 } else {
                     print("Pre-Chat Lead Collection is not enabled.")
                     
-                    let applozicClient = applozicClientType.init(applicationKey: appID)
+                    _ = applozicClientType.init(applicationKey: appID)
                     let kmUser = KMUser()
                     kmUser.userId = Kommunicate.randomId()
                     kmUser.applicationId = applicationId
@@ -705,9 +705,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
         let conversation = kommunicateConversationBuilder.build()
         createConversation(conversation: conversation) { (result) in
             switch result {
-            case .success(let conversationId):
-                let teamid = "67476167"
-                
+            case .success(let conversationId):                
                 DispatchQueue.main.async {
                     showConversationWith(groupId: conversationId, from: viewController, completionHandler: { success in
                         guard success else {
