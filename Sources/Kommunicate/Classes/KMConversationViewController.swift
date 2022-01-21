@@ -415,7 +415,7 @@ open class KMConversationViewController: ALKConversationViewController {
                 var replyMetaData = customMetadata[ChannelMetadataKeys.chatContext] as? [String: Any]
                 replyMetaData?.merge(chatContextData) { $1 }
                 let  metaDataToSend = [ChannelMetadataKeys.chatContext:replyMetaData]
-                viewModel.send(message: text, metadata: metaDataToSend)
+                viewModel.send(message: text, metadata: metaDataToSend as [AnyHashable : Any])
         } catch {
             print("Error while sending quick reply message %@", error.localizedDescription)
         }

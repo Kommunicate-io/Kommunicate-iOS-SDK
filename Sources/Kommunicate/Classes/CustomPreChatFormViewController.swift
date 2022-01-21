@@ -358,15 +358,12 @@ open class CustomPreChatFormViewController: UIViewController {
         }
         
         selectedButton = sender
-        guard let btnView = sender as? UIButton else {
-            addTransparent(sender.frame)
-            return
-        }
-        guard let superview = btnView.superview as? UIStackView else {
+     
+        guard let superview = sender.superview as? UIStackView else {
             addTransparent(sender.frame)
            return
         }
-        let cvtRect = superview.convert(btnView.frame, to: view)
+        let cvtRect = superview.convert(sender.frame, to: view)
         addTransparent(cvtRect)
     }
     
