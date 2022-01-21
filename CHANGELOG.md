@@ -2,13 +2,15 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
-## [Unreleased]
-- Updated KM Chat UI to 0.1.1 which has the updated KM Core (0.0.2) pod
+## [6.3.2] - 2022-01-21
+- Updated KM Chat UI to 0.1.2 which has the updated KM Core (0.0.2) pod
 - [CM-781] Fixed Lexical issue of KM Core Sdk
-- Integrated KM Chat UI(0.1.0) & KM Core (0.0.1) pod in the place of Applozic pods
+- [CM-766] Support for Drop Down in Prechat Lead Form 
+- [CM-780] Added Support for Updating team Id for a conversation
 - [CM-759] Fix for reply meta not reaching webhook when default chatContextData exists.
 - [CM-709] Added Event Listeners 
 - [CM-743] Updated reference images for snapshot tests
+- [CM-670] Update API endpoints
 
 ## [6.3.1] - 2021-11-30
 
