@@ -17,10 +17,19 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 ## [6.3.0] - 2021-09-30
 
 ### Enhancements
-- Update ApplozicSwift to 6.3.0
+- Update ApplozicSwift to 6.4.0
+- Added support for Xcode 13 and iOS 15
 - [TD-2111] Added a password field to PreChat Form View.
 - [TD-2099] Add support to update team for existing conversation
 - [TD-2223] Add support for PreChatLeadCollection
+
+## [6.2.1] - 2021-08-19
+
+### Enhancements
+
+- Added support to post rich message button notifications
+
+## [6.2.0] - 2021-08-18Z
 
 ## [6.2.0] - 2021-08-18Z
 ### Fixes
