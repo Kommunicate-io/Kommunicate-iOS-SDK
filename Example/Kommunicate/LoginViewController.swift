@@ -35,6 +35,19 @@ class LoginViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+       
+        if (KMUserDefaultHandler.isLoggedIn())
+        {
+            // Get login screen from storyboard and present it
+            if let viewController = UIStoryboard(name: "Main", bundle: nil)
+                .instantiateViewController(withIdentifier: "NavViewController") as? UINavigationController {
+                viewController.modalPresentationStyle = .fullScreen
+                self.present(viewController, animated:true, completion: nil)
+            }
+        }
+    }
+    
     //to log out from prechat
 //    override func viewDidAppear(_ animated: Bool) {
 //        if Kommunicate.isLoggedIn {
@@ -76,14 +89,78 @@ class LoginViewController: UIViewController {
         }
         registerUser(kmUser)
     }
+    
 
     @IBAction func loginAsVisitor(_ sender: Any) {
         resignFields()
-        let applicationId = (UIApplication.shared.delegate as! AppDelegate).appId
-        setupApplicationKey(applicationId)
+//        let applicationId = (UIApplication.shared.delegate as! AppDelegate).appId
+//        setupApplicationKey(applicationId)
 
-        let kmUser = userWithUserId(Kommunicate.randomId(), andApplicationId: applicationId)
-        registerUser(kmUser)
+//        let kmUser = userWithUserId(Kommunicate.randomId(), andApplicationId: applicationId)
+//        registerUser(kmUser)
+        
+
+        let a = LeadCollectionField(type: "OTHER", field: "Other", req: true, placeHolder: "Enter Your Name", element: nil, option: nil)
+        let b = LeadCollectionField(type: "OTHER", field: "Other", req: false, placeHolder: "Enter  your EmailID", element: nil, option: nil)
+        let c = LeadCollectionField(type: "OTHER", field: "other", req: false, placeHolder: "Enter Your Phone Number", element: nil, option: nil)
+//
+        let d = LeadCollectionField(type: "", field: "Number", req: true, placeHolder: "Choose Your Lucky Number", element: "select", option:[
+            LeadCollectionDropDownField("1"),
+            LeadCollectionDropDownField("2"),
+            LeadCollectionDropDownField("3"),
+            LeadCollectionDropDownField("4"),
+            LeadCollectionDropDownField("5"),
+            LeadCollectionDropDownField("6"),
+            LeadCollectionDropDownField("7"),
+            LeadCollectionDropDownField("8"),
+            LeadCollectionDropDownField("9"),
+            LeadCollectionDropDownField("10"),
+            LeadCollectionDropDownField("11"),
+            LeadCollectionDropDownField("12"),
+            LeadCollectionDropDownField("13"),
+            LeadCollectionDropDownField("14"),
+            LeadCollectionDropDownField("15"),
+            LeadCollectionDropDownField("16"),
+            LeadCollectionDropDownField("17"),
+            LeadCollectionDropDownField("18"),
+            LeadCollectionDropDownField("19")]
+        )
+        let e = LeadCollectionField(type: "", field: "JOB", req: false, placeHolder: "Choose Your Company", element: "select", option:[
+            LeadCollectionDropDownField("job A"),
+            LeadCollectionDropDownField("job B"),
+            LeadCollectionDropDownField("job C"),
+            LeadCollectionDropDownField("job D"),
+            LeadCollectionDropDownField("job E"),
+            LeadCollectionDropDownField("job F"),
+            LeadCollectionDropDownField("job G"),
+            LeadCollectionDropDownField("job H"),
+            LeadCollectionDropDownField("job I"),
+            LeadCollectionDropDownField("job J"),
+            LeadCollectionDropDownField("job K"),
+            LeadCollectionDropDownField("job L"),
+            LeadCollectionDropDownField("job M"),
+            LeadCollectionDropDownField("job N"),
+            LeadCollectionDropDownField("job O"),
+            LeadCollectionDropDownField("job P"),
+            LeadCollectionDropDownField("job Q"),
+            LeadCollectionDropDownField("job R"),
+            LeadCollectionDropDownField("job S")]
+        )
+
+        
+        let list :[LeadCollectionField] = [a,b,c,d,e]
+        
+        Kommunicate.launchPreChatWithCustomPayload(appID: (UIApplication.shared.delegate as! AppDelegate).appId,  viewController: self, inputList: list){ (response, error) in
+            guard let response = response else {
+                print("Error \(error)")
+                return
+            }
+            Kommunicate.userSubmittedResponse(name: "123456789", email: "", phoneNumber: "", password: "")
+            print("User Submitted Response \(response)")
+        }
+        
+        
+       
 
     }
 

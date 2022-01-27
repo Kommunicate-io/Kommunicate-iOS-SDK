@@ -17,7 +17,7 @@ open class CustomPreChatFormViewController: UIViewController {
     static let email = "Email"
     static let name = "Name"
     static let phone = "Phone"
-    static let dropDownType = "selection"
+    static let dropDownType = "select"
     
     private var transparentView = UIView()
     private var tableView = UITableView()
@@ -321,18 +321,22 @@ open class CustomPreChatFormViewController: UIViewController {
         let window = UIApplication.shared.keyWindow
         transparentView.frame = window?.frame ?? self.view.frame
         self.view.addSubview(transparentView)
+
+
         
         tableView.frame = CGRect(x: rect.origin.x, y: rect.origin.y + rect.height, width: rect.width, height: 0)
         self.view.addSubview(tableView)
         tableView.layer.cornerRadius = 5
         tableView.reloadData()
+        tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+
         
         transparentView.backgroundColor = UIColor.black.withAlphaComponent(0.9)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(removeTransparentView))
         transparentView.addGestureRecognizer(tapGesture)
         UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
             self.transparentView.alpha = 0.5
-            self.tableView.frame = CGRect(x: rect.origin.x, y: rect.origin.y+rect.height, width: rect.width, height: CGFloat(self.selectedDataSource.count * 50))
+            self.tableView.frame = CGRect(x: rect.origin.x, y: rect.origin.y+rect.height, width: rect.width, height:self.view.frame.size.height - self.tableView.frame.origin.y)
         }, completion: nil)
         
     }

@@ -42,7 +42,7 @@ enum KMLocalizationKey {
 }
 
 @objc
-open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegate {
+open class Kommunicate: NSObject,Localizable {
 
     //MARK: - Public properties
 
@@ -83,7 +83,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
 
     public static let shared = Kommunicate()
     public static var presentingViewController = UIViewController()
-    public static var leadArray = [LeadCollectionFields]()
+    public static var leadArray = [LeadCollectionField]()
 
     public enum KommunicateError: Error {
         case notLoggedIn
@@ -92,6 +92,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
         case teamNotPresent
         case conversationUpdateFailed
         case appSettingsFetchFailed
+        case prechatFormNotFilled
     }
 
     //MARK: - Private properties
@@ -501,7 +502,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                                 let customPreChatVC = CustomPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
                                 customPreChatVC.submitButtonTapped = {  (response:[String:String]) in
                                                                     
-                                    Kommunicate().userSubmittedResponse(name: response[CustomPreChatFormViewController.name] ?? "", email: response[CustomPreChatFormViewController.email] ?? "", phoneNumber: response[CustomPreChatFormViewController.phone] ?? "", password: "")
+                                    Kommunicate.userSubmittedResponse(name: response[CustomPreChatFormViewController.name] ?? "", email: response[CustomPreChatFormViewController.email] ?? "", phoneNumber: response[CustomPreChatFormViewController.phone] ?? "", password: "")
                                 }
                                 customPreChatVC.closeButtonTapped = {
                                     Kommunicate().closeButtonTapped()
@@ -510,7 +511,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                             } else {
                                 let preChatVC = KMPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
                                 preChatVC.submitButtonTapped = {
-                                    Kommunicate().userSubmittedResponse(name: preChatVC.formView.nameTextField.text!, email: preChatVC.formView.emailTextField.text!, phoneNumber: preChatVC.formView.phoneNumberTextField.text!, password: "")
+                                    Kommunicate.userSubmittedResponse(name: preChatVC.formView.nameTextField.text!, email: preChatVC.formView.emailTextField.text!, phoneNumber: preChatVC.formView.phoneNumberTextField.text!, password: "")
                                 }
                                 preChatVC.closeButtonTapped = {
                                     Kommunicate().closeButtonTapped()
@@ -593,7 +594,56 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
         }
     }
     
-    public func userSubmittedResponse(name: String, email: String, phoneNumber: String, password: String) {
+    /**
+    launches the PreChat Lead Collection with custom payload
+
+     - Parameters:
+     - appID: User's application ID.
+     - inputList: list of LeadCollectionField objects to create a form in pre Chat.
+     - viewController: ViewController from which the pre-chat form view will be launched.
+     */
+    open class func launchPreChatWithCustomPayload(appID: String,viewController: UIViewController, inputList: [LeadCollectionField],completion: @escaping([String:String]?,KommunicateError?) -> ()){
+        KMUserDefaultHandler.setApplicationKey(appID)
+        Kommunicate.presentingViewController = viewController
+        
+        Kommunicate.leadArray = inputList
+        
+        if !KMUserDefaultHandler.isLoggedIn() {
+            DispatchQueue.main.async {
+                if !Kommunicate.leadArray.isEmpty {
+                    let customPreChatVC = CustomPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
+                   
+                    customPreChatVC.submitButtonTapped = {  (response:[String:String]) in
+                        completion(response,nil)
+                        Kommunicate.presentingViewController.dismiss(animated: false, completion: nil)
+
+                    }
+                    customPreChatVC.closeButtonTapped = {
+                        Kommunicate().closeButtonTapped()
+                        completion(nil,.prechatFormNotFilled)
+                    }
+                    viewController.present(customPreChatVC, animated: false, completion: nil)
+                } else {
+                    let preChatVC = KMPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
+                    preChatVC.submitButtonTapped = {
+                        Kommunicate.userSubmittedResponse(name: preChatVC.formView.nameTextField.text!, email: preChatVC.formView.emailTextField.text!, phoneNumber: preChatVC.formView.phoneNumberTextField.text!, password: "")
+                    }
+                    preChatVC.closeButtonTapped = {
+                        Kommunicate().closeButtonTapped()
+                        completion(nil,.prechatFormNotFilled)
+
+                    }
+                    viewController.present(preChatVC, animated: false, completion: nil)
+                }
+            }
+        }
+        completion(nil,nil)
+        
+    }
+    
+    
+    
+    open class func userSubmittedResponse(name: String, email: String, phoneNumber: String, password: String) {
         
         guard let appID = KMUserDefaultHandler.getApplicationKey() else { return }
         Kommunicate.presentingViewController.dismiss(animated: false, completion: nil)

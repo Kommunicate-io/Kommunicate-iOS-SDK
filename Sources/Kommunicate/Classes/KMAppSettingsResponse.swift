@@ -28,7 +28,7 @@ public struct AppSetting: Decodable {
     let chatWidget: ChatWidgetResponse?
     let collectFeedback: Bool?
     let collectLead: Bool?
-    let leadCollection: [LeadCollectionFields]?
+    let leadCollection: [LeadCollectionField]?
 
     enum CodingKeys: String, CodingKey {
         case agentID = "agentId"
@@ -45,18 +45,8 @@ struct ChatWidgetResponse: Decodable {
     let preChatGreetingMsg : String?
 }
 
-public struct LeadCollectionFields : Decodable {
-    let type: String
-    let field: String
-    let required: Bool
-    let placeholder: String
-    let element: String?
-    let options: [LeadCollectionDropDownField]?
-}
 
-public struct LeadCollectionDropDownField: Decodable {
-    let value: String
-}
+
 extension KMAppSettingsResponse {
     init(data: Data) throws {
         self = try JSONDecoder().decode(KMAppSettingsResponse.self, from: data)
