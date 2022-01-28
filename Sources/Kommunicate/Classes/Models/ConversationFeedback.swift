@@ -8,6 +8,7 @@
 import Foundation
 
 // MARK: - FeedbackResponse
+
 protocol FeedbackResponse {
     var code: String { get }
     var data: ConversationFeedback? { get }
@@ -16,12 +17,14 @@ protocol FeedbackResponse {
 }
 
 // MARK: - ConversationFeedbackResponse
+
 struct ConversationFeedbackResponse: Decodable, FeedbackResponse {
     let code: String
     let data: ConversationFeedback?
 }
 
 // MARK: - ConversationFeedbackSubmissionResponse
+
 struct ConversationFeedbackSubmissionResponse: FeedbackResponse {
     let code: String
     let data: ConversationFeedback?
@@ -37,6 +40,7 @@ struct ConversationFeedbackSubmissionResponse: FeedbackResponse {
 }
 
 // MARK: - ConversationFeedback
+
 struct ConversationFeedback: Decodable {
     let id, groupID: Int
     let comments: [String]?

@@ -7,30 +7,28 @@
 
 import Foundation
 
- public struct LeadCollectionField : Decodable {
-     let type: String
-     let field: String
-     let required: Bool
-     let placeholder: String
-     let element: String?
-     let options: [LeadCollectionDropDownField]?
-    
-     public init(type: String, field: String, req: Bool, placeHolder: String, element: String?,option: [LeadCollectionDropDownField]?) {
+public struct LeadCollectionField: Decodable {
+    let type: String
+    let field: String
+    let required: Bool
+    let placeholder: String
+    let element: String?
+    let options: [LeadCollectionDropDownField]?
+
+    public init(type: String, field: String, req: Bool, placeHolder: String, element: String?, option: [LeadCollectionDropDownField]?) {
         self.type = type
         self.field = field
-        self.required = req
-        self.placeholder = placeHolder
+        required = req
+        placeholder = placeHolder
         self.element = element
-        self.options = option
+        options = option
     }
-
 }
-
 
 public struct LeadCollectionDropDownField: Decodable {
     let value: String
-    
-    public init(_ value: String){
+
+    public init(_ value: String) {
         self.value = value
     }
 }

@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 extension URLBuilder {
     static func awayMessageURLFor(applicationKey: String, groupId: String) -> URLBuilder {
         let url = URLBuilder.kommunicateApi.add(paths: ["applications", applicationKey, "awaymessage"])

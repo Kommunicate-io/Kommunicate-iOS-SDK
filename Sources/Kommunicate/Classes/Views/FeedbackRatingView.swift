@@ -6,12 +6,10 @@
 //
 
 import Foundation
-import UIKit
 import KommunicateChatUI_iOS_SDK
-
+import UIKit
 
 class FeedbackRatingView: UIView {
-
     var ratingSelected: ((RatingType) -> Void)?
 
     private let sadEmojiButton: EmojiRatingButton = {
@@ -48,13 +46,13 @@ class FeedbackRatingView: UIView {
     private lazy var ratingButtons = [
         sadEmojiButton,
         confusedEmojiButton,
-        happyEmojiButton
+        happyEmojiButton,
     ]
 
     private var selectedRatingTag = 0 {
         didSet {
             let allTags = RatingType.allCases.map { $0.rawValue }
-            guard allTags.contains(selectedRatingTag) && selectedRatingTag != oldValue else { return }
+            guard allTags.contains(selectedRatingTag), selectedRatingTag != oldValue else { return }
             // update state of all buttons
             ratingButtons.forEach { $0.isInactive = ($0.tag != selectedRatingTag) }
             ratingSelected?(RatingType(rawValue: selectedRatingTag) ?? .happy)
@@ -67,7 +65,8 @@ class FeedbackRatingView: UIView {
         setupView()
     }
 
-    required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -77,15 +76,14 @@ class FeedbackRatingView: UIView {
 //
             switch tag {
             case 1:
-                KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.rateConversationEmotionsClick, data: ["UserSelection":["Emoji Clicked": KMCustomEventHandler.CSATRating.poor]])
+                KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.rateConversationEmotionsClick, data: ["UserSelection": ["Emoji Clicked": KMCustomEventHandler.CSATRating.poor]])
             case 5:
-                KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.rateConversationEmotionsClick, data: ["UserSelection":["Emoji Clicked": KMCustomEventHandler.CSATRating.average]])
+                KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.rateConversationEmotionsClick, data: ["UserSelection": ["Emoji Clicked": KMCustomEventHandler.CSATRating.average]])
             case 10:
-                KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.rateConversationEmotionsClick, data: ["UserSelection":["Emoji Clicked": KMCustomEventHandler.CSATRating.great]])
+                KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.rateConversationEmotionsClick, data: ["UserSelection": ["Emoji Clicked": KMCustomEventHandler.CSATRating.great]])
             default:
                 print("Emoji value is not registered!!")
             }
-
         }
         ratingButtons.forEach { $0.ratingTapped = onRatingTap }
     }
@@ -97,13 +95,12 @@ class FeedbackRatingView: UIView {
         NSLayoutConstraint.activate([
             emojiStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             emojiStackView.topAnchor.constraint(equalTo: topAnchor),
-            emojiStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            emojiStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
 }
 
 class EmojiRatingButton: UIView {
-
     typealias Tag = Int
 
     var selectedStateWidth: CGFloat = 42
@@ -146,7 +143,7 @@ class EmojiRatingButton: UIView {
         return stackview
     }()
 
-    private lazy var normalStateWidth = selectedStateWidth*0.8
+    private lazy var normalStateWidth = selectedStateWidth * 0.8
     private lazy var emojiWidthConstraint = emojiButton.widthAnchor.constraint(
         equalToConstant: normalStateWidth
     )
@@ -158,7 +155,8 @@ class EmojiRatingButton: UIView {
         setupView()
     }
 
-    required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -189,7 +187,7 @@ class EmojiRatingButton: UIView {
         ])
     }
 
-    @objc private func tapped(_ button: UIButton) {
+    @objc private func tapped(_: UIButton) {
         ratingTapped?(tag)
     }
 
@@ -203,7 +201,7 @@ class EmojiRatingButton: UIView {
         }
         emojiButton.isSelected = !emojiButton.isSelected
         emojiWidthConstraint.constant = buttonWidth
-        UIView.animate(withDuration: 0.3, animations: {() -> Void in
+        UIView.animate(withDuration: 0.3, animations: { () in
             self.layoutIfNeeded()
             self.titleLabel.alpha = labelAlpha
         })
@@ -218,7 +216,7 @@ extension RatingType: Localizable {
     }
 
     enum LocalizedText {
-        static private let filename = Kommunicate.defaultConfiguration.localizedStringFileName
+        private static let filename = Kommunicate.defaultConfiguration.localizedStringFileName
 
         static let sad = localizedString(forKey: "ConversationRatingOptionPoor", fileName: filename)
         static let confused = localizedString(forKey: "ConversationRatingOptionAverage", fileName: filename)
@@ -252,7 +250,6 @@ extension RatingType: Localizable {
 
 extension EmojiRatingButton {
     class Button: UIButton {
-
         var isInactive: Bool = false {
             didSet {
                 setNeedsLayout()
@@ -260,10 +257,8 @@ extension EmojiRatingButton {
         }
 
         override var state: UIControl.State {
-            get {
-                return isInactive ? UIControl.State(rawValue: super.state.rawValue |
-                    UIControl.State.inactive.rawValue) : super.state
-            }
+            return isInactive ? UIControl.State(rawValue: super.state.rawValue |
+                UIControl.State.inactive.rawValue) : super.state
         }
     }
 }

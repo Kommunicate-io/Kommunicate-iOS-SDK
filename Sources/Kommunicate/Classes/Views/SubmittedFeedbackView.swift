@@ -37,7 +37,7 @@ class SubmittedFeedbackView: UIView {
             ratingView.isHidden = feedback?.rating == nil
             commentsView.isHidden = feedback?.comment == nil
             layoutMargins = (feedback != nil)
-                ? UIEdgeInsets(top: 0, left: 0, bottom: Size.MainView.bottom, right: 0):.zero
+                ? UIEdgeInsets(top: 0, left: 0, bottom: Size.MainView.bottom, right: 0) : .zero
         }
     }
 
@@ -47,7 +47,8 @@ class SubmittedFeedbackView: UIView {
         setupLayout()
     }
 
-    required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -72,11 +73,10 @@ class SubmittedFeedbackView: UIView {
 
 extension SubmittedFeedbackView {
     class RatingView: UIView {
-
         var rating: RatingType? {
             didSet {
                 emojiView.image = rating?.icon()
-                self.invalidateIntrinsicContentSize()
+                invalidateIntrinsicContentSize()
             }
         }
 
@@ -113,7 +113,8 @@ extension SubmittedFeedbackView {
             setupLayout()
         }
 
-        required init?(coder: NSCoder) {
+        @available(*, unavailable)
+        required init?(coder _: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
 
@@ -140,7 +141,7 @@ extension SubmittedFeedbackView {
                 ),
                 emojiView.heightAnchor.constraint(
                     equalToConstant: Size.RatingView.EmojiView.height
-                )
+                ),
             ])
             leftLineView.layout {
                 $0.leading == leadingAnchor
@@ -157,8 +158,8 @@ extension SubmittedFeedbackView {
 
         func drawAGradientLine(inView containerView: UIView, leftAligned: Bool) {
             let gradColors = [
-                UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1).cgColor,
-                UIColor(red: 0, green: 0, blue: 0, alpha: 0.72) .cgColor
+                UIColor(red: 216 / 255, green: 216 / 255, blue: 216 / 255, alpha: 1).cgColor,
+                UIColor(red: 0, green: 0, blue: 0, alpha: 0.72).cgColor,
             ]
             let gradientLayer = CAGradientLayer()
             gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
@@ -198,7 +199,8 @@ extension SubmittedFeedbackView {
             setupViews()
         }
 
-        required init?(coder: NSCoder) {
+        @available(*, unavailable)
+        required init?(coder _: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
 
@@ -232,14 +234,13 @@ extension SubmittedFeedbackView.CommentsView {
         let fixedWidth = textView.frame.size.width
         let size = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
         reqHeightForComments = size.height
-        return reqHeightForComments < maxHeight ? reqHeightForComments:maxHeight
+        return reqHeightForComments < maxHeight ? reqHeightForComments : maxHeight
     }
 }
 
-
 extension SubmittedFeedbackView: Localizable {
     enum LocalizedText {
-        static private let filename = Kommunicate.defaultConfiguration.localizedStringFileName
+        private static let filename = Kommunicate.defaultConfiguration.localizedStringFileName
 
         static let ratingTitle = localizedString(forKey: "PreviousConversationFeedbackTitle", fileName: filename)
     }
@@ -253,12 +254,14 @@ extension SubmittedFeedbackView {
             static let leading: CGFloat = 20
             static let trailing: CGFloat = -20
         }
+
         enum RatingView {
             enum LineView {
                 static let height: CGFloat = 0.51
                 static let leading: CGFloat = 10
                 static let trailing: CGFloat = -10
             }
+
             enum EmojiView {
                 static let width: CGFloat = 15
                 static let height: CGFloat = 15

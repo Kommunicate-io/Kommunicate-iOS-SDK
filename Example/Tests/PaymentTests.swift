@@ -6,9 +6,9 @@
 //  Copyright © 2018 CocoaPods. All rights reserved.
 //
 
-@testable import Kommunicate
 import KommunicateCore_iOS_SDK
 import XCTest
+@testable import Kommunicate
 class PaymentTests: XCTestCase {
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.

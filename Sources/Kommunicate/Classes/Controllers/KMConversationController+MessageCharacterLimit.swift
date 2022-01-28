@@ -8,18 +8,18 @@
 import Foundation
 
 extension KMConversationViewController: MessageCharacterLimitDelegate {
-    func characterLimit(manager: MessageCharacterLimitManager, _ isHidden: Bool) {
-        if (isHidden) {
-            chatBar.headerViewHeight = self.isAwayMessageViewHidden ? 0 :  awayMessageheight
+    func characterLimit(manager _: MessageCharacterLimitManager, _ isHidden: Bool) {
+        if isHidden {
+            chatBar.headerViewHeight = isAwayMessageViewHidden ? 0 : awayMessageheight
         } else {
-            chatBar.headerViewHeight = isAwayMessageViewHidden ?  MessageCharacterLimitManager.charLimitViewHeight : awayMessageheight + MessageCharacterLimitManager.charLimitViewHeight
+            chatBar.headerViewHeight = isAwayMessageViewHidden ? MessageCharacterLimitManager.charLimitViewHeight : awayMessageheight + MessageCharacterLimitManager.charLimitViewHeight
         }
     }
 
-    func characterLimit(manager: MessageCharacterLimitManager, reachedTheLimit limit: Int, textCount: Int) {
+    func characterLimit(manager _: MessageCharacterLimitManager, reachedTheLimit _: Int, textCount: Int) {
         let messageLimit = CharacterLimit.charlimit
         let botLimit = CharacterLimit.botCharLimit
-        if isConversationAssignedToDialogflowBot && textCount >= botLimit.soft && textCount <= messageLimit.soft {
+        if isConversationAssignedToDialogflowBot, textCount >= botLimit.soft, textCount <= messageLimit.soft {
             botCharLimitManager.messageToShow = characterLimitMessage(textCount: textCount, limit: botLimit, isMessageforBot: true)
             botCharLimitManager.showLimitView(true, disableButton: textCount > botLimit.hard)
         } else if textCount >= messageLimit.soft {

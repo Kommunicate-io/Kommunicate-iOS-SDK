@@ -11,7 +11,7 @@ import KommunicateCore_iOS_SDK
 
 public class KMPushNotificationHelper {
     /// Stores information about the notification that arrives
-    var conversationViewConfig : KMConversationViewConfiguration!
+    var conversationViewConfig: KMConversationViewConfiguration!
     var configuration: ALKConfiguration!
 
     public struct NotificationData {
@@ -27,7 +27,7 @@ public class KMPushNotificationHelper {
         }
     }
 
-    public init(_ configuration: ALKConfiguration,_ conversationViewConfig: KMConversationViewConfiguration) {
+    public init(_ configuration: ALKConfiguration, _ conversationViewConfig: KMConversationViewConfiguration) {
         self.configuration = configuration
         self.conversationViewConfig = conversationViewConfig
     }
@@ -44,8 +44,9 @@ public class KMPushNotificationHelper {
         let notifData = notificationData(using: object)
         guard
             let userInfo = notification.userInfo,
-            let alertValue = userInfo["alertValue"] as? String else {
-                return (notifData, nil)
+            let alertValue = userInfo["alertValue"] as? String
+        else {
+            return (notifData, nil)
         }
         return (notifData, alertValue)
     }
@@ -81,9 +82,9 @@ public class KMPushNotificationHelper {
         return isChatThreadIsOpen(notification, userId: viewModel.contactId, groupId: viewModel.channelKey)
     }
 
-    private func isChatThreadIsOpen(_ notification: NotificationData, userId: String?, groupId: NSNumber?) -> Bool {
+    private func isChatThreadIsOpen(_ notification: NotificationData, userId _: String?, groupId: NSNumber?) -> Bool {
         let isGroupMessage = notification.groupId != nil && notification.groupId == groupId
-        if isGroupMessage{
+        if isGroupMessage {
             return true
         }
         return false
@@ -120,9 +121,10 @@ public class KMPushNotificationHelper {
     ///   - notification: notification that is tapped.
     public func refreshConversation(_ viewController: KMConversationViewController, with notification: NotificationData) {
         viewController.unsubscribingChannel()
-        if !self.isChatThreadIsOpen(notification,
-                                    userId: viewController.viewModel.contactId,
-                                    groupId: viewController.viewModel.channelKey) {
+        if !isChatThreadIsOpen(notification,
+                               userId: viewController.viewModel.contactId,
+                               groupId: viewController.viewModel.channelKey)
+        {
             viewController.viewModel.prefilledMessage = nil
         }
         viewController.viewModel.contactId = nil
@@ -137,7 +139,6 @@ public class KMPushNotificationHelper {
     /// - WARNING: Doesn't work if Kommunicate's Controller is added inside some container.
     /// - Returns: Bool value indicating whether Kommunicate view is at top.
     public func isKommunicateVCAtTop() -> Bool {
-
         if NotificationHelper().isApplozicVCAtTop() {
             return true
         }
@@ -159,7 +160,7 @@ public class KMPushNotificationHelper {
     /// - WARNING: Use this only when `isKommunicateVCAtTop` returns true.
     /// - Parameter notification: Contains details about arrived notification.
     public func handleNotificationTap(_ notification: NotificationData) {
-        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.notificationClick, data: ["UserSelection":["notificationdata":notification]])
+        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.notificationClick, data: ["UserSelection": ["notificationdata": notification]])
         guard let topVC = ALPushAssist().topViewController else { return }
         switch topVC {
         case let vc as KMConversationListViewController:
@@ -170,7 +171,8 @@ public class KMPushNotificationHelper {
             refreshConversation(vc, with: notification)
         default:
             if let searchVC = topVC as? UISearchController,
-                let vc = searchVC.presentingViewController as? KMConversationListViewController {
+               let vc = searchVC.presentingViewController as? KMConversationListViewController
+            {
                 openConversationFromListVC(vc, notification: notification)
                 return
             }
@@ -197,18 +199,18 @@ public class KMPushNotificationHelper {
     private func findChatVC(_ notification: NotificationData) {
         guard let vc = ALPushAssist().topViewController else { return }
         dismissOurVCIfVisible(vc) { handleTap in
-            if (handleTap){
+            if handleTap {
                 self.handleNotificationTap(notification)
             }
         }
     }
 
     private func dismissOurVCIfVisible(_ vc: UIViewController,
-                                       completion: @escaping (Bool) -> Void) {
-
-        if(!isKommunicateVCAtTop()) {
+                                       completion: @escaping (Bool) -> Void)
+    {
+        if !isKommunicateVCAtTop() {
             completion(false)
-            return;
+            return
         }
 
         guard !String(describing: vc.classForCoder).hasPrefix("KMConversation") else {
@@ -217,11 +219,12 @@ public class KMPushNotificationHelper {
         }
         guard
             vc.navigationController != nil,
-            vc.navigationController?.popViewController(animated: true) == nil else {
-                vc.dismiss(animated: true) {
-                    completion(true)
-                }
-                return
+            vc.navigationController?.popViewController(animated: true) == nil
+        else {
+            vc.dismiss(animated: true) {
+                completion(true)
+            }
+            return
         }
         vc.dismiss(animated: true) {
             completion(true)

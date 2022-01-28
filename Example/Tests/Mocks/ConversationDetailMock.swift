@@ -7,8 +7,8 @@
 //
 
 import Foundation
-@testable import Kommunicate
 import KommunicateCore_iOS_SDK
+@testable import Kommunicate
 
 class ConversationDetailMock: ConversationDetail {
     var groupId: NSNumber!

@@ -37,20 +37,19 @@ public struct AppSetting: Decodable {
 }
 
 struct ChatWidgetResponse: Decodable {
-    let primaryColor : String?
-    let secondaryColor : String?
-    let showPoweredBy : Bool?
-    let isSingleThreaded : Bool?
-    let hidePostCTAEnabled : Bool?
-    let preChatGreetingMsg : String?
+    let primaryColor: String?
+    let secondaryColor: String?
+    let showPoweredBy: Bool?
+    let isSingleThreaded: Bool?
+    let hidePostCTAEnabled: Bool?
+    let preChatGreetingMsg: String?
 }
-
-
 
 extension KMAppSettingsResponse {
     init(data: Data) throws {
         self = try JSONDecoder().decode(KMAppSettingsResponse.self, from: data)
     }
+
     func appSettings() throws -> AppSetting {
         guard code == "SUCCESS" else {
             throw KMAppSettingsError.invalidCodeValue

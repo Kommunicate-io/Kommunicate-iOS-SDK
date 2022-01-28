@@ -1,7 +1,7 @@
-@testable import Kommunicate
 import KommunicateCore_iOS_SDK
 import UIKit
 import XCTest
+@testable import Kommunicate
 
 class KommunicateTests: XCTestCase {
     class KommunicateMock: Kommunicate {

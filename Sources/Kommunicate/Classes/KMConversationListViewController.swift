@@ -9,10 +9,9 @@ import Foundation
 import KommunicateChatUI_iOS_SDK
 import KommunicateCore_iOS_SDK
 
-public class KMConversationListViewController : ALKBaseViewController, Localizable {
-
+public class KMConversationListViewController: ALKBaseViewController, Localizable {
     enum LocalizedText {
-        static private let filename = Kommunicate.defaultConfiguration.localizedStringFileName
+        private static let filename = Kommunicate.defaultConfiguration.localizedStringFileName
         static let title = localizedString(forKey: "ConversationListVCTitle", fileName: filename)
         static let NoConversationsLabelText = localizedString(forKey: "NoConversationsLabelText", fileName: filename)
         static let leftBarBackButtonText = localizedString(forKey: "Back", fileName: filename)
@@ -21,7 +20,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         static let waitMessage = localizedString(forKey: "WaitMessage", fileName: filename)
     }
 
-    let faqIdentifier =  11223346
+    let faqIdentifier = 11_223_346
 
     public var conversationViewController: KMConversationViewController?
     public var conversationViewModelType = ALKConversationViewModel.self
@@ -41,13 +40,14 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
             static let leading: CGFloat = 10.0
             static let trailing: CGFloat = 10.0
         }
+
         enum StartNewButton {
             static let height: CGFloat = 50
-            static let width : CGFloat = 50
+            static let width: CGFloat = 50
         }
     }
 
-    let backgroundView : UIView = {
+    let backgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         return view
@@ -60,7 +60,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         return button
     }()
 
-    lazy var noConversationLabel : UILabel = {
+    lazy var noConversationLabel: UILabel = {
         let label = UILabel()
         label.text = localizedString(forKey: "NoConversationsLabelText", fileName: configuration.localizedStringFileName)
         label.textColor = UIColor.black
@@ -87,7 +87,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         return barButton
     }()
 
-    private var converastionListNavBarItemToken: NotificationToken? = nil
+    private var converastionListNavBarItemToken: NotificationToken?
     fileprivate var tapToDismiss: UITapGestureRecognizer!
     fileprivate var alMqttConversationService: ALMQTTConversationService!
     fileprivate let activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
@@ -109,12 +109,12 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         localizedStringFileName = configuration.localizedStringFileName
     }
 
-
+    @available(*, unavailable)
     public required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    required init(configuration: ALKConfiguration) {
+    required init(configuration _: ALKConfiguration) {
         fatalError("init(configuration:) has not been implemented")
     }
 
@@ -122,7 +122,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         NotificationCenter.default.addObserver(self, selector: #selector(addMessages(notification:)),
                                                name: Notification.Name.newMessageNotification, object: nil)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide(notification:)), name:  UIResponder.keyboardDidHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide(notification:)), name: UIResponder.keyboardDidHideNotification, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(pushNotification(notification:)), name: Notification.Name.pushNotification, object: nil)
 
@@ -136,9 +136,10 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
 
             let pushAssist = ALPushAssist()
             guard let notificationInfo = notification.userInfo,
-                let topVc = pushAssist.topViewController,
-                topVc is KMConversationListViewController else {
-                    return
+                  let topVc = pushAssist.topViewController,
+                  topVc is KMConversationListViewController
+            else {
+                return
             }
             let identifier = notificationInfo["identifier"] as? Int
             if identifier == self.faqIdentifier {
@@ -150,13 +151,13 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         }
     }
 
-    open override func viewWillAppear(_ animated: Bool) {
+    override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         edgesForExtendedLayout = []
         viewModel.prepareController(dbService: dbService)
     }
 
-    open override func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         setupMqtt()
         subscribeToConversation()
@@ -168,9 +169,9 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         extendedLayoutIncludesOpaqueBars = true
     }
 
-    open override func viewDidAppear(_ animated: Bool) {
+    override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if  channelKey != nil {
+        if channelKey != nil {
             launchChat(groupId: channelKey)
             channelKey = nil
         }
@@ -185,7 +186,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
 
     func setupViewAndConstraints() {
         view.isUserInteractionEnabled = false
-        var image = self.kmConversationViewConfiguration.startNewButtonIcon?.scale(with: CGSize.init(width: Padding.StartNewButton.width, height: Padding.StartNewButton.height))
+        var image = kmConversationViewConfiguration.startNewButtonIcon?.scale(with: CGSize(width: Padding.StartNewButton.width, height: Padding.StartNewButton.height))
         image = image?.withRenderingMode(.alwaysTemplate)
         startNewButton.setImage(image, for: .normal)
 
@@ -193,10 +194,10 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         view.addViewsForAutolayout(views: [backgroundView])
 
         activityIndicator.color = UIColor.gray
-        backgroundView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        backgroundView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        backgroundView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        backgroundView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
 
         startNewButton.widthAnchor.constraint(equalToConstant: Padding.StartNewButton.width).isActive = true
         startNewButton.heightAnchor.constraint(equalToConstant: Padding.StartNewButton.height).isActive = true
@@ -230,13 +231,13 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         guard let msgArray = notification.object as? [ALMessage] else { return }
         print("new notification received: ", msgArray.first?.message ?? "")
         guard let list = notification.object as? [Any], !list.isEmpty else { return }
-        self.viewModel.addMessages(messages: list)
+        viewModel.addMessages(messages: list)
     }
 
     @objc func keyboardDidHide(notification: NSNotification) {
-        guard let _ = notification.object  else { return }
-        if self.navigationController?.visibleViewController as? KMConversationListViewController != nil, self.configuration.isMessageSearchEnabled, self.searchBar.searchBar.text == "" {
-            self.showNavigationItems()
+        guard let _ = notification.object else { return }
+        if navigationController?.visibleViewController as? KMConversationListViewController != nil, configuration.isMessageSearchEnabled, searchBar.searchBar.text == "" {
+            showNavigationItems()
         }
     }
 
@@ -265,7 +266,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         let info = notification.userInfo
         let alertValue = info?["alertValue"]
         guard let updateUI = info?["updateUI"] as? Int else { return }
-        if updateUI == Int(APP_STATE_ACTIVE.rawValue), self.isViewLoaded, self.view.window != nil {
+        if updateUI == Int(APP_STATE_ACTIVE.rawValue), isViewLoaded, view.window != nil {
             guard let alert = alertValue as? String else { return }
             let alertComponents = alert.components(separatedBy: ":")
             if alertComponents.count > 1 {
@@ -273,40 +274,40 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
             } else {
                 message.message = alertComponents.first
             }
-            self.viewModel.addMessages(messages: [message])
+            viewModel.addMessages(messages: [message])
         } else if updateUI == Int(APP_STATE_INACTIVE.rawValue) {
             // Coming from background
 
             guard groupId != nil || conversationId != nil else { return }
-            self.launchChat(groupId: groupId)
+            launchChat(groupId: groupId)
         }
     }
 
     @objc func updateMessageList(notification: NSNotification) {
         print("Reloadtable notification received")
         guard let list = notification.object as? [Any] else { return }
-        self.viewModel.updateMessageList(messages: list)
+        viewModel.updateMessageList(messages: list)
     }
 
     @objc func updateUserDetails(notification: NSNotification) {
         print("update user detail notification received")
         guard let userId = notification.object as? String else { return }
         print("update user detail")
-        self.viewModel.updateUserDetail(userId: userId) { (success) in
+        viewModel.updateUserDetail(userId: userId) { success in
             if success {
                 self.tableView.reloadData()
             }
         }
     }
 
-    @objc func updateChannelName(notification: NSNotification) {
+    @objc func updateChannelName(notification _: NSNotification) {
         print("update group name notification received")
-        guard self.view.window != nil else { return }
+        guard view.window != nil else { return }
         print("update group detail")
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
 
-    public override func removeObserver() {
+    override public func removeObserver() {
         if alMqttConversationService != nil {
             alMqttConversationService.unsubscribeToConversation()
         }
@@ -400,9 +401,10 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
 
     func sync(message: ALMessage) {
         if let viewController = conversationViewController,
-            ALPushAssist().topViewController is KMConversationViewController,
-            viewController.viewModel != nil,
-            viewController.viewModel.channelKey == message.groupId {
+           ALPushAssist().topViewController is KMConversationViewController,
+           viewController.viewModel != nil,
+           viewController.viewModel.channelKey == message.groupId
+        {
             viewController.viewModel.addMessagesToList([message])
         }
         viewModel.prepareController(dbService: dbService)
@@ -447,37 +449,39 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         }
     }
 
-    func showNoConversationsView(_ show : Bool) {
+    func showNoConversationsView(_ show: Bool) {
         view.isUserInteractionEnabled = true
         conversationListTableViewController.tableView.isHidden = show
         noConversationLabel.isHidden = !show
-        if !configuration.hideEmptyStateStartNewButtonInConversationList, self.kmConversationViewConfiguration.startNewButtonIcon != nil  {
+        if !configuration.hideEmptyStateStartNewButtonInConversationList, kmConversationViewConfiguration.startNewButtonIcon != nil {
             startNewButton.isHidden = !show
         }
     }
 
     private func showAlert() {
-        guard  let topVC = ALPushAssist().topViewController,
-            topVC is KMConversationListViewController else {
-                return
+        guard let topVC = ALPushAssist().topViewController,
+              topVC is KMConversationListViewController
+        else {
+            return
         }
         let alertMessage = LocalizedText.unableToCreateConversationError
         let okText = LocalizedText.okButton
         let alert = UIAlertController(
             title: "",
             message: alertMessage,
-            preferredStyle: UIAlertController.Style.alert)
+            preferredStyle: UIAlertController.Style.alert
+        )
         alert.addAction(UIAlertAction(title: okText, style: UIAlertAction.Style.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
 
     private func createConversationAndLaunch() {
         view.isUserInteractionEnabled = false
-        let alertView = displayAlert(viewController : self)
-        Kommunicate.createConversation() { (result) in
+        let alertView = displayAlert(viewController: self)
+        Kommunicate.createConversation { result in
             switch result {
-            case .success(let conversationId):
-                self.channelService.getChannelInformation(byResponse: nil, orClientChannelKey: conversationId, withCompletion: { error, channel, response in
+            case let .success(conversationId):
+                self.channelService.getChannelInformation(byResponse: nil, orClientChannelKey: conversationId, withCompletion: { _, channel, _ in
                     DispatchQueue.main.async {
                         self.view.isUserInteractionEnabled = true
                         alertView.dismiss(animated: true, completion: nil)
@@ -489,7 +493,7 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
                         self.launchChat(groupId: alChannel.key)
                     }
                 })
-            case .failure( _):
+            case .failure:
                 DispatchQueue.main.async {
                     self.view.isUserInteractionEnabled = true
                     alertView.dismiss(animated: true, completion: {
@@ -500,23 +504,22 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
         }
     }
 
-    private func displayAlert(viewController:KMConversationListViewController) -> UIAlertController {
-
+    private func displayAlert(viewController: KMConversationListViewController) -> UIAlertController {
         let alertTitle = LocalizedText.waitMessage
         let loadingAlertController = UIAlertController(title: alertTitle, message: nil, preferredStyle: .alert)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
 
         loadingAlertController.view.addSubview(activityIndicator)
 
-        let xConstraint: NSLayoutConstraint = NSLayoutConstraint(item: activityIndicator, attribute: .centerX, relatedBy: .equal, toItem: loadingAlertController.view, attribute: .centerX, multiplier: 1, constant: 0)
-        let yConstraint: NSLayoutConstraint = NSLayoutConstraint(item: activityIndicator, attribute: .centerY, relatedBy: .equal, toItem: loadingAlertController.view, attribute: .centerY, multiplier: 1.4, constant: 0)
+        let xConstraint = NSLayoutConstraint(item: activityIndicator, attribute: .centerX, relatedBy: .equal, toItem: loadingAlertController.view, attribute: .centerX, multiplier: 1, constant: 0)
+        let yConstraint = NSLayoutConstraint(item: activityIndicator, attribute: .centerY, relatedBy: .equal, toItem: loadingAlertController.view, attribute: .centerY, multiplier: 1.4, constant: 0)
 
-        NSLayoutConstraint.activate([ xConstraint, yConstraint])
+        NSLayoutConstraint.activate([xConstraint, yConstraint])
         activityIndicator.isUserInteractionEnabled = false
         activityIndicator.startAnimating()
 
-        let height: NSLayoutConstraint = NSLayoutConstraint(item: loadingAlertController.view as Any, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 80)
-        loadingAlertController.view.addConstraint(height);
+        let height = NSLayoutConstraint(item: loadingAlertController.view as Any, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 80)
+        loadingAlertController.view.addConstraint(height)
 
         viewController.present(loadingAlertController, animated: true, completion: nil)
 
@@ -526,11 +529,11 @@ public class KMConversationListViewController : ALKBaseViewController, Localizab
     private func checkPlanAndShowSuspensionScreen() {
         let accountVC = ALKAccountSuspensionController()
         guard PricingPlan.shared.showSuspensionScreen() else { return }
-        self.present(accountVC, animated: true, completion: nil)
-        accountVC.closePressed = {[weak self] in
+        present(accountVC, animated: true, completion: nil)
+        accountVC.closePressed = { [weak self] in
             self?.dismiss(animated: true, completion: nil)
         }
-        self.registerUserClientService.syncAccountStatus { response, error in
+        registerUserClientService.syncAccountStatus { response, error in
             guard error == nil, let response = response, response.isRegisteredSuccessfully() else {
                 print("Failed to sync the account package status")
                 return
@@ -567,7 +570,7 @@ extension KMConversationListViewController: ALKConversationListViewModelDelegate
     open func listUpdated() {
         DispatchQueue.main.async {
             print("Number of rows \(self.tableView.numberOfRows(inSection: 0))")
-            if (self.viewModel.getChatList().isEmpty) {
+            if self.viewModel.getChatList().isEmpty {
                 self.showNoConversationsView(true)
             }
             self.tableView.reloadData()
@@ -592,8 +595,8 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
     open func updateUserDetail(_ userId: String!) {
         guard let userId = userId else { return }
         print("update user detail")
-        viewModel.updateUserDetail(userId: userId) { (success) in
-            if (success) {
+        viewModel.updateUserDetail(userId: userId) { success in
+            if success {
                 self.tableView.reloadData()
             }
         }
@@ -620,9 +623,10 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
         guard let message = alMessage else { return }
         let viewController = navigationController?.visibleViewController as? KMConversationViewController
         if let vm = viewController?.viewModel, vm.contactId != nil || vm.channelKey != nil,
-            let visibleController = navigationController?.visibleViewController,
-            visibleController.isKind(of: KMConversationViewController.self),
-            isNewMessageForActiveThread(alMessage: alMessage, vm: vm) {
+           let visibleController = navigationController?.visibleViewController,
+           visibleController.isKind(of: KMConversationViewController.self),
+           isNewMessageForActiveThread(alMessage: alMessage, vm: vm)
+        {
             viewModel.syncCall(viewController: viewController, message: message, isChatOpen: true)
 
         } else if !isMessageSentByLoggedInUser(alMessage: alMessage) {
@@ -630,7 +634,7 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
             notificationView?.showNativeNotificationWithcompletionHandler {
                 _ in
                 let kmNotificationHelper = KMPushNotificationHelper(self.configuration, self.kmConversationViewConfiguration)
-                let  notificationData =  kmNotificationHelper.notificationData(message: message)
+                let notificationData = kmNotificationHelper.notificationData(message: message)
 
                 guard !kmNotificationHelper.isKommunicateVCAtTop() else {
                     kmNotificationHelper.handleNotificationTap(notificationData)
@@ -640,7 +644,8 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
             }
         }
         if let visibleController = navigationController?.visibleViewController,
-            visibleController.isKind(of: KMConversationListViewController.self) {
+           visibleController.isKind(of: KMConversationListViewController.self)
+        {
             sync(message: alMessage)
         }
     }
@@ -700,8 +705,7 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
 }
 
 extension KMConversationListViewController: ALKConversationListTableViewDelegate {
-    public func tapped(_ chat: ALKChatViewModelProtocol, at index: Int) {
-
+    public func tapped(_ chat: ALKChatViewModelProtocol, at _: Int) {
         let convViewModel = conversationViewModelType.init(contactId: chat.contactId, channelKey: chat.channelKey, localizedStringFileName: configuration.localizedStringFileName)
         let viewController = conversationViewController ?? KMConversationViewController(configuration: configuration, conversationViewConfiguration: kmConversationViewConfiguration, individualLaunch: false)
         viewController.viewModel = convViewModel
@@ -709,16 +713,14 @@ extension KMConversationListViewController: ALKConversationListTableViewDelegate
         navigationController?.pushViewController(viewController, animated: true)
     }
 
-    public func emptyChatCellTapped() {
-
-    }
+    public func emptyChatCellTapped() {}
 
     public func scrolledToBottom() {
         viewModel.fetchMoreMessages(dbService: dbService)
     }
 
     public func userBlockNotification(userId: String, isBlocked: Bool) {
-        viewModel.userBlockNotification(userId : userId,  isBlocked: isBlocked)
+        viewModel.userBlockNotification(userId: userId, isBlocked: isBlocked)
     }
 
     public func muteNotification(conversation: ALMessage, isMuted: Bool) {

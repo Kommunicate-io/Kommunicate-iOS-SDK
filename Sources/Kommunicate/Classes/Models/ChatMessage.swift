@@ -9,7 +9,7 @@ import Foundation
 import KommunicateChatUI_iOS_SDK
 import UIKit
 
-class ChatMessage: ALKChatViewModelProtocol,Localizable {
+class ChatMessage: ALKChatViewModelProtocol, Localizable {
     var messageMetadata: NSMutableDictionary?
     var messageType: ALKMessageType
     var avatar: URL?
@@ -29,31 +29,31 @@ class ChatMessage: ALKChatViewModelProtocol,Localizable {
     var isMessageEmpty: Bool
 
     init(message: ALKChatViewModelProtocol) {
-        self.avatar = message.avatar
-        self.avatarImage = message.avatarImage
-        self.avatarGroupImageUrl = message.avatarGroupImageUrl
-        self.name = message.name
-        self.groupName = message.groupName
-        self.theLastMessage = message.theLastMessage
-        self.hasUnreadMessages = message.hasUnreadMessages
-        self.totalNumberOfUnreadMessages = message.totalNumberOfUnreadMessages
-        self.isGroupChat = message.isGroupChat
-        self.contactId = message.contactId
-        self.channelKey = message.channelKey
-        self.conversationId = message.conversationId
-        self.createdAt = message.createdAt
-        self.messageType = message.messageType
-        self.isMessageEmpty = message.isMessageEmpty
+        avatar = message.avatar
+        avatarImage = message.avatarImage
+        avatarGroupImageUrl = message.avatarGroupImageUrl
+        name = message.name
+        groupName = message.groupName
+        theLastMessage = message.theLastMessage
+        hasUnreadMessages = message.hasUnreadMessages
+        totalNumberOfUnreadMessages = message.totalNumberOfUnreadMessages
+        isGroupChat = message.isGroupChat
+        contactId = message.contactId
+        channelKey = message.channelKey
+        conversationId = message.conversationId
+        createdAt = message.createdAt
+        messageType = message.messageType
+        isMessageEmpty = message.isMessageEmpty
 
         // Update message to show conversation assignee details
-        let (_,channel) = ConversationDetail().conversationAssignee(groupId: self.channelKey, userId: self.contactId)
-        self.channelType = message.channelType
+        let (_, channel) = ConversationDetail().conversationAssignee(groupId: channelKey, userId: contactId)
+        channelType = message.channelType
 
-        guard let alChannel = channel  else {
-            self.groupName = localizedString(forKey: KMLocalizationKey.noName, fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
+        guard let alChannel = channel else {
+            groupName = localizedString(forKey: KMLocalizationKey.noName, fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
             return
         }
-        self.groupName = alChannel.name ?? localizedString(forKey: KMLocalizationKey.noName, fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
-        self.avatarGroupImageUrl = alChannel.channelImageURL
+        groupName = alChannel.name ?? localizedString(forKey: KMLocalizationKey.noName, fileName: Kommunicate.defaultConfiguration.localizedStringFileName)
+        avatarGroupImageUrl = alChannel.channelImageURL
     }
 }

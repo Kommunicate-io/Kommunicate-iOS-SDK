@@ -8,7 +8,6 @@
 import Foundation
 
 extension KMConversationService {
-
     private enum FeedbackParamKey {
         static let groupId = "groupId"
         static let comment = "comments"
@@ -26,7 +25,7 @@ extension KMConversationService {
     ///   - completion: A Result of type `ConversationFeedback`.
     func feedbackFor(
         groupId: Int,
-        completion: @escaping (Result<ConversationFeedback, FeedbackError>)->()
+        completion: @escaping (Result<ConversationFeedback, FeedbackError>) -> Void
     ) {
         guard let url = URLBuilder.feedbackURLFor(groupId: String(describing: groupId)).url else {
             completion(.failure(.api(.urlBuilding)))
@@ -35,7 +34,7 @@ extension KMConversationService {
         DataLoader.request(url: url) {
             result in
             switch result {
-            case .success(let data):
+            case let .success(data):
                 guard let feedbackResponse = try? ConversationFeedbackResponse(data: data) else {
                     completion(.failure(.api(.jsonConversion)))
                     return
@@ -49,7 +48,7 @@ extension KMConversationService {
                 } catch {
                     completion(.failure(.notFound))
                 }
-            case .failure(let error):
+            case let .failure(error):
                 completion(.failure(.api(.network(error))))
             }
         }
@@ -67,7 +66,7 @@ extension KMConversationService {
         userName: String,
         assigneeId: String,
         applicationId: String,
-        completion: @escaping (Result<ConversationFeedback, FeedbackError>)->()
+        completion: @escaping (Result<ConversationFeedback, FeedbackError>) -> Void
     ) {
         guard let url = URLBuilder.feedbackURLForSubmission().url else {
             completion(.failure(.api(.urlBuilding)))
@@ -75,25 +74,26 @@ extension KMConversationService {
         }
         let userInfo: [String: Any] = [
             FeedbackParamKey.userName: userName,
-            FeedbackParamKey.userId: userId
+            FeedbackParamKey.userId: userId,
         ]
         var params: [String: Any] = [
             FeedbackParamKey.groupId: groupId,
             FeedbackParamKey.rating: feedback.rating.rawValue,
             FeedbackParamKey.applicationId: applicationId,
             FeedbackParamKey.assigneeId: assigneeId,
-            FeedbackParamKey.userInfo: userInfo
+            FeedbackParamKey.userInfo: userInfo,
         ]
         if let comment = feedback.comment, !comment.isEmpty {
             params[FeedbackParamKey.comment] = [comment]
         }
         DataLoader.postRequest(url: url, params: params) { result in
             switch result {
-            case .success(let data):
+            case let .success(data):
                 guard let feedbackResponse =
-                    try? ConversationFeedbackSubmissionResponse(data: data) else {
-                        completion(.failure(.api(.jsonConversion)))
-                        return
+                    try? ConversationFeedbackSubmissionResponse(data: data)
+                else {
+                    completion(.failure(.api(.jsonConversion)))
+                    return
                 }
                 do {
                     let feedback = try feedbackResponse.conversationFeedback()
@@ -103,7 +103,7 @@ extension KMConversationService {
                 } catch {
                     completion(.failure(.notFound))
                 }
-            case .failure(let error):
+            case let .failure(error):
                 completion(.failure(.api(.network(error))))
             }
         }

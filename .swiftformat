@@ -1,0 +1,31 @@
+# file options
+
+--exclude Tests,Demo/Pods
+
+# format options
+
+--allman false
+--commas always
+--comments indent
+--elseposition same-line
+--empty void
+--header ignore
+--hexliteralcase uppercase
+--ifdef indent
+--indent 4
+--indentcase false
+--importgrouping testable-bottom
+--linebreaks lf
+--operatorfunc spaced
+--patternlet hoist
+--ranges spaced
+--self remove
+--semicolons inline
+--stripunusedargs always
+--trimwhitespace always
+--wraparguments preserve
+--wrapcollections preserve
+
+# rules
+
+--enable isEmpty

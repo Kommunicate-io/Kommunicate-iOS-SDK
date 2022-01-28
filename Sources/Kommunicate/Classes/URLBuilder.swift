@@ -9,7 +9,6 @@ import Foundation
 import KommunicateCore_iOS_SDK
 
 final class URLBuilder {
-
     private var components = URLComponents()
     private var pathComponents = [String]()
 
@@ -19,7 +18,8 @@ final class URLBuilder {
 
     static var chatApi: URLBuilder {
         guard let baseURL = URL(string: ALUserDefaultsHandler.getBASEURL()),
-              let host = baseURL.host else {
+              let host = baseURL.host
+        else {
             return URLBuilder(host: "")
         }
         return URLBuilder(host: host)
@@ -58,7 +58,7 @@ final class URLBuilder {
 
     @discardableResult
     func add(paths: [LosslessStringConvertible]) -> URLBuilder {
-        paths.forEach { add(path: $0)}
+        paths.forEach { add(path: $0) }
         return self
     }
 
@@ -72,10 +72,8 @@ final class URLBuilder {
 }
 
 extension URLBuilder {
-
     /// Bot Detail url builder
-    static func botDetail(for applicationKey: String, botId: String) -> URLBuilder {
+    static func botDetail(for _: String, botId: String) -> URLBuilder {
         return URLBuilder.kommunicateApi.add(paths: ["rest", "ws", "botdetails", botId])
     }
 }
-

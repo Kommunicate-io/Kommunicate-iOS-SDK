@@ -11,20 +11,19 @@ import UIKit
 
 /// A view to show away message. It has message label and dotted line view.
 class AwayMessageView: UIView {
-
     enum ConstraintIdentifier: String {
-         case awayMessageViewHeight
+        case awayMessageViewHeight
     }
 
-    struct Padding {
-        struct DottedLineView {
+    enum Padding {
+        enum DottedLineView {
             static let leading: CGFloat = 12.0
             static let trailing: CGFloat = 23.0
         }
 
-        struct MessageLabel {
+        enum MessageLabel {
             static let top: CGFloat = 5.0
-            static let leading: CGFloat  = 20.0
+            static let leading: CGFloat = 20.0
             static let trailing: CGFloat = 20.0
         }
     }
@@ -43,14 +42,15 @@ class AwayMessageView: UIView {
 
     private let dottedLayer: CAShapeLayer = {
         let shapeLayer = CAShapeLayer()
-        shapeLayer.strokeColor =  UIColor(netHex: 0xbebbbb).cgColor
+        shapeLayer.strokeColor = UIColor(netHex: 0xBEBBBB).cgColor
         shapeLayer.lineWidth = 0
         shapeLayer.lineDashPattern = [5, 5]
         shapeLayer.path = CGMutablePath()
         return shapeLayer
     }()
+
     private let dottedLineViewHeight: CGFloat = 1.0
-    lazy private var dottedLineHeightAnchor = dottedLineView.heightAnchor.constraint(equalToConstant: 0)
+    private lazy var dottedLineHeightAnchor = dottedLineView.heightAnchor.constraint(equalToConstant: 0)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -80,8 +80,8 @@ class AwayMessageView: UIView {
     }
 
     func showMessage(_ flag: Bool) {
-        dottedLineHeightAnchor.constant = flag ? dottedLineViewHeight:0
-        dottedLayer.lineWidth = flag ? dottedLineViewHeight:0
+        dottedLineHeightAnchor.constant = flag ? dottedLineViewHeight : 0
+        dottedLayer.lineWidth = flag ? dottedLineViewHeight : 0
     }
 
     private func addConstraints() {

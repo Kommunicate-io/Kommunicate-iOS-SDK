@@ -12,7 +12,6 @@ protocol Localizable {
 }
 
 extension Localizable {
-
     static func localizedString(forKey: String) -> String {
         let bundle = Bundle.kommunicate
 

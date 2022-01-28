@@ -9,8 +9,7 @@ import KommunicateChatUI_iOS_SDK
 import WebKit
 
 public class FaqViewController: UIViewController, Localizable {
-
-    var webView: WKWebView = WKWebView()
+    var webView: WKWebView = .init()
     let url: URL
     let configuration: ALKConfiguration
 
@@ -18,14 +17,15 @@ public class FaqViewController: UIViewController, Localizable {
         self.url = url
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
-        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.faqClick, data:["UserSelection":["FaqUrl":url]] )
+        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.faqClick, data: ["UserSelection": ["FaqUrl": url]])
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func loadView() {
+    override public func loadView() {
         super.loadView()
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
@@ -34,28 +34,27 @@ public class FaqViewController: UIViewController, Localizable {
         view = webView
     }
 
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         webView.load(URLRequest(url: url))
     }
 
-    public override func viewWillAppear(_ animated: Bool) {
+    override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        var backImage = UIImage.init(named: "icon_back", in: Bundle.kommunicate, compatibleWith: nil)
+        var backImage = UIImage(named: "icon_back", in: Bundle.kommunicate, compatibleWith: nil)
         backImage = backImage?.imageFlippedForRightToLeftLayoutDirection()
-        let backButton = UIBarButtonItem.init(image: backImage, style: .plain, target: self , action: #selector(backTapped))
+        let backButton = UIBarButtonItem(image: backImage, style: .plain, target: self, action: #selector(backTapped))
         backButton.accessibilityIdentifier = "BackButton"
         navigationItem.leftBarButtonItem = backButton
         navigationItem.title = localizedString(forKey: "FaqTitle", fileName: configuration.localizedStringFileName)
     }
 
     @objc func backTapped() {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }
 
 extension FaqViewController: WKNavigationDelegate {
-
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         guard navigationAction.navigationType == .linkActivated else {
             decisionHandler(.allow)
@@ -64,5 +63,4 @@ extension FaqViewController: WKNavigationDelegate {
         webView.load(navigationAction.request)
         decisionHandler(.cancel)
     }
-
 }

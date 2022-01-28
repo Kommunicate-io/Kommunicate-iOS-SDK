@@ -11,8 +11,7 @@ struct API {
     enum Backend: String {
         case chat = "https://chat.kommunicate.io"
         var url: URL {
-            return URL(string: self.rawValue)!
+            return URL(string: rawValue)!
         }
     }
 }
-

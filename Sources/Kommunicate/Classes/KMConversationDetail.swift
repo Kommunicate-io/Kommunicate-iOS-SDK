@@ -9,16 +9,15 @@ import Foundation
 import KommunicateCore_iOS_SDK
 
 public protocol KMConversationDetailType {
-    var groupId: Int {get}
-    var user: String {get set}
-    var agent: String {get set}
-    var applicationKey: String {get}
-    var createdBy: String {get}
+    var groupId: Int { get }
+    var user: String { get set }
+    var agent: String { get set }
+    var applicationKey: String { get }
+    var createdBy: String { get }
 }
 
 /// Contains details of a conversation need to passed
 open class KMConversationDetail: KMConversationDetailType, Encodable {
-
     public let groupId: Int
     public var user: String
     public var agent: String
@@ -29,8 +28,8 @@ open class KMConversationDetail: KMConversationDetailType, Encodable {
                 user: String,
                 agent: String,
                 applicationKey: String,
-                createdBy: String
-                ) {
+                createdBy: String)
+    {
         self.groupId = groupId
         self.user = user
         self.agent = agent
@@ -39,21 +38,20 @@ open class KMConversationDetail: KMConversationDetailType, Encodable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case groupId = "groupId"
+        case groupId
         case user = "participantUserId"
         case agent = "defaultAgentId"
-        case applicationKey = "applicationKey"
-        case createdBy = "createdBy"
+        case applicationKey
+        case createdBy
     }
 }
 
 public protocol KMGroupUserType {
-    var id: String {get}
-    var role: KMGroupUser.RoleType {get}
+    var id: String { get }
+    var role: KMGroupUser.RoleType { get }
 }
 
 public class KMGroupUser: ALGroupUser, KMGroupUserType, Encodable {
-
     public enum RoleType: Int {
         case agent = 1
         case bot = 2
@@ -86,10 +84,10 @@ public class KMGroupUser: ALGroupUser, KMGroupUserType, Encodable {
         try container.encode(role.rawValue, forKey: .role)
     }
 
-    public func toDict() -> Dictionary<String, Any> {
-        var dict = Dictionary<String, Any>()
-        dict[CodingKeys.id.rawValue] = self.id
-        dict[CodingKeys.role.rawValue] = self.role.rawValue
+    public func toDict() -> [String: Any] {
+        var dict = [String: Any]()
+        dict[CodingKeys.id.rawValue] = id
+        dict[CodingKeys.role.rawValue] = role.rawValue
         return dict
     }
 }

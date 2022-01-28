@@ -13,7 +13,7 @@ protocol BotDetailResponseProtocol {
     func botDetail() throws -> [BotDetail]
 }
 
-struct BotDetailResponse : Decodable, BotDetailResponseProtocol {
+struct BotDetailResponse: Decodable, BotDetailResponseProtocol {
     let message: String
     let data: [BotDetail]?
 
@@ -36,9 +36,11 @@ extension BotDetailResponse {
         case SMARTREPLY = "smartreply"
         case CUSTOM = "custom"
     }
+
     init(data: Data) throws {
         self = try JSONDecoder().decode(BotDetailResponse.self, from: data)
     }
+
     func botDetail() throws -> [BotDetail] {
         guard message == "success" else {
             throw KMBotError.invalidCodeValue

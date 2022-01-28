@@ -6,11 +6,11 @@
 //  Copyright © 2018 CocoaPods. All rights reserved.
 //
 
-@testable import Kommunicate
 import KommunicateCore_iOS_SDK
 import Nimble
 import Nimble_Snapshots
 import Quick
+@testable import Kommunicate
 
 class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
     func backButtonPressed() {}

@@ -8,7 +8,7 @@
 import UIKit
 
 class TextViewWithPlaceholder: UITextView {
-    private class PlaceholderLabel: UILabel { }
+    private class PlaceholderLabel: UILabel {}
 
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -68,7 +68,7 @@ class TextViewWithPlaceholder: UITextView {
 }
 
 extension TextViewWithPlaceholder: NSTextStorageDelegate {
-    func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
+    func textStorage(_: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range _: NSRange, changeInLength _: Int) {
         if editedMask.contains(.editedCharacters) {
             placeholderLabel.isHidden = !text.isEmpty
         }

@@ -5,12 +5,11 @@
 //  Created by Mukesh on 17/02/20.
 //
 
-import UIKit
 import KommunicateChatUI_iOS_SDK
+import UIKit
 
 class ConversationClosedView: UIView {
-
-    var restartTapped: (()->(Void))?
+    var restartTapped: (() -> Void)?
 
     private let previousRatingView = SubmittedFeedbackView()
 
@@ -75,7 +74,8 @@ class ConversationClosedView: UIView {
         setupView()
     }
 
-    required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -98,7 +98,7 @@ class ConversationClosedView: UIView {
             action: #selector(restartConversationTapped),
             for: .touchUpInside
         )
-        self.backgroundColor = .background(.mediumGrey)
+        backgroundColor = .background(.mediumGrey)
         setupLayout()
     }
 
@@ -108,7 +108,7 @@ class ConversationClosedView: UIView {
         addViewsForAutolayout(views: [
             previousRatingView,
             conversationResolvedLabel,
-            restartConversationStackView
+            restartConversationStackView,
         ])
 
         previousRatingView.layout {
@@ -145,14 +145,14 @@ class ConversationClosedView: UIView {
             restartConversationStackView.bottomAnchor.constraint(
                 equalTo: bottomAnchor,
                 constant: Size.RestartConversationView.bottom
-            )
+            ),
         ])
     }
 }
 
 extension ConversationClosedView: Localizable {
     enum LocalizedText {
-        static private let filename = Kommunicate.defaultConfiguration.localizedStringFileName
+        private static let filename = Kommunicate.defaultConfiguration.localizedStringFileName
 
         static let conversationResolved = localizedString(
             forKey: "ConversationClosedDescription",

@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 extension UIViewController {
-
     var bottomAnchor: NSLayoutYAxisAnchor {
         if #available(iOS 11.0, *) {
             return view.safeAreaLayoutGuide.bottomAnchor

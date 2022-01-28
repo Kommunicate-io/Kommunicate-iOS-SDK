@@ -8,10 +8,9 @@
 import Foundation
 import KommunicateChatUI_iOS_SDK
 
-extension ALKConfiguration {
-
+public extension ALKConfiguration {
     /// If true, faq button in conversation view will be hidden.
-    public var hideFaqButtonInConversationView: Bool {
+    var hideFaqButtonInConversationView: Bool {
         set {
             guard newValue else { return }
             navigationItemsForConversationView.removeAll(where: { $0.identifier == faqIdentifier })
@@ -23,7 +22,7 @@ extension ALKConfiguration {
     }
 
     /// If true, faq button in conversation list will be hidden.
-    public var hideFaqButtonInConversationList: Bool {
+    var hideFaqButtonInConversationList: Bool {
         set {
             guard newValue else { return }
             navigationItemsForConversationList.removeAll(where: { $0.identifier == faqIdentifier })
@@ -37,7 +36,7 @@ extension ALKConfiguration {
     /// passed with each message as value of `KM_CHAT_CONTEXT` key.
     ///
     /// - Parameter info: Info that should be passed with each message
-    public mutating func updateChatContext(with info: [String: Any]) throws {
+    mutating func updateChatContext(with info: [String: Any]) throws {
         var metadata = messageMetadata ?? [:]
         var context: [String: Any] = [:]
 
@@ -56,12 +55,11 @@ extension ALKConfiguration {
         }
     }
 
-
     /// Use this to update user's language, it will be passed with
     /// each message in the metadata.
     ///
     /// - Parameter tag: Language tag to set user's language
-    public mutating func updateUserLanguage(tag: String) throws {
+    mutating func updateUserLanguage(tag: String) throws {
         do {
             try updateChatContext(with: [ChannelMetadataKeys.languageTag: tag])
         } catch {
@@ -73,15 +71,15 @@ extension ALKConfiguration {
         guard
             let messageMetadata = messageMetadata,
             let chatContext = messageMetadata[ChannelMetadataKeys.chatContext] as? String,
-            let contextData = chatContext.data(using: .utf8) else {
-                return nil
+            let contextData = chatContext.data(using: .utf8)
+        else {
+            return nil
         }
         do {
             let contextDict = try JSONSerialization
-                .jsonObject(with: contextData, options : .allowFragments) as? Dictionary<String, Any>
+                .jsonObject(with: contextData, options: .allowFragments) as? [String: Any]
             return contextDict
-        }
-        catch {
+        } catch {
             throw error
         }
     }

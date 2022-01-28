@@ -8,19 +8,19 @@
 import Foundation
 import UIKit
 class MessageCharacterLimitView: UIView {
-
     enum ConstraintIdentifier: String {
         case messageCharacterLimitViewHeight
     }
 
-    struct Padding {
-        struct MessageLabel {
+    enum Padding {
+        enum MessageLabel {
             static let top: CGFloat = 5.0
-            static let leading: CGFloat  = 20.0
+            static let leading: CGFloat = 20.0
             static let trailing: CGFloat = 20.0
             static let height: CGFloat = 70.0
         }
-        struct DottedLineView {
+
+        enum DottedLineView {
             static let leading: CGFloat = 12.0
             static let trailing: CGFloat = 23.0
         }
@@ -41,7 +41,7 @@ class MessageCharacterLimitView: UIView {
 
     private let dottedLayer: CAShapeLayer = {
         let shapeLayer = CAShapeLayer()
-        shapeLayer.strokeColor =  UIColor(netHex: 0xbebbbb).cgColor
+        shapeLayer.strokeColor = UIColor(netHex: 0xBEBBBB).cgColor
         shapeLayer.lineWidth = 0
         shapeLayer.lineDashPattern = [5, 5]
         shapeLayer.path = CGMutablePath()
@@ -49,11 +49,11 @@ class MessageCharacterLimitView: UIView {
     }()
 
     private let dottedLineViewHeight: CGFloat = 1.0
-    lazy private var dottedLineHeightAnchor = dottedLineView.heightAnchor.constraint(equalToConstant: 0)
+    private lazy var dottedLineHeightAnchor = dottedLineView.heightAnchor.constraint(equalToConstant: 0)
 
-    lazy private var messageLabelHeightAnchor = messageLabel.heightAnchor.constraint(equalToConstant: 0)
+    private lazy var messageLabelHeightAnchor = messageLabel.heightAnchor.constraint(equalToConstant: 0)
 
-    public override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
     }
@@ -81,8 +81,8 @@ class MessageCharacterLimitView: UIView {
     }
 
     func showDottedLine(_ flag: Bool) {
-        dottedLineHeightAnchor.constant = flag ? dottedLineViewHeight:0
-        dottedLayer.lineWidth = flag ? dottedLineViewHeight:0
+        dottedLineHeightAnchor.constant = flag ? dottedLineViewHeight : 0
+        dottedLayer.lineWidth = flag ? dottedLineViewHeight : 0
     }
 
     private func addConstraints() {
@@ -101,7 +101,7 @@ class MessageCharacterLimitView: UIView {
         }
     }
 
-    func hideView(hide:Bool) {
+    func hideView(hide: Bool) {
         showDottedLine(!hide)
         messageLabelHeightAnchor.constant = hide ? 0 : height()
     }

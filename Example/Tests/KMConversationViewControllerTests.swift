@@ -6,10 +6,10 @@
 //  Copyright © 2019 CocoaPods. All rights reserved.
 //
 
-@testable import Kommunicate
 import KommunicateChatUI_iOS_SDK
 import Nimble
 import Quick
+@testable import Kommunicate
 
 class KMConversationViewControllerTests: QuickSpec {
     override func spec() {
