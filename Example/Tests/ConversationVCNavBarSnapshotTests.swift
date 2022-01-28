@@ -6,17 +6,15 @@
 //  Copyright © 2018 CocoaPods. All rights reserved.
 //
 
-import Quick
+@testable import Kommunicate
+import KommunicateCore_iOS_SDK
 import Nimble
 import Nimble_Snapshots
-import KommunicateCore_iOS_SDK
-@testable import Kommunicate
+import Quick
 
 class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
-    func backButtonPressed() {
+    func backButtonPressed() {}
 
-    }
-    
     let mockContact: ALContact = {
         let alContact = ALContact()
         alContact.userId = "demoUserId"
@@ -26,23 +24,24 @@ class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
 
     let mockChannel: ALChannel = {
         let channel = ALChannel()
-        channel.key = 1244444
+        channel.key = 1_244_444
         channel.name = "Demo Display Name"
         channel.type = Int16(SUPPORT_GROUP.rawValue)
         return channel
     }()
-    
+
     override func spec() {
-        describe ("conversationVC NavBar") {
+        describe("conversationVC NavBar") {
             var navigationController: UINavigationController!
             var customNavigationView: ConversationVCNavBar!
             var viewController: UIViewController!
-            
+
             beforeEach {
                 customNavigationView = ConversationVCNavBar(
                     delegate: self,
                     localizationFileName: "Localizable",
-                    configuration: KMConversationViewConfiguration())
+                    configuration: KMConversationViewConfiguration()
+                )
                 viewController = UIViewController(nibName: nil, bundle: nil)
                 viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
                 navigationController = KMBaseNavigationViewController(rootViewController: viewController)
@@ -50,17 +49,16 @@ class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
                 customNavigationView.setupAppearance()
             }
 
-
-            it ("show agent online") {
+            it("show agent online") {
                 self.mockContact.connected = true
-                customNavigationView.updateView(assignee: self.mockContact,channel:self.mockChannel )
+                customNavigationView.updateView(assignee: self.mockContact, channel: self.mockChannel)
                 navigationController.navigationBar.snapshotView(afterScreenUpdates: true)
                 expect(navigationController.navigationBar).to(haveValidSnapshot())
             }
-            
-            it ("show agent offline") {
+
+            it("show agent offline") {
                 self.mockContact.connected = false
-                customNavigationView.updateView(assignee: self.mockContact,channel: self.mockChannel)
+                customNavigationView.updateView(assignee: self.mockContact, channel: self.mockChannel)
                 navigationController.navigationBar.snapshotView(afterScreenUpdates: true)
                 expect(navigationController.navigationBar).to(haveValidSnapshot())
             }
@@ -74,8 +72,7 @@ class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
         navigationBarProxy.titleTextAttributes = [
             .foregroundColor: UIColor.blue,
             .font: UIFont.boldSystemFont(ofSize: 16),
-            .subtitleFont: UIFont.systemFont(ofSize: 8)
+            .subtitleFont: UIFont.systemFont(ofSize: 8),
         ]
     }
-    
 }

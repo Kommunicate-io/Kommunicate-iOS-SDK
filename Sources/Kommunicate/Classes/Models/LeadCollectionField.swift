@@ -15,13 +15,13 @@ import Foundation
      let element: String?
      let options: [LeadCollectionDropDownField]?
     
-     public init(type: String, field: String,req: Bool,placeHolder: String,element : String?,option: [LeadCollectionDropDownField]?) {
+     public init(type: String, field: String, req: Bool, placeHolder: String, element: String?,option: [LeadCollectionDropDownField]?) {
         self.type = type
         self.field = field
         self.required = req
         self.placeholder = placeHolder
-         self.element = element
-         self.options = option
+        self.element = element
+        self.options = option
     }
 
 }

@@ -6,13 +6,12 @@
 //  Copyright © 2019 CocoaPods. All rights reserved.
 //
 
-import Quick
-import Nimble
-import KommunicateChatUI_iOS_SDK
 @testable import Kommunicate
+import KommunicateChatUI_iOS_SDK
+import Nimble
+import Quick
 
 class KMConversationViewControllerTests: QuickSpec {
-
     override func spec() {
         describe("KMConversationVC") {
             context("while fetching conversation details") {
@@ -44,8 +43,6 @@ class KMConversationViewControllerTests: QuickSpec {
                     }
                 }
             }
-
         }
     }
-
 }

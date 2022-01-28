@@ -3,6 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
+- [CM-798]  Launch Prechat with Custom Payload 
 
 ## [6.4.0] - 2022-01-21Z
 - Updated KM Chat UI to 0.1.2 which has the updated KM Core (0.0.2) pod

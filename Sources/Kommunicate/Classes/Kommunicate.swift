@@ -602,7 +602,7 @@ open class Kommunicate: NSObject,Localizable {
      - inputList: list of LeadCollectionField objects to create a form in pre Chat.
      - viewController: ViewController from which the pre-chat form view will be launched.
      */
-    open class func launchPreChatWithCustomPayload(appID: String,viewController: UIViewController, inputList: [LeadCollectionField],completion: @escaping([String:String]?,KommunicateError?) -> ()){
+    open class func launchPreChatWithCustomPayload(appID: String, viewController: UIViewController, inputList: [LeadCollectionField], completion: @escaping([String:String]?,KommunicateError?) -> ()){
         KMUserDefaultHandler.setApplicationKey(appID)
         Kommunicate.presentingViewController = viewController
         
@@ -622,7 +622,7 @@ open class Kommunicate: NSObject,Localizable {
                         Kommunicate().closeButtonTapped()
                         completion(nil,.prechatFormNotFilled)
                     }
-                    viewController.present(customPreChatVC, animated: false, completion: nil)
+                    viewController.present(customPreChatVC, animated: true, completion: nil)
                 } else {
                     let preChatVC = KMPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
                     preChatVC.submitButtonTapped = {
@@ -633,12 +633,11 @@ open class Kommunicate: NSObject,Localizable {
                         completion(nil,.prechatFormNotFilled)
 
                     }
-                    viewController.present(preChatVC, animated: false, completion: nil)
+                    viewController.present(preChatVC, animated: true, completion: nil)
                 }
             }
         }
         completion(nil,nil)
-        
     }
     
     
@@ -649,12 +648,18 @@ open class Kommunicate: NSObject,Localizable {
         Kommunicate.presentingViewController.dismiss(animated: false, completion: nil)
         let kmUser = KMUser.init()
         kmUser.applicationId = appID
+       
         if !email.isEmpty {
             kmUser.userId = email
             kmUser.email = email
-        } else {
+        } else if !name.isEmpty {
             kmUser.userId = name
+        }else if !phoneNumber.isEmpty {
+            kmUser.userId = phoneNumber
+        }else{
+            kmUser.userId = Kommunicate.randomId()
         }
+        
         if !phoneNumber.isEmpty {
             kmUser.contactNumber = phoneNumber
         }

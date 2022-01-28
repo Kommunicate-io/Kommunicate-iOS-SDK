@@ -11,7 +11,6 @@ import XCTest
 @testable import Kommunicate
 
 class MessageMetadataTests: XCTestCase {
-
     var config: KMConfiguration!
 
     var messageMetadata: [AnyHashable: Any]? {
@@ -32,7 +31,6 @@ class MessageMetadataTests: XCTestCase {
         let value1 = try XCTUnwrap(context["chatInfo"] as? String)
         XCTAssertEqual(value1, "chat info value")
     }
-
 
     func testLanguageUpdate() throws {
         try config.updateUserLanguage(tag: "fr")
@@ -64,15 +62,15 @@ class MessageMetadataTests: XCTestCase {
     private func chatContextFromMetadata(_ metadata: [AnyHashable: Any]) throws -> [String: Any]? {
         guard
             let chatContext = metadata[ChannelMetadataKeys.chatContext] as? String,
-            let contextData = chatContext.data(using: .utf8) else {
-                return nil
+            let contextData = chatContext.data(using: .utf8)
+        else {
+            return nil
         }
         do {
             let contextDict = try JSONSerialization
-                .jsonObject(with: contextData, options : .allowFragments) as? Dictionary<String, Any>
+                .jsonObject(with: contextData, options: .allowFragments) as? [String: Any]
             return contextDict
-        }
-        catch {
+        } catch {
             throw error
         }
     }

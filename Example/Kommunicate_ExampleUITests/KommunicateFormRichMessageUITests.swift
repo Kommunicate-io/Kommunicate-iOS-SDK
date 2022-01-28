@@ -15,10 +15,11 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         static let fillUserId = "TestUserId"
         static let fillPassword = "TestUserPassword"
     }
+
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        addUIInterruptionMonitor(withDescription: AppPermission.AlertMessage.accessNotificationInApplication) { (alerts) -> Bool in
+        addUIInterruptionMonitor(withDescription: AppPermission.AlertMessage.accessNotificationInApplication) { alerts -> Bool in
             if alerts.buttons[AppPermission.AlertButton.allow].exists {
                 alerts.buttons[AppPermission.AlertButton.allow].tap()
             }
@@ -35,7 +36,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
             return
         }
     }
-    
+
     func testFormTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
@@ -49,7 +50,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse]
         waitFor(object: submitResponse) { $0.exists }
     }
-    
+
     private func login() {
         let path = Bundle(for: KommunicateRichMessageUITests.self).url(forResource: "Info", withExtension: "plist")
         let dict = NSDictionary(contentsOf: path!) as? [String: Any]
@@ -65,8 +66,8 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         passwordSecureTextField.typeText(password as! String)
         elementsQuery.buttons[InAppButton.LaunchScreen.getStarted].tap()
     }
-    
-    private func beforeTest_Launch_NewConversation () -> (XCUIApplication) {
+
+    private func beforeTest_Launch_NewConversation() -> (XCUIApplication) {
         let app = XCUIApplication()
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]
         waitFor(object: launchConversationButton) { $0.exists }
@@ -81,7 +82,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         inputView.tap()
         return app
     }
-    
+
     private func appIdFromEnvVars() -> String? {
         let path = Bundle(for: KommunicateRichMessageUITests.self).url(forResource: "Info", withExtension: "plist")
         let dict = NSDictionary(contentsOf: path!) as? [String: Any]

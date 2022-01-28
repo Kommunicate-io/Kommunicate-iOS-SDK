@@ -7,16 +7,14 @@
 //
 
 import Foundation
-import KommunicateCore_iOS_SDK
 @testable import Kommunicate
+import KommunicateCore_iOS_SDK
 
 class ConversationDetailMock: ConversationDetail {
-
     var groupId: NSNumber!
 
-    override func updatedAssigneeDetails(groupId: NSNumber?, userId: String?, completion: @escaping (ALContact?,ALChannel?) -> ()) {
+    override func updatedAssigneeDetails(groupId: NSNumber?, userId _: String?, completion: @escaping (ALContact?, ALChannel?) -> Void) {
         self.groupId = groupId
-        completion(nil,nil)
+        completion(nil, nil)
     }
-
 }

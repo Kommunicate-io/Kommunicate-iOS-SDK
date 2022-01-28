@@ -6,23 +6,22 @@
 //  Copyright © 2018 CocoaPods. All rights reserved.
 //
 
-import XCTest
 @testable import Kommunicate
 import KommunicateCore_iOS_SDK
+import XCTest
 class PaymentTests: XCTestCase {
-
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
     func testPayment_whenStartupPlan_andUserRoleWebAdmin_showsSuspension() {
-
         UserDefaultsHandlerMock.pricingPackage = 101
         UserDefaultsHandlerMock.userRole = Int16(AL_USER_ROLE.rawValue)
         UtilityClassMock.isDebugBuild = false
         let pricing = PricingPlan(
             utility: UtilityClassMock.self,
-            userDefaultsHandler: UserDefaultsHandlerMock.self)
+            userDefaultsHandler: UserDefaultsHandlerMock.self
+        )
 
         XCTAssertTrue(pricing.showSuspensionScreen())
     }
@@ -33,7 +32,8 @@ class PaymentTests: XCTestCase {
         UtilityClassMock.isDebugBuild = false
         let pricing = PricingPlan(
             utility: UtilityClassMock.self,
-            userDefaultsHandler: UserDefaultsHandlerMock.self)
+            userDefaultsHandler: UserDefaultsHandlerMock.self
+        )
 
         XCTAssertFalse(pricing.showSuspensionScreen())
     }
@@ -44,28 +44,26 @@ class PaymentTests: XCTestCase {
         UtilityClassMock.isDebugBuild = false
         let pricing = PricingPlan(
             utility: UtilityClassMock.self,
-            userDefaultsHandler: UserDefaultsHandlerMock.self)
+            userDefaultsHandler: UserDefaultsHandlerMock.self
+        )
 
         XCTAssertFalse(pricing.showSuspensionScreen())
     }
 
     func testPayment_whenDebugBuild_hidesSuspension() {
-
         UserDefaultsHandlerMock.pricingPackage = 101
         UserDefaultsHandlerMock.userRole = Int16(AL_USER_ROLE.rawValue)
         UtilityClassMock.isDebugBuild = true
         let pricing = PricingPlan(
             utility: UtilityClassMock.self,
-            userDefaultsHandler: UserDefaultsHandlerMock.self)
+            userDefaultsHandler: UserDefaultsHandlerMock.self
+        )
 
         XCTAssertFalse(pricing.showSuspensionScreen())
-
     }
 }
 
-
 class UserDefaultsHandlerMock: ALUserDefaultsHandler {
-
     static var pricingPackage: Int16 = 101
     static var userRole = Int16(AL_APPLICATION_WEB_ADMIN.rawValue)
 
@@ -79,7 +77,6 @@ class UserDefaultsHandlerMock: ALUserDefaultsHandler {
 }
 
 class UtilityClassMock: ALUtilityClass {
-
     static var isDebugBuild = false
 
     override class func isThisDebugBuild() -> Bool {
