@@ -146,14 +146,25 @@
 
             let list: [LeadCollectionField] = [a, b, c, d, e]
 
-            Kommunicate.launchPreChatWithCustomPayload(appID: (UIApplication.shared.delegate as! AppDelegate).appId, viewController: self, inputList: list) { response, error in
-                guard let response = response else {
+            Kommunicate.launchPreChatWithCustomPayload(appID: (UIApplication.shared.delegate as! AppDelegate).appId, viewController: self, inputList: list,prechatcompletion: {
+                error in
+                guard let error = error else{
+                    print("Successfully launched prechat")
+                    return
+                }
+                print("Error while launching Pre chat \(error)")
+                
+            },completion: {response, error in
+                guard let response = response else{
                     print("Error \(error)")
                     return
                 }
-                Kommunicate.userSubmittedResponse(name: "123456789", email: "", phoneNumber: "", password: "")
                 print("User Submitted Response \(response)")
-            }
+               
+                Kommunicate.userSubmittedResponse(name: "123456789", email: "", phoneNumber: "", password: "")
+                
+            })
+        
         }
 
         @objc func keyboardWillHide(notification: NSNotification) {

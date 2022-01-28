@@ -601,8 +601,10 @@ open class Kommunicate: NSObject,Localizable {
      - appID: User's application ID.
      - inputList: list of LeadCollectionField objects to create a form in pre Chat.
      - viewController: ViewController from which the pre-chat form view will be launched.
+     - prechatCompletion:  Callback to inform prechat launched successfully or not
+     - completion: Callback to pass form response or error
      */
-    open class func launchPreChatWithCustomPayload(appID: String, viewController: UIViewController, inputList: [LeadCollectionField], completion: @escaping([String:String]?,KommunicateError?) -> ()){
+    open class func launchPreChatWithCustomPayload(appID: String, viewController: UIViewController, inputList: [LeadCollectionField], prechatcompletion: @escaping(KommunicateError?) -> (),completion: @escaping([String:String]?,KommunicateError?) -> ()){
         KMUserDefaultHandler.setApplicationKey(appID)
         Kommunicate.presentingViewController = viewController
         
@@ -623,6 +625,7 @@ open class Kommunicate: NSObject,Localizable {
                         completion(nil,.prechatFormNotFilled)
                     }
                     viewController.present(customPreChatVC, animated: true, completion: nil)
+                    prechatcompletion(nil)
                 } else {
                     let preChatVC = KMPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
                     preChatVC.submitButtonTapped = {
@@ -634,6 +637,7 @@ open class Kommunicate: NSObject,Localizable {
 
                     }
                     viewController.present(preChatVC, animated: true, completion: nil)
+                    prechatcompletion(nil)
                 }
             }
         }
