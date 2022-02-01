@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension Bundle {
-    public static var kommunicate: Bundle {
+public extension Bundle {
+    static var kommunicate: Bundle {
         #if SWIFT_PACKAGE
             return Bundle.module
         #else

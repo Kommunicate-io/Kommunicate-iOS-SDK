@@ -9,52 +9,50 @@ import Foundation
 import KommunicateCore_iOS_SDK
 
 class ConversationDetail {
-
     let channelService = ALChannelService()
     let userService = ALUserService()
     let contactDbService = ALContactDBService()
     let channelDbService = ALChannelDBService()
 
-    func conversationAssignee(groupId: NSNumber?, userId: String?) -> (ALContact?,ALChannel?) {
+    func conversationAssignee(groupId: NSNumber?, userId: String?) -> (ALContact?, ALChannel?) {
         // Check if group conversation.
         guard let channelKey = groupId else {
             guard let userId = userId else {
-                return (nil,nil)
+                return (nil, nil)
             }
-            return (ALContactService().loadContact(byKey: "userId", value: userId),nil)
+            return (ALContactService().loadContact(byKey: "userId", value: userId), nil)
         }
 
         let channel = channelService.getChannelByKey(channelKey)
         let metadata = channel?.metadata
         // Check if metadata contains assignee details
 
-        if(channel?.type == Int16(SUPPORT_GROUP.rawValue)){
+        if channel?.type == Int16(SUPPORT_GROUP.rawValue) {
             guard let assigneeId = metadata?[ChannelMetadataKeys.conversationAssignee] as? String else {
-                return (nil,channel)
+                return (nil, channel)
             }
 
             // Load contact from assignee id
             guard let assignee = contactDbService.loadContact(byKey: "userId", value: assigneeId) else {
-                return (nil,channel)
+                return (nil, channel)
             }
-            return (assignee,channel)
+            return (assignee, channel)
         }
-        return (nil,channel)
+        return (nil, channel)
     }
-
 
     func updatedAssigneeDetails(groupId: NSNumber?,
                                 userId: String?,
-                                completion: @escaping (ALContact?, ALChannel?) -> ()) {
-
+                                completion: @escaping (ALContact?, ALChannel?) -> Void)
+    {
         var (assignee, alChannel) = conversationAssignee(groupId: groupId, userId: userId)
         guard let contact = assignee else {
-            completion(nil,alChannel)
+            completion(nil, alChannel)
             return
         }
 
         let userIds: [String] = [contact.userId]
-        userService.fetchAndupdateUserDetails(NSMutableArray(array: userIds)) {[weak self] userDetailArray, _ in
+        userService.fetchAndupdateUserDetails(NSMutableArray(array: userIds)) { [weak self] userDetailArray, _ in
             guard let strongSelf = self, let userDetails = userDetailArray else {
                 completion(contact, alChannel)
                 return
@@ -74,13 +72,13 @@ class ConversationDetail {
         return channel.isClosedConversation
     }
 
-    func feedbackFor(channelId: Int, completion: @escaping (Feedback?)->()) {
+    func feedbackFor(channelId: Int, completion: @escaping (Feedback?) -> Void) {
         let conversationService = KMConversationService()
         conversationService.feedbackFor(groupId: channelId, completion: { result in
             switch result {
-            case .success(let value):
+            case let .success(value):
                 completion(value.feedback)
-            case .failure(let error):
+            case let .failure(error):
                 print("Conversation feedback error: \(error.localizedDescription)")
                 completion(nil)
             }
@@ -90,7 +88,8 @@ class ConversationDetail {
     func isAssignedToBot(groupID: Int) -> Bool {
         guard let assigneeId = assigneeUserIdFor(groupID: groupID),
               let channelUserX = channelDbService.loadChannelUserX(byUserId: groupID as NSNumber, andUserId: assigneeId),
-              let userRole = channelUserX.role as? Int else {
+              let userRole = channelUserX.role as? Int
+        else {
             return false
         }
         return userRole == KMGroupUser.RoleType.bot.rawValue
@@ -99,7 +98,8 @@ class ConversationDetail {
     private func assigneeUserIdFor(groupID: Int) -> String? {
         guard let channel = channelService.getChannelByKey(groupID as NSNumber),
               channel.type == Int16(SUPPORT_GROUP.rawValue),
-              let assigneeId = channel.metadata?[KMBotService.conversationAssignee] as? String else {
+              let assigneeId = channel.metadata?[KMBotService.conversationAssignee] as? String
+        else {
             return nil
         }
         return assigneeId

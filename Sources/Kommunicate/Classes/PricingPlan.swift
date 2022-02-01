@@ -9,7 +9,6 @@ import Foundation
 import KommunicateCore_iOS_SDK
 
 struct PricingPlan {
-
     static let shared = PricingPlan()
 
     // Dependencies
@@ -21,7 +20,8 @@ struct PricingPlan {
 
     init(
         utility: ALUtilityClass.Type = ALUtilityClass.self,
-        userDefaultsHandler: ALUserDefaultsHandler.Type = ALUserDefaultsHandler.self) {
+        userDefaultsHandler: ALUserDefaultsHandler.Type = ALUserDefaultsHandler.self
+    ) {
         self.utility = utility
         self.userDefaultsHandler = userDefaultsHandler
     }
@@ -30,7 +30,7 @@ struct PricingPlan {
         let isReleaseBuild = !utility.isThisDebugBuild()
         let isFreePlan = userDefaultsHandler.getUserPricingPackage() == startupPlan
         let isNotAgent = userDefaultsHandler.getUserRoleType() != Int16(AL_APPLICATION_WEB_ADMIN.rawValue)
-        guard isReleaseBuild && isNotAgent && isFreePlan else { return false }
+        guard isReleaseBuild, isNotAgent, isFreePlan else { return false }
         return true
     }
 }

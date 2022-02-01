@@ -10,12 +10,12 @@ import KommunicateChatUI_iOS_SDK
 import UIKit
 
 class KMAppSettingService {
-
     let appSettingsUserDefaults = ALKAppSettingsUserDefaults()
 
     func appSetting(
         applicationKey: String = KMUserDefaultHandler.getApplicationKey(),
-        completion: @escaping (Result<AppSetting, KMAppSettingsError>)->()) {
+        completion: @escaping (Result<AppSetting, KMAppSettingsError>) -> Void
+    ) {
         guard let url = URLBuilder.appSettings(for: applicationKey).url else {
             completion(.failure(.api(.urlBuilding)))
             return
@@ -23,7 +23,7 @@ class KMAppSettingService {
         DataLoader.request(url: url, completion: {
             result in
             switch result {
-            case .success(let data):
+            case let .success(data):
                 guard let appSettingResponse = try? KMAppSettingsResponse(data: data) else {
                     completion(.failure(.api(.jsonConversion)))
                     return
@@ -36,7 +36,7 @@ class KMAppSettingService {
                 } catch {
                     completion(.failure(.notFound))
                 }
-            case .failure(let error):
+            case let .failure(error):
                 completion(.failure(.api(.network(error))))
             }
         })
@@ -67,7 +67,7 @@ class KMAppSettingService {
         appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
     }
 
-    func clearAppSettingsData()  {
+    func clearAppSettingsData() {
         /// Clearing the app settings data
         appSettingsUserDefaults.clear()
 

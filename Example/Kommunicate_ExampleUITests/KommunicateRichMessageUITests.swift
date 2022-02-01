@@ -22,10 +22,11 @@ class KommunicateRichMessageUITests: XCTestCase {
         static let fillUserId = "TestUserId"
         static let fillPassword = "TestUserPassword"
     }
+
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        addUIInterruptionMonitor(withDescription: AppPermission.AlertMessage.accessNotificationInApplication) { (alerts) -> Bool in
+        addUIInterruptionMonitor(withDescription: AppPermission.AlertMessage.accessNotificationInApplication) { alerts -> Bool in
             if alerts.buttons[AppPermission.AlertButton.allow].exists {
                 alerts.buttons[AppPermission.AlertButton.allow].tap()
             }
@@ -42,7 +43,7 @@ class KommunicateRichMessageUITests: XCTestCase {
             return
         }
     }
-    
+
     func testSuggestedRepliesTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
@@ -57,7 +58,7 @@ class KommunicateRichMessageUITests: XCTestCase {
             .textViews[RichMessageResponseText.suggestedButtonResponse]
         waitFor(object: suggestedRepliesResponse) { $0.exists }
     }
-    
+
     func testLinkbuttonTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
@@ -72,7 +73,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.goToGoogle].tap()
     }
-    
+
     func testSubmitButtonTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
@@ -87,7 +88,7 @@ class KommunicateRichMessageUITests: XCTestCase {
             .textViews[RichMessageResponseText.submitButtonResponse]
         waitFor(object: submitResponse) { $0.exists }
     }
-    
+
     func testImageTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
@@ -97,7 +98,7 @@ class KommunicateRichMessageUITests: XCTestCase {
             .staticTexts[RichMessageResponseText.imageResponse]
         waitFor(object: imageTemplateResponse) { $0.exists }
     }
-    
+
     func testListTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
@@ -112,7 +113,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.seeUsOnFacebook].tap()
     }
-    
+
     func testSingleCardTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
@@ -121,13 +122,13 @@ class KommunicateRichMessageUITests: XCTestCase {
         let singleCardResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.singleCardResponse]
         waitFor(object: singleCardResponse) { $0.exists }
-        guard         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.linkButton].isEnabled else {
+        guard app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.linkButton].isEnabled else {
             XCTFail("Button in Single card template is disabled or not visible")
             return
         }
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.linkButton].tap()
     }
-    
+
     func testCardCarouselTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
@@ -137,7 +138,7 @@ class KommunicateRichMessageUITests: XCTestCase {
             .textViews[RichMessageResponseText.cardCarouselResponse]
         waitFor(object: cardCarouselResponse) { $0.exists }
     }
-    
+
     private func login() {
         let path = Bundle(for: KommunicateRichMessageUITests.self).url(forResource: "Info", withExtension: "plist")
         let dict = NSDictionary(contentsOf: path!) as? [String: Any]
@@ -153,8 +154,8 @@ class KommunicateRichMessageUITests: XCTestCase {
         passwordSecureTextField.typeText(password as! String)
         elementsQuery.buttons[InAppButton.LaunchScreen.getStarted].tap()
     }
-    
-    private func beforeTest_Launch_NewConversation () -> (XCUIApplication) {
+
+    private func beforeTest_Launch_NewConversation() -> (XCUIApplication) {
         let app = XCUIApplication()
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]
         waitFor(object: launchConversationButton) { $0.exists }
@@ -169,7 +170,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         inputView.tap()
         return app
     }
-    
+
     private func appIdFromEnvVars() -> String? {
         let path = Bundle(for: KommunicateRichMessageUITests.self).url(forResource: "Info", withExtension: "plist")
         let dict = NSDictionary(contentsOf: path!) as? [String: Any]

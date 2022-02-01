@@ -13,7 +13,6 @@ public protocol KMPreChatFormViewControllerDelegate: AnyObject {
 }
 
 open class KMPreChatFormViewController: UIViewController {
-
     public struct PreChatConfiguration {
         public enum InfoOption: Equatable, CaseIterable {
             case email
@@ -21,6 +20,7 @@ open class KMPreChatFormViewController: UIViewController {
             case name
             case password
         }
+
         /// A list of fields to show.
         public var optionsToShow: [InfoOption] = [.email, .phoneNumber, .name]
 
@@ -44,12 +44,11 @@ open class KMPreChatFormViewController: UIViewController {
 
     var configuration: KMConfiguration!
     var formView: KMPreChatUserFormView!
-    public var submitButtonTapped:(() -> Void)?
-    public var closeButtonTapped:(() -> Void)?
+    public var submitButtonTapped: (() -> Void)?
+    public var closeButtonTapped: (() -> Void)?
 
-    struct LocalizationKey {
-
-        struct Placeholder {
+    enum LocalizationKey {
+        enum Placeholder {
             private static let prefix = "PreChatView"
             private static let suffix = "Placeholder"
             static let name = prefix + "Name" + suffix
@@ -57,7 +56,7 @@ open class KMPreChatFormViewController: UIViewController {
             static let phoneNumber = prefix + "PhoneNumber" + suffix
             static let password = prefix + "Password" + suffix
         }
-}
+    }
 
     enum TextFieldValidationError: Error, Localizable {
         case emailAndPhoneNumberEmpty
@@ -100,14 +99,14 @@ open class KMPreChatFormViewController: UIViewController {
         setupViews()
     }
 
-    required public init(configuration: KMConfiguration, preChatConfiguration: PreChatConfiguration = PreChatConfiguration()) {
+    public required init(configuration: KMConfiguration, preChatConfiguration: PreChatConfiguration = PreChatConfiguration()) {
         self.configuration = configuration
         self.preChatConfiguration = preChatConfiguration
         super.init(nibName: nil, bundle: nil)
-        self.addObservers()
+        addObservers()
     }
 
-    required public init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         addObservers()
     }
@@ -118,20 +117,22 @@ open class KMPreChatFormViewController: UIViewController {
 
     func setupViews() {
         PreChatConfiguration.InfoOption.allCases.forEach { option in
-            if !preChatConfiguration.optionsToShow.contains(option) && preChatConfiguration.mandatoryOptions.contains(option) {
+            if !preChatConfiguration.optionsToShow.contains(option), preChatConfiguration.mandatoryOptions.contains(option) {
                 preChatConfiguration.mandatoryOptions.removeAll(where: { $0 == option })
             }
         }
         if preChatConfiguration.allowEmailOrPhoneNumber,
-           (!preChatConfiguration.mandatoryOptions.contains(.email)
-                || !preChatConfiguration.mandatoryOptions.contains(.phoneNumber)) {
+           !preChatConfiguration.mandatoryOptions.contains(.email)
+           || !preChatConfiguration.mandatoryOptions.contains(.phoneNumber)
+        {
             preChatConfiguration.allowEmailOrPhoneNumber = false
         }
         formView = KMPreChatUserFormView(
             frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height),
-            localizationFileName: configuration.localizedStringFileName)
+            localizationFileName: configuration.localizedStringFileName
+        )
         PreChatConfiguration.InfoOption.allCases
-            .filter{ !preChatConfiguration.optionsToShow.contains($0) }
+            .filter { !preChatConfiguration.optionsToShow.contains($0) }
             .forEach { option in
                 switch option {
                 case .email:
@@ -158,8 +159,7 @@ open class KMPreChatFormViewController: UIViewController {
             [closeButton.topAnchor.constraint(equalTo: topAnchor, constant: 20),
              closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
              closeButton.heightAnchor.constraint(equalToConstant: 30),
-             closeButton.widthAnchor.constraint(equalToConstant: 30)
-            ]
+             closeButton.widthAnchor.constraint(equalToConstant: 30)]
         )
 
         formView.sendInstructionsButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
@@ -167,22 +167,26 @@ open class KMPreChatFormViewController: UIViewController {
 
         formView.setPlaceHolder(
             for: formView.emailTextField,
-            valueFromKey: LocalizationKey.Placeholder.email)
+            valueFromKey: LocalizationKey.Placeholder.email
+        )
         formView.setPlaceHolder(
             for: formView.nameTextField,
-            valueFromKey: LocalizationKey.Placeholder.name)
+            valueFromKey: LocalizationKey.Placeholder.name
+        )
         formView.setPlaceHolder(
             for: formView.phoneNumberTextField,
-            valueFromKey: LocalizationKey.Placeholder.phoneNumber)
+            valueFromKey: LocalizationKey.Placeholder.phoneNumber
+        )
         formView.setPlaceHolder(
             for: formView.passwordTextField,
-            valueFromKey: LocalizationKey.Placeholder.password)
+            valueFromKey: LocalizationKey.Placeholder.password
+        )
         setDelegateToSelf(for: [formView.emailTextField, formView.nameTextField, formView.phoneNumberTextField, formView.passwordTextField])
 
         // Dismiss keyboard when tapped outside
-        let tapper = UITapGestureRecognizer(target: self.view, action:#selector(self.view.endEditing(_:)))
+        let tapper = UITapGestureRecognizer(target: view, action: #selector(view.endEditing(_:)))
         tapper.cancelsTouchesInView = false
-        self.view.addGestureRecognizer(tapper)
+        view.addGestureRecognizer(tapper)
     }
 
     func updateTextFieldWhenbeginEditing(textField: UITextField) {
@@ -192,13 +196,13 @@ open class KMPreChatFormViewController: UIViewController {
 
         switch textField.tag {
         case 1: // email
-            if textField.text == "" { setEmptyPlaceholder(for: textField, andHideLabel: formView.emailTitleLabel)}
+            if textField.text == "" { setEmptyPlaceholder(for: textField, andHideLabel: formView.emailTitleLabel) }
         case 2: // Name
-            if textField.text == "" { setEmptyPlaceholder(for: textField, andHideLabel: formView.nameTitleLabel)}
+            if textField.text == "" { setEmptyPlaceholder(for: textField, andHideLabel: formView.nameTitleLabel) }
         case 3: // Phone number
-            if textField.text == "" { setEmptyPlaceholder(for: textField, andHideLabel: formView.phoneNumberTitle)}
+            if textField.text == "" { setEmptyPlaceholder(for: textField, andHideLabel: formView.phoneNumberTitle) }
         case 4: // Password
-            if textField.text == "" { setEmptyPlaceholder(for: textField, andHideLabel: formView.passwordTitle)}
+            if textField.text == "" { setEmptyPlaceholder(for: textField, andHideLabel: formView.passwordTitle) }
         default:
             print("Field not implemented yet")
         }
@@ -211,32 +215,40 @@ open class KMPreChatFormViewController: UIViewController {
                 setPlaceHolder(
                     for: textField,
                     valueFromKey: LocalizationKey.Placeholder.email,
-                    andShowLabel: formView.emailTitleLabel)}
+                    andShowLabel: formView.emailTitleLabel
+                )
+            }
         case 2: // Name
             if textField.text == "" {
                 setPlaceHolder(
                     for: textField,
                     valueFromKey: LocalizationKey.Placeholder.name,
-                    andShowLabel: formView.nameTitleLabel)}
+                    andShowLabel: formView.nameTitleLabel
+                )
+            }
         case 3: // Phone number
             if textField.text == "" {
                 setPlaceHolder(
                     for: textField,
                     valueFromKey: LocalizationKey.Placeholder.phoneNumber,
-                    andShowLabel: formView.phoneNumberTitle)}
+                    andShowLabel: formView.phoneNumberTitle
+                )
+            }
         case 4: // Password
             if textField.text == "" {
                 setPlaceHolder(
                     for: textField,
                     valueFromKey: LocalizationKey.Placeholder.password,
-                    andShowLabel: formView.passwordTitle)}
+                    andShowLabel: formView.passwordTitle
+                )
+            }
         default:
             print("Field not implemented yet")
         }
     }
 
-    func setDelegateToSelf(for textFields:[UITextField]) {
-        textFields.forEach {$0.delegate = self}
+    func setDelegateToSelf(for textFields: [UITextField]) {
+        textFields.forEach { $0.delegate = self }
     }
 
     @objc func sendButtonTapped() {
@@ -244,10 +256,11 @@ open class KMPreChatFormViewController: UIViewController {
             emailTextField: formView.emailTextField,
             phoneNumberTextField: formView.phoneNumberTextField,
             nameTextField: formView.nameTextField,
-            passwordTextField: formView.passwordTextField)
+            passwordTextField: formView.passwordTextField
+        )
 
         switch validation {
-        case .failure(let error):
+        case let .failure(error):
             // Display error message
             formView.showErrorLabelWith(message: error.localizationDescription(fromFileName: configuration.localizedStringFileName))
         case .success:
@@ -257,11 +270,12 @@ open class KMPreChatFormViewController: UIViewController {
                 name: formView.nameTextField.text ?? "",
                 email: formView.emailTextField.text ?? "",
                 phoneNumber: formView.phoneNumberTextField.text ?? "",
-                password: formView.passwordTextField.text ?? "")
+                password: formView.passwordTextField.text ?? ""
+            )
         }
     }
 
-    @objc func closeButtonAction(_ button: UIButton) {
+    @objc func closeButtonAction(_: UIButton) {
         closeButtonTapped?()
         guard let delegate = delegate else { return }
         delegate.closeButtonTapped()
@@ -272,14 +286,15 @@ open class KMPreChatFormViewController: UIViewController {
         phoneNumberTextField: UITextField,
         nameTextField: UITextField,
         passwordTextField: UITextField
-    ) -> Result<TextFieldValidationError>{
+    ) -> Result<TextFieldValidationError> {
         var validationError: TextFieldValidationError?
 
         outerLoop: for mandatoryOption in preChatConfiguration.mandatoryOptions {
             switch mandatoryOption {
             case .email:
                 if let emailText = emailTextField.text,
-                   !emailText.isEmpty, !emailText.isValidEmail {
+                   !emailText.isEmpty, !emailText.isValidEmail
+                {
                     validationError = TextFieldValidationError.invalidEmailAddress
                     break outerLoop
                 }
@@ -288,21 +303,22 @@ open class KMPreChatFormViewController: UIViewController {
                     validationError = TextFieldValidationError.emptyName
                     break outerLoop
                 }
-                
+
             case .password:
                 if let passwordText = passwordTextField.text, passwordText.isEmpty {
                     validationError = TextFieldValidationError.emptyPassword
                     break outerLoop
                 }
-                
+
             case .phoneNumber:
                 let isValidNumber: ((String) -> Bool) = { number in
-                    return self.preChatConfiguration.phoneNumberRegexPattern != nil ?
-                        number.matchesWithPattern(self.preChatConfiguration.phoneNumberRegexPattern ?? ""):number.isValidPhoneNumber
+                    self.preChatConfiguration.phoneNumberRegexPattern != nil ?
+                        number.matchesWithPattern(self.preChatConfiguration.phoneNumberRegexPattern ?? "") : number.isValidPhoneNumber
                 }
 
                 if let phoneNumberText = phoneNumberTextField.text,
-                   !phoneNumberText.isEmpty, !isValidNumber(phoneNumberText) {
+                   !phoneNumberText.isEmpty, !isValidNumber(phoneNumberText)
+                {
                     validationError = TextFieldValidationError.invalidPhoneNumber
                     break outerLoop
                 }
@@ -312,22 +328,25 @@ open class KMPreChatFormViewController: UIViewController {
         if preChatConfiguration.allowEmailOrPhoneNumber,
            let emailText = emailTextField.text,
            let phoneNumberText = phoneNumberTextField.text,
-           (emailText.isEmpty && phoneNumberText.isEmpty) {
+           emailText.isEmpty, phoneNumberText.isEmpty
+        {
             return Result.failure(TextFieldValidationError.emailAndPhoneNumberEmpty)
         } else {
             if let emailText = emailTextField.text,
-               emailText.isEmpty && preChatConfiguration.mandatoryOptions.contains(.email) {
+               emailText.isEmpty, preChatConfiguration.mandatoryOptions.contains(.email)
+            {
                 validationError = TextFieldValidationError.emptyEmailAddress
             } else if let phoneNumberText = phoneNumberTextField.text,
-                      phoneNumberText.isEmpty && preChatConfiguration.mandatoryOptions.contains(.phoneNumber) {
+                      phoneNumberText.isEmpty, preChatConfiguration.mandatoryOptions.contains(.phoneNumber)
+            {
                 validationError = TextFieldValidationError.emptyPhoneNumber
             }
         }
 
-        return validationError != nil ? .failure(validationError!):.success
+        return validationError != nil ? .failure(validationError!) : .success
     }
 
-    @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {
+    @objc func dismissKeyboard(_: UITapGestureRecognizer) {
         formView.emailTextField.resignFirstResponder()
     }
 
@@ -341,12 +360,11 @@ open class KMPreChatFormViewController: UIViewController {
     @objc func keyboardWillChange(notification: NSNotification) {
         if Kommunicate.leadArray.isEmpty {
             if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                if formView.emailTextField.isFirstResponder || formView.nameTextField.isFirstResponder || formView.phoneNumberTextField.isFirstResponder || formView.passwordTextField.isFirstResponder  {
-
+                if formView.emailTextField.isFirstResponder || formView.nameTextField.isFirstResponder || formView.phoneNumberTextField.isFirstResponder || formView.passwordTextField.isFirstResponder {
                     let defaultTopPadding = CGFloat(86)
-                    let bottomPadding = self.view.frame.height - defaultTopPadding - formView.topStackView.frame.height
+                    let bottomPadding = view.frame.height - defaultTopPadding - formView.topStackView.frame.height
 
-                    let updatedTopPadding = -1*(keyboardSize.height - bottomPadding)
+                    let updatedTopPadding = -1 * (keyboardSize.height - bottomPadding)
                     if formView.topConstraint.constant == updatedTopPadding { return }
                     formView.topConstraint.constant = updatedTopPadding
                 }
@@ -373,7 +391,8 @@ open class KMPreChatFormViewController: UIViewController {
     private func setPlaceHolder(
         for textField: UITextField,
         valueFromKey key: String,
-        andShowLabel label: UILabel) {
+        andShowLabel label: UILabel
+    ) {
         formView.setPlaceHolder(for: textField, valueFromKey: key)
         label.hide()
     }
@@ -398,9 +417,9 @@ extension KMPreChatFormViewController: UITextFieldDelegate {
         updateTextFieldWhenFinishedEditing(textField: textField)
     }
 
-    //MARK: - Controlling the Keyboard
-    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    // MARK: - Controlling the Keyboard
 
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == formView.emailTextField {
             textField.resignFirstResponder()
             formView.nameTextField.becomeFirstResponder()
@@ -418,9 +437,9 @@ extension KMPreChatFormViewController: UITextFieldDelegate {
 }
 
 extension UIControl {
-    func addAction(for controlEvents: UIControl.Event = .touchUpInside, _ closure: @escaping()->()) {
+    func addAction(for controlEvents: UIControl.Event = .touchUpInside, _ closure: @escaping () -> Void) {
         if #available(iOS 14.0, *) {
-            addAction(UIAction { (action: UIAction) in closure() }, for: controlEvents)
+            addAction(UIAction { (_: UIAction) in closure() }, for: controlEvents)
         }
     }
 }

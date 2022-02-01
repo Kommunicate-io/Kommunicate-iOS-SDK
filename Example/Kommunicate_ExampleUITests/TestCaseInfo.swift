@@ -6,7 +6,6 @@
 //  Copyright © 2020 CocoaPods. All rights reserved.
 //
 
-
 import Foundation
 
 enum AppPermission {
@@ -16,7 +15,7 @@ enum AppPermission {
         static let accessContact = "“KommunicateDemo” Would Like to Access Your Contacts"
         static let accessLocation = "“KommunicateDemo” to access your location while you are using the app?"
     }
-    
+
     enum AlertButton {
         static let allowAllPhotos = "Allow Access to All Photos"
         static let allow = "Allow"
@@ -32,16 +31,16 @@ enum InAppButton {
         static let loginAsVisitor = "Login as Visitor"
         static let logoutButton = "Logout"
     }
-    
+
     enum CreatingGroup {
         static let startNewIcon = "startNewIcon"
     }
-    
+
     enum EditGroup {
         static let launch = "Launch Conversations"
         static let iconSendWhite = "icon send white"
     }
-    
+
     enum ConversationScreen {
         static let openCamera = "photoButtonInConversationScreen"
         static let send = "sendButton"
@@ -55,7 +54,6 @@ enum InAppButton {
         static let faqButton = "FAQ"
         static let loadingIndicator = "loadingIndicator"
         static let activityIndicator = "activityIndicator"
-        
     }
 }
 

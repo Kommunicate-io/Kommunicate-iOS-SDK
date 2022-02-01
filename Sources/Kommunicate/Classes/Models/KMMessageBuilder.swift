@@ -9,37 +9,36 @@ import Foundation
 import KommunicateCore_iOS_SDK
 
 public class KMMessage: NSObject {
-    public var conversationId : String = ""
+    public var conversationId: String = ""
     public var text: String = ""
-    public var metadata: [String : Any]?
+    public var metadata: [String: Any]?
 }
 
-public class KMMessageBuilder : NSObject {
+public class KMMessageBuilder: NSObject {
     private var message = KMMessage()
 
     @discardableResult
-    @objc public func withConversationId(_ conversationId: String) ->  KMMessageBuilder {
+    @objc public func withConversationId(_ conversationId: String) -> KMMessageBuilder {
         message.conversationId = conversationId
         return self
     }
 
     @discardableResult
-    @objc public func withText(_ text: String) ->  KMMessageBuilder {
+    @objc public func withText(_ text: String) -> KMMessageBuilder {
         message.text = text
         return self
     }
 
     @discardableResult
-    @objc public func withMetadata(_ metadata: [String: Any]) ->  KMMessageBuilder {
+    @objc public func withMetadata(_ metadata: [String: Any]) -> KMMessageBuilder {
         message.metadata = metadata
         return self
     }
 
-    @objc public func build() ->  KMMessage {
+    @objc public func build() -> KMMessage {
         return message
     }
 }
-
 
 extension KMMessage {
     func toALMessage() -> ALMessage {
@@ -48,7 +47,7 @@ extension KMMessage {
         alMessage.contactIds = nil
         alMessage.message = text
         alMessage.type = AL_OUT_BOX
-        let date = Date().timeIntervalSince1970*1000
+        let date = Date().timeIntervalSince1970 * 1000
         alMessage.createdAtTime = NSNumber(value: date)
         alMessage.sendToDevice = false
         alMessage.deviceKey = ALUserDefaultsHandler.getDeviceKeyString()

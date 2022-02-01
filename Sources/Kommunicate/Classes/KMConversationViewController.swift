@@ -5,15 +5,14 @@
 //  Created by Shivam Pokhriyal on 14/11/18.
 //
 
-import UIKit
 import KommunicateChatUI_iOS_SDK
 import KommunicateCore_iOS_SDK
+import UIKit
 
 /// Before pushing this view Controller. Use this
 /// navigationItem.backBarButtonItem = UIBarButtonItem(customView: UIView())
 open class KMConversationViewController: ALKConversationViewController {
-
-    private let faqIdentifier =  11223346
+    private let faqIdentifier = 11_223_346
     private let kmConversationViewConfiguration: KMConversationViewConfiguration
     private weak var ratingVC: RatingViewController?
     private let registerUserClientService = ALRegisterUserClientService()
@@ -23,7 +22,8 @@ open class KMConversationViewController: ALKConversationViewController {
     lazy var customNavigationView = ConversationVCNavBar(
         delegate: self,
         localizationFileName: self.configuration.localizedStringFileName,
-        configuration: kmConversationViewConfiguration)
+        configuration: kmConversationViewConfiguration
+    )
 
     let awayMessageView = AwayMessageView(frame: CGRect.zero)
     let charLimitView = MessageCharacterLimitView(frame: .zero)
@@ -66,10 +66,11 @@ open class KMConversationViewController: ALKConversationViewController {
             }
         }
     }
+
     let awayMessageheight = 80.0
 
-    private var converastionNavBarItemToken: NotificationToken? = nil
-    private var channelMetadataUpdateToken: NotificationToken? = nil
+    private var converastionNavBarItemToken: NotificationToken?
+    private var channelMetadataUpdateToken: NotificationToken?
 
     var isAwayMessageViewHidden = true {
         didSet {
@@ -80,9 +81,10 @@ open class KMConversationViewController: ALKConversationViewController {
 
     private var isClosedConversation: Bool {
         guard let channelId = viewModel.channelKey,
-            !ALChannelService.isChannelDeleted(channelId),
-            conversationDetail.isClosedConversation(channelId: channelId.intValue) else {
-                return false
+              !ALChannelService.isChannelDeleted(channelId),
+              conversationDetail.isClosedConversation(channelId: channelId.intValue)
+        else {
+            return false
         }
         return true
     }
@@ -99,19 +101,21 @@ open class KMConversationViewController: ALKConversationViewController {
         setupNavigation()
     }
 
-    required public init(configuration: ALKConfiguration,
+    public required init(configuration: ALKConfiguration,
                          conversationViewConfiguration: KMConversationViewConfiguration,
-                         individualLaunch : Bool = true) {
-        self.kmConversationViewConfiguration = conversationViewConfiguration
+                         individualLaunch: Bool = true)
+    {
+        kmConversationViewConfiguration = conversationViewConfiguration
         super.init(configuration: configuration, individualLaunch: individualLaunch)
         addNotificationCenterObserver()
     }
 
-    required public init?(coder aDecoder: NSCoder) {
+    @available(*, unavailable)
+    public required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    open override func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         customNavigationView.setupAppearance()
         if #available(iOS 13.0, *) {
@@ -128,13 +132,13 @@ open class KMConversationViewController: ALKConversationViewController {
         setupConversationClosedView()
     }
 
-    open override func viewDidLayoutSubviews() {
+    override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         awayMessageView.drawDottedLines()
         charLimitView.drawDottedLines()
     }
 
-    open override func viewWillDisappear(_ animated: Bool) {
+    override open func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         hideAwayAndClosedView()
         isConversationAssignedToDialogflowBot = false
@@ -153,29 +157,31 @@ open class KMConversationViewController: ALKConversationViewController {
     }
 
     func addNotificationCenterObserver() {
-
         converastionNavBarItemToken = NotificationCenter.default.observe(
-            name: Notification.Name(rawValue:ALKNavigationItem.NSNotificationForConversationViewNavigationTap),
+            name: Notification.Name(rawValue: ALKNavigationItem.NSNotificationForConversationViewNavigationTap),
             object: nil,
             queue: nil,
             using: { [weak self] notification in
                 guard let notificationInfo = notification.userInfo,
-                    let strongSelf = self else {
-                        return
+                      let strongSelf = self
+                else {
+                    return
                 }
                 let identifier = notificationInfo["identifier"] as? Int
-                if identifier == strongSelf.faqIdentifier{
+                if identifier == strongSelf.faqIdentifier {
                     Kommunicate.openFaq(from: strongSelf, with: strongSelf.configuration)
                 }
-        })
+            }
+        )
 
         channelMetadataUpdateToken = NotificationCenter.default.observe(
             name: NSNotification.Name(rawValue: "UPDATE_CHANNEL_METADATA"),
             object: nil,
             queue: nil,
-            using: { [weak self] notification in
+            using: { [weak self] _ in
                 self?.onChannelMetadataUpdate()
-        })
+            }
+        )
     }
 
     @objc override open func pushNotification(notification: NSNotification) {
@@ -183,8 +189,8 @@ open class KMConversationViewController: ALKConversationViewController {
         let pushNotificationHelper = KMPushNotificationHelper(configuration, kmConversationViewConfiguration)
         let (notifData, _) = pushNotificationHelper.notificationInfo(notification as Notification)
         guard
-            self.isViewLoaded,
-            self.view.window != nil,
+            isViewLoaded,
+            view.window != nil,
             let notificationData = notifData,
             !pushNotificationHelper.isNotificationForActiveThread(notificationData)
         else { return }
@@ -219,20 +225,20 @@ open class KMConversationViewController: ALKConversationViewController {
 
     func messageStatusAndFetchBotType() {
         if isClosedConversation {
-            self.conversationAssignedToDialogflowBot()
+            conversationAssignedToDialogflowBot()
         } else {
             guard let channelKey = viewModel.channelKey else { return }
             conversationService.awayMessageFor(groupId: channelKey, completion: {
                 result in
                 DispatchQueue.main.async {
                     switch result {
-                    case .success(let message):
+                    case let .success(message):
                         guard type(of: message) == String.self, !message.isEmpty else { return }
                         self.isAwayMessageViewHidden = false
                         self.awayMessageView.set(message: message)
                         /// Fetch the bot type
                         self.conversationAssignedToDialogflowBot()
-                    case .failure(let error):
+                    case let .failure(error):
                         print("Message status error: \(error)")
                         self.isAwayMessageViewHidden = true
                         /// Fetch the bot type
@@ -250,7 +256,8 @@ open class KMConversationViewController: ALKConversationViewController {
         let notification = Notification(
             name: Notification.Name(rawValue: launchNotificationName),
             object: nil,
-            userInfo: info)
+            userInfo: info
+        )
         NotificationCenter.default.post(notification)
     }
 
@@ -260,17 +267,18 @@ open class KMConversationViewController: ALKConversationViewController {
         let notification = Notification(
             name: Notification.Name(rawValue: backbuttonNotificationName),
             object: nil,
-            userInfo: info)
+            userInfo: info
+        )
         NotificationCenter.default.post(notification)
     }
 
     func updateAssigneeDetails() {
-        conversationDetail.updatedAssigneeDetails(groupId: viewModel.channelKey, userId: viewModel.contactId) { (contact,channel) in
+        conversationDetail.updatedAssigneeDetails(groupId: viewModel.channelKey, userId: viewModel.contactId) { contact, channel in
             guard let alChannel = channel else {
                 print("Channel is nil in updatedAssigneeDetails")
                 return
             }
-            self.customNavigationView.updateView(assignee: contact,channel: alChannel)
+            self.customNavigationView.updateView(assignee: contact, channel: alChannel)
             self.assigneeUserId = contact?.userId
             self.hideInputBarIfAssignedToBot()
         }
@@ -294,17 +302,17 @@ open class KMConversationViewController: ALKConversationViewController {
         navigationItem.titleView = UIView()
         navigationItem.leftBarButtonItems = nil
         // Create custom navigation view.
-        let (contact,channel) =  conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId)
+        let (contact, channel) = conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId)
         guard let alChannel = channel else {
             print("Channel is nil in conversationAssignee")
             return
         }
-        customNavigationView.updateView(assignee:contact ,channel: alChannel)
+        customNavigationView.updateView(assignee: contact, channel: alChannel)
         assigneeUserId = contact?.userId
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
     }
 
-    public override func refreshViewController() {
+    override public func refreshViewController() {
         clearAndReloadTable()
         configureChatBar()
         hideAwayAndClosedView()
@@ -319,15 +327,15 @@ open class KMConversationViewController: ALKConversationViewController {
         ALMessageService.syncMessages()
     }
 
-    public override func loadingFinished(error _: Error?) {
+    override public func loadingFinished(error _: Error?) {
         super.loadingFinished(error: nil)
         checkFeedbackAndShowRatingView()
     }
 
     private func setupConversationClosedView() {
-        conversationClosedView.restartTapped = {[weak self] in
+        conversationClosedView.restartTapped = { [weak self] in
             guard let weakSelf = self else {
-                return;
+                return
             }
             weakSelf.isClosedConversationViewHidden = true
         }
@@ -348,11 +356,11 @@ open class KMConversationViewController: ALKConversationViewController {
     private func checkPlanAndShowSuspensionScreen() {
         let accountVC = ALKAccountSuspensionController()
         guard PricingPlan.shared.showSuspensionScreen() else { return }
-        self.present(accountVC, animated: true, completion: nil)
-        accountVC.closePressed = {[weak self] in
+        present(accountVC, animated: true, completion: nil)
+        accountVC.closePressed = { [weak self] in
             self?.dismiss(animated: true, completion: nil)
         }
-        self.registerUserClientService.syncAccountStatus { response, error in
+        registerUserClientService.syncAccountStatus { response, error in
             guard error == nil, let response = response, response.isRegisteredSuccessfully() else {
                 print("Failed to sync the account package status")
                 return
@@ -367,9 +375,9 @@ open class KMConversationViewController: ALKConversationViewController {
         /// Make sure to keep the height of bot character limit view if it's visible.
         let charLimitViewHeight = charLimitView.constraint(withIdentifier: MessageCharacterLimitView.ConstraintIdentifier.messageCharacterLimitViewHeight.rawValue)?.constant ?? 0
         let isChatLimitViewVisible = charLimitViewHeight > 0 && !charLimitView.isHidden
-        let botCharLimitViewHeight = isChatLimitViewVisible ? MessageCharacterLimitManager.charLimitViewHeight:0
+        let botCharLimitViewHeight = isChatLimitViewVisible ? MessageCharacterLimitManager.charLimitViewHeight : 0
 
-        chatBar.headerViewHeight = flag ? awayMessageheight: botCharLimitViewHeight
+        chatBar.headerViewHeight = flag ? awayMessageheight : botCharLimitViewHeight
         awayMessageView.showMessage(flag)
         let indexPath = IndexPath(row: 0, section: viewModel.messageModels.count - 1)
         moveTableViewToBottom(indexPath: indexPath)
@@ -382,40 +390,42 @@ open class KMConversationViewController: ALKConversationViewController {
 
     private func hideInputBarIfAssignedToBot() {
         guard kmConversationViewConfiguration.restrictMessageTypingWithBots,
-              let groupId = viewModel.channelKey else {
+              let groupId = viewModel.channelKey
+        else {
             return
         }
         let isAssignedToBot = conversationDetail.isAssignedToBot(groupID: Int(truncating: groupId))
         isChatBarHidden = isAssignedToBot
     }
 
-    open override func sendQuickReply(_ text: String,
-                                      metadata: [String : Any]?,
-                                      languageCode language: String?) {
+    override open func sendQuickReply(_ text: String,
+                                      metadata: [String: Any]?,
+                                      languageCode language: String?)
+    {
         do {
-                let customMetadata = metadata ?? [String: Any]()
+            let customMetadata = metadata ?? [String: Any]()
 
-                if let updatedLanguage = language {
-                    try configuration.updateUserLanguage(tag: updatedLanguage)
-                }
+            if let updatedLanguage = language {
+                try configuration.updateUserLanguage(tag: updatedLanguage)
+            }
 
-                guard let messageMetadata = configuration.messageMetadata as? [String: Any],
-                      let jsonData = messageMetadata[ChannelMetadataKeys.chatContext] as? String,!jsonData.isEmpty,
-                      let data =  jsonData.data(using: .utf8),
-                      let chatContextData = try JSONSerialization.jsonObject(with: data,options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any]
-                else {
-                        viewModel.send(message: text, metadata: customMetadata)
-                        return
-                    }
-        
-                if customMetadata.isEmpty {
-                    viewModel.send(message: text, metadata: messageMetadata)
-                    return
-                }
-                var replyMetaData = customMetadata[ChannelMetadataKeys.chatContext] as? [String: Any]
-                replyMetaData?.merge(chatContextData) { $1 }
-                let  metaDataToSend = [ChannelMetadataKeys.chatContext:replyMetaData]
-                viewModel.send(message: text, metadata: metaDataToSend as [AnyHashable : Any])
+            guard let messageMetadata = configuration.messageMetadata as? [String: Any],
+                  let jsonData = messageMetadata[ChannelMetadataKeys.chatContext] as? String,!jsonData.isEmpty,
+                  let data = jsonData.data(using: .utf8),
+                  let chatContextData = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any]
+            else {
+                viewModel.send(message: text, metadata: customMetadata)
+                return
+            }
+
+            if customMetadata.isEmpty {
+                viewModel.send(message: text, metadata: messageMetadata)
+                return
+            }
+            var replyMetaData = customMetadata[ChannelMetadataKeys.chatContext] as? [String: Any]
+            replyMetaData?.merge(chatContextData) { $1 }
+            let metaDataToSend = [ChannelMetadataKeys.chatContext: replyMetaData]
+            viewModel.send(message: text, metadata: metaDataToSend as [AnyHashable: Any])
         } catch {
             print("Error while sending quick reply message %@", error.localizedDescription)
         }
@@ -425,9 +435,9 @@ open class KMConversationViewController: ALKConversationViewController {
 extension KMConversationViewController: NavigationBarCallbacks {
     func backButtonPressed() {
         view.endEditing(true)
-        let popVC = self.navigationController?.popViewController(animated: true)
+        let popVC = navigationController?.popViewController(animated: true)
         if popVC == nil {
-            self.dismiss(animated: true, completion: nil)
+            dismiss(animated: true, completion: nil)
         }
         guard let channelId = viewModel.channelKey else { return }
         sendConversationCloseNotification(channelId: String(describing: channelId))
@@ -435,7 +445,6 @@ extension KMConversationViewController: NavigationBarCallbacks {
 }
 
 extension KMConversationViewController {
-
     func checkFeedbackAndShowRatingView() {
         guard isClosedConversation else {
             isClosedConversationViewHidden = true
@@ -468,24 +477,25 @@ extension KMConversationViewController {
         }
         ratingVC.feedbackSubmitted = { [weak self] feedback in
             print("feedback submitted with rating: \(feedback.rating)")
-            KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.submitRatingClick, data: ["UserSelection":["SubmittedFeedback":feedback]])
+            KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.submitRatingClick, data: ["UserSelection": ["SubmittedFeedback": feedback]])
             self?.hideRatingView()
-            
+
             self?.submitFeedback(feedback: feedback)
         }
-       
-        self.present(ratingVC, animated: true, completion: {[weak self] in
+
+        present(ratingVC, animated: true, completion: { [weak self] in
             self?.ratingVC = ratingVC
         })
     }
 
     private func hideRatingView() {
         guard let ratingVC = ratingVC,
-            UIViewController.topViewController() is RatingViewController,
-            !ratingVC.isBeingDismissed else {
-                return
+              UIViewController.topViewController() is RatingViewController,
+              !ratingVC.isBeingDismissed
+        else {
+            return
         }
-        self.dismiss(animated: true, completion: { [weak self] in
+        dismiss(animated: true, completion: { [weak self] in
             self?.ratingVC = nil
         })
     }
@@ -501,13 +511,13 @@ extension KMConversationViewController {
             applicationId: KMUserDefaultHandler.getApplicationKey()
         ) { [weak self] result in
             switch result {
-            case .success(let conversationFeedback):
+            case let .success(conversationFeedback):
                 print("feedback submit response success: \(conversationFeedback)")
                 guard conversationFeedback.feedback != nil else { return }
                 DispatchQueue.main.async {
                     self?.show(feedback: feedback)
                 }
-            case .failure(let error):
+            case let .failure(error):
                 print("feedback submit response failure: \(error)")
             }
         }
@@ -553,12 +563,13 @@ extension KMConversationViewController {
 
     func conversationAssignedToDialogflowBot() {
         guard let channelKey = viewModel.channelKey else { return }
-        kmBotService.conversationAssignedToBotForBotType(type: BotDetailResponse.BotType.DIALOGFLOW.rawValue,groupId: channelKey) {[weak self] (isDialogflowBot) in
+        kmBotService.conversationAssignedToBotForBotType(type: BotDetailResponse.BotType.DIALOGFLOW.rawValue, groupId: channelKey) { [weak self] isDialogflowBot in
 
             self?.isConversationAssignedToDialogflowBot = isDialogflowBot
             guard let weakSelf = self,
                   channelKey == weakSelf.viewModel.channelKey,
-                  !weakSelf.isClosedConversation else {
+                  !weakSelf.isClosedConversation
+            else {
                 return
             }
         }
@@ -567,14 +578,14 @@ extension KMConversationViewController {
     func characterLimitMessage(textCount: Int, limit: CharacterLimit.Limit, isMessageforBot isBot: Bool) -> String {
         let extraCharacters = textCount - limit.hard
         let limitExceeded = extraCharacters > 0
-        let charLimitMessage = isBot ? CharacterLimit.LocalizedText.botCharLimit:CharacterLimit.LocalizedText.charLimit
+        let charLimitMessage = isBot ? CharacterLimit.LocalizedText.botCharLimit : CharacterLimit.LocalizedText.charLimit
         let removeCharMessage = CharacterLimit.LocalizedText.removeCharMessage
         let remainingCharMessage = CharacterLimit.LocalizedText.remainingCharMessage
         var charInfoText = ""
-        if (limitExceeded) {
-            charInfoText =  String(format: removeCharMessage, extraCharacters)
+        if limitExceeded {
+            charInfoText = String(format: removeCharMessage, extraCharacters)
         } else {
-            charInfoText =  String(format: remainingCharMessage, -extraCharacters)
+            charInfoText = String(format: remainingCharMessage, -extraCharacters)
         }
         return String(format: charLimitMessage, limit.hard, charInfoText)
     }

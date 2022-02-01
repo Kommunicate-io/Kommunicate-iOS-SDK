@@ -20,7 +20,6 @@ struct Feedback {
 }
 
 class RatingViewController: UIViewController {
-
     var closeButtontapped: (() -> Void)?
     var feedbackSubmitted: ((Feedback) -> Void)?
 
@@ -45,7 +44,7 @@ class RatingViewController: UIViewController {
     let restartConversationView: UILabel = {
         let label = UILabel(frame: .zero)
         label.numberOfLines = 1
-        label.textColor = UIColor(netHex: 0x8b8888)
+        label.textColor = UIColor(netHex: 0x8B8888)
         label.font = Style.Font.normal(size: 14).font()
         label.backgroundColor = .clear
         label.alpha = 0
@@ -66,7 +65,7 @@ class RatingViewController: UIViewController {
         textView.isScrollEnabled = true
         textView.font = Style.Font.normal(size: 14).font()
         textView.placeholder = LocalizedText.commentPlaceholder
-        textView.placeholderColor = UIColor(netHex: 0xaeaaaa)
+        textView.placeholderColor = UIColor(netHex: 0xAEAAAA)
         textView.delaysContentTouches = false
         textView.layer.borderColor = UIColor(netHex: 0x848484).cgColor
         textView.layer.cornerRadius = 4
@@ -81,7 +80,7 @@ class RatingViewController: UIViewController {
         let button = UIButton(frame: .zero)
         button.setTitle(LocalizedText.submit, for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UIColor(netHex: 0x5451e2)
+        button.backgroundColor = UIColor(netHex: 0x5451E2)
         button.layer.cornerRadius = 4
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -117,7 +116,8 @@ class RatingViewController: UIViewController {
         setupButtons()
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -182,7 +182,7 @@ class RatingViewController: UIViewController {
     func setupButtons() {
         closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
         submitButton.addTarget(self, action: #selector(submitTapped), for: .touchUpInside)
-        ratingView.ratingSelected = {[weak self] rating in
+        ratingView.ratingSelected = { [weak self] rating in
             self?.ratingSelected = rating
             self?.commentsView.isHidden = false
             self?.submitButton.isHidden = false
@@ -206,7 +206,6 @@ class RatingViewController: UIViewController {
         feedbackSubmitted?(feedback)
     }
 
-
     private func calculatePreferredSize() {
         let targetSize = CGSize(width: view.bounds.width,
                                 height: UIView.layoutFittingCompressedSize.height)
@@ -224,8 +223,8 @@ class RatingViewController: UIViewController {
         guard
             commentsView.isFirstResponder,
             let keyboardSize = (keyboardFrameValue as? NSValue)?.cgRectValue
-            else {
-                return
+        else {
+            return
         }
 
         let keyboardHeight = -1 * keyboardSize.height
@@ -234,7 +233,7 @@ class RatingViewController: UIViewController {
         calculatePreferredSize()
     }
 
-    @objc private func onKeyboardHide(notification: Notification) {
+    @objc private func onKeyboardHide(notification _: Notification) {
         bottomConstraint.constant = 0
         calculatePreferredSize()
     }
@@ -251,13 +250,12 @@ class RatingViewController: UIViewController {
 }
 
 class BottomSheetTransitionDelegate: NSObject, UIViewControllerTransitioningDelegate {
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source _: UIViewController) -> UIPresentationController? {
         return BottomSheetController(presentedViewController: presented, presenting: presenting)
     }
 }
 
 class BottomSheetController: UIPresentationController {
-
     private var dimmingView: UIView = {
         let dimmingView = UIView()
         dimmingView.translatesAutoresizingMaskIntoConstraints = false
@@ -267,9 +265,8 @@ class BottomSheetController: UIPresentationController {
     }()
 
     override var frameOfPresentedViewInContainerView: CGRect {
-
         guard let containerView = containerView,
-            let presentedView = presentedView else { return .zero }
+              let presentedView = presentedView else { return .zero }
 
         let containerViewframe = containerView.bounds
         // Using autolayout to calculate the frame instead of manually
@@ -281,7 +278,8 @@ class BottomSheetController: UIPresentationController {
         )
         let targetHeight = presentedView.systemLayoutSizeFitting(
             fittingSize, withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel).height
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
 
         var frame = containerViewframe
         frame.origin.y += frame.size.height - targetHeight
@@ -295,7 +293,6 @@ class BottomSheetController: UIPresentationController {
     }
 
     override func presentationTransitionWillBegin() {
-
         guard let containerView = containerView else { return }
 
         containerView.insertSubview(dimmingView, at: 0)
@@ -303,7 +300,7 @@ class BottomSheetController: UIPresentationController {
             dimmingView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             dimmingView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             dimmingView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            dimmingView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            dimmingView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
         ])
 
         guard let coordinator = presentedViewController.transitionCoordinator else {
@@ -322,7 +319,7 @@ class BottomSheetController: UIPresentationController {
             return
         }
 
-        coordinator.animate(alongsideTransition: { (_) in
+        coordinator.animate(alongsideTransition: { _ in
             self.dimmingView.alpha = 0
         })
     }
@@ -352,7 +349,7 @@ private extension RatingViewController {
 
         enum RatingView {
             static let top: CGFloat = 43.0
-            static let leading: CGFloat  = 28.0
+            static let leading: CGFloat = 28.0
             static let trailing: CGFloat = -28.0
             static let height: CGFloat = 80.0
         }
@@ -370,7 +367,7 @@ private extension RatingViewController {
 
 extension RatingViewController: Localizable {
     enum LocalizedText {
-        static private let filename = Kommunicate.defaultConfiguration.localizedStringFileName
+        private static let filename = Kommunicate.defaultConfiguration.localizedStringFileName
 
         static let title = localizedString(forKey: "ConversationRatingTitle", fileName: filename)
         static let commentPlaceholder = localizedString(forKey: "ConversationRatingCommentsPlaceholder", fileName: filename)

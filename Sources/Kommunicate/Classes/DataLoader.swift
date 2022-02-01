@@ -8,16 +8,14 @@
 import Foundation
 
 class DataLoader {
-
     enum LoadingError: Error {
         case network(Error?)
         case invalidParam
     }
 
     static func request(url: URL, completion: @escaping (Result<Data, LoadingError>) -> Void) {
-
         var urlRequest = URLRequest(url: url)
-        
+
         urlRequest.httpMethod = "GET"
         urlRequest.timeoutInterval = 600
         urlRequest.setValue("Application/json", forHTTPHeaderField: "Content-Type")
@@ -29,7 +27,7 @@ class DataLoader {
 
         // make the request
         let task = session.dataTask(with: urlRequest) {
-            (data, response, error) in
+            data, _, error in
             let result = data.map(Result.success) ??
                 .failure(LoadingError.network(error))
 
@@ -48,9 +46,10 @@ class DataLoader {
         urlRequest.timeoutInterval = 600
         urlRequest.setValue("Application/json", forHTTPHeaderField: "Content-Type")
         guard let httpBody = try? JSONSerialization
-            .data(withJSONObject: params, options: .prettyPrinted) else {
-                completion(.failure(.invalidParam))
-                return
+            .data(withJSONObject: params, options: .prettyPrinted)
+        else {
+            completion(.failure(.invalidParam))
+            return
         }
         let contentLength = String(format: "%lu", UInt(httpBody.count))
         urlRequest.setValue(contentLength, forHTTPHeaderField: "Content-Length")
@@ -61,7 +60,7 @@ class DataLoader {
         let session = URLSession(configuration: config)
         // make the request
         let task = session.dataTask(with: urlRequest) {
-            (data, response, error) in
+            data, _, error in
             let result = data.map(Result.success) ??
                 .failure(LoadingError.network(error))
             completion(result)

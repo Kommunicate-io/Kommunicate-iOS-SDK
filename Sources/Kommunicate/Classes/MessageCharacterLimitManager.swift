@@ -10,14 +10,15 @@ import KommunicateChatUI_iOS_SDK
 import UIKit
 
 // MARK: MessageCharacterLimitDelegate
+
 protocol MessageCharacterLimitDelegate: AnyObject {
     func characterLimit(manager: MessageCharacterLimitManager, _ isHidden: Bool)
     func characterLimit(manager: MessageCharacterLimitManager, reachedTheLimit limit: Int, textCount: Int)
 }
 
 class MessageCharacterLimitManager: NSObject {
-
     // MARK: - Internal properties
+
     static let charLimitViewHeight = 80.0
     weak var delegate: MessageCharacterLimitDelegate?
     var messageToShow: String = ""
@@ -26,13 +27,13 @@ class MessageCharacterLimitManager: NSObject {
     private let chatBar: ALKChatBar
     private let charLimitView: MessageCharacterLimitView
     private let limit: Int
-    
+
     // MARK: - Internal Initialization
 
     init(chatBar: ALKChatBar,
          charLimitView: MessageCharacterLimitView,
-         limit: Int
-    ) {
+         limit: Int)
+    {
         self.chatBar = chatBar
         self.charLimitView = charLimitView
         self.limit = limit
@@ -48,7 +49,7 @@ class MessageCharacterLimitManager: NSObject {
         guard isCharLimitCheckEnabled else { return }
         let extraCharacters = text.count - limit
         let limitExceeded = extraCharacters > 0
-        guard !text.isEmpty && limitExceeded else {
+        guard !text.isEmpty, limitExceeded else {
             showLimitView(false)
             return
         }
@@ -57,19 +58,20 @@ class MessageCharacterLimitManager: NSObject {
 
     func showLimitView(_ show: Bool, disableButton: Bool = true) {
         chatBar.disableSendButton(isSendButtonDisabled: show && disableButton)
-        charLimitView.set(message: show ? messageToShow:"")
-        self.charLimitView.isHidden = !show
+        charLimitView.set(message: show ? messageToShow : "")
+        charLimitView.isHidden = !show
         charLimitViewHeight(hide: !show)
     }
 
     private func hideCharLimitView(_ hide: Bool) {
-        charLimitView.constraint(withIdentifier: MessageCharacterLimitView.ConstraintIdentifier.messageCharacterLimitViewHeight.rawValue)?.constant = CGFloat(hide ?  0 : MessageCharacterLimitManager.charLimitViewHeight)
+        charLimitView.constraint(withIdentifier: MessageCharacterLimitView.ConstraintIdentifier.messageCharacterLimitViewHeight.rawValue)?.constant = CGFloat(hide ? 0 : MessageCharacterLimitManager.charLimitViewHeight)
         charLimitView.hideView(hide: hide)
     }
 
     // MARK: - Private helper methods
+
     private func charLimitViewHeight(hide: Bool) {
-        self.hideCharLimitView(hide)
+        hideCharLimitView(hide)
         delegate?.characterLimit(manager: self, hide)
     }
 }

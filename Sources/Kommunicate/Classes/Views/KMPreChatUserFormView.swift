@@ -8,12 +8,11 @@
 import UIKit
 
 class CircleView: UIView {
-
     override func draw(_ rect: CGRect) {
-        guard let context = UIGraphicsGetCurrentContext() else {return}
+        guard let context = UIGraphicsGetCurrentContext() else { return }
 
         context.addEllipse(in: rect)
-        var backgroundColor = UIColor(red: 92/255, green: 90/255, blue: 167/255, alpha: 1)
+        var backgroundColor = UIColor(red: 92 / 255, green: 90 / 255, blue: 167 / 255, alpha: 1)
         backgroundColor = backgroundColor.withAlphaComponent(0.2)
         context.setFillColor(backgroundColor.cgColor)
         context.fillPath()
@@ -31,28 +30,28 @@ class KMPreChatUserFormView: UIView, Localizable {
     var localizationFileName: String!
 
     @IBOutlet var contentView: KMPreChatUserFormView!
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var nameTextField: UITextField!
-    @IBOutlet weak var phoneNumberTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var emailTitleLabel: UILabel!
-    @IBOutlet weak var nameTitleLabel: UILabel!
-    @IBOutlet weak var phoneNumberTitle: UILabel!
-    @IBOutlet weak var passwordTitle: UILabel!
-    @IBOutlet weak var sendInstructionsButton: UIButton!
+    @IBOutlet var emailTextField: UITextField!
+    @IBOutlet var nameTextField: UITextField!
+    @IBOutlet var phoneNumberTextField: UITextField!
+    @IBOutlet var passwordTextField: UITextField!
+    @IBOutlet var emailTitleLabel: UILabel!
+    @IBOutlet var nameTitleLabel: UILabel!
+    @IBOutlet var phoneNumberTitle: UILabel!
+    @IBOutlet var passwordTitle: UILabel!
+    @IBOutlet var sendInstructionsButton: UIButton!
 
-    @IBOutlet weak var getStartedDescriptionLabel: UILabel!
-    @IBOutlet weak var errorMessageLabel: UILabel!
+    @IBOutlet var getStartedDescriptionLabel: UILabel!
+    @IBOutlet var errorMessageLabel: UILabel!
 
-    @IBOutlet weak var topStackView: UIStackView!
+    @IBOutlet var topStackView: UIStackView!
 
-    @IBOutlet weak var topConstraint: NSLayoutConstraint!
-    @IBOutlet weak var emailStackView: UIStackView!
-    @IBOutlet weak var nameStackView: UIStackView!
-    @IBOutlet weak var phoneNumberStackView: UIStackView!
-    @IBOutlet weak var passwordStackView: UIStackView!
+    @IBOutlet var topConstraint: NSLayoutConstraint!
+    @IBOutlet var emailStackView: UIStackView!
+    @IBOutlet var nameStackView: UIStackView!
+    @IBOutlet var phoneNumberStackView: UIStackView!
+    @IBOutlet var passwordStackView: UIStackView!
 
-    struct LocalizationKey {
+    enum LocalizationKey {
         private static let prefix = "PreChatView"
         private static let suffix = "Title"
         static let getStarted = prefix + "GetStartedDescription"
@@ -79,7 +78,7 @@ class KMPreChatUserFormView: UIView, Localizable {
             return
         }
         addSubview(contentView)
-        contentView.frame = self.bounds
+        contentView.frame = bounds
         contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         setupLocalizedLabelTexts()
     }
@@ -101,7 +100,7 @@ class KMPreChatUserFormView: UIView, Localizable {
         switch field {
         case .name:
             nameStackView.isHidden = true
-        case.email:
+        case .email:
             emailStackView.isHidden = true
         case .phoneNumber:
             phoneNumberStackView.isHidden = true
@@ -112,8 +111,8 @@ class KMPreChatUserFormView: UIView, Localizable {
 
     private func placeholderWith(text: String) -> NSAttributedString {
         return NSAttributedString(string: text, attributes: [
-            .foregroundColor: UIColor(red: 173, green: 168, blue: 168) ,
-            .font: UIFont(name: "HelveticaNeue-Medium", size: 16.0) ?? UIFont.systemFont(ofSize: 16.0)
+            .foregroundColor: UIColor(red: 173, green: 168, blue: 168),
+            .font: UIFont(name: "HelveticaNeue-Medium", size: 16.0) ?? UIFont.systemFont(ofSize: 16.0),
         ])
     }
 

@@ -34,51 +34,51 @@ extension Style {
         case condensedBold(size: CGFloat)
 
         func font() -> UIFont {
-            var option: String = ""
+            var option = ""
             var fontSize: CGFloat = 0
 
             switch self {
             case let .ultraLight(size): option = "-UltraLight"
-            fontSize = size
+                fontSize = size
 
             case let .ultraLightItalic(size): option = "-UltraLightItalic"
-            fontSize = size
+                fontSize = size
 
             case let .thin(size): option = "-Thin"
-            fontSize = size
+                fontSize = size
 
             case let .thinItalic(size): option = "-ThinItalic"
-            fontSize = size
+                fontSize = size
 
             case let .light(size): option = "-Light"
-            fontSize = size
+                fontSize = size
 
             case let .lightItalic(size): option = "-LightItalic"
-            fontSize = size
+                fontSize = size
 
             case let .medium(size): option = "-Medium"
-            fontSize = size
+                fontSize = size
 
             case let .mediumItalic(size): option = "-MediumItalic"
-            fontSize = size
+                fontSize = size
 
             case let .normal(size): option = ""
-            fontSize = size
+                fontSize = size
 
             case let .italic(size): option = "-Italic"
-            fontSize = size
+                fontSize = size
 
             case let .bold(size): option = "-Bold"
-            fontSize = size
+                fontSize = size
 
             case let .boldItalic(size): option = "-BoldItalic"
-            fontSize = size
+                fontSize = size
 
             case let .condensedBlack(size): option = "-CondensedBlack"
-            fontSize = size
+                fontSize = size
 
             case let .condensedBold(size): option = "-CondensedBold"
-            fontSize = size
+                fontSize = size
             }
 
             return UIFont(name: "HelveticaNeue\(option)", size: CGFloat(fontSize)) ?? UIFont.systemFont(ofSize: fontSize)

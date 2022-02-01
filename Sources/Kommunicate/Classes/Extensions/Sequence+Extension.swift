@@ -9,6 +9,6 @@ import Foundation
 
 extension Sequence where Iterator.Element: Hashable {
     var uniqueElements: [Iterator.Element] {
-        return Array( Set(self) )
+        return Array(Set(self))
     }
 }

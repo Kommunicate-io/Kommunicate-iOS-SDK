@@ -11,7 +11,7 @@ import KommunicateCore_iOS_SDK
 /// `KMBotService` will have all the API releated to bots
 public struct KMBotService {
     var channelService: ALChannelService
-    var channelDBService : ALChannelDBService
+    var channelDBService: ALChannelDBService
     static let conversationAssignee = "CONVERSATION_ASSIGNEE"
 
     public init() {
@@ -26,7 +26,8 @@ public struct KMBotService {
     ///   - completion: A result of type `BotDetail` or `KMBotError`
     public func botDetail(applicationKey: String = KMUserDefaultHandler.getApplicationKey(),
                           botId: String,
-                          completion: @escaping (Result<BotDetail, KMBotError>)->()) {
+                          completion: @escaping (Result<BotDetail, KMBotError>) -> Void)
+    {
         guard let url = URLBuilder.botDetail(for: applicationKey, botId: botId).url else {
             completion(.failure(.api(.urlBuilding)))
             return
@@ -34,31 +35,32 @@ public struct KMBotService {
         DataLoader.request(url: url, completion: {
             result in
             switch result {
-            case .success(let data):
+            case let .success(data):
                 guard let botDetailResponse = try? BotDetailResponse(data: data) else {
                     completion(.failure(.api(.jsonConversion)))
                     return
                 }
                 do {
                     let botDetailArray = try botDetailResponse.botDetail()
-                    guard botDetailArray.count > 0,
-                        let botDetail = botDetailArray.first, let botType = botDetail.aiPlatform  else {
-                            completion(.failure(.notFound))
-                            return;
+                    guard !botDetailArray.isEmpty,
+                          let botDetail = botDetailArray.first, let botType = botDetail.aiPlatform
+                    else {
+                        completion(.failure(.notFound))
+                        return
                     }
-                    print("Bot detail fetched successfully for botId:\(botId) And Bot platform:",botDetail.aiPlatform as Any)
+                    print("Bot detail fetched successfully for botId:\(botId) And Bot platform:", botDetail.aiPlatform as Any)
                     /// Add the botType and botId in user defaults
                     DispatchQueue.main.async {
                         KMAppUserDefaultHandler.shared.setBotType(botType, botId: botId)
                         completion(.success(botDetail))
                     }
                 } catch let error as KMBotError {
-                    print("Got some error in bot detail: %@ ",error.localizedDescription)
+                    print("Got some error in bot detail: %@ ", error.localizedDescription)
                     completion(.failure(error))
                 } catch {
                     completion(.failure(.notFound))
                 }
-            case .failure(let error):
+            case let .failure(error):
                 completion(.failure(.api(.network(error))))
             }
         })
@@ -69,9 +71,10 @@ public struct KMBotService {
     /// - Returns: Assignee userId of this channel groupId.
     func assigneeUserIdFor(groupId: NSNumber) -> String? {
         guard let channel = channelService.getChannelByKey(groupId),
-            channel.type == Int16(SUPPORT_GROUP.rawValue),
-            let assigneeId = channel.metadata?[KMBotService.conversationAssignee] as? String else {
-                return nil
+              channel.type == Int16(SUPPORT_GROUP.rawValue),
+              let assigneeId = channel.metadata?[KMBotService.conversationAssignee] as? String
+        else {
+            return nil
         }
         return assigneeId
     }
@@ -81,18 +84,19 @@ public struct KMBotService {
     ///   - type: type of the bot  from enum `BotType`
     ///   - groupId: groupId of conversation
     ///   - completion: true in case if the passed  bot type and response bot type are same..
-    func conversationAssignedToBotForBotType(type:String, groupId: NSNumber,  completion: @escaping (Bool) -> ()) {
-        guard let assigneeId = self.assigneeUserIdFor(groupId: groupId),
-            let channelUserX = channelDBService.loadChannelUserX(byUserId: groupId, andUserId: assigneeId),
-            channelUserX.role == 2 else {
-                completion(false)
-                return
+    func conversationAssignedToBotForBotType(type: String, groupId: NSNumber, completion: @escaping (Bool) -> Void) {
+        guard let assigneeId = assigneeUserIdFor(groupId: groupId),
+              let channelUserX = channelDBService.loadChannelUserX(byUserId: groupId, andUserId: assigneeId),
+              channelUserX.role == 2
+        else {
+            completion(false)
+            return
         }
-        self.fetchBotType(assigneeId) { (result) in
+        fetchBotType(assigneeId) { result in
             switch result {
-            case.success(let botType):
+            case let .success(botType):
                 completion(botType == type)
-            case .failure(_):
+            case .failure:
                 completion(false)
             }
         }
@@ -102,19 +106,19 @@ public struct KMBotService {
     /// - Parameters:
     ///   - botId: Pass the botId for fetching bot type
     ///   - completion: Result with botType or `KMBotError`
-    func fetchBotType(_ botId: String, completion: @escaping (Result<String, KMBotError>) -> ()) {
+    func fetchBotType(_ botId: String, completion: @escaping (Result<String, KMBotError>) -> Void) {
         if let botType = KMAppUserDefaultHandler.shared.getBotType(botId: botId) {
             completion(.success(botType))
         } else {
-            self.botDetail(botId: botId) { (result) in
+            botDetail(botId: botId) { result in
                 switch result {
-                case .success(let botDetail) :
+                case let .success(botDetail):
                     guard let aiPlatform = botDetail.aiPlatform else {
                         completion(.failure(.notFound))
                         return
                     }
                     completion(.success(aiPlatform))
-                case .failure(let error) :
+                case let .failure(error):
                     completion(.failure(error))
                 }
             }

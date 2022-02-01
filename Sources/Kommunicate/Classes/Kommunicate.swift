@@ -6,9 +6,9 @@
 //
 
 import Foundation
-import UIKit
 import KommunicateChatUI_iOS_SDK
 import KommunicateCore_iOS_SDK
+import UIKit
 #if canImport(RichMessageKit)
     import RichMessageKit
     public typealias KMStyle = RichMessageKit.Style
@@ -16,12 +16,12 @@ import KommunicateCore_iOS_SDK
     public typealias KMStyle = KommunicateChatUI_iOS_SDK.Style
 #endif
 
-var TYPE_CLIENT : Int16 = 0
-var TYPE_APPLOZIC : Int16 = 1
-var TYPE_FACEBOOK : Int16 = 2
+var TYPE_CLIENT: Int16 = 0
+var TYPE_APPLOZIC: Int16 = 1
+var TYPE_FACEBOOK: Int16 = 2
 
-var APNS_TYPE_DEVELOPMENT : Int16 = 0
-var APNS_TYPE_DISTRIBUTION : Int16 = 1
+var APNS_TYPE_DEVELOPMENT: Int16 = 0
+var APNS_TYPE_DISTRIBUTION: Int16 = 1
 
 public typealias KMUser = ALUser
 public typealias KMUserDefaultHandler = ALUserDefaultsHandler
@@ -35,16 +35,15 @@ public typealias KMBaseNavigationViewController = ALKBaseNavigationViewControlle
 public typealias KMChatBarConfiguration = ALKChatBarConfiguration
 public typealias KMCustomEventHandler = ALKCustomEventHandler
 
-let faqIdentifier =  11223346
+let faqIdentifier = 11_223_346
 
 enum KMLocalizationKey {
     static let noName = "NoName"
 }
 
 @objc
-open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegate {
-
-    //MARK: - Public properties
+open class Kommunicate: NSObject, Localizable {
+    // MARK: - Public properties
 
     /// Returns true if user is already logged in.
     @objc open class var isLoggedIn: Bool {
@@ -67,7 +66,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
         config.isTapOnNavigationBarEnabled = false
         config.isProfileTapActionEnabled = false
         var navigationItemsForConversationList = [ALKNavigationItem]()
-        let faqItem = ALKNavigationItem(identifier: faqIdentifier, text:  NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
+        let faqItem = ALKNavigationItem(identifier: faqIdentifier, text: NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
         navigationItemsForConversationList.append(faqItem)
         var navigationItemsForConversationView = [ALKNavigationItem]()
         navigationItemsForConversationView.append(faqItem)
@@ -83,7 +82,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
 
     public static let shared = Kommunicate()
     public static var presentingViewController = UIViewController()
-    public static var leadArray = [LeadCollectionFields]()
+    public static var leadArray = [LeadCollectionField]()
 
     public enum KommunicateError: Error {
         case notLoggedIn
@@ -92,9 +91,10 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
         case teamNotPresent
         case conversationUpdateFailed
         case appSettingsFetchFailed
+        case prechatFormNotFilled
     }
 
-    //MARK: - Private properties
+    // MARK: - Private properties
 
     private static var applicationId = ""
 
@@ -106,12 +106,11 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
 
     static var applozicClientType: ApplozicClient.Type = ApplozicClient.self
 
-    public override init() {
+    override public init() {
         super.init()
     }
 
-    //MARK: - Public methods
-
+    // MARK: - Public methods
 
     /**
      Setup an App ID. It will be used for all Kommunicate related requests.
@@ -127,9 +126,10 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
             return
         }
         guard KMUserDefaultHandler.isAppIdEmpty ||
-            KMUserDefaultHandler.matchesCurrentAppId(applicationId) else {
-                assertionFailure("Kommunicate App ID changed: log out and log in again")
-                return
+            KMUserDefaultHandler.matchesCurrentAppId(applicationId)
+        else {
+            assertionFailure("Kommunicate App ID changed: log out and log in again")
+            return
         }
         self.applicationId = applicationId
         ALUserDefaultsHandler.setApplicationKey(applicationId)
@@ -146,43 +146,39 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
      */
     @objc open class func registerUser(
         _ kmUser: KMUser,
-        completion : @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
+        completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void
+    ) {
         let validationError = validateUserData(user: kmUser)
         guard validationError == nil else {
             print("Error while registering the user to Kommunicate: ", validationError!.localizedDescription)
             completion(nil, validationError)
             return
         }
-        let registerUserClientService: ALRegisterUserClientService = ALRegisterUserClientService()
-        registerUserClientService.initWithCompletion(kmUser, withCompletion: { (response, error) in
-            if (error != nil)
-            {
+        let registerUserClientService = ALRegisterUserClientService()
+        registerUserClientService.initWithCompletion(kmUser, withCompletion: { response, error in
+            if error != nil {
                 print("Error while registering the user to Kommunicate")
-                let errorPass = NSError(domain:"Error while registering the user to Kommunicate", code:0, userInfo:nil)
+                let errorPass = NSError(domain: "Error while registering the user to Kommunicate", code: 0, userInfo: nil)
                 completion(response, errorPass as NSError?)
-            }
-            else if(!(response?.isRegisteredSuccessfully())!)
-            {
-                let errorPass = NSError(domain:"Invalid Password", code:0, userInfo:nil)
+            } else if !(response?.isRegisteredSuccessfully())! {
+                let errorPass = NSError(domain: "Invalid Password", code: 0, userInfo: nil)
                 print("Error while registering the user to Kommunicate: ", errorPass.localizedDescription)
-                completion(response , errorPass as NSError?)
-            }
-            else
-            {
+                completion(response, errorPass as NSError?)
+            } else {
                 print("Registered the user to Kommunicate")
                 let kmAppSetting = KMAppSettingService()
-                kmAppSetting.appSetting { (result) in
+                kmAppSetting.appSetting { result in
                     switch result {
-                    case .success(let appSetting):
+                    case let .success(appSetting):
                         DispatchQueue.main.async {
                             kmAppSetting.updateAppsettings(chatWidgetResponse: appSetting.chatWidget)
                             KMAppUserDefaultHandler.shared.isCSATEnabled
                                 = appSetting.collectFeedback ?? false
-                            completion(response , error as NSError?)
+                            completion(response, error as NSError?)
                         }
-                    case .failure( _) :
+                    case .failure:
                         DispatchQueue.main.async {
-                            completion(response , error as NSError?)
+                            completion(response, error as NSError?)
                         }
                     }
                 }
@@ -191,9 +187,9 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
     }
 
     /// Logs out the current logged in user and clears all the cache.
-    open class func logoutUser(completion: @escaping (Result<String, KMError>) -> ()) {
+    open class func logoutUser(completion: @escaping (Result<String, KMError>) -> Void) {
         let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
-        applozicClient?.logoutUser(completion: { (error, apiResponse) in
+        applozicClient?.logoutUser(completion: { error, _ in
             Kommunicate.shared.clearUserDefaults()
             guard error == nil else {
                 completion(.failure(KMError.api(error)))
@@ -206,11 +202,11 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
     /// Creates a new conversation with the details passed.
     /// - Parameter conversation: An instance of `KMConversation` object.
     /// - Parameter completion: If successful the success callback will have a conversationId else it will be KMConversationError on failure.
-    open class func createConversation (
+    open class func createConversation(
         conversation: KMConversation = KMConversationBuilder().build(),
-        completion: @escaping (Result<String, KMConversationError>) -> ()) {
-        
-              guard ALDataNetworkConnection.checkDataNetworkAvailable() else {
+        completion: @escaping (Result<String, KMConversationError>) -> Void
+    ) {
+        guard ALDataNetworkConnection.checkDataNetworkAvailable() else {
             completion(.failure(KMConversationError.internet))
             return
         }
@@ -231,19 +227,20 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
             appSettingsService.appSetting {
                 result in
                 switch result {
-                case .success(let appSettings):
+                case let .success(appSettings):
 
-                    if (allAgentIds.isEmpty) {
+                    if allAgentIds.isEmpty {
                         allAgentIds.append(appSettings.agentID)
                     }
                     // If single threaded is not enabled for this conversation,
                     // then check in global app settings.
                     if !conversation.useLastConversation,
                        let chatWidget = appSettings.chatWidget,
-                       let isSingleThreaded = chatWidget.isSingleThreaded {
+                       let isSingleThreaded = chatWidget.isSingleThreaded
+                    {
                         conversation.useLastConversation = isSingleThreaded
                     }
-                case .failure(let error):
+                case let .failure(error):
                     completion(.failure(KMConversationError.api(error)))
                     return
                 }
@@ -252,19 +249,20 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                 conversation.botIds = allBotIds
 
                 let isClientIdEmpty = (conversation.clientConversationId ?? "").isEmpty
-                if isClientIdEmpty && conversation.useLastConversation {
+                if isClientIdEmpty, conversation.useLastConversation {
                     conversation.clientConversationId = service.createClientIdFrom(
                         userId: conversation.userId,
                         agentIds: conversation.agentIds,
-                        botIds: conversation.botIds ?? [])
+                        botIds: conversation.botIds ?? []
+                    )
                 }
                 service.createConversation(conversation: conversation, completion: { response in
                     DispatchQueue.main.async {
                         guard let conversationId = response.clientChannelKey else {
                             completion(.failure(KMConversationError.api(response.error)))
-                            return;
+                            return
                         }
-                        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.newConversation, data: ["UserSelection":["ClientConversationId":conversation.clientConversationId]])
+                        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.newConversation, data: ["UserSelection": ["ClientConversationId": conversation.clientConversationId]])
                         completion(.success(conversationId))
                     }
                 })
@@ -316,7 +314,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
         completionHandler: @escaping (Bool) -> Void
     ) {
         let alChannelService = ALChannelService()
-        alChannelService.getChannelInformation(nil, orClientChannelKey: clientGroupId) { (channel) in
+        alChannelService.getChannelInformation(nil, orClientChannelKey: clientGroupId) { channel in
             guard let channel = channel, let key = channel.key else {
                 completionHandler(false)
                 return
@@ -325,7 +323,8 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                 groupId: key,
                 from: viewController,
                 prefilledMessage: prefilledMessage,
-                showListOnBack: showListOnBack) { result in
+                showListOnBack: showListOnBack
+            ) { result in
                 completionHandler(result)
             }
         }
@@ -342,7 +341,8 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
 
     open class func createAndShowConversation(
         from viewController: UIViewController,
-        completion:@escaping (_ error: KommunicateError?) -> ()){
+        completion: @escaping (_ error: KommunicateError?) -> Void
+    ) {
         guard isLoggedIn else {
             completion(KommunicateError.notLoggedIn)
             return
@@ -365,7 +365,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
             }
         })
     }
-    
+
     /**
      Updates the conversation parameters.
      Requires the conversation ID and the specific parameters that need to be updated for the specified conversation ID.
@@ -374,13 +374,12 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
      - conversation: Conversation that needs to be updated
      - completion: Called with the status of the conversation update
      */
-    open class func updateConversation(conversation: KMConversation, completion:@escaping (Result<String, KommunicateError>) -> ()) {
-        
+    open class func updateConversation(conversation: KMConversation, completion: @escaping (Result<String, KommunicateError>) -> Void) {
         let service = KMConversationService()
         guard let groupID = conversation.clientConversationId, !groupID.isEmpty else { return }
         if let teamID = conversation.teamId, !teamID.isEmpty {
             service.updateTeam(groupID: groupID, teamID: teamID) { response in
-                if (response.success) {
+                if response.success {
                     completion(.success(groupID))
                 } else {
                     completion(.failure(KommunicateError.conversationUpdateFailed))
@@ -388,8 +387,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
             }
         } else { completion(.failure(KommunicateError.teamNotPresent)) }
     }
-   
-    
+
     /**
      Updates the conversation teamid.
      Requires the conversation  and the team ID to update
@@ -400,26 +398,22 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
 
      - completion: Called with the status of the Team ID update
      */
-    open class func updateTeamId(conversation: KMConversation,teamId: String, completion:@escaping (Result<String, KommunicateError>) -> ()) {
-        
+    open class func updateTeamId(conversation: KMConversation, teamId: String, completion: @escaping (Result<String, KommunicateError>) -> Void) {
         let service = KMConversationService()
         guard let groupID = conversation.clientConversationId, !groupID.isEmpty else { return }
-       
+
         guard !teamId.isEmpty else {
             return completion(.failure(KommunicateError.teamNotPresent))
         }
-        
+
         service.updateTeam(groupID: groupID, teamID: teamId) { response in
-            if (response.success) {
+            if response.success {
                 completion(.success(groupID))
             } else {
                 completion(.failure(KommunicateError.conversationUpdateFailed))
             }
         }
-        
     }
-    
-    
 
     /**
      Generates a random id that can be used as an `userId`
@@ -446,16 +440,17 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
     /// - Parameter completion: If there's any error while sending this message, then it will be returned in this block.
     open class func sendMessage(
         message: KMMessage,
-        completion: @escaping (Error?) -> ()) {
+        completion: @escaping (Error?) -> Void
+    ) {
         guard !message.conversationId.isEmpty else {
-            let emptyConversationId = NSError(domain:"Empty conversation ID", code:0, userInfo:nil)
+            let emptyConversationId = NSError(domain: "Empty conversation ID", code: 0, userInfo: nil)
             completion(emptyConversationId)
             return
         }
         let alChannelService = ALChannelService()
         alChannelService.getChannelInformation(nil, orClientChannelKey: message.conversationId) { channel in
             guard let channel = channel, let key = channel.key else {
-                let noConversationError = NSError(domain:"No conversation found", code:0, userInfo:nil)
+                let noConversationError = NSError(domain: "No conversation found", code: 0, userInfo: nil)
                 completion(noConversationError)
                 return
             }
@@ -470,7 +465,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
             }
         }
     }
-    
+
     /**
      Creates and launches the conversation with PreChat Lead Collection.
 
@@ -480,28 +475,26 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
      - viewController: ViewController from which the pre-chat form view will be launched.
      */
 
-    open class func createConversationWithPreChat(appID: String, conversation: KMConversation?, viewController: UIViewController, completion: @escaping(KommunicateError?) -> ()) {
-        
+    open class func createConversationWithPreChat(appID: String, conversation: KMConversation?, viewController: UIViewController, completion: @escaping (KommunicateError?) -> Void) {
         KMUserDefaultHandler.setApplicationKey(appID)
         Kommunicate.presentingViewController = viewController
 
         let kmAppSetting = KMAppSettingService()
-        kmAppSetting.appSetting { (result) in
+        kmAppSetting.appSetting { result in
             switch result {
-            case .success(let appSetting):
+            case let .success(appSetting):
                 guard let isPreChatEnable = appSetting.collectLead else { return }
                 if isPreChatEnable {
                     UserDefaults.standard.set(appSetting.chatWidget?.preChatGreetingMsg!, forKey: "leadCollectionTitle")
                     leadArray = appSetting.leadCollection!
-                    
-                        
+
                     if !KMUserDefaultHandler.isLoggedIn() {
                         DispatchQueue.main.async {
                             if !Kommunicate.leadArray.isEmpty {
                                 let customPreChatVC = CustomPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
-                                customPreChatVC.submitButtonTapped = {  (response:[String:String]) in
-                                                                    
-                                    Kommunicate().userSubmittedResponse(name: response[CustomPreChatFormViewController.name] ?? "", email: response[CustomPreChatFormViewController.email] ?? "", phoneNumber: response[CustomPreChatFormViewController.phone] ?? "", password: "")
+                                customPreChatVC.submitButtonTapped = { (response: [String: String]) in
+
+                                    Kommunicate.userSubmittedResponse(name: response[CustomPreChatFormViewController.name] ?? "", email: response[CustomPreChatFormViewController.email] ?? "", phoneNumber: response[CustomPreChatFormViewController.phone] ?? "", password: "")
                                 }
                                 customPreChatVC.closeButtonTapped = {
                                     Kommunicate().closeButtonTapped()
@@ -510,7 +503,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                             } else {
                                 let preChatVC = KMPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
                                 preChatVC.submitButtonTapped = {
-                                    Kommunicate().userSubmittedResponse(name: preChatVC.formView.nameTextField.text!, email: preChatVC.formView.emailTextField.text!, phoneNumber: preChatVC.formView.phoneNumberTextField.text!, password: "")
+                                    Kommunicate.userSubmittedResponse(name: preChatVC.formView.nameTextField.text!, email: preChatVC.formView.emailTextField.text!, phoneNumber: preChatVC.formView.phoneNumberTextField.text!, password: "")
                                 }
                                 preChatVC.closeButtonTapped = {
                                     Kommunicate().closeButtonTapped()
@@ -522,12 +515,12 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                     completion(nil)
                 } else {
                     print("Pre-Chat Lead Collection is not enabled.")
-                    
+
                     _ = applozicClientType.init(applicationKey: appID)
                     let kmUser = KMUser()
                     kmUser.userId = Kommunicate.randomId()
                     kmUser.applicationId = applicationId
-                    
+
                     Kommunicate.registerUser(kmUser, completion: {
                         response, error in
                         guard error == nil else {
@@ -535,11 +528,11 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                             return
                         }
                         print("User registration was successful: %@ \(String(describing: response?.isRegisteredSuccessfully()))")
-                        
+
                         if conversation != nil {
-                            createConversation(conversation: conversation!) { (result) in
+                            createConversation(conversation: conversation!) { result in
                                 switch result {
-                                case .success(let conversationId):
+                                case let .success(conversationId):
                                     DispatchQueue.main.async {
                                         showConversationWith(groupId: conversationId, from: viewController, completionHandler: { success in
                                             guard success else {
@@ -550,7 +543,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                                             completion(nil)
                                         })
                                     }
-                                case .failure(_):
+                                case .failure:
                                     completion(KommunicateError.conversationCreateFailed)
                                     return
                                 }
@@ -565,9 +558,9 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                             let kommunicateConversationBuilder = KMConversationBuilder()
                                 .useLastConversation(false)
                             let conversation = kommunicateConversationBuilder.build()
-                            createConversation(conversation: conversation) { (result) in
+                            createConversation(conversation: conversation) { result in
                                 switch result {
-                                case .success(let conversationId):
+                                case let .success(conversationId):
                                     DispatchQueue.main.async {
                                         showConversationWith(groupId: conversationId, from: viewController, completionHandler: { success in
                                             guard success else {
@@ -578,7 +571,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                                             completion(nil)
                                         })
                                     }
-                                case .failure(_):
+                                case .failure:
                                     completion(KommunicateError.conversationCreateFailed)
                                     return
                                 }
@@ -586,31 +579,84 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                         }
                     })
                 }
-            case .failure(let error) :
+            case let .failure(error):
                 print("Error in fetching Kommunicate app settings: %@", error)
                 completion(KommunicateError.appSettingsFetchFailed)
             }
         }
     }
-    
-    public func userSubmittedResponse(name: String, email: String, phoneNumber: String, password: String) {
-        
+
+    /**
+     launches the PreChat Lead Collection with custom payload
+
+      - Parameters:
+      - appID: User's application ID.
+      - inputList: list of LeadCollectionField objects to create a form in pre Chat.
+      - viewController: ViewController from which the pre-chat form view will be launched.
+      - prechatCompletion:  Callback to inform prechat launched successfully or not
+      - onFormCompletion: Callback to pass form response or error
+      */
+    open class func launchPreChatWithCustomPayload(appID: String, viewController: UIViewController, inputList: [LeadCollectionField], prechatcompletion: @escaping (KommunicateError?) -> Void, onFormCompletion: @escaping ([String: String]?, KommunicateError?) -> Void) {
+        KMUserDefaultHandler.setApplicationKey(appID)
+        Kommunicate.presentingViewController = viewController
+
+        leadArray = inputList
+
+        if !KMUserDefaultHandler.isLoggedIn() {
+            DispatchQueue.main.async {
+                if !Kommunicate.leadArray.isEmpty {
+                    let customPreChatVC = CustomPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
+
+                    customPreChatVC.submitButtonTapped = { (response: [String: String]) in
+                        onFormCompletion(response, nil)
+                        Kommunicate.presentingViewController.dismiss(animated: true, completion: nil)
+                    }
+                    customPreChatVC.closeButtonTapped = {
+                        Kommunicate().closeButtonTapped()
+                        onFormCompletion(nil, .prechatFormNotFilled)
+                    }
+                    viewController.present(customPreChatVC, animated: true, completion: nil)
+                    prechatcompletion(nil)
+                } else {
+                    let preChatVC = KMPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
+                    preChatVC.submitButtonTapped = {
+                        Kommunicate.userSubmittedResponse(name: preChatVC.formView.nameTextField.text!, email: preChatVC.formView.emailTextField.text!, phoneNumber: preChatVC.formView.phoneNumberTextField.text!, password: "")
+                    }
+                    preChatVC.closeButtonTapped = {
+                        Kommunicate().closeButtonTapped()
+                        onFormCompletion(nil, .prechatFormNotFilled)
+                    }
+                    viewController.present(preChatVC, animated: true, completion: nil)
+                    prechatcompletion(nil)
+                }
+            }
+        }
+        prechatcompletion(nil)
+    }
+
+    open class func userSubmittedResponse(name: String, email: String, phoneNumber: String, password _: String) {
         guard let appID = KMUserDefaultHandler.getApplicationKey() else { return }
         Kommunicate.presentingViewController.dismiss(animated: false, completion: nil)
-        let kmUser = KMUser.init()
+        let kmUser = KMUser()
         kmUser.applicationId = appID
+
         if !email.isEmpty {
             kmUser.userId = email
             kmUser.email = email
-        } else {
+        } else if !name.isEmpty {
             kmUser.userId = name
+        } else if !phoneNumber.isEmpty {
+            kmUser.userId = phoneNumber
+        } else {
+            kmUser.userId = Kommunicate.randomId()
         }
+
         if !phoneNumber.isEmpty {
             kmUser.contactNumber = phoneNumber
         }
         kmUser.contactNumber = phoneNumber
         kmUser.displayName = name
-        
+
         Kommunicate.setup(applicationId: appID)
         Kommunicate.registerUser(kmUser, completion: {
             response, error in
@@ -627,16 +673,16 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
             })
         })
     }
-    
+
     public func closeButtonTapped() {
         Kommunicate.presentingViewController.dismiss(animated: true, completion: nil)
     }
 
-    //MARK: - Internal methods
+    // MARK: - Internal methods
 
     class func configureListVC(_ vc: KMConversationListViewController) {
         vc.conversationListTableViewController.dataSource.cellConfigurator = {
-            (messageModel, tableCell) in
+            messageModel, tableCell in
             let cell = tableCell as! ALKChatCell
             let message = ChatMessage(message: messageModel)
             cell.update(viewModel: message, identity: nil)
@@ -674,38 +720,36 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
         }
     }
 
-    //MARK: - Private methods
+    // MARK: - Private methods
 
     private func updateToken() {
         guard let deviceToken = pushNotificationTokenData else { return }
-        print("DEVICE_TOKEN_DATA :: \(deviceToken.description)")  // (SWIFT = 3) : TOKEN PARSING
+        print("DEVICE_TOKEN_DATA :: \(deviceToken.description)") // (SWIFT = 3) : TOKEN PARSING
 
-        var deviceTokenString: String = ""
-        for i in 0..<deviceToken.count
-        {
+        var deviceTokenString = ""
+        for i in 0 ..< deviceToken.count {
             deviceTokenString += String(format: "%02.2hhx", deviceToken[i] as CVarArg)
         }
         print("DEVICE_TOKEN_STRING :: \(deviceTokenString)")
 
-        if (ALUserDefaultsHandler.getApnDeviceToken() != deviceTokenString)
-        {
-            let alRegisterUserClientService: ALRegisterUserClientService = ALRegisterUserClientService()
-            alRegisterUserClientService.updateApnDeviceToken(withCompletion: deviceTokenString, withCompletion: { (response, error) in
-                print ("REGISTRATION_RESPONSE :: \(String(describing: response))")
+        if ALUserDefaultsHandler.getApnDeviceToken() != deviceTokenString {
+            let alRegisterUserClientService = ALRegisterUserClientService()
+            alRegisterUserClientService.updateApnDeviceToken(withCompletion: deviceTokenString, withCompletion: { response, _ in
+                print("REGISTRATION_RESPONSE :: \(String(describing: response))")
             })
         }
     }
 
-
     private class func createAConversationAndLaunch(
         from viewController: UIViewController,
-        completion:@escaping (_ error: KommunicateError?) -> ()) {
+        completion: @escaping (_ error: KommunicateError?) -> Void
+    ) {
         let kommunicateConversationBuilder = KMConversationBuilder()
             .useLastConversation(true)
         let conversation = kommunicateConversationBuilder.build()
-        createConversation(conversation: conversation) { (result) in
+        createConversation(conversation: conversation) { result in
             switch result {
-            case .success(let conversationId):                
+            case let .success(conversationId):
                 DispatchQueue.main.async {
                     showConversationWith(groupId: conversationId, from: viewController, completionHandler: { success in
                         guard success else {
@@ -716,7 +760,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
                         completion(nil)
                     })
                 }
-            case .failure(_):
+            case .failure:
                 completion(KommunicateError.conversationCreateFailed)
                 return
             }
@@ -725,7 +769,7 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
 
     func defaultChatViewSettings() {
         KMUserDefaultHandler.setBASEURL(API.Backend.chat.rawValue)
-        KMUserDefaultHandler.setGoogleMapAPIKey("AIzaSyCOacEeJi-ZWLLrOtYyj3PKMTOFEG7HDlw") //REPLACE WITH YOUR GOOGLE MAPKEY
+        KMUserDefaultHandler.setGoogleMapAPIKey("AIzaSyCOacEeJi-ZWLLrOtYyj3PKMTOFEG7HDlw") // REPLACE WITH YOUR GOOGLE MAPKEY
         ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description()])
         ALApplozicSettings.setFilterContactsStatus(true)
         ALUserDefaultsHandler.setDebugLogsRequire(true)
@@ -754,24 +798,25 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
      */
     @available(*, deprecated, message: "Use createConversation(conversation:completion:)")
     @objc open class func createConversation(
-        userId: String,
+        userId _: String,
         agentIds: [String] = [],
         botIds: [String]?,
         useLastConversation: Bool = false,
-        clientConversationId: String? = nil,
-        completion:@escaping (_ clientGroupId: String) -> ()) {
+        clientConversationId _: String? = nil,
+        completion: @escaping (_ clientGroupId: String) -> Void
+    ) {
         let kommunicateConversationBuilder = KMConversationBuilder()
             .useLastConversation(useLastConversation)
             .withAgentIds(agentIds)
             .withBotIds(botIds ?? [])
-        let conversation =  kommunicateConversationBuilder.build()
+        let conversation = kommunicateConversationBuilder.build()
 
-        createConversation(conversation: conversation) { (result) in
+        createConversation(conversation: conversation) { result in
 
             switch result {
-            case .success(let conversationId):
+            case let .success(conversationId):
                 completion(conversationId)
-            case .failure(_):
+            case .failure:
                 completion("")
             }
         }
@@ -798,20 +843,21 @@ open class Kommunicate: NSObject,Localizable, KMPreChatFormViewControllerDelegat
 
     private static func validateUserData(user: KMUser) -> NSError? {
         guard let userId = user.userId, !userId.isEmpty else {
-            return NSError(domain:"User ID is not present", code:0, userInfo:nil)
+            return NSError(domain: "User ID is not present", code: 0, userInfo: nil)
         }
         guard !userId.containsWhitespace else {
-            return NSError(domain:"User ID contains whitespace or newline characters", code:0, userInfo:nil)
+            return NSError(domain: "User ID contains whitespace or newline characters", code: 0, userInfo: nil)
         }
         return nil
     }
+
     /**
      Subscribe Chat Events
      - Parameters:
      - events: list of events to subscribe.
      - callback: ALKCustomEventCallback to send subscribed event's data
      */
-    public static func subscribeCustomEvents(events: [CustomEvent],callback: ALKCustomEventCallback){
-        KMCustomEventHandler.shared.setSubscribedEvents(eventsList: events,eventDelegate: callback)
+    public static func subscribeCustomEvents(events: [CustomEvent], callback: ALKCustomEventCallback) {
+        KMCustomEventHandler.shared.setSubscribedEvents(eventsList: events, eventDelegate: callback)
     }
 }

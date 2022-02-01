@@ -7,13 +7,14 @@
 
 import KommunicateCore_iOS_SDK
 
-extension ALPushNotificationService {
-    public func isKommunicateNotification(_ dict: [AnyHashable: Any]) -> Bool {
+public extension ALPushNotificationService {
+    func isKommunicateNotification(_ dict: [AnyHashable: Any]) -> Bool {
         return isApplozicNotification(dict)
     }
 
-    public func processPushNotification(_ dict: [AnyHashable: Any],
-                                        appState: UIApplication.State) {
+    func processPushNotification(_ dict: [AnyHashable: Any],
+                                 appState: UIApplication.State)
+    {
         switch appState {
         case .active:
             processPushNotification(dict, updateUI: NSNumber(value: APP_STATE_ACTIVE.rawValue))
