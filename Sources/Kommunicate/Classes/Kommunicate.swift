@@ -7,7 +7,7 @@
 
 import Foundation
 import KommunicateChatUI_iOS_SDK
-import KommunicateCore_iOS_SDK
+import ApplozicCore
 import UIKit
 #if canImport(RichMessageKit)
     import RichMessageKit

@@ -6,7 +6,7 @@
 //  Copyright © 2018 CocoaPods. All rights reserved.
 //
 
-import KommunicateCore_iOS_SDK
+import ApplozicCore
 import XCTest
 @testable import Kommunicate
 class PaymentTests: XCTestCase {

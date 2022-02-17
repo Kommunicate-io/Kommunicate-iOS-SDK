@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import KommunicateCore_iOS_SDK
+import ApplozicCore
 
 /// Wraps the observer token received from
 /// NotificationCenter.addObserver(forName:object:queue:using:)

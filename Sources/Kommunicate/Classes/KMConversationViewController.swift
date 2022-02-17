@@ -6,7 +6,7 @@
 //
 
 import KommunicateChatUI_iOS_SDK
-import KommunicateCore_iOS_SDK
+import ApplozicCore
 import UIKit
 
 /// Before pushing this view Controller. Use this

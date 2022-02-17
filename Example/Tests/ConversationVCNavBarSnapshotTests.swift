@@ -6,7 +6,7 @@
 //  Copyright © 2018 CocoaPods. All rights reserved.
 //
 
-import KommunicateCore_iOS_SDK
+import ApplozicCore
 import Nimble
 import Nimble_Snapshots
 import Quick

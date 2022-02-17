@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import KommunicateCore_iOS_SDK
+import ApplozicCore
 @testable import Kommunicate
 
 class ConversationDetailMock: ConversationDetail {
