@@ -165,6 +165,11 @@ open class KMConversationViewController: ALKConversationViewController {
        guard let messages = messageList as? [ALMessage] else { return }
        messageArray = messages
        count = 0
+
+        if messageArray.count > 1 {
+            messageArray.sort { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime) }
+        }
+
        var filteredArray = [ALMessage]()
        let contactService = ALContactService()
        if viewModel.channelKey != nil, viewModel.channelKey == messageArray[count].groupId {
@@ -188,9 +193,10 @@ open class KMConversationViewController: ALKConversationViewController {
     @objc func loopOverMessageArray() {
        if count >= messageArray.count {
            timer.invalidate()
+           currentMessage = ALMessage()
            return
        }
-       if currentMessage == nil || currentMessage.message != messageArray[count].message {
+       if currentMessage.message != messageArray[count].message {
            showTypingLabel(status: true, userId: messageArray[count].to)
            currentMessage = messageArray[count]
            Timer.scheduledTimer(timeInterval: TimeInterval(UserDefaults.standard.integer(forKey: "botDelayInterval")+2), target: self, selector: #selector(self.addMessagesToViewModel), userInfo: nil, repeats: false)
