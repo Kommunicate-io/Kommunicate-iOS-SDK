@@ -163,36 +163,33 @@ open class KMConversationViewController: ALKConversationViewController {
     
     open override func addMessagesToList(_ messageList: [Any]) {
        guard let messages = messageList as? [ALMessage] else { return }
-       messageArray = messages
-       count = 0
-
+        messageArray.append(contentsOf: messages)
+       
         if messageArray.count > 1 {
             messageArray.sort { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime) }
         }
 
-       var filteredArray = [ALMessage]()
        let contactService = ALContactService()
        if viewModel.channelKey != nil, viewModel.channelKey == messageArray[count].groupId {
            let delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval
            UserDefaults.standard.set((delayInterval/1000), forKey: "botDelayInterval")
            let alContact = contactService.loadContact(byKey: "userId", value:  messageArray[count].to)
            if delayInterval > 0 && alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue){
-               timer = Timer.scheduledTimer(timeInterval: TimeInterval((delayInterval/1000)), target: self, selector: #selector(loopOverMessageArray), userInfo: nil, repeats: true)
-               timer.fire()
+               if !self.timer.isValid {
+                   self.timer = Timer.scheduledTimer(timeInterval: TimeInterval((delayInterval/1000)), target: self, selector: #selector(self.loopOverMessageArray), userInfo: nil, repeats: true)
+                   self.timer.fire()
+               }
            } else {
-               filteredArray.append(messageArray[count])
+               self.viewModel.addMessagesToList(messageList)
            }
        } else {
-           filteredArray.append(messageArray[count])
-       }
-       if !filteredArray.isEmpty {
-           self.viewModel.addMessagesToList([filteredArray])
+           self.viewModel.addMessagesToList(messageList)
        }
    }
     
     @objc func loopOverMessageArray() {
        if count >= messageArray.count {
-           timer.invalidate()
+           self.timer.invalidate()
            currentMessage = ALMessage()
            return
        }
