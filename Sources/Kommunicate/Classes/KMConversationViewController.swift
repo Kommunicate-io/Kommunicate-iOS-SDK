@@ -180,9 +180,13 @@ open class KMConversationViewController: ALKConversationViewController {
                    self.timer.fire()
                }
            } else {
+               count = 0
+               messageArray.removeAll()
                self.viewModel.addMessagesToList(messageList)
            }
        } else {
+           count = 0
+           messageArray.removeAll()
            self.viewModel.addMessagesToList(messageList)
        }
    }
