@@ -6,6 +6,8 @@ platform :ios, '12.0'
 
 target 'Kommunicate_Example' do
   pod 'Kommunicate', :path => '../'
+  pod 'KommunicateChatUI-iOS-SDK', :git => 'https://github.com/Sathyan-Elangovan/KommunicateChatUI-iOS-SDK.git', :branch => 'user_status_real_time_update'
+  pod 'KommunicateCore-iOS-SDK', :git => 'https://github.com/Sathyan-Elangovan/KommunicateCore-iOS-SDK.git', :branch => 'user_online_away_listener'
   target 'Kommunicate_Tests' do
     inherit! :search_paths
     pod 'FBSnapshotTestCase' , '~> 2.1.4'
