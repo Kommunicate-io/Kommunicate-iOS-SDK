@@ -34,6 +34,7 @@ DEPENDENCIES:
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - KommunicateChatUI-iOS-SDK (from `https://github.com/Sathyan-Elangovan/KommunicateChatUI-iOS-SDK.git`, branch `resolve_event_listener`)
+
   - Nimble
   - Nimble-Snapshots
   - Quick
@@ -44,6 +45,7 @@ SPEC REPOS:
     - iOSSnapshotTestCase
     - Kingfisher
     - KommunicateCore-iOS-SDK
+
     - Nimble
     - Nimble-Snapshots
     - Quick
@@ -60,6 +62,7 @@ CHECKOUT OPTIONS:
   KommunicateChatUI-iOS-SDK:
     :commit: fb18f85154ef00ee79ba08b736d150d773116a7c
     :git: https://github.com/Sathyan-Elangovan/KommunicateChatUI-iOS-SDK.git
+    
 
 SPEC CHECKSUMS:
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
@@ -74,5 +77,6 @@ SPEC CHECKSUMS:
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
 PODFILE CHECKSUM: b2706ffdbd779d0e004835e0c1476e73bb79bdeb
+
 
 COCOAPODS: 1.11.2
