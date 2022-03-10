@@ -34,7 +34,6 @@ DEPENDENCIES:
   - FBSnapshotTestCase (~> 2.1.4)
   - Kommunicate (from `../`)
   - KommunicateChatUI-iOS-SDK (from `https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git`, branch `dev`)
-
   - Nimble
   - Nimble-Snapshots
   - Quick
@@ -61,6 +60,7 @@ CHECKOUT OPTIONS:
   KommunicateChatUI-iOS-SDK:
     :commit: bf90bfb151149dea1b5adc0e0f3c6e8840ae1bf7
     :git: https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git
+
 SPEC CHECKSUMS:
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: a670511f9ee3829c2b9c23e6e68f315fd7b6790f
@@ -73,6 +73,6 @@ SPEC CHECKSUMS:
   Quick: 6473349e43b9271a8d43839d9ba1c442ed1b7ac4
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: c74aef1fb00b57ecc11a555759dbeb910a7f1bd9
+PODFILE CHECKSUM: e1fb44573d49ed6fb615c9623d26bf5af9b7f1e4
 
 COCOAPODS: 1.11.2
