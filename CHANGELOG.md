@@ -3,6 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
+- [CM-842] Added S3 service as the default service for upload/download images
 - [CM-758] Added callback for User Online Status 
 - [CM-798] Launch Prechat with Custom Payload 
 
