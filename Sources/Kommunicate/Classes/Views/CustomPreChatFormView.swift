@@ -54,7 +54,7 @@ class CustomPreChatFormView: UIView, UITextFieldDelegate {
             if let type = element.element, type == CustomPreChatFormViewController.dropDownType, let options = element.options, !options.isEmpty {
                 let image = UIImage(named: "icon_down", in: Bundle.kommunicate, compatibleWith: nil)
                 let button = UIButton()
-                button.setTitleColor(UIColor(131, green: 131, blue: 136), for: .normal)
+                button.setTitleColor(UIColor(red: 131, green: 131, blue: 136), for: .normal)
                 button.setTitle(element.placeholder, for: .normal)
                 button.tag = index
                 button.contentHorizontalAlignment = UIControl.ContentHorizontalAlignment.left
@@ -64,7 +64,7 @@ class CustomPreChatFormView: UIView, UITextFieldDelegate {
                 button.imageEdgeInsets = UIEdgeInsets(top: 5, left: contentView.frame.width - 60, bottom: 5, right: 15)
                 button.layer.cornerRadius = 2
                 button.layer.borderWidth = 1
-                button.layer.borderColor = UIColor(92, green: 90, blue: 167).cgColor
+                button.layer.borderColor = UIColor(red: 92, green: 90, blue: 167).cgColor
                 formStackView.addArrangedSubview(button)
                 button.leadingAnchor.constraint(equalTo: formStackView.leadingAnchor, constant: 15).isActive = true
                 button.trailingAnchor.constraint(equalTo: formStackView.trailingAnchor, constant: -15).isActive = true
@@ -74,7 +74,7 @@ class CustomPreChatFormView: UIView, UITextFieldDelegate {
                 textLabel.text = element.field
                 textLabel.textAlignment = .left
                 textLabel.font = UIFont(name: "HelveticaNeue", size: 13)
-                textLabel.textColor = UIColor(131, green: 131, blue: 136)
+                textLabel.textColor = UIColor(red: 131, green: 131, blue: 136)
                 textLabel.widthAnchor.constraint(equalToConstant: contentView.frame.width).isActive = true
                 textLabel.heightAnchor.constraint(equalToConstant: 14.0).isActive = true
                 textLabel.isHidden = true
@@ -84,7 +84,7 @@ class CustomPreChatFormView: UIView, UITextFieldDelegate {
                 textField.textAlignment = .left
                 textField.attributedPlaceholder = placeholderForTextField(text: element.placeholder)
                 textLabel.font = UIFont(name: "HelveticaNeue", size: 16)
-                textLabel.textColor = UIColor(68, green: 68, blue: 70)
+                textLabel.textColor = UIColor(red: 68, green: 68, blue: 70)
                 textField.widthAnchor.constraint(equalToConstant: contentView.frame.width).isActive = true
                 textField.heightAnchor.constraint(equalToConstant: 22).isActive = true
                 textField.tag = index
@@ -96,7 +96,7 @@ class CustomPreChatFormView: UIView, UITextFieldDelegate {
                 textField.spellCheckingType = .no
 
                 let view = UIView()
-                view.backgroundColor = UIColor(218, green: 215, blue: 215)
+                view.backgroundColor = UIColor(red: 218, green: 215, blue: 215)
                 view.widthAnchor.constraint(equalToConstant: contentView.frame.width).isActive = true
                 view.heightAnchor.constraint(equalToConstant: 2).isActive = true
 

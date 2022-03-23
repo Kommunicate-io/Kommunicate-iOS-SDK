@@ -2,30 +2,30 @@
   "object": {
     "pins": [
       {
-        "package": "Applozic",
-        "repositoryURL": "https://github.com/AppLozic/Applozic-Chat-iOS-Framework.git",
-        "state": {
-          "branch": null,
-          "revision": "ba28f9ddcd713ecde8d546fdd727b8fdc1b26cc1",
-          "version": "8.1.0"
-        }
-      },
-      {
-        "package": "ApplozicSwift",
-        "repositoryURL": "https://github.com/AppLozic/ApplozicSwift.git",
-        "state": {
-          "branch": null,
-          "revision": "c2f805dcf84c842f85dff1869e15671f9b78aa04",
-          "version": "6.0.0"
-        }
-      },
-      {
         "package": "Kingfisher",
         "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
         "state": {
           "branch": null,
-          "revision": "fd6aee6d3774db191b22e331cc88f00041a2ca85",
-          "version": "5.14.1"
+          "revision": "8c65ddf756c633d01d9ae01092bf72f0c66dfc60",
+          "version": "7.0.0"
+        }
+      },
+      {
+        "package": "KommunicateChatUI-iOS-SDK",
+        "repositoryURL": "https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git",
+        "state": {
+          "branch": null,
+          "revision": "f3da8050db54328441dbb4432d6fe7b7a150b833",
+          "version": "0.2.0"
+        }
+      },
+      {
+        "package": "KommunicateCore_iOS_SDK",
+        "repositoryURL": "https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git",
+        "state": {
+          "branch": null,
+          "revision": "d33f8370719d60e90fa6d6e6630f748aeaa9aa1d",
+          "version": "1.0.1"
         }
       },
       {
