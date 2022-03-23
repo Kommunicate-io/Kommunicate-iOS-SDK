@@ -3,6 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
+- Updated to KM Chat UI 0.2.0
 - [CM-842] Added S3 service as the default service for upload/download images
 - [CM-830] Added Event Callback for Conversation resolve
 - [CM-758] Added callback for User Online Status 
