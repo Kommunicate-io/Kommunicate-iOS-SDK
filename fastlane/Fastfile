@@ -16,7 +16,7 @@ platform :ios do
     version_bump_podspec(path: "Kommunicate.podspec", version_number: version)
     cocoapods(clean_install: true, podfile: "Example/Podfile", repo_update: true)
 
-    pod_lib_lint --allow-warnings
+    pod_lib_lint(allow_warnings: true)
     update_changelog_tag(version: version)
     push_version_update(version: version, releaseBranchName: releaseBranchName)
 
