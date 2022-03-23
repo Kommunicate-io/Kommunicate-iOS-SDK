@@ -20,7 +20,7 @@ platform :ios do
     update_changelog_tag(version: version)
     push_version_update(version: version, releaseBranchName: releaseBranchName)
 
-    pod_push
+    pod_push(allow_warnings: true)
     release_docs(version: version)
   end
 
