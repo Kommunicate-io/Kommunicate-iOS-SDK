@@ -163,16 +163,17 @@ UnableToCreateConversationError = "Unable to create conversation";
 OkButton = "Okay";
 WaitMessage = "Please wait...";
 
+/* Last Message of conversation */
+Photo = "photo1";
+Location = "Location1";
+Audio = "Audio1";
+Update = "Update1";
+Video = "Video1";
+Message = "Message1";
+FAQ = "FAQ1";
+Document = "Document1";
+Contact = "Contact1";
+Buttons = "Buttons1";
 
-/* conversation created day labels
-Today = "Today1";
-Yesterday = "Yesterday1";
-Monday = "Monday1";
-Tuesday = "Tuesday1";
-Wednesday = "Wednesday1";
-Thursday = "Thursday1";
-Friday = "Friday1";
-Saturday = "Saturday1";
-Sunday = "Sunday1";
 
- */
+
