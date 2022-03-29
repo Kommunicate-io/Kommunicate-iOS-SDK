@@ -164,16 +164,13 @@ OkButton = "Okay";
 WaitMessage = "Please wait...";
 
 /* Last Message of conversation */
-Photo = "photo1";
-Location = "Location1";
-Audio = "Audio1";
-Update = "Update1";
-Video = "Video1";
-Message = "Message1";
-FAQ = "FAQ1";
-Document = "Document1";
-Contact = "Contact1";
-Buttons = "Buttons1";
-
-
-
+Photo = "photo";
+Location = "Location";
+Audio = "Audio";
+Update = "Update";
+Video = "Video";
+Message = "Message";
+FAQ = "FAQ";
+Document = "Document";
+Contact = "Contact";
+Buttons = "Buttons";
