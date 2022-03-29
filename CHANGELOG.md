@@ -3,6 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
+- [CM-848] Added Localisation Support for the Last message of conversation which will be shown on ConversationList Screeen
 
 ## [6.6.0] - 2022-03-23Z
 - Updated to KM Chat UI 0.2.0 
