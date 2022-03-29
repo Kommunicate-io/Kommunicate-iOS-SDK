@@ -3,6 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
+- [CM-666] Move conversation metadata and assignee update to a separate function | iOS
 
 ## [6.6.0] - 2022-03-23Z
 - Updated to KM Chat UI 0.2.0 
