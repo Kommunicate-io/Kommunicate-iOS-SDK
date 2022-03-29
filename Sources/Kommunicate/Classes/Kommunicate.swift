@@ -414,6 +414,51 @@ open class Kommunicate: NSObject, Localizable {
             }
         }
     }
+    
+    
+    
+    open class func updateConversationMetaData(clientConversationId: String?,conversation: KMConversation?, teamId: String?=nil, assigneeId: String?=nil,metaData: NSMutableDictionary?=nil,completion: @escaping (Result<String, KommunicateError>) -> Void){
+        let service = KMConversationService()
+        guard clientConversationId != nil || conversation != nil else{
+            completion(.failure(.conversationUpdateFailed))
+            return
+        }
+        
+        var groupId: String?
+        
+        if let clientConversationId = clientConversationId {
+            groupId = clientConversationId
+        } else if let conversation = conversation, let id = conversation.clientConversationId, !id.isEmpty {
+            groupId = id
+        }else {
+            completion(.failure(.conversationNotPresent))
+            return
+        }
+      
+        var defaultMetaData = NSMutableDictionary(
+            dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
+        
+        if let metaData = metaData {
+            defaultMetaData.addEntries(from:metaData as! [AnyHashable : Any])
+        }
+        
+       
+        if let teamId = teamId {
+            defaultMetaData.setValue(teamId, forKey: ChannelMetadataKeys.teamId)
+        }
+        
+        if let assigneeId = assigneeId {
+            defaultMetaData.setValue(assigneeId, forKey: ChannelMetadataKeys.conversationAssignee)
+        }
+        
+        service.updateConversationMetadata(groupId: groupId!, metadata: defaultMetaData){ response in
+            if response.success {
+                completion(.success(groupId!))
+            } else {
+                completion(.failure(KommunicateError.conversationUpdateFailed))
+            }
+        }
+    }
 
     /**
      Generates a random id that can be used as an `userId`

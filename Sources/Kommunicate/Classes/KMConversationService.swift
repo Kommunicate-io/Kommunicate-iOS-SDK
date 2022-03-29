@@ -510,6 +510,21 @@ public class KMConversationService: KMConservationServiceable, Localizable {
             completion(Response(success: true, clientChannelKey: channelKey, error: nil))
         }
     }
+    
+    
+    public func updateConversationMetadata(
+        groupId: String,
+        metadata: NSMutableDictionary,
+        completion: @escaping ((Response) -> Void)
+    ) {
+        ALChannelService().updateChannelMetaData(nil, orClientChannelKey: groupId, metadata: metadata) { error in
+            guard error == nil else {
+                completion(Response(success: false, clientChannelKey: nil, error: error))
+                return
+            }
+            completion(Response(success: true, clientChannelKey: groupId, error: nil))
+        }
+    }
 
     public func updateTeam(
         groupID: String,
