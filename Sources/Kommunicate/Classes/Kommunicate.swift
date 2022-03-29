@@ -398,26 +398,41 @@ open class Kommunicate: NSObject, Localizable {
 
      - completion: Called with the status of the Team ID update
      */
+    @available(*, deprecated, message: "Use updateConversationMetaData(clientConversationId: teamId: completion:)")
     open class func updateTeamId(conversation: KMConversation, teamId: String, completion: @escaping (Result<String, KommunicateError>) -> Void) {
-        let service = KMConversationService()
         guard let groupID = conversation.clientConversationId, !groupID.isEmpty else { return }
 
         guard !teamId.isEmpty else {
             return completion(.failure(KommunicateError.teamNotPresent))
         }
 
-        service.updateTeam(groupID: groupID, teamID: teamId) { response in
-            if response.success {
-                completion(.success(groupID))
-            } else {
-                completion(.failure(KommunicateError.conversationUpdateFailed))
+        updateConversationMetaData(clientConversationId: groupID, teamId: teamId) { response in
+            switch response{
+            case .success(let clientConversationId):
+                completion(.success(clientConversationId))
+                break
+            case .failure(let error):
+                completion(.failure(error))
+                break
             }
         }
     }
     
     
-    
-    open class func updateConversationMetaData(clientConversationId: String?,conversation: KMConversation?, teamId: String?=nil, assigneeId: String?=nil,metaData: NSMutableDictionary?=nil,completion: @escaping (Result<String, KommunicateError>) -> Void){
+    /**
+         Updates the conversation meta data.
+         Requires  either conversation or clientConversationId
+
+         - Parameters:
+         - conversation: Conversation that needs to be updated
+         - clientConversationId : conversation's clientConversationId that needs to be updated
+            (this method required either conversation or clientConversationId for updation)
+         - teamId :  teamId that needs to be udpated in conversation (Optional)
+         - assigneeId: new assigneeId that needs to be updated in the conversation (Optional)
+         - metaData: metaData to be added to the conversation(Optional)
+         - completion: Called with the status of the update
+    */
+    open class func updateConversationMetaData(clientConversationId: String?,conversation: KMConversation? = nil, teamId: String?=nil, assigneeId: String?=nil,metaData: NSMutableDictionary?=nil,completion: @escaping (Result<String, KommunicateError>) -> Void){
         let service = KMConversationService()
         guard clientConversationId != nil || conversation != nil else{
             completion(.failure(.conversationUpdateFailed))
@@ -435,7 +450,7 @@ open class Kommunicate: NSObject, Localizable {
             return
         }
       
-        var defaultMetaData = NSMutableDictionary(
+        let defaultMetaData = NSMutableDictionary(
             dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
         
         if let metaData = metaData {
