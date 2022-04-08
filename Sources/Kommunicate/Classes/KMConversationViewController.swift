@@ -556,8 +556,6 @@ extension KMConversationViewController {
     }
 
     private func show(feedback: Feedback) {
-        conversationClosedView.setFeedback(feedback)
-        conversationClosedView.layoutIfNeeded()
         updateMessageListBottomPadding(isClosedViewHidden: false)
     }
 }
