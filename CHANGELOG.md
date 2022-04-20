@@ -3,6 +3,13 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
+- [CM-848] Added Localisation Support for the Last message of conversation which will be shown on ConversationList Screeen
+
+## [6.6.0] - 2022-03-23Z
+- Updated to KM Chat UI 0.2.0 
+- [CM-825] Fixed SPM integration issues by adding SPM support for KM Chat UI & KM Core
+- [CM-842] Added S3 service as the default service for upload/download images
+- [CM-830] Added Event Callback for Conversation resolve
 - [CM-758] Added callback for User Online Status 
 - [CM-798] Launch Prechat with Custom Payload 
 
@@ -274,6 +281,8 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 - [AL-2853]Added support for showing Away message.
 - [AL-3062]While creating a conversation, a default agent will be fetched and added. Now it's not required  to pass the agent Ids.
+- [AL-3188]Send notification when conversation view is launched and closed.
+- [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.

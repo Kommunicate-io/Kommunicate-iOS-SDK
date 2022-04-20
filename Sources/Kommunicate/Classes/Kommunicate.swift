@@ -775,6 +775,7 @@ open class Kommunicate: NSObject, Localizable {
         ALUserDefaultsHandler.setDebugLogsRequire(true)
         ALApplozicSettings.setSwiftFramework(true)
         ALApplozicSettings.hideMessages(withMetadataKeys: ["KM_ASSIGN", "KM_STATUS"])
+        ALApplozicSettings.enableS3StorageService(true)
     }
 
     func setupDefaultStyle() {

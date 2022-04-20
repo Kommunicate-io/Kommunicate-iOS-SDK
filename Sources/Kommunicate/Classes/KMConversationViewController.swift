@@ -606,6 +606,10 @@ extension KMConversationViewController {
         conversationClosedView.isHidden = !flag
         updateMessageListBottomPadding(isClosedViewHidden: !flag)
         topConstraintClosedView?.isActive = flag
+        if flag {
+            guard let channelId = viewModel.channelKey else { return }
+            ALKCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.resolveConversation, data: ["UserSelection": channelId])
+        }
     }
 
     private func show(feedback: Feedback) {
