@@ -24,6 +24,7 @@
         @IBAction func launchConversation(_: Any) {
             activityIndicator.startAnimating()
             view.isUserInteractionEnabled = false
+//            Kommunicate.showConversations(from: self)
 
             Kommunicate.createAndShowConversation(from: self, completion: {
                 error in
