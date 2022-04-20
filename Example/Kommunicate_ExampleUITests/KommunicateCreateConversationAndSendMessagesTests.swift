@@ -140,7 +140,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
 }
 
 extension XCTestCase {
-    func waitFor<T>(object: T, timeout: TimeInterval = 20, file: String = #file, line: UInt = #line, expectationPredicate: @escaping (T) -> Bool) {
+    func waitFor<T>(object: T, timeout: TimeInterval = 30, file: String = #file, line: UInt = #line, expectationPredicate: @escaping (T) -> Bool) {
         let predicate = NSPredicate { obj, _ in
             expectationPredicate(obj as! T)
         }
