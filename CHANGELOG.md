@@ -5,6 +5,56 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 ## [Unreleased]
 - [CM-848] Added Localisation Support for the Last message of conversation which will be shown on ConversationList Screeen
 
+- Added a function to update conversation properties: team ID, assignee and metadata.
+
+Sample Code Snippet: 
+```
+Use this method to update assignee or teamId & metadata. Don't try to update assignee & teamId at the same time.
+  let conversationId = "your_conversation_id"
+  let assigneeId = "your_assignee_id"
+  let metaData = ["key1":"value1", "key2": "key2", "key3":"value3"]
+```
+If you want to update conversation assignee, then create conversation object like this:
+``` 
+ let conversation = KMConversationBuilder().withClientConversationId(conversationId).withConversationAssignee(assigneeId).build()
+```
+If you want to update teamId & conversation meta data, then create conversation object like this:
+``` 
+ let conversation = KMConversationBuilder().withClientConversationId(conversationId).withMetaData(metaData).withTeamId(teamId).build()
+```
+If you want to update teamId only, then create conversation object like this:
+``` 
+ let conversation = KMConversationBuilder().withClientConversationId(conversationId).withTeamId(teamId).build()
+```
+If you want to update conversation meta data only, then create conversation object like this:
+``` 
+  let conversation = KMConversationBuilder().withClientConversationId(conversationId).withMetaData(metaData).build()
+``` 
+after that call  the `updateConversation` by passing above created `conversation`
+
+``` 
+  Kommunicate.updateConversation(conversation: conversation) {response in
+     switch response {
+        case .success(let clientConversationId):
+           print("conversation is updated successfully")
+// To launch the conversation
+           Kommunicate.showConversationWith(groupId: clientConversationId, from: self, completionHandler: {response in
+              if response {
+                  print("conversation is shown")
+              } else {
+                  print("conversation is not shown")
+               }
+            })
+           break
+        case .failure(let error):
+           print("failed to update conversation")
+           break
+     }
+  }
+```
+- Deprecated `Kommunicate.UpdateTeamId()` function.
+- [CM-666] Move conversation metadata and assignee update to a separate function | iOS
+
 ## [6.6.0] - 2022-03-23Z
 - Updated to KM Chat UI 0.2.0 
 - [CM-825] Fixed SPM integration issues by adding SPM support for KM Chat UI & KM Core

@@ -1,5 +1,35 @@
 ## Migration Guides
 
+### Migrating from versions < [unrealeased]
+
+### updated teamid of the conversation
+If you were using `Kommunicate.UpdateTeamId()` to update the teamId, then you can replace with below method
+
+```swift
+  let conversationId = "your_conversation_id"
+  let teamId = "your_team_id"
+  let conversation = KMConversationBuilder().withClientConversationId(conversationId).withMetaData(metaData).withTeamId(teamId).build()
+  
+ Kommunicate.updateConversation(conversation: conversation) {response in
+     switch response {
+        case .success(let clientConversationId):
+           print("conversation is updated successfully")
+// To launch the conversation
+           Kommunicate.showConversationWith(groupId: clientConversationId, from: self, completionHandler: {response in
+              if response {
+                  print("conversation is shown")
+              } else {
+                  print("conversation is not shown")
+               }
+            })
+           break
+        case .failure(let error):
+           print("failed to update conversation")
+           break
+     }
+  }
+```
+
 ### Migrating from versions < 3.2.0
 
 #### Logout user
