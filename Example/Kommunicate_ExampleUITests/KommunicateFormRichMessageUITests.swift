@@ -42,6 +42,9 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
+        let formFirstResponse = app.tables[AppScreen.innerChatScreenTableView]
+            .textViews[RichMessageResponseText.formFirstResponse]
+        waitFor(object: formFirstResponse) { $0.exists }
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.male].tap()
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.metal].tap()

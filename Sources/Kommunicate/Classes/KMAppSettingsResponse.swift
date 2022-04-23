@@ -41,6 +41,7 @@ struct ChatWidgetResponse: Decodable {
     let secondaryColor: String?
     let showPoweredBy: Bool?
     let isSingleThreaded: Bool?
+    let botMessageDelayInterval: Int?
     let hidePostCTAEnabled: Bool?
     let preChatGreetingMsg: String?
 }

@@ -98,4 +98,7 @@ enum RichMessageResponseText {
     static let listTemplateResponse = "List template Rich Message"
     static let singleCardResponse = "Single card template"
     static let cardCarouselResponse = "Carousel"
+    static let submitFirstResponse = "Submit Button Rich Message"
+    static let sugggestedRepliesFirstMessage = "Suggested Replies Rich Message"
+    static let formFirstResponse = "Submit your details"
 }

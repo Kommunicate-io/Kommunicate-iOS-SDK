@@ -91,6 +91,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         let openLocation = app.buttons[InAppButton.ConversationScreen.openLocation]
         waitFor(object: openLocation) { $0.exists }
         openLocation.tap() // click on location button
+        sleep(5)
         addUIInterruptionMonitor(withDescription: AppPermission.AlertMessage.accessLocation) { alerts -> Bool in
             if alerts.buttons[AppPermission.AlertButton.allowLoation].exists {
                 alerts.buttons[AppPermission.AlertButton.allowLoation].tap()
@@ -140,7 +141,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
 }
 
 extension XCTestCase {
-    func waitFor<T>(object: T, timeout: TimeInterval = 20, file: String = #file, line: UInt = #line, expectationPredicate: @escaping (T) -> Bool) {
+    func waitFor<T>(object: T, timeout: TimeInterval = 30, file: String = #file, line: UInt = #line, expectationPredicate: @escaping (T) -> Bool) {
         let predicate = NSPredicate { obj, _ in
             expectationPredicate(obj as! T)
         }

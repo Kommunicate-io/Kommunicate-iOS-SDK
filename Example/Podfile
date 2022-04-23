@@ -7,7 +7,7 @@ platform :ios, '12.0'
 target 'Kommunicate_Example' do
   pod 'Kommunicate', :path => '../'
   target 'Kommunicate_Tests' do
-    inherit! :search_paths
+    inherit! :search_paths 
     pod 'FBSnapshotTestCase' , '~> 2.1.4'
     pod 'Nimble'
     pod 'Quick'

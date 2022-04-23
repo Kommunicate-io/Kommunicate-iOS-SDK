@@ -43,28 +43,37 @@ class KMAppSettingService {
     }
 
     func updateAppsettings(chatWidgetResponse: ChatWidgetResponse?) {
-        guard let chatWidget = chatWidgetResponse,
-              var primaryColor = chatWidget.primaryColor
-        else {
-            setupDefaultSettings()
-            return
-        }
-        primaryColor = primaryColor.replacingOccurrences(of: "#", with: "")
-        let appSettings = ALKAppSettings(primaryColor: primaryColor)
+        guard let chatWidget = chatWidgetResponse else {
+                   return
+               }
 
-        /// Primary color for sent message background
-        appSettings.sentMessageBackgroundColor = primaryColor
+       KMAppUserDefaultHandler.shared.botMessageDelayInterval = chatWidget.botMessageDelayInterval ?? 0
+       
+       guard var primaryColor = chatWidget.primaryColor else {
+       guard let chatWidget = chatWidgetResponse,
+             var primaryColor = chatWidget.primaryColor
+       else {
+           setupDefaultSettings()
+           return
+       }
+       primaryColor = primaryColor.replacingOccurrences(of: "#", with: "")
+       let appSettings = ALKAppSettings(primaryColor: primaryColor)
 
-        /// Primary color for attachment tint color
-        appSettings.attachmentIconsTintColor = primaryColor
+       /// Primary color for sent message background
+       appSettings.sentMessageBackgroundColor = primaryColor
 
-        if let secondaryColor = chatWidget.secondaryColor, !secondaryColor.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            appSettings.secondaryColor = secondaryColor.replacingOccurrences(of: "#", with: "")
-        }
-        appSettings.buttonPrimaryColor = primaryColor
-        appSettings.showPoweredBy = chatWidget.showPoweredBy ?? false
-        appSettings.hidePostCTAEnabled = chatWidget.hidePostCTAEnabled ?? false
-        appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
+       /// Primary color for attachment tint color
+       appSettings.attachmentIconsTintColor = primaryColor
+
+       if let secondaryColor = chatWidget.secondaryColor, !secondaryColor.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+           appSettings.secondaryColor = secondaryColor.replacingOccurrences(of: "#", with: "")
+       }
+       appSettings.buttonPrimaryColor = primaryColor
+       appSettings.showPoweredBy = chatWidget.showPoweredBy ?? false
+       appSettings.hidePostCTAEnabled = chatWidget.hidePostCTAEnabled ?? false
+       appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
+           return
+       }
     }
 
     func clearAppSettingsData() {

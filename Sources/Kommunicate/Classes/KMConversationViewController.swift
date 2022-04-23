@@ -18,7 +18,11 @@ open class KMConversationViewController: ALKConversationViewController {
     private let registerUserClientService = ALRegisterUserClientService()
     let kmBotService = KMBotService()
     private var assigneeUserId: String?
-
+    var messageArray = [ALMessage]()
+    var timer = Timer()
+    var count = 0
+    var currentMessage = ALMessage()
+    
     lazy var customNavigationView = ConversationVCNavBar(
         delegate: self,
         localizationFileName: self.configuration.localizedStringFileName,
@@ -155,7 +159,60 @@ open class KMConversationViewController: ALKConversationViewController {
             isAwayMessageViewHidden = true
         }
     }
+    
+    
+    open override func addMessagesToList(_ messageList: [Any]) {
+       guard let messages = messageList as? [ALMessage] else { return }
+        messageArray.append(contentsOf: messages)
+       
+        if messageArray.count > 1 {
+            messageArray.sort { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime) }
+        }
 
+       let contactService = ALContactService()
+       if viewModel.channelKey != nil, viewModel.channelKey == messageArray[count].groupId {
+           let delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval
+           UserDefaults.standard.set((delayInterval/1000), forKey: "botDelayInterval")
+           let alContact = contactService.loadContact(byKey: "userId", value:  messageArray[count].to)
+           if delayInterval > 0 && alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue){
+               if !self.timer.isValid {
+                   self.timer = Timer.scheduledTimer(timeInterval: TimeInterval((delayInterval/1000)), target: self, selector: #selector(self.loopOverMessageArray), userInfo: nil, repeats: true)
+                   self.timer.fire()
+               }
+           } else {
+               count = 0
+               messageArray.removeAll()
+               self.viewModel.addMessagesToList(messageList)
+           }
+       } else {
+           count = 0
+           messageArray.removeAll()
+           self.viewModel.addMessagesToList(messageList)
+       }
+   }
+    
+    @objc func loopOverMessageArray() {
+       if count >= messageArray.count {
+           self.timer.invalidate()
+           currentMessage = ALMessage()
+           return
+       }
+       if (currentMessage.message != messageArray[count].message || currentMessage.createdAtTime != messageArray[count].createdAtTime) {
+           showTypingLabel(status: true, userId: messageArray[count].to)
+           currentMessage = messageArray[count]
+           Timer.scheduledTimer(timeInterval: TimeInterval(UserDefaults.standard.integer(forKey: "botDelayInterval")+2), target: self, selector: #selector(self.addMessagesToViewModel), userInfo: nil, repeats: false)
+       }
+   }
+    
+    @objc func addMessagesToViewModel() {
+       self.viewModel.addMessagesToList([currentMessage])
+       if count >= messageArray.count {
+           count = 0
+       } else {
+           count = count + 1
+       }
+   }
+    
     func addNotificationCenterObserver() {
         converastionNavBarItemToken = NotificationCenter.default.observe(
             name: Notification.Name(rawValue: ALKNavigationItem.NSNotificationForConversationViewNavigationTap),
