@@ -92,6 +92,8 @@ open class Kommunicate: NSObject, Localizable {
         case conversationUpdateFailed
         case appSettingsFetchFailed
         case prechatFormNotFilled
+        case bothTeamIDAndAssigneeIDShouldNotPresent
+        case clientConversationIdNotPresent
     }
 
     // MARK: - Private properties
@@ -369,46 +371,61 @@ open class Kommunicate: NSObject, Localizable {
     /**
      Updates the conversation parameters.
      Requires the conversation ID and the specific parameters that need to be updated for the specified conversation ID.
+     Use this method to update either assignee or teamId & metadata. Should not use this method to update assignee & teamId at the same time.
 
      - Parameters:
      - conversation: Conversation that needs to be updated
      - completion: Called with the status of the conversation update
      */
     open class func updateConversation(conversation: KMConversation, completion: @escaping (Result<String, KommunicateError>) -> Void) {
+        guard let clientConversationId = conversation.clientConversationId, !clientConversationId.isEmpty else { return completion(.failure(.clientConversationIdNotPresent)) }
+        
+        if conversation.conversationAssignee != nil && conversation.teamId != nil {
+            return completion(.failure(.bothTeamIDAndAssigneeIDShouldNotPresent))
+        }
+      
         let service = KMConversationService()
-        guard let groupID = conversation.clientConversationId, !groupID.isEmpty else { return }
-        if let teamID = conversation.teamId, !teamID.isEmpty {
-            service.updateTeam(groupID: groupID, teamID: teamID) { response in
-                if response.success {
-                    completion(.success(groupID))
-                } else {
-                    completion(.failure(KommunicateError.conversationUpdateFailed))
+        if let assignee = conversation.conversationAssignee {
+            service.isGroupPresent(clientId: clientConversationId, completion: { present, channel in
+                guard present else{
+                    return completion(.failure(.conversationNotPresent))
                 }
-            }
-        } else { completion(.failure(KommunicateError.teamNotPresent)) }
-    }
+                let groupID = Int(truncating: channel?.key ?? 0)
+                
+                guard groupID != 0 else{
+                    return completion(.failure(.conversationUpdateFailed))
+                }
 
-    /**
-     Updates the conversation teamid.
-     Requires the conversation  and the team ID to update
-
-     - Parameters:
-     - conversation: Conversation that needs to be updated
-     - teamId :  teamId that needs to be udpated in conversation
-
-     - completion: Called with the status of the Team ID update
-     */
-    open class func updateTeamId(conversation: KMConversation, teamId: String, completion: @escaping (Result<String, KommunicateError>) -> Void) {
-        let service = KMConversationService()
-        guard let groupID = conversation.clientConversationId, !groupID.isEmpty else { return }
-
-        guard !teamId.isEmpty else {
-            return completion(.failure(KommunicateError.teamNotPresent))
+                service.assignConversation(groupId: groupID, to: assignee){ result in
+                    switch result {
+                    case .success:
+                        completion(.success(clientConversationId))
+                    case .failure(_):
+                        completion(.failure(.conversationUpdateFailed))
+                    }
+                }
+            
+            })
+            return
         }
 
-        service.updateTeam(groupID: groupID, teamID: teamId) { response in
+        let defaultMetaData = NSMutableDictionary (
+            dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
+    
+        if let conversationMetaDict = conversation.conversationMetadata as NSDictionary? as! [String:Any]? {
+            let jsonObject = try? JSONSerialization.data(withJSONObject: conversationMetaDict, options: [])
+            if let jsonString = String(data: jsonObject!, encoding: .utf8) {
+                defaultMetaData.setValue(jsonString, forKey: ChannelMetadataKeys.conversationMetaData)
+            }
+        }
+
+        if let teamId = conversation.teamId {
+            defaultMetaData.setValue(teamId, forKey: ChannelMetadataKeys.teamId)
+        }
+        
+        service.updateConversationMetadata(groupId: clientConversationId, metadata: defaultMetaData) { response in
             if response.success {
-                completion(.success(groupID))
+                completion(.success(clientConversationId))
             } else {
                 completion(.failure(KommunicateError.conversationUpdateFailed))
             }
@@ -835,6 +852,39 @@ open class Kommunicate: NSObject, Localizable {
             })
         }
     }
+    
+    /**
+     Updates the conversation teamid.
+     Requires the conversation  and the team ID to update
+
+     - Parameters:
+     - conversation: Conversation that needs to be updated
+     - teamId :  teamId that needs to be udpated in conversation
+
+     - completion: Called with the status of the Team ID update
+     */
+    @available(*, deprecated, message: "Use updateConversation(conversation: completion:)")
+    open class func updateTeamId(conversation: KMConversation, teamId: String, completion: @escaping (Result<String, KommunicateError>) -> Void) {
+        guard let groupID = conversation.clientConversationId, !groupID.isEmpty else { return }
+
+        guard !teamId.isEmpty else {
+            return completion(.failure(KommunicateError.teamNotPresent))
+        }
+        conversation.teamId = teamId
+        
+        updateConversation(conversation: conversation){
+            response in
+               switch response{
+               case .success(let clientConversationId):
+                   completion(.success(clientConversationId))
+                   break
+               case .failure(let error):
+                   completion(.failure(error))
+                   break
+               }
+        }
+    }
+    
 
     private func clearUserDefaults() {
         let kmAppSetting = KMAppSettingService()
