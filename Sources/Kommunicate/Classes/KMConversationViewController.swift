@@ -547,6 +547,7 @@ extension KMConversationViewController {
 
     private func showClosedConversationView(_ flag: Bool) {
         conversationClosedView.isHidden = !flag
+        isAwayMessageViewHidden = true
         updateMessageListBottomPadding(isClosedViewHidden: !flag)
         topConstraintClosedView?.isActive = flag
         if flag {
@@ -556,8 +557,6 @@ extension KMConversationViewController {
     }
 
     private func show(feedback: Feedback) {
-        conversationClosedView.setFeedback(feedback)
-        conversationClosedView.layoutIfNeeded()
         updateMessageListBottomPadding(isClosedViewHidden: false)
     }
 }
