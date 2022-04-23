@@ -3,7 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
-
+- [CM-699] Show rating same as web.
 ## [6.6.0] - 2022-03-23Z
 - Updated to KM Chat UI 0.2.0 
 - [CM-825] Fixed SPM integration issues by adding SPM support for KM Chat UI & KM Core
