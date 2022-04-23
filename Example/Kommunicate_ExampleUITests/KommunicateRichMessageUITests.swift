@@ -45,19 +45,22 @@ class KommunicateRichMessageUITests: XCTestCase {
     }
 
     func testSuggestedRepliesTemplate() {
-        let app = beforeTest_Launch_NewConversation()
-        waitFor(object: app) { $0.exists }
-        app.typeText(GroupData.typeText1) // typing message
-        app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
-        guard app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.button].isEnabled else {
-            XCTFail("Button in Suggested Replies Template is disabled or not visible")
-            return
-        }
-        app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.button].tap()
-        let suggestedRepliesResponse = app.tables[AppScreen.innerChatScreenTableView]
-            .textViews[RichMessageResponseText.suggestedButtonResponse]
-        waitFor(object: suggestedRepliesResponse) { $0.exists }
-    }
+       let app = beforeTest_Launch_NewConversation()
+       waitFor(object: app) { $0.exists }
+       app.typeText(GroupData.typeText1) // typing message
+       app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
+       let suggestedReplyFirstResponse = app.tables[AppScreen.innerChatScreenTableView]
+           .textViews[RichMessageResponseText.sugggestedRepliesFirstMessage]
+       waitFor(object: suggestedReplyFirstResponse) { $0.exists }
+       guard app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.button].isEnabled else {
+           XCTFail("Button in Suggested Replies Template is disabled or not visible")
+           return
+       }
+       app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.button].tap()
+       let suggestedRepliesResponse = app.tables[AppScreen.innerChatScreenTableView]
+           .textViews[RichMessageResponseText.suggestedButtonResponse]
+       waitFor(object: suggestedRepliesResponse) { $0.exists }
+   }
 
     func testLinkbuttonTemplate() {
         let app = beforeTest_Launch_NewConversation()
@@ -79,6 +82,9 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText3) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
+        let submitFirstResponse = app.tables[AppScreen.innerChatScreenTableView]
+            .textViews[RichMessageResponseText.submitFirstResponse]
+        waitFor(object: submitFirstResponse) { $0.exists }
         guard app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.pay].isEnabled else {
             XCTFail("Submit Button is disabled or not visible")
             return
