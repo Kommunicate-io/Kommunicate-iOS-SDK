@@ -17,6 +17,7 @@ public enum ChannelMetadataKeys {
     static let chatContext = "KM_CHAT_CONTEXT"
     static let languageTag = "kmUserLanguageCode"
     static let teamId = "KM_TEAM_ID"
+    static let conversationMetaData = "conversationMetadata" // dictionary mapped with this key will be shown on  ConversationInfo section
 }
 
 enum LocalizationKey {
@@ -372,7 +373,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         return agentIds.map { createAgentGroupUserFrom(agentId: $0) }
     }
 
-    private func isGroupPresent(clientId: String, completion: @escaping (_ isPresent: Bool, _ channel: ALChannel?) -> Void) {
+    internal func isGroupPresent(clientId: String, completion: @escaping (_ isPresent: Bool, _ channel: ALChannel?) -> Void) {
         let client = ALChannelService()
         client.getChannelInformation(byResponse: nil, orClientChannelKey: clientId, withCompletion: {
             _, channel, _ in
@@ -456,7 +457,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         return allBotIds
     }
 
-    private func assignConversation(
+    internal func assignConversation(
         groupId: Int,
         to user: String,
         completion: @escaping (Result<[String: Any], ServiceError>) -> Void
@@ -508,6 +509,21 @@ public class KMConversationService: KMConservationServiceable, Localizable {
                 return
             }
             completion(Response(success: true, clientChannelKey: channelKey, error: nil))
+        }
+    }
+    
+    
+    public func updateConversationMetadata(
+        groupId: String,
+        metadata: NSMutableDictionary,
+        completion: @escaping ((Response) -> Void)
+    ) {
+        ALChannelService().updateChannelMetaData(nil, orClientChannelKey: groupId, metadata: metadata) { error in
+            guard error == nil else {
+                completion(Response(success: false, clientChannelKey: nil, error: error))
+                return
+            }
+            completion(Response(success: true, clientChannelKey: groupId, error: nil))
         }
     }
 
