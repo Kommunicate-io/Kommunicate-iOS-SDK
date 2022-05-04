@@ -520,6 +520,9 @@ extension KMConversationViewController {
                     self?.showRatingView()
                     return
                 }
+                guard !Kommunicate.defaultConfiguration.oneTimeRating else{
+                    return
+                }
                 self?.showRatingView()
             }
         }
