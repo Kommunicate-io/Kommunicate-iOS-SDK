@@ -200,7 +200,7 @@ open class KMConversationViewController: ALKConversationViewController {
        if (currentMessage.message != messageArray[count].message || currentMessage.createdAtTime != messageArray[count].createdAtTime) {
            showTypingLabel(status: true, userId: messageArray[count].to)
            currentMessage = messageArray[count]
-           Timer.scheduledTimer(timeInterval: TimeInterval(UserDefaults.standard.integer(forKey: "botDelayInterval")+2), target: self, selector: #selector(self.addMessagesToViewModel), userInfo: nil, repeats: false)
+           Timer.scheduledTimer(timeInterval: TimeInterval(UserDefaults.standard.integer(forKey: "botDelayInterval")), target: self, selector: #selector(self.addMessagesToViewModel), userInfo: nil, repeats: false)
        }
    }
     
