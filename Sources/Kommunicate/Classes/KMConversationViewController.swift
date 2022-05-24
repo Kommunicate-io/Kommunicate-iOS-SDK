@@ -182,10 +182,12 @@ open class KMConversationViewController: ALKConversationViewController {
                loopOverMessageArray()
            } else {
                print("Pakka10 KMConver second viewModel.addMessagesToList at \(getDate())")
+               count = messageArray.count
                self.viewModel.addMessagesToList(messageList)
            }
        } else {
            print("Pakka10 KMConver last else viewModel.addMessagesToList at \(getDate()) channelKey \(viewModel.channelKey) -> group id \(messageArray[count].groupId) ")
+           count = messageArray.count
            self.viewModel.addMessagesToList(messageList)
        }
    }
