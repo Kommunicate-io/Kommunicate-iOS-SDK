@@ -49,21 +49,19 @@ class KMAppSettingService {
 
        KMAppUserDefaultHandler.shared.botMessageDelayInterval = chatWidget.botMessageDelayInterval ?? 0
        
-       guard var primaryColor = chatWidget.primaryColor else {
-       guard let chatWidget = chatWidgetResponse,
-             var primaryColor = chatWidget.primaryColor
-       else {
+       guard let primaryColor = chatWidget.primaryColor else {
            setupDefaultSettings()
            return
        }
-       primaryColor = primaryColor.replacingOccurrences(of: "#", with: "")
-       let appSettings = ALKAppSettings(primaryColor: primaryColor)
+        
+        let decodedPrimaryColor = primaryColor.replacingOccurrences(of: "#", with: "")
+        let appSettings = ALKAppSettings(primaryColor: decodedPrimaryColor)
 
        /// Primary color for sent message background
-       appSettings.sentMessageBackgroundColor = primaryColor
+       appSettings.sentMessageBackgroundColor = decodedPrimaryColor
 
        /// Primary color for attachment tint color
-       appSettings.attachmentIconsTintColor = primaryColor
+       appSettings.attachmentIconsTintColor = decodedPrimaryColor
 
        if let secondaryColor = chatWidget.secondaryColor, !secondaryColor.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
            appSettings.secondaryColor = secondaryColor.replacingOccurrences(of: "#", with: "")
@@ -72,8 +70,6 @@ class KMAppSettingService {
        appSettings.showPoweredBy = chatWidget.showPoweredBy ?? false
        appSettings.hidePostCTAEnabled = chatWidget.hidePostCTAEnabled ?? false
        appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
-           return
-       }
     }
 
     func clearAppSettingsData() {
