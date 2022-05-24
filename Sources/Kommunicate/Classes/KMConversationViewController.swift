@@ -182,7 +182,7 @@ open class KMConversationViewController: ALKConversationViewController {
                loopOverMessageArray()
            } else {
                print("Pakka10 KMConver second viewModel.addMessagesToList at \(getDate())")
-               count = messageArray.count
+               count = messageArray.countt
                self.viewModel.addMessagesToList(messageList)
            }
        } else {
