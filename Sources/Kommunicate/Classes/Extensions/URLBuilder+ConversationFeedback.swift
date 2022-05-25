@@ -9,7 +9,7 @@ import Foundation
 
 extension URLBuilder {
     static func feedbackURLFor(groupId: String) -> URLBuilder {
-        let url = URLBuilder.kommunicateApi.add(paths: ["rest", "ws", "feedback", groupId])
+        let url = URLBuilder.kommunicateApi.add(paths: ["feedback", groupId])
         return url
     }
 
