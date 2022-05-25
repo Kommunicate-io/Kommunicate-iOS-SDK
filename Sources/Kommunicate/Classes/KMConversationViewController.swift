@@ -181,19 +181,16 @@ open class KMConversationViewController: ALKConversationViewController {
            if delayInterval > 0 && alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue){
                loopOverMessageArray()
            } else {
-               print("Pakka10 KMConver second viewModel.addMessagesToList at \(getDate())")
                count = messageArray.count
                self.viewModel.addMessagesToList(messageList)
            }
        } else {
-           print("Pakka10 KMConver last else viewModel.addMessagesToList at \(getDate()) channelKey \(viewModel.channelKey) -> group id \(messageArray[count].groupId) ")
            count = messageArray.count
            self.viewModel.addMessagesToList(messageList)
        }
    }
     
      func loopOverMessageArray() {
-        print("pakka10 current time at loopOverMessageArray \(getDate()) count \(count) messageArrayCount \(messageArray.count)")
 
          if count >= messageArray.count {
            currentMessage = ALMessage()
@@ -201,22 +198,19 @@ open class KMConversationViewController: ALKConversationViewController {
          }
          
          guard !self.timer.isValid else{
-            print("pakka10 timer is running already")
-             return
+            print("timer is running already")
+            return
          }
          
-//         print("pakka10 current Message \(currentMessage.message)")
          currentMessage = messageArray[count]
          guard !viewModel.containsMessage(currentMessage) else{
-             print("pakka10 viewModelAlreadyContains Message")
+             print("viewModel Already Contains Message")
              count += 1
              loopOverMessageArray()
              return
          }
          showTypingLabel(status: true, userId: currentMessage.to)
          self.timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(delayInterval), repeats: false) {[self] timer in
-         print("pakka10 Timer fired!")
-         print("pakka10 addMessagesToList  \(getDate())")
          self.viewModel.addMessagesToList([currentMessage])
          self.timer.invalidate()
          if count < messageArray.count {
@@ -238,20 +232,12 @@ open class KMConversationViewController: ALKConversationViewController {
     }
     
     @objc func addMessagesToViewModel() {
-        print("pakka10 current time \(getDate())")
        self.viewModel.addMessagesToList([currentMessage])
        if count >= messageArray.count {
            count = 0
        } else {
            count = count + 1
        }
-   }
-    
-    func getDate() -> String {
-        let date = Date()
-        let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        return df.string(from: date)
     }
     
     func addNotificationCenterObserver() {
