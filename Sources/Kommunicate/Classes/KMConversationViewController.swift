@@ -163,17 +163,14 @@ open class KMConversationViewController: ALKConversationViewController {
     
     
     open override func addMessagesToList(_ messageList: [Any]) {
-    
        guard let messages = messageList as? [ALMessage] else { return }
-        
+    
         messageArray.append(contentsOf: messages)
-        
         if messageArray.count > 1 {
             messageArray.sort { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime) }
         }
 
        let contactService = ALContactService()
-        
        if viewModel.channelKey != nil, viewModel.channelKey == messageArray[count].groupId {
            delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval/1000
            UserDefaults.standard.set((delayInterval), forKey: "botDelayInterval")
@@ -182,10 +179,12 @@ open class KMConversationViewController: ALKConversationViewController {
            if delayInterval > 0 && alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue){
                loopOverMessageArray()
            } else {
+               // Add messages to viewmodel without any delay
                count = messageArray.count
                self.viewModel.addMessagesToList(messageList)
            }
        } else {
+           // Add messages to viewmodel without any delay
            count = messageArray.count
            self.viewModel.addMessagesToList(messageList)
        }
