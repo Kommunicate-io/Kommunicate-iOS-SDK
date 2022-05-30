@@ -178,6 +178,7 @@ open class KMConversationViewController: ALKConversationViewController {
            delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval/1000
            UserDefaults.standard.set((delayInterval), forKey: "botDelayInterval")
            let alContact = contactService.loadContact(byKey: "userId", value:  messageArray[count].to)
+            // Check for bot message & delay interval
            if delayInterval > 0 && alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue){
                loopOverMessageArray()
            } else {
@@ -188,11 +189,11 @@ open class KMConversationViewController: ALKConversationViewController {
            count = messageArray.count
            self.viewModel.addMessagesToList(messageList)
        }
-   }
-    
-     func loopOverMessageArray() {
+    }
 
-         if count >= messageArray.count {
+    // This method is used to delay the bot message as well as to show typing indicator
+    func loopOverMessageArray() {
+        if count >= messageArray.count {
            currentMessage = ALMessage()
            return
          }
@@ -209,7 +210,9 @@ open class KMConversationViewController: ALKConversationViewController {
              loopOverMessageArray()
              return
          }
+         
          showTypingLabel(status: true, userId: currentMessage.to)
+         
          self.timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(delayInterval), repeats: false) {[self] timer in
          self.viewModel.addMessagesToList([currentMessage])
          self.timer.invalidate()
@@ -217,26 +220,6 @@ open class KMConversationViewController: ALKConversationViewController {
            count = count + 1
            loopOverMessageArray()
          }
-       }
-   }
-    func addMessageToVM(delay: Int,completion:(Bool) -> ()){
-       
-        
-        self.viewModel.addMessagesToList([currentMessage])
-        if count == messageArray.count {
-            completion(false)
-        }else{
-            completion(true)
-        }
-       
-    }
-    
-    @objc func addMessagesToViewModel() {
-       self.viewModel.addMessagesToList([currentMessage])
-       if count >= messageArray.count {
-           count = 0
-       } else {
-           count = count + 1
        }
     }
     
