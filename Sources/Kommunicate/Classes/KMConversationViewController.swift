@@ -22,6 +22,7 @@ open class KMConversationViewController: ALKConversationViewController {
     var timer = Timer()
     var count = 0
     var currentMessage = ALMessage()
+    var delayInterval = 0
     
     lazy var customNavigationView = ConversationVCNavBar(
         delegate: self,
@@ -163,55 +164,63 @@ open class KMConversationViewController: ALKConversationViewController {
     
     open override func addMessagesToList(_ messageList: [Any]) {
        guard let messages = messageList as? [ALMessage] else { return }
+    
         messageArray.append(contentsOf: messages)
-       
         if messageArray.count > 1 {
             messageArray.sort { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime) }
         }
 
        let contactService = ALContactService()
        if viewModel.channelKey != nil, viewModel.channelKey == messageArray[count].groupId {
-           let delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval
-           UserDefaults.standard.set((delayInterval/1000), forKey: "botDelayInterval")
+           delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval/1000
+           UserDefaults.standard.set((delayInterval), forKey: "botDelayInterval")
            let alContact = contactService.loadContact(byKey: "userId", value:  messageArray[count].to)
+            // Check for bot message & delay interval
            if delayInterval > 0 && alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue){
-               if !self.timer.isValid {
-                   self.timer = Timer.scheduledTimer(timeInterval: TimeInterval((delayInterval/1000)), target: self, selector: #selector(self.loopOverMessageArray), userInfo: nil, repeats: true)
-                   self.timer.fire()
-               }
+               showDelayAndTypingIndicatorForMessage()
            } else {
-               count = 0
-               messageArray.removeAll()
+               // Add messages to viewmodel without any delay
+               count = messageArray.count
                self.viewModel.addMessagesToList(messageList)
            }
        } else {
-           count = 0
-           messageArray.removeAll()
+           // Add messages to viewmodel without any delay
+           count = messageArray.count
            self.viewModel.addMessagesToList(messageList)
        }
-   }
-    
-    @objc func loopOverMessageArray() {
-       if count >= messageArray.count {
-           self.timer.invalidate()
+    }
+
+    // This method is used to delay the bot message as well as to show typing indicator
+    func showDelayAndTypingIndicatorForMessage() {
+        if count >= messageArray.count {
            currentMessage = ALMessage()
            return
-       }
-       if (currentMessage.message != messageArray[count].message || currentMessage.createdAtTime != messageArray[count].createdAtTime) {
-           showTypingLabel(status: true, userId: messageArray[count].to)
-           currentMessage = messageArray[count]
-           Timer.scheduledTimer(timeInterval: TimeInterval(UserDefaults.standard.integer(forKey: "botDelayInterval")+2), target: self, selector: #selector(self.addMessagesToViewModel), userInfo: nil, repeats: false)
-       }
-   }
-    
-    @objc func addMessagesToViewModel() {
-       self.viewModel.addMessagesToList([currentMessage])
-       if count >= messageArray.count {
-           count = 0
-       } else {
+         }
+         
+         guard !self.timer.isValid else{
+            print("timer is running already")
+            return
+         }
+         
+         currentMessage = messageArray[count]
+         guard !viewModel.containsMessage(currentMessage) else{
+             print("viewModel Already Contains Message")
+             count += 1
+             showDelayAndTypingIndicatorForMessage()
+             return
+         }
+         
+         showTypingLabel(status: true, userId: currentMessage.to)
+         
+         self.timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(delayInterval), repeats: false) {[self] timer in
+         self.viewModel.addMessagesToList([currentMessage])
+         self.timer.invalidate()
+         if count < messageArray.count {
            count = count + 1
+           showDelayAndTypingIndicatorForMessage()
+         }
        }
-   }
+    }
     
     func addNotificationCenterObserver() {
         converastionNavBarItemToken = NotificationCenter.default.observe(
