@@ -177,7 +177,7 @@ open class KMConversationViewController: ALKConversationViewController {
            let alContact = contactService.loadContact(byKey: "userId", value:  messageArray[count].to)
             // Check for bot message & delay interval
            if delayInterval > 0 && alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue){
-               loopOverMessageArray()
+               showDelayAndTypingIndicatorForMessage()
            } else {
                // Add messages to viewmodel without any delay
                count = messageArray.count
@@ -191,7 +191,7 @@ open class KMConversationViewController: ALKConversationViewController {
     }
 
     // This method is used to delay the bot message as well as to show typing indicator
-    func loopOverMessageArray() {
+    func showDelayAndTypingIndicatorForMessage() {
         if count >= messageArray.count {
            currentMessage = ALMessage()
            return
@@ -206,7 +206,7 @@ open class KMConversationViewController: ALKConversationViewController {
          guard !viewModel.containsMessage(currentMessage) else{
              print("viewModel Already Contains Message")
              count += 1
-             loopOverMessageArray()
+             showDelayAndTypingIndicatorForMessage()
              return
          }
          
@@ -217,7 +217,7 @@ open class KMConversationViewController: ALKConversationViewController {
          self.timer.invalidate()
          if count < messageArray.count {
            count = count + 1
-           loopOverMessageArray()
+           showDelayAndTypingIndicatorForMessage()
          }
        }
     }

@@ -3,6 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
+- [CM-829] Optimized Typing Indicator for Bot Messages & Added Typing Indicator for Welcome Message
 - [CM-918] Optimized Customisation -> Change message background color based on Primary color Selection on Dashboard
 - [CM-870] Added OneTime Rating Feature
 - [CM-701] Added Bot Typing Indicator Support
