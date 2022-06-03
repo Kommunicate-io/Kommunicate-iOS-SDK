@@ -20,6 +20,66 @@ public extension ALKConfiguration {
             return navigationItemsForConversationView.contains { $0.identifier == faqIdentifier }
         }
     }
+    
+    // List of assignee id to be added with the conversation when the conversation created from ConversationListScreen
+    var defaultAssignee: String? {
+        set {
+            UserDefaults.standard.set(newValue, forKey: ConversationDefaultSettings.defaultAssignee)
+        }
+        get {
+            return UserDefaults.standard.string(forKey:ConversationDefaultSettings.defaultAssignee)
+        }
+    }
+    
+    // List of teamId to be added with the conversation when the conversation created from ConversationListScreen
+    var defaultTeamId: String? {
+        set {
+            UserDefaults.standard.set(newValue, forKey: ConversationDefaultSettings.defaultTeam)
+        }
+        get {
+            return UserDefaults.standard.string(forKey: ConversationDefaultSettings.defaultTeam)
+        }
+    }
+    
+    // List of skipRouting flag to be added with the conversation when the conversation created from ConversationListScreen
+    var defaultSkipRouting: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: ConversationDefaultSettings.defaultSkipRouting)
+        }
+        get {
+            return UserDefaults.standard.bool(forKey: ConversationDefaultSettings.defaultSkipRouting)
+        }
+    }
+    
+    // List of AgentIds to be added with the conversation when the conversation created from ConversationListScreen
+    var defaultAgentIds: [String]? {
+        set {
+            UserDefaults.standard.set(newValue, forKey: ConversationDefaultSettings.defaultAgentIds)
+        }
+        get {
+            return UserDefaults.standard.object(forKey: ConversationDefaultSettings.defaultAgentIds) as? [String]
+        }
+    }
+    
+    // List of botIds to be added the conversation when the conversation created from ConversationListScreen
+    var defaultBotIds: [String]? {
+        set {
+            UserDefaults.standard.set(newValue, forKey: ConversationDefaultSettings.defaultBotIds)
+        }
+        get {
+            return UserDefaults.standard.object(forKey: ConversationDefaultSettings.defaultBotIds) as? [String]
+        }
+    }
+    
+    // To clear the default conversation settings like defaultAssignee,defaultBotIds..etc
+    func clearDefaultConversationSettings(){
+        let userDefaults = UserDefaults.standard
+        userDefaults.removeObject(forKey: ConversationDefaultSettings.defaultBotIds)
+        userDefaults.removeObject(forKey: ConversationDefaultSettings.defaultAgentIds)
+        userDefaults.removeObject(forKey: ConversationDefaultSettings.defaultAssignee)
+        userDefaults.removeObject(forKey: ConversationDefaultSettings.defaultSkipRouting)
+        userDefaults.removeObject(forKey: ConversationDefaultSettings.defaultTeam)
+    }
 
     /// If true, faq button in conversation list will be hidden.
     var hideFaqButtonInConversationList: Bool {
@@ -83,4 +143,12 @@ public extension ALKConfiguration {
             throw error
         }
     }
+}
+private enum ConversationDefaultSettings {
+    static let defaultBotIds = "DEFAULT_BOT_IDS"
+    static let defaultAgentIds = "DEFAULT_AGENT_IDS"
+    static let defaultAssignee = "DEFAULT_ASSIGNEE"
+    static let defaultTeam = "DEFAUT_TEAM_ID"
+    static let defaultSkipRouting = "DEFAULT_SKIP_ROUTING"
+
 }

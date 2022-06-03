@@ -480,26 +480,26 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         let alertView = displayAlert(viewController: self)
         
         let conversationBuilder = KMConversationBuilder()
-        let kmSettings = KMDefaultSettings()
+        let configuration = Kommunicate.defaultConfiguration
         
         // Check for default Setting & update the conversation.
-        if let defaultBotIds = kmSettings.getDefaultBotIds() {
+        if let defaultBotIds = configuration.defaultBotIds, !defaultBotIds.isEmpty {
             conversationBuilder.withBotIds(defaultBotIds)
         }
         
-        if let defaultAgentIds = kmSettings.getDefaultAgentIds() {
+        if let defaultAgentIds = configuration.defaultAgentIds, !defaultAgentIds.isEmpty {
             conversationBuilder.withAgentIds(defaultAgentIds)
         }
         
-        if kmSettings.getDefaultSkipRounting() {
+        if configuration.defaultSkipRouting {
             conversationBuilder.skipRouting(true)
         }
         
-        if let defaultTeamId = kmSettings.getDefaultTeam(), !defaultTeamId.isEmpty {
+        if let defaultTeamId = configuration.defaultTeamId, !defaultTeamId.isEmpty {
             conversationBuilder.withTeamId(defaultTeamId)
         }
         
-        if let defaultAssignee = kmSettings.getDefaultAssignee() {
+        if let defaultAssignee = configuration.defaultAssignee, !defaultAssignee.isEmpty {
             conversationBuilder.withDefaultConversationAssignee(defaultAssignee)
         }
         
