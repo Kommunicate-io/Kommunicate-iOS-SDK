@@ -21,7 +21,7 @@ public extension ALKConfiguration {
         }
     }
     
-    // List of assignee id to be added with the conversation when the conversation created from ConversationListScreen
+    //  assignee id to be added with the conversation when the conversation created from ConversationListScreen
     var defaultAssignee: String? {
         set {
             UserDefaults.standard.set(newValue, forKey: ConversationDefaultSettings.defaultAssignee)
@@ -31,7 +31,7 @@ public extension ALKConfiguration {
         }
     }
     
-    // List of teamId to be added with the conversation when the conversation created from ConversationListScreen
+    // teamId to be added with the conversation when the conversation created from ConversationListScreen
     var defaultTeamId: String? {
         set {
             UserDefaults.standard.set(newValue, forKey: ConversationDefaultSettings.defaultTeam)
@@ -41,7 +41,7 @@ public extension ALKConfiguration {
         }
     }
     
-    // List of skipRouting flag to be added with the conversation when the conversation created from ConversationListScreen
+    //  skipRouting flag to be added with the conversation when the conversation created from ConversationListScreen
     var defaultSkipRouting: Bool {
         set {
             UserDefaults.standard.set(newValue, forKey: ConversationDefaultSettings.defaultSkipRouting)
