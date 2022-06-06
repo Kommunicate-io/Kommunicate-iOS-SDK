@@ -111,8 +111,6 @@ import KommunicateCore_iOS_SDK
         conversation.defaultConversationAssignee = defaultConversationAssignee
         return self
     }
-    
-    
 
     /// To assign the conversation to a team, pass a team Id.
     /// - Parameter teamId: Pass a team ID
