@@ -21,6 +21,7 @@ import KommunicateCore_iOS_SDK
     public var conversationMetadata = [AnyHashable: Any]()
     public var conversationAssignee: String?
     public var teamId: String?
+    public var defaultConversationAssignee: String?
 
     public init(userId: String) {
         self.userId = userId
@@ -100,6 +101,14 @@ import KommunicateCore_iOS_SDK
     @discardableResult
     @objc public func withConversationAssignee(_ conversationAssignee: String) -> KMConversationBuilder {
         conversation.conversationAssignee = conversationAssignee
+        return self
+    }
+   
+    /// To set default conversation assignee, pass Agent ID or Bot Id.
+    /// - Parameter defaultConversationAssignee: Pass AgentId or botId
+    @discardableResult
+    @objc public func withDefaultConversationAssignee(_ defaultConversationAssignee: String) -> KMConversationBuilder {
+        conversation.defaultConversationAssignee = defaultConversationAssignee
         return self
     }
 

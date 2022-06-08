@@ -478,7 +478,32 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     private func createConversationAndLaunch() {
         view.isUserInteractionEnabled = false
         let alertView = displayAlert(viewController: self)
-        Kommunicate.createConversation { result in
+        
+        let conversationBuilder = KMConversationBuilder()
+        let configuration = Kommunicate.defaultConfiguration
+        
+        // Check for default Setting & update the conversation.
+        if let defaultBotIds = configuration.defaultBotIds, !defaultBotIds.isEmpty {
+            conversationBuilder.withBotIds(defaultBotIds)
+        }
+        
+        if let defaultAgentIds = configuration.defaultAgentIds, !defaultAgentIds.isEmpty {
+            conversationBuilder.withAgentIds(defaultAgentIds)
+        }
+        
+        if configuration.defaultSkipRouting {
+            conversationBuilder.skipRouting(true)
+        }
+        
+        if let defaultTeamId = configuration.defaultTeamId, !defaultTeamId.isEmpty {
+            conversationBuilder.withTeamId(defaultTeamId)
+        }
+        
+        if let defaultAssignee = configuration.defaultAssignee, !defaultAssignee.isEmpty {
+            conversationBuilder.withDefaultConversationAssignee(defaultAssignee)
+        }
+        
+        Kommunicate.createConversation(conversation: conversationBuilder.build()) { result in
             switch result {
             case let .success(conversationId):
                 self.channelService.getChannelInformation(byResponse: nil, orClientChannelKey: conversationId, withCompletion: { _, channel, _ in
