@@ -91,7 +91,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         let openLocation = app.buttons[InAppButton.ConversationScreen.openLocation]
         waitFor(object: openLocation) { $0.exists }
         openLocation.tap() // click on location button
-        sleep(5)
+        sleep(15)
         addUIInterruptionMonitor(withDescription: AppPermission.AlertMessage.accessLocation) { alerts -> Bool in
             if alerts.buttons[AppPermission.AlertButton.allowLoation].exists {
                 alerts.buttons[AppPermission.AlertButton.allowLoation].tap()
