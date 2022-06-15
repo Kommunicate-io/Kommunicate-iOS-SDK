@@ -19,6 +19,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
+        sleep(10)
         addUIInterruptionMonitor(withDescription: AppPermission.AlertMessage.accessNotificationInApplication) { alerts -> Bool in
             if alerts.buttons[AppPermission.AlertButton.allow].exists {
                 alerts.buttons[AppPermission.AlertButton.allow].tap()
@@ -42,6 +43,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         let openPhotos = app.buttons[InAppButton.ConversationScreen.openPhotos]
         waitFor(object: openPhotos) { $0.exists }
         app.buttons[InAppButton.ConversationScreen.openPhotos].tap() // Click on photo button
+        sleep(15)
         addUIInterruptionMonitor(withDescription: AppPermission.AlertMessage.accessPhoto) { alerts -> Bool in
             if alerts.buttons[AppPermission.AlertButton.allowAllPhotos].exists {
                 alerts.buttons[AppPermission.AlertButton.allowAllPhotos].tap()
@@ -68,6 +70,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
             app.buttons[InAppButton.ConversationScreen.openCamera]
         waitFor(object: openCamera) { $0.exists }
         app.buttons[InAppButton.ConversationScreen.openCamera].tap()
+        sleep(15)
         addUIInterruptionMonitor(withDescription: AppPermission.AlertMessage.accessPhoto) { alerts -> Bool in
             if alerts.buttons[AppPermission.AlertButton.allowAllPhotos].exists {
                 alerts.buttons[AppPermission.AlertButton.allowAllPhotos].tap()
@@ -91,7 +94,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         let openLocation = app.buttons[InAppButton.ConversationScreen.openLocation]
         waitFor(object: openLocation) { $0.exists }
         openLocation.tap() // click on location button
-        sleep(5)
+        sleep(15)
         addUIInterruptionMonitor(withDescription: AppPermission.AlertMessage.accessLocation) { alerts -> Bool in
             if alerts.buttons[AppPermission.AlertButton.allowLoation].exists {
                 alerts.buttons[AppPermission.AlertButton.allowLoation].tap()

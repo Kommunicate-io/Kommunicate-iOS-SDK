@@ -3,6 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
+- [CM-956] UITestCases Optimization & bitrise updation 
 - [CM-945] Added support for setting default BotID, agentID, assignee and TeamID.Whenever customer creates a new conversation from Conversation List Screen by clicking `Create new Conversation` button , Conversation will be created based on this default settings.
 - [CM-829] Optimized Typing Indicator for Bot Messages & Added Typing Indicator for Welcome Message
 - [CM-918] Optimized Customisation -> Change message background color based on Primary color Selection on Dashboard
