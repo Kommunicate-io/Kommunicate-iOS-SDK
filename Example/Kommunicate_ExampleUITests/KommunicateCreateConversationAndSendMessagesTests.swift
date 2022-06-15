@@ -19,7 +19,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        sleep(15)
+        sleep(10)
         addUIInterruptionMonitor(withDescription: AppPermission.AlertMessage.accessNotificationInApplication) { alerts -> Bool in
             if alerts.buttons[AppPermission.AlertButton.allow].exists {
                 alerts.buttons[AppPermission.AlertButton.allow].tap()
