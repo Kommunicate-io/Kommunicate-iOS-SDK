@@ -791,7 +791,8 @@ open class Kommunicate: NSObject, Localizable {
         ALApplozicSettings.setFilterContactsStatus(true)
         ALUserDefaultsHandler.setDebugLogsRequire(true)
         ALApplozicSettings.setSwiftFramework(true)
-        ALApplozicSettings.hideMessages(withMetadataKeys: ["KM_ASSIGN", "KM_STATUS"])
+        let hiddenMessageMetaDataFlagArray = ["KM_ASSIGN", "KM_STATUS" , "KM_ASSIGN_TO", "KM_ASSIGN_TEAM"]
+        ALApplozicSettings.hideMessages(withMetadataKeys:hiddenMessageMetaDataFlagArray)
         ALApplozicSettings.enableS3StorageService(true)
     }
 
