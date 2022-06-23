@@ -3,6 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
+- Updated KM Chat UI to 0.2.3
 - [CM-961] Fixed Blank message comes if handover option is added in welcome message
 - [CM-956] UITestCases Optimization & bitrise updation 
 - [CM-945] Added support for setting default BotID, agentID, assignee and TeamID.Whenever customer creates a new conversation from Conversation List Screen by clicking `Create new Conversation` button , Conversation will be created based on this default settings.
