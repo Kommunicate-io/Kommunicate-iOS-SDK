@@ -3,6 +3,8 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
+
+## [6.7.0] - 2022-06-24Z
 - Updated KM Chat UI to 0.2.3
 - [CM-961] Fixed Blank message comes if handover option is added in welcome message
 - [CM-956] UITestCases Optimization & bitrise updation 
@@ -338,6 +340,7 @@ after that call  the `updateConversation` by passing above created `conversation
 
 - [AL-2853]Added support for showing Away message.
 - [AL-3062]While creating a conversation, a default agent will be fetched and added. Now it's not required  to pass the agent Ids.
+- [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
