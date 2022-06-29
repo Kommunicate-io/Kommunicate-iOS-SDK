@@ -3,7 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
-
+- [CM-977] Fixed Showing Bot typing indicator when you open older conversations
 ## [6.7.0] - 2022-06-24Z
 - Updated KM Chat UI to 0.2.3
 - [CM-961] Fixed Blank message comes if handover option is added in welcome message
