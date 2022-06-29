@@ -135,6 +135,8 @@ open class KMConversationViewController: ALKConversationViewController {
         guard let channelId = viewModel.channelKey else { return }
         sendConversationOpenNotification(channelId: String(describing: channelId))
         setupConversationClosedView()
+        delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval/1000
+        UserDefaults.standard.set((delayInterval), forKey: "botDelayInterval")
     }
 
     override open func viewDidLayoutSubviews() {
@@ -172,8 +174,6 @@ open class KMConversationViewController: ALKConversationViewController {
 
        let contactService = ALContactService()
        if viewModel.channelKey != nil, viewModel.channelKey == messageArray[count].groupId {
-           delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval/1000
-           UserDefaults.standard.set((delayInterval), forKey: "botDelayInterval")
            let alContact = contactService.loadContact(byKey: "userId", value:  messageArray[count].to)
             // Check for bot message & delay interval
            if delayInterval > 0 && alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue){
