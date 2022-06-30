@@ -369,14 +369,25 @@ open class KMConversationViewController: ALKConversationViewController {
         navigationItem.leftBarButtonItems = nil
         // Create custom navigation view.
         let (contact, channel) = conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId)
-        guard let alChannel = channel else {
-            print("Channel is nil in conversationAssignee")
-            return
+        if let alChannel = channel {
+          setupTopBar(alChannel: alChannel, contact: contact)
+        } else {
+          let alChannelService = ALChannelService()
+          alChannelService.getChannelInformation(viewModel.channelKey, orClientChannelKey: nil) { channel in
+            guard let alChannel = channel else {
+              print("Channel is nil in conversationAssignee")
+              return
+            }
+            self.setupTopBar(alChannel: alChannel, contact: contact)
+          }
         }
+      }
+      private func setupTopBar(alChannel: ALChannel, contact: ALContact?) {
         customNavigationView.updateView(assignee: contact, channel: alChannel)
         assigneeUserId = contact?.userId
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
-    }
+        updateAssigneeDetails()
+      }
 
     override public func refreshViewController() {
         clearAndReloadTable()
