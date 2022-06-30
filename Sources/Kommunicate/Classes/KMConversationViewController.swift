@@ -386,7 +386,7 @@ open class KMConversationViewController: ALKConversationViewController {
         customNavigationView.updateView(assignee: contact, channel: alChannel)
         assigneeUserId = contact?.userId
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
-        refreshViewController()
+        updateAssigneeDetails()
       }
 
     override public func refreshViewController() {
