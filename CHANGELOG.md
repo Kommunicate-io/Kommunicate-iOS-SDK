@@ -4,6 +4,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 - Updated KommunicateChatUI-iOS-SDK to 0.2.4
+- [CM-984] Fixed Top Navigation Bar showing blank when open it from Notification
 ## [6.7.0] - 2022-06-24Z
 - Updated KM Chat UI to 0.2.3
 - [CM-961] Fixed Blank message comes if handover option is added in welcome message
