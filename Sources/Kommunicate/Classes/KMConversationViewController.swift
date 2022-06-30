@@ -136,7 +136,6 @@ open class KMConversationViewController: ALKConversationViewController {
         sendConversationOpenNotification(channelId: String(describing: channelId))
         setupConversationClosedView()
         delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval/1000
-        UserDefaults.standard.set((delayInterval), forKey: "botDelayInterval")
     }
 
     override open func viewDidLayoutSubviews() {
