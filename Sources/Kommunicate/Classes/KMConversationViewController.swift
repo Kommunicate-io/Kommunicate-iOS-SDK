@@ -163,13 +163,20 @@ open class KMConversationViewController: ALKConversationViewController {
     
     
     open override func addMessagesToList(_ messageList: [Any]) {
-       guard let messages = messageList as? [ALMessage] else { return }
+       guard var messages = messageList as? [ALMessage] else { return }
     
         messageArray.append(contentsOf: messages)
         if messageArray.count > 1 {
-            messageArray.sort { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime) }
+            messageArray.sort { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime)
+            }
         }
-
+        
+        if messages.count > 1 {
+            messages.sort { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime) }
+        }
+        
+        self.viewModel.checkForTextToSpeech(list: messages)
+        
        let contactService = ALContactService()
        if viewModel.channelKey != nil, viewModel.channelKey == messageArray[count].groupId {
            delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval/1000
@@ -400,6 +407,7 @@ open class KMConversationViewController: ALKConversationViewController {
         isChannelLeft()
         checkUserBlock()
         subscribeChannelToMqtt()
+        viewModel.setConfiguration(configuration)
         viewModel.prepareController()
         ALMessageService.syncMessages()
     }
