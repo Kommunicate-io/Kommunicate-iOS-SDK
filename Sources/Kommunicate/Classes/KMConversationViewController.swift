@@ -175,10 +175,12 @@ open class KMConversationViewController: ALKConversationViewController {
             messages.sort { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime) }
         }
         
-        self.viewModel.checkForTextToSpeech(list: messages)
+        if configuration.enableTextToSpeechInConversation {
+            self.viewModel.checkForTextToSpeech(list: messages)
+        }
         
-       let contactService = ALContactService()
-       if viewModel.channelKey != nil, viewModel.channelKey == messageArray[count].groupId {
+        let contactService = ALContactService()
+        if viewModel.channelKey != nil, viewModel.channelKey == messageArray[count].groupId {
            delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval/1000
            UserDefaults.standard.set((delayInterval), forKey: "botDelayInterval")
            let alContact = contactService.loadContact(byKey: "userId", value:  messageArray[count].to)
@@ -190,7 +192,7 @@ open class KMConversationViewController: ALKConversationViewController {
                count = messageArray.count
                self.viewModel.addMessagesToList(messageList)
            }
-       } else {
+        } else {
            // Add messages to viewmodel without any delay
            count = messageArray.count
            self.viewModel.addMessagesToList(messageList)
@@ -407,7 +409,6 @@ open class KMConversationViewController: ALKConversationViewController {
         isChannelLeft()
         checkUserBlock()
         subscribeChannelToMqtt()
-        viewModel.setConfiguration(configuration)
         viewModel.prepareController()
         ALMessageService.syncMessages()
     }
@@ -526,6 +527,8 @@ extension KMConversationViewController: NavigationBarCallbacks {
         }
         guard let channelId = viewModel.channelKey else { return }
         sendConversationCloseNotification(channelId: String(describing: channelId))
+        guard configuration.enableTextToSpeechInConversation else {return}
+        stopTextToSpeechIfSpeaking()
     }
 }
 
