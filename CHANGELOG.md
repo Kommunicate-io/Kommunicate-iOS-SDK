@@ -3,7 +3,11 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
-
+- [CM-1015] Added Text To Speech Feature.
+```
+    You can enable this by adding below line in Appdelegate.swift file or before initiating the conversation.
+    Kommunicate.defaultConfiguration.enableTextToSpeechInConversation = true
+```
 ## [6.7.1] - 2022-07-01Z
 - Updated KommunicateChatUI-iOS-SDK to 0.2.4
 - [CM-984] Fixed Top Navigation Bar showing blank when open it from Notification
