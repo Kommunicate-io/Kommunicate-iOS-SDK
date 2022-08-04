@@ -163,15 +163,24 @@ open class KMConversationViewController: ALKConversationViewController {
     
     
     open override func addMessagesToList(_ messageList: [Any]) {
-       guard let messages = messageList as? [ALMessage] else { return }
+       guard var messages = messageList as? [ALMessage] else { return }
     
         messageArray.append(contentsOf: messages)
         if messageArray.count > 1 {
-            messageArray.sort { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime) }
+            messageArray.sort { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime)
+            }
         }
-
-       let contactService = ALContactService()
-       if viewModel.channelKey != nil, viewModel.channelKey == messageArray[count].groupId {
+        
+        if messages.count > 1 {
+            messages.sort { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime) }
+        }
+        
+        if configuration.enableTextToSpeechInConversation {
+            self.viewModel.checkForTextToSpeech(list: messages)
+        }
+        
+        let contactService = ALContactService()
+        if viewModel.channelKey != nil, viewModel.channelKey == messageArray[count].groupId {
            delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval/1000
            UserDefaults.standard.set((delayInterval), forKey: "botDelayInterval")
            let alContact = contactService.loadContact(byKey: "userId", value:  messageArray[count].to)
@@ -183,7 +192,7 @@ open class KMConversationViewController: ALKConversationViewController {
                count = messageArray.count
                self.viewModel.addMessagesToList(messageList)
            }
-       } else {
+        } else {
            // Add messages to viewmodel without any delay
            count = messageArray.count
            self.viewModel.addMessagesToList(messageList)
@@ -518,6 +527,8 @@ extension KMConversationViewController: NavigationBarCallbacks {
         }
         guard let channelId = viewModel.channelKey else { return }
         sendConversationCloseNotification(channelId: String(describing: channelId))
+        guard configuration.enableTextToSpeechInConversation else {return}
+        stopTextToSpeechIfSpeaking()
     }
 }
 
