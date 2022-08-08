@@ -6,15 +6,15 @@ PODS:
     - iOSSnapshotTestCase/Core
   - Kingfisher (7.0.0)
   - Kommunicate (6.7.1):
-    - KommunicateChatUI-iOS-SDK (~> 0.2.4)
-  - KommunicateChatUI-iOS-SDK (0.2.4):
-    - KommunicateChatUI-iOS-SDK/Complete (= 0.2.4)
-  - KommunicateChatUI-iOS-SDK/Complete (0.2.4):
+    - KommunicateChatUI-iOS-SDK (~> 0.2.5)
+  - KommunicateChatUI-iOS-SDK (0.2.5):
+    - KommunicateChatUI-iOS-SDK/Complete (= 0.2.5)
+  - KommunicateChatUI-iOS-SDK/Complete (0.2.5):
     - Kingfisher (~> 7.0.0)
     - KommunicateChatUI-iOS-SDK/RichMessageKit
     - KommunicateCore-iOS-SDK (~> 1.0.4)
     - SwipeCellKit (~> 2.7.1)
-  - KommunicateChatUI-iOS-SDK/RichMessageKit (0.2.4)
+  - KommunicateChatUI-iOS-SDK/RichMessageKit (0.2.5)
   - KommunicateCore-iOS-SDK (1.0.4)
   - Nimble (10.0.0)
   - Nimble-Snapshots (9.4.0):
@@ -28,7 +28,6 @@ PODS:
 DEPENDENCIES:
   - iOSSnapshotTestCase (~> 8.0.0)
   - Kommunicate (from `../`)
-  - KommunicateChatUI-iOS-SDK (from `https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git`, branch `dev`)
   - Nimble
   - Nimble-Snapshots
   - Quick
@@ -37,6 +36,7 @@ SPEC REPOS:
   trunk:
     - iOSSnapshotTestCase
     - Kingfisher
+    - KommunicateChatUI-iOS-SDK
     - KommunicateCore-iOS-SDK
     - Nimble
     - Nimble-Snapshots
@@ -46,26 +46,18 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Kommunicate:
     :path: "../"
-  KommunicateChatUI-iOS-SDK:
-    :branch: dev
-    :git: https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git
-
-CHECKOUT OPTIONS:
-  KommunicateChatUI-iOS-SDK:
-    :commit: b658fea077ee4a5a98673d9406e383477c39f8b9
-    :git: https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git
 
 SPEC CHECKSUMS:
   iOSSnapshotTestCase: a670511f9ee3829c2b9c23e6e68f315fd7b6790f
   Kingfisher: 5efc54fec3980f92354898532e562cc17f31efb4
-  Kommunicate: 8b53955b2b145837c0b0bbbb02bf4f07669be99f
-  KommunicateChatUI-iOS-SDK: 4fbc0b2f1e2d94196c3bdf9fd75437638be98d9e
+  Kommunicate: 8d1f02f2b5ca2e7103661cc8f25678ad150fe845
+  KommunicateChatUI-iOS-SDK: 2507026e4630067caea09a1d36404a3fa3c146b7
   KommunicateCore-iOS-SDK: f4cbf5ee3a11f869d7effaff4270823bb1336991
   Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
   Nimble-Snapshots: ef281b908c604f78c8313587e25ea92c8ab513d7
   Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: 71e9528497f8b4631a9d59677822ecd0231fef1c
+PODFILE CHECKSUM: 4ce9d42da4b992774ca3d9b09546e7c3e0c0e727
 
 COCOAPODS: 1.11.3
