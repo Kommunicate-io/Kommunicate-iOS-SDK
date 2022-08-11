@@ -17,7 +17,7 @@
         // Pass your App Id here. You can get the App Id from install section in the dashboard.
         var appId = ""
 
-        func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        func application(_: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
             setUpNavigationBarAppearance()
 
             UNUserNotificationCenter.current().delegate = self
@@ -26,8 +26,16 @@
             KMPushNotificationHandler.shared.dataConnectionNotificationHandlerWith(Kommunicate.defaultConfiguration, Kommunicate.kmConversationViewConfiguration)
             let kmApplocalNotificationHandler = KMAppLocalNotification.appLocalNotificationHandler()
             kmApplocalNotificationHandler?.dataConnectionNotificationHandler()
-
-            if KMUserDefaultHandler.isLoggedIn() {
+           
+            // When the app launch after user tap on notification (originally was not running / not in background)
+            if let notificationObject = launchOptions?[.remoteNotification] as? [String:AnyObject],
+               let notificationData = notificationObject["aps"] as? [String:AnyObject] {
+                let service = KMPushNotificationService()
+//                guard let dict = notificationData as? [AnyHashable : Any] else{return true}
+                if service.isApplozicNotification(notificationData) {
+                    service.processPushNotification(notificationData, appState: UIApplication.shared.applicationState)
+                }
+            } else if KMUserDefaultHandler.isLoggedIn() {
                 // Get login screen from storyboard and present it
                 if let viewController = UIStoryboard(name: "Main", bundle: nil)
                     .instantiateViewController(withIdentifier: "NavViewController") as? UINavigationController
@@ -91,6 +99,7 @@
             }
         }
 
+        // This function will be called when the app receive notification
         func userNotificationCenter(_: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
             let service = KMPushNotificationService()
             let dict = notification.request.content.userInfo
@@ -102,6 +111,7 @@
             completionHandler([.sound, .badge, .alert])
         }
 
+        // This function will be called right after user tap on the notification
         func userNotificationCenter(_: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
             let service = KMPushNotificationService()
             let dict = response.notification.request.content.userInfo
