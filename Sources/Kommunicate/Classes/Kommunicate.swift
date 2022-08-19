@@ -289,11 +289,18 @@ open class Kommunicate: NSObject, Localizable {
      - Parameters:
      - viewController: ViewController from which the chat list will be launched.
      */
-    @objc open class func showConversations(from viewController: UIViewController) {
+    @objc open class func showConversations(from viewController: UIViewController, rootView: UIView) {
         let conversationVC = conversationListViewController()
         let navVC = KMBaseNavigationViewController(rootViewController: conversationVC)
-        navVC.modalPresentationStyle = .fullScreen
-        viewController.present(navVC, animated: true, completion: nil)
+//        navVC.modalPresentationStyle = .popover
+//        rootView.addchil(navVC)
+        
+        navVC.willMove(toParent: viewController)
+        navVC.view.frame = rootView.bounds
+        rootView.addSubview(navVC.view)
+        viewController.addChild(navVC)
+        navVC.didMove(toParent: viewController)
+//        viewController.present(navVC, animated: true, completion: nil)
     }
 
     /**
@@ -331,6 +338,30 @@ open class Kommunicate: NSObject, Localizable {
             }
         }
     }
+    
+    @objc open class func showConversationWithv2(
+        groupId clientGroupId: String,
+        from viewController: UIViewController,rootView:UIView,
+        prefilledMessage: String? = nil,
+        showListOnBack: Bool = false,
+        completionHandler: @escaping (Bool) -> Void
+    ) {
+        let alChannelService = ALChannelService()
+        alChannelService.getChannelInformation(nil, orClientChannelKey: clientGroupId) { channel in
+            guard let channel = channel, let key = channel.key else {
+                completionHandler(false)
+                return
+            }
+            self.openChatWithv2(
+                groupId: key,
+                from: viewController,rootView: rootView,
+                prefilledMessage: prefilledMessage,
+                showListOnBack: showListOnBack
+            ) { result in
+                completionHandler(result)
+            }
+        }
+    }
 
     /**
      Creates and launches the conversation. In case multiple conversations
@@ -357,10 +388,38 @@ open class Kommunicate: NSObject, Localizable {
 
             // If more than 1 thread is present then the list will be shown
             if let messages = messageList, messages.count > 1, error == nil {
-                showConversations(from: viewController)
+//                showConversations(from: viewControllerte)
                 completion(nil)
             } else {
                 createAConversationAndLaunch(from: viewController, completion: {
+                    conversationError in
+                    completion(conversationError)
+                })
+            }
+        })
+    }
+    
+    
+    open class func createAndShowConversationV2(
+        from viewController: UIViewController,rootView:UIView,
+        completion: @escaping (_ error: KommunicateError?) -> Void
+    ) {
+        guard isLoggedIn else {
+            completion(KommunicateError.notLoggedIn)
+            return
+        }
+
+        let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
+        applozicClient?.getLatestMessages(false, withCompletionHandler: {
+            messageList, error in
+            print("Kommunicate: message list received")
+
+            // If more than 1 thread is present then the list will be shown
+            if let messages = messageList, messages.count > 1, error == nil {
+                showConversations(from: viewController,rootView: rootView)
+                completion(nil)
+            } else {
+                createAConversationAndLaunchv2(from: viewController,rootView: rootView, completion: {
                     conversationError in
                     completion(conversationError)
                 })
@@ -736,6 +795,40 @@ open class Kommunicate: NSObject, Localizable {
             }
         }
     }
+    
+    class func openChatWithv2(
+        groupId: NSNumber,
+        from viewController: UIViewController,rootView:UIView,
+        prefilledMessage: String? = nil,
+        showListOnBack: Bool = false,
+        completionHandler: @escaping (Bool) -> Void
+    ) {
+//        if showListOnBack {
+//            let conversationListVC = conversationListViewController()
+//            conversationListVC.channelKey = groupId
+//            let navVC = KMBaseNavigationViewController(rootViewController: conversationListVC)
+//            navVC.modalPresentationStyle = .fullScreen
+//            viewController.present(navVC, animated: true) {
+//                completionHandler(true)
+//            }
+//        } else {
+            let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName, prefilledMessage: prefilledMessage)
+            let conversationVC = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration)
+            conversationVC.viewModel = convViewModel
+            let navVC = KMBaseNavigationViewController(rootViewController: conversationVC)
+            navVC.willMove(toParent: viewController)
+            navVC.view.frame = rootView.bounds
+            rootView.addSubview(navVC.view)
+            viewController.addChild(navVC)
+            navVC.didMove(toParent: viewController)
+            completionHandler(true)
+
+//            navVC.modalPresentationStyle = .fullScreen
+//            viewController.present(navVC, animated: true) {
+//                completionHandler(true)
+//            }
+//        }
+    }
 
     // MARK: - Private methods
 
@@ -769,6 +862,33 @@ open class Kommunicate: NSObject, Localizable {
             case let .success(conversationId):
                 DispatchQueue.main.async {
                     showConversationWith(groupId: conversationId, from: viewController, completionHandler: { success in
+                        guard success else {
+                            completion(KommunicateError.conversationNotPresent)
+                            return
+                        }
+                        print("Kommunicate: conversation was shown")
+                        completion(nil)
+                    })
+                }
+            case .failure:
+                completion(KommunicateError.conversationCreateFailed)
+                return
+            }
+        }
+    }
+    
+    private class func createAConversationAndLaunchv2(
+        from viewController: UIViewController,rootView:UIView,
+        completion: @escaping (_ error: KommunicateError?) -> Void
+    ) {
+        let kommunicateConversationBuilder = KMConversationBuilder()
+            .useLastConversation(true)
+        let conversation = kommunicateConversationBuilder.build()
+        createConversation(conversation: conversation) { result in
+            switch result {
+            case let .success(conversationId):
+                DispatchQueue.main.async {
+                    showConversationWithv2(groupId: conversationId, from: viewController,rootView: rootView, completionHandler: { success in
                         guard success else {
                             completion(KommunicateError.conversationNotPresent)
                             return
