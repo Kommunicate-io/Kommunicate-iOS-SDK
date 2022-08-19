@@ -21,6 +21,7 @@
             setUpNavigationBarAppearance()
 
             UNUserNotificationCenter.current().delegate = self
+            Kommunicate.defaultConfiguration.hideNavigationBarOnChat = true
 
             registerForNotification()
             KMPushNotificationHandler.shared.dataConnectionNotificationHandlerWith(Kommunicate.defaultConfiguration, Kommunicate.kmConversationViewConfiguration)

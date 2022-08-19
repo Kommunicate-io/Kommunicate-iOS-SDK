@@ -19,20 +19,33 @@
                                                y: view.bounds.size.height / 2)
             view.addSubview(activityIndicator)
             view.bringSubviewToFront(activityIndicator)
+            self.navigationController?.navigationBar
         }
 
+        @IBAction func goToEmbed(_ sender: Any) {
+            print("Tapped on Embedded VC")
+            if let viewController = UIStoryboard(name: "Main", bundle: nil)
+                .instantiateViewController(withIdentifier: "embeddedvc") as? UIViewController
+            {
+//                viewController.modalPresentationStyle = .fullScreen
+//                self.present(viewController, animated: true, completion: nil)
+                self.navigationController?.pushViewController(viewController, animated: true)
+            }
+        }
+        @IBOutlet weak var sampleRootView: UIView!
         @IBAction func launchConversation(_: Any) {
-            activityIndicator.startAnimating()
-            view.isUserInteractionEnabled = false
-
-            Kommunicate.createAndShowConversation(from: self, completion: {
-                error in
-                self.activityIndicator.stopAnimating()
-                self.view.isUserInteractionEnabled = true
-                if error != nil {
-                    print("Error while launching")
-                }
-            })
+//            activityIndicator.startAnimating()
+//            view.isUserInteractionEnabled = false
+//
+//            Kommunicate.createAndShowConversation(from: self, completion: {
+//                error in
+//                self.activityIndicator.stopAnimating()
+//                self.view.isUserInteractionEnabled = true
+//                if error != nil {
+//                    print("Error while launching")
+//                }
+//            })
+            Kommunicate.showConversations(from: self,rootView: sampleRootView)
         }
 
         @IBAction func logoutAction(_: Any) {
