@@ -141,7 +141,6 @@ open class KMConversationViewController: ALKConversationViewController {
         super.addObserver()
         NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { [weak self] _ in
             guard let weakSelf = self, weakSelf.viewModel != nil else { return }
-            print("Pakka101 called from didBecomeActiveNotification at KMConvVC ")
             weakSelf.updateAssigneeDetails()
         }
 
@@ -150,7 +149,6 @@ open class KMConversationViewController: ALKConversationViewController {
     open override func removeObserver() {
         super.removeObserver()
         NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
-
     }
 
     override open func viewDidLayoutSubviews() {
@@ -376,6 +374,19 @@ open class KMConversationViewController: ALKConversationViewController {
         }
     }
     
+    /*
+        This method will verify status chagned user id & current Conversation's assignee. If both are
+        same then it will update.
+        - Parameters:
+        - userId: userId whose status changed
+     */
+    func updateAssigneeOnlineStatus(userId: String){
+        let (ConversationAssignee, _) = conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId)
+        guard userId == ConversationAssignee?.userId else {
+            return
+        }
+        updateAssigneeDetails()
+    }
     
     @objc func onChannelMetadataUpdate() {
         guard viewModel != nil, viewModel.isGroup else { return }
