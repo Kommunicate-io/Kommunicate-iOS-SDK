@@ -621,7 +621,10 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
         guard let contactId = contactId, let status = status else{
             return
         }
-        print("Status Changed \(contactId) \(status)")
+        
+//        var currentContactId = conversationViewController?.viewModel.contactId
+        conversationViewController?.updateAssigneeDetails()
+        print("Pakka101 KM List Status Changed \(contactId) \(status)")
         
     }
 

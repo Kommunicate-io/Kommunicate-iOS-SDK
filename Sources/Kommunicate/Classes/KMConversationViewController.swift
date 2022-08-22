@@ -136,6 +136,22 @@ open class KMConversationViewController: ALKConversationViewController {
         sendConversationOpenNotification(channelId: String(describing: channelId))
         setupConversationClosedView()
     }
+    
+    open override func addObserver() {
+        super.addObserver()
+        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { [weak self] _ in
+            guard let weakSelf = self, weakSelf.viewModel != nil else { return }
+            print("Pakka101 called from didBecomeActiveNotification at KMConvVC ")
+            weakSelf.updateAssigneeDetails()
+        }
+
+    }
+    
+    open override func removeObserver() {
+        super.removeObserver()
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
+
+    }
 
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -349,16 +365,18 @@ open class KMConversationViewController: ALKConversationViewController {
 
     func updateAssigneeDetails() {
         conversationDetail.updatedAssigneeDetails(groupId: viewModel.channelKey, userId: viewModel.contactId) { contact, channel in
-            guard let alChannel = channel else {
+            guard let alChannel = channel, let contact = contact else {
                 print("Channel is nil in updatedAssigneeDetails")
                 return
             }
             self.customNavigationView.updateView(assignee: contact, channel: alChannel)
-            self.assigneeUserId = contact?.userId
+            self.assigneeUserId = contact.userId
             self.hideInputBarIfAssignedToBot()
+            self.isAwayMessageViewHidden = !contact.isInAwayMode
         }
     }
-
+    
+    
     @objc func onChannelMetadataUpdate() {
         guard viewModel != nil, viewModel.isGroup else { return }
         updateAssigneeDetails()

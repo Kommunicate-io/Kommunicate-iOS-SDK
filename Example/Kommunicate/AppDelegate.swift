@@ -15,7 +15,7 @@
         var window: UIWindow?
 
         // Pass your App Id here. You can get the App Id from install section in the dashboard.
-        var appId = ""
+        var appId = "18ae6ce9d4f469f95c9c095fb5b0bda44"
 
         func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
             setUpNavigationBarAppearance()
