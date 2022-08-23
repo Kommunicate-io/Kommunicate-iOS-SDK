@@ -137,19 +137,19 @@ open class KMConversationViewController: ALKConversationViewController {
         setupConversationClosedView()
     }
     
-    open override func addObserver() {
-        super.addObserver()
-        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { [weak self] _ in
-            guard let weakSelf = self, weakSelf.viewModel != nil else { return }
-            weakSelf.updateAssigneeDetails()
-        }
-
-    }
+//    open override func addObserver() {
+//        super.addObserver()
+////        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { [weak self] _ in
+////            guard let weakSelf = self, weakSelf.viewModel != nil else { return }
+////            weakSelf.updateAssigneeDetails()
+////        }
+//
+//    }
     
-    open override func removeObserver() {
-        super.removeObserver()
-        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
-    }
+//    open override func removeObserver() {
+//        super.removeObserver()
+//        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
+//    }
 
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -361,7 +361,7 @@ open class KMConversationViewController: ALKConversationViewController {
         NotificationCenter.default.post(notification)
     }
 
-    func updateAssigneeDetails() {
+    open override func updateAssigneeDetails() {
         conversationDetail.updatedAssigneeDetails(groupId: viewModel.channelKey, userId: viewModel.contactId) { contact, channel in
             self.messageStatusAndFetchBotType()
             guard let alChannel = channel else {
@@ -376,13 +376,7 @@ open class KMConversationViewController: ALKConversationViewController {
         }
     }
     
-    /*
-        This method will verify status chagned user id & current Conversation's assignee. If both are
-        same then it will update.
-        - Parameters:
-        - userId: userId whose status changed
-     */
-    func updateAssigneeOnlineStatus(userId: String){
+    open override func updateAssigneeOnlineStatus(userId: String){
         let (ConversationAssignee, _) = conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId)
         guard userId == ConversationAssignee?.userId else {
             return
