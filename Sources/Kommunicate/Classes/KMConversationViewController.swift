@@ -316,8 +316,8 @@ open class KMConversationViewController: ALKConversationViewController {
         if isClosedConversation {
             conversationAssignedToDialogflowBot()
         } else {
-            guard let channelKey = viewModel.channelKey else { return }
-            conversationService.awayMessageFor(groupId: channelKey, completion: {
+            guard let channelKey = viewModel.channelKey, let applicationKey =  ALUserDefaultsHandler.getApplicationKey() else { return }
+            conversationService.awayMessageFor(applicationKey: applicationKey,groupId: channelKey, completion: {
                 result in
                 DispatchQueue.main.async {
                     switch result {
