@@ -348,6 +348,7 @@ open class KMConversationViewController: ALKConversationViewController {
     }
 
     open override func updateAssigneeDetails() {
+        super.updateAssigneeDetails()
         conversationDetail.updatedAssigneeDetails(groupId: viewModel.channelKey, userId: viewModel.contactId) { contact, channel in
             self.messageStatusAndFetchBotType()
             guard let alChannel = channel else {
@@ -368,6 +369,7 @@ open class KMConversationViewController: ALKConversationViewController {
      - userId: userId whose status changed
      */
     open override func updateAssigneeOnlineStatus(userId: String){
+        super.updateAssigneeOnlineStatus(userId: userId)
         let (ConversationAssignee, _) = conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId)
         guard userId == ConversationAssignee?.userId else {
             return
