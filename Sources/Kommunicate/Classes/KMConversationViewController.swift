@@ -137,20 +137,6 @@ open class KMConversationViewController: ALKConversationViewController {
         setupConversationClosedView()
     }
     
-//    open override func addObserver() {
-//        super.addObserver()
-////        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { [weak self] _ in
-////            guard let weakSelf = self, weakSelf.viewModel != nil else { return }
-////            weakSelf.updateAssigneeDetails()
-////        }
-//
-//    }
-    
-//    open override func removeObserver() {
-//        super.removeObserver()
-//        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
-//    }
-
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         awayMessageView.drawDottedLines()
