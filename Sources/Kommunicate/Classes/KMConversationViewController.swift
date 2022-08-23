@@ -362,6 +362,11 @@ open class KMConversationViewController: ALKConversationViewController {
         }
     }
     
+    /*
+     This method will verify status changed user id & current Conversation's assignee. If both are same then it will update.
+     - Parameters:
+     - userId: userId whose status changed
+     */
     open override func updateAssigneeOnlineStatus(userId: String){
         let (ConversationAssignee, _) = conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId)
         guard userId == ConversationAssignee?.userId else {
