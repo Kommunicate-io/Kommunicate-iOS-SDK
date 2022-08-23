@@ -363,6 +363,7 @@ open class KMConversationViewController: ALKConversationViewController {
 
     func updateAssigneeDetails() {
         conversationDetail.updatedAssigneeDetails(groupId: viewModel.channelKey, userId: viewModel.contactId) { contact, channel in
+            self.messageStatusAndFetchBotType()
             guard let alChannel = channel, let contact = contact else {
                 print("Channel is nil in updatedAssigneeDetails")
                 return
@@ -394,7 +395,6 @@ open class KMConversationViewController: ALKConversationViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.conversationAssignedToDialogflowBot()
         }
-        messageStatusAndFetchBotType()
         // If the user was typing when the status changed
         view.endEditing(true)
         guard isClosedConversationViewHidden == isClosedConversation else { return }
