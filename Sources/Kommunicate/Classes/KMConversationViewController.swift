@@ -364,13 +364,14 @@ open class KMConversationViewController: ALKConversationViewController {
     func updateAssigneeDetails() {
         conversationDetail.updatedAssigneeDetails(groupId: viewModel.channelKey, userId: viewModel.contactId) { contact, channel in
             self.messageStatusAndFetchBotType()
-            guard let alChannel = channel, let contact = contact else {
+            guard let alChannel = channel else {
                 print("Channel is nil in updatedAssigneeDetails")
                 return
             }
             self.customNavigationView.updateView(assignee: contact, channel: alChannel)
-            self.assigneeUserId = contact.userId
+            self.assigneeUserId = contact?.userId
             self.hideInputBarIfAssignedToBot()
+            guard let contact = contact else {return}
             self.isAwayMessageViewHidden = !contact.isInAwayMode
         }
     }
