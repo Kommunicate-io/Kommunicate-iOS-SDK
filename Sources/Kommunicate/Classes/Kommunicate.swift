@@ -11,6 +11,7 @@ import KommunicateCore_iOS_SDK
 import UIKit
 #if canImport(RichMessageKit)
     import RichMessageKit
+import Kommunicate_Example
     public typealias KMStyle = RichMessageKit.Style
 #else
     public typealias KMStyle = KommunicateChatUI_iOS_SDK.Style
@@ -944,7 +945,7 @@ open class Kommunicate: NSObject, Localizable {
     func defaultChatViewSettings() {
         KMUserDefaultHandler.setBASEURL(API.Backend.chat.rawValue)
         KMUserDefaultHandler.setGoogleMapAPIKey("AIzaSyCOacEeJi-ZWLLrOtYyj3PKMTOFEG7HDlw") // REPLACE WITH YOUR GOOGLE MAPKEY
-        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description()])
+        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description(),Kommunicate.defaultConfiguration.embeddedVCName])
         ALApplozicSettings.setFilterContactsStatus(true)
         ALUserDefaultsHandler.setDebugLogsRequire(true)
         ALApplozicSettings.setSwiftFramework(true)

@@ -20,6 +20,7 @@
         func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
             setUpNavigationBarAppearance()
 
+            Kommunicate.defaultConfiguration.embeddedVCName = EmbeddedViewController.description()
             UNUserNotificationCenter.current().delegate = self
             Kommunicate.defaultConfiguration.hideNavigationBarOnChat = true
 

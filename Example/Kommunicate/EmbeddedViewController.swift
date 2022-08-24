@@ -17,26 +17,29 @@ class EmbeddedViewController: UIViewController {
         print("Back Button Tapped")
         self.navigationController?.popViewController(animated: true)
     }
+    
+    @IBAction func logout(_ sender: Any) {
+        print("Logout Tapped")
+    }
+    
     let activityIndicator = UIActivityIndicatorView(style: .gray)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        activityIndicator.center = CGPoint(x: view.bounds.size.width / 2,
-//                                           y: view.bounds.size.height / 2)
-//        view.addSubview(activityIndicator)
-//        view.bringSubviewToFront(activityIndicator)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
-
+        activityIndicator.center = CGPoint(x: view.bounds.size.width / 2,
+                                           y: view.bounds.size.height / 2)
+        view.addSubview(activityIndicator)
+        view.bringSubviewToFront(activityIndicator)
         
-//        Kommunicate.showConversations(from: self,rootView: rootView)
-        Kommunicate.createAndShowConversationV2(from: self, rootView:rootView,completion: {
-                     error in
-//                     self.activityIndicator.stopAnimating()
-//                     self.view.isUserInteractionEnabled = true
-                     if error != nil {
-                         print("Error while launching")
-                     }
-                 })
+        Kommunicate.createAndEmbedConversation(from: self, rootView: rootView) { error in
+            self.activityIndicator.stopAnimating()
+            self.view.isUserInteractionEnabled = true
+            if error != nil {
+                print("Error while launching")
+            }
+            
+        }
     }
 
     @IBOutlet weak var rootView: UIView!

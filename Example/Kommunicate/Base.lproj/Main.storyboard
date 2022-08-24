@@ -263,11 +263,11 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="65"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_back" translatesAutoresizingMaskIntoConstraints="NO" id="kku-je-p4n" userLabel="back image view">
-                                        <rect key="frame" x="0.0" y="7.5" width="50" height="50"/>
+                                        <rect key="frame" x="0.0" y="20" width="50" height="25"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <gestureRecognizers/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="7DE-St-05Q"/>
+                                            <constraint firstAttribute="height" constant="25" id="7DE-St-05Q"/>
                                             <constraint firstAttribute="width" constant="50" id="ggc-WC-J9f"/>
                                         </constraints>
                                         <connections>
@@ -280,12 +280,16 @@
                                         <color key="textColor" systemColor="systemBackgroundColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fill_214" translatesAutoresizingMaskIntoConstraints="NO" id="PHf-2H-dTH">
+                                    <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_logout" translatesAutoresizingMaskIntoConstraints="NO" id="PHf-2H-dTH">
                                         <rect key="frame" x="334" y="20" width="25" height="25"/>
+                                        <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="25" id="GlH-jG-4wD"/>
                                             <constraint firstAttribute="height" constant="25" id="OJi-ug-4b4"/>
                                         </constraints>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="mXg-lv-Q9n" appends="YES" id="y56-FI-HUd"/>
+                                        </connections>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
@@ -320,9 +324,14 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HSe-w1-a3z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="Cem-4G-3cf">
+                <tapGestureRecognizer id="Cem-4G-3cf" userLabel="back_tap">
                     <connections>
                         <action selector="backButtonTapped:" destination="mOC-zg-XRN" id="LYl-cp-OJD"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="mXg-lv-Q9n" userLabel="logout_tap">
+                    <connections>
+                        <action selector="logout:" destination="mOC-zg-XRN" id="mfg-RS-9xX"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
@@ -348,8 +357,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="fill_214" width="23" height="23"/>
-        <image name="icon_back" width="8" height="8"/>
+        <image name="icon_back" width="9.5" height="17"/>
+        <image name="icon_logout" width="22.5" height="21"/>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

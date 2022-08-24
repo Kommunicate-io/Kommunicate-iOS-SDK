@@ -19,7 +19,6 @@
                                                y: view.bounds.size.height / 2)
             view.addSubview(activityIndicator)
             view.bringSubviewToFront(activityIndicator)
-            self.navigationController?.navigationBar
         }
 
         @IBAction func goToEmbed(_ sender: Any) {
@@ -45,7 +44,7 @@
 //                    print("Error while launching")
 //                }
 //            })
-            Kommunicate.showConversations(from: self,rootView: sampleRootView)
+            Kommunicate.showConversations(from: self)
         }
 
         @IBAction func logoutAction(_: Any) {
