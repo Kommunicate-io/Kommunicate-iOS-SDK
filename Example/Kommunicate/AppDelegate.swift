@@ -17,7 +17,7 @@
         // Pass your App Id here. You can get the App Id from install section in the dashboard.
         var appId = ""
 
-        func application(_: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
             setUpNavigationBarAppearance()
 
             UNUserNotificationCenter.current().delegate = self
@@ -26,8 +26,8 @@
             KMPushNotificationHandler.shared.dataConnectionNotificationHandlerWith(Kommunicate.defaultConfiguration, Kommunicate.kmConversationViewConfiguration)
             let kmApplocalNotificationHandler = KMAppLocalNotification.appLocalNotificationHandler()
             kmApplocalNotificationHandler?.dataConnectionNotificationHandler()
-           
-           if KMUserDefaultHandler.isLoggedIn() {
+            
+            if KMUserDefaultHandler.isLoggedIn() {
                 // Get login screen from storyboard and present it
                 if let viewController = UIStoryboard(name: "Main", bundle: nil)
                     .instantiateViewController(withIdentifier: "NavViewController") as? UINavigationController
