@@ -27,15 +27,7 @@
             let kmApplocalNotificationHandler = KMAppLocalNotification.appLocalNotificationHandler()
             kmApplocalNotificationHandler?.dataConnectionNotificationHandler()
            
-            // When the app launch after user tap on notification (originally was not running / not in background)
-            if let notificationObject = launchOptions?[.remoteNotification] as? [String:AnyObject],
-               let notificationData = notificationObject["aps"] as? [String:AnyObject] {
-                let service = KMPushNotificationService()
-//                guard let dict = notificationData as? [AnyHashable : Any] else{return true}
-                if service.isApplozicNotification(notificationData) {
-                    service.processPushNotification(notificationData, appState: UIApplication.shared.applicationState)
-                }
-            } else if KMUserDefaultHandler.isLoggedIn() {
+           if KMUserDefaultHandler.isLoggedIn() {
                 // Get login screen from storyboard and present it
                 if let viewController = UIStoryboard(name: "Main", bundle: nil)
                     .instantiateViewController(withIdentifier: "NavViewController") as? UINavigationController

@@ -39,17 +39,19 @@ public class KMPushNotificationHandler: Localizable {
             else { return }
 
             guard let userInfo = notification.userInfo as? [String: Any], let state = userInfo["updateUI"] as? NSNumber else { return }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                switch state {
+                case NSNumber(value: APP_STATE_ACTIVE.rawValue):
+                    guard !pushNotificationHelper.isNotificationForActiveThread(notificationData) else { return }
 
-            switch state {
-            case NSNumber(value: APP_STATE_ACTIVE.rawValue):
-                guard !pushNotificationHelper.isNotificationForActiveThread(notificationData) else { return }
-
-                ALUtilityClass.thirdDisplayNotificationTS(message, andForContactId: nil, withGroupId: notificationData.groupId, completionHandler: {
-                    _ in
+                    ALUtilityClass.thirdDisplayNotificationTS(message, andForContactId: nil, withGroupId: notificationData.groupId, completionHandler: {
+                        _ in
+                        weakSelf.launchIndividualChatWith(notificationData: notificationData)
+                    })
+                default:
                     weakSelf.launchIndividualChatWith(notificationData: notificationData)
-                })
-            default:
-                weakSelf.launchIndividualChatWith(notificationData: notificationData)
+                }
             }
         })
     }
