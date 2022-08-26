@@ -136,7 +136,7 @@ open class KMConversationViewController: ALKConversationViewController {
         sendConversationOpenNotification(channelId: String(describing: channelId))
         setupConversationClosedView()
     }
-
+    
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         awayMessageView.drawDottedLines()
@@ -302,8 +302,8 @@ open class KMConversationViewController: ALKConversationViewController {
         if isClosedConversation {
             conversationAssignedToDialogflowBot()
         } else {
-            guard let channelKey = viewModel.channelKey else { return }
-            conversationService.awayMessageFor(groupId: channelKey, completion: {
+            guard let channelKey = viewModel.channelKey, let applicationKey =  ALUserDefaultsHandler.getApplicationKey() else { return }
+            conversationService.awayMessageFor(applicationKey: applicationKey,groupId: channelKey, completion: {
                 result in
                 DispatchQueue.main.async {
                     switch result {
@@ -347,8 +347,10 @@ open class KMConversationViewController: ALKConversationViewController {
         NotificationCenter.default.post(notification)
     }
 
-    func updateAssigneeDetails() {
+    open override func updateAssigneeDetails() {
+        super.updateAssigneeDetails()
         conversationDetail.updatedAssigneeDetails(groupId: viewModel.channelKey, userId: viewModel.contactId) { contact, channel in
+            self.messageStatusAndFetchBotType()
             guard let alChannel = channel else {
                 print("Channel is nil in updatedAssigneeDetails")
                 return
@@ -356,16 +358,31 @@ open class KMConversationViewController: ALKConversationViewController {
             self.customNavigationView.updateView(assignee: contact, channel: alChannel)
             self.assigneeUserId = contact?.userId
             self.hideInputBarIfAssignedToBot()
+            guard let contact = contact else {return}
+            self.isAwayMessageViewHidden = !contact.isInAwayMode
         }
     }
-
+    
+    /*
+     This method will verify status changed user id & current Conversation's assignee. If both are same then it will update.
+     - Parameters:
+     - userId: userId whose status changed
+     */
+    open override func updateAssigneeOnlineStatus(userId: String){
+        super.updateAssigneeOnlineStatus(userId: userId)
+        let (ConversationAssignee, _) = conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId)
+        guard userId == ConversationAssignee?.userId else {
+            return
+        }
+        updateAssigneeDetails()
+    }
+    
     @objc func onChannelMetadataUpdate() {
         guard viewModel != nil, viewModel.isGroup else { return }
         updateAssigneeDetails()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.conversationAssignedToDialogflowBot()
         }
-        messageStatusAndFetchBotType()
         // If the user was typing when the status changed
         view.endEditing(true)
         guard isClosedConversationViewHidden == isClosedConversation else { return }
