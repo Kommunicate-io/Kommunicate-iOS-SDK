@@ -3,7 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
-- [CM-1020] Fixed Conversation is not opening when Push Notification Tapped
+- [CM-1020] Fixed Conversation is not opening on Push Notification tap when app is not running.
 ## [6.7.2] - 2022-08-08Z
 - Upgraded KommunicateChatUI-iOS-SDK to 0.2.5
 - [CM-1015] Added Text To Speech Feature.
