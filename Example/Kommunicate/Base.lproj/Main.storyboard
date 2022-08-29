@@ -4,7 +4,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -247,96 +246,6 @@
             </objects>
             <point key="canvasLocation" x="252" y="474.51274362818594"/>
         </scene>
-        <!--Embedded View Controller-->
-        <scene sceneID="2hR-wo-zBa">
-            <objects>
-                <viewController storyboardIdentifier="embeddedvc" id="mOC-zg-XRN" customClass="EmbeddedViewController" customModule="Kommunicate_Example" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="niE-VC-bQG"/>
-                        <viewControllerLayoutGuide type="bottom" id="dgN-V2-N7u"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Nkd-dR-k4z" customClass="Embed">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mMd-qu-TnM" userLabel="topbar">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="65"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_back" translatesAutoresizingMaskIntoConstraints="NO" id="kku-je-p4n" userLabel="back image view">
-                                        <rect key="frame" x="0.0" y="20" width="50" height="25"/>
-                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <gestureRecognizers/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="25" id="7DE-St-05Q"/>
-                                            <constraint firstAttribute="width" constant="50" id="ggc-WC-J9f"/>
-                                        </constraints>
-                                        <connections>
-                                            <outletCollection property="gestureRecognizers" destination="Cem-4G-3cf" appends="YES" id="l45-US-3Bf"/>
-                                        </connections>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ask  &amp; Solve" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fO0-Eg-mbg">
-                                        <rect key="frame" x="100" y="22" width="100" height="21"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                        <color key="textColor" systemColor="systemBackgroundColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_logout" translatesAutoresizingMaskIntoConstraints="NO" id="PHf-2H-dTH">
-                                        <rect key="frame" x="334" y="20" width="25" height="25"/>
-                                        <gestureRecognizers/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="25" id="GlH-jG-4wD"/>
-                                            <constraint firstAttribute="height" constant="25" id="OJi-ug-4b4"/>
-                                        </constraints>
-                                        <connections>
-                                            <outletCollection property="gestureRecognizers" destination="mXg-lv-Q9n" appends="YES" id="y56-FI-HUd"/>
-                                        </connections>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemBlueColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="65" id="CMM-m0-Nhy"/>
-                                    <constraint firstItem="kku-je-p4n" firstAttribute="centerY" secondItem="mMd-qu-TnM" secondAttribute="centerY" id="EJE-KG-fbf"/>
-                                    <constraint firstItem="fO0-Eg-mbg" firstAttribute="leading" secondItem="mMd-qu-TnM" secondAttribute="leading" constant="100" id="hIN-yI-c5W"/>
-                                    <constraint firstItem="kku-je-p4n" firstAttribute="leading" secondItem="mMd-qu-TnM" secondAttribute="leading" id="lEZ-7n-6Tl"/>
-                                    <constraint firstItem="fO0-Eg-mbg" firstAttribute="centerY" secondItem="mMd-qu-TnM" secondAttribute="centerY" id="mcI-mw-Cza"/>
-                                    <constraint firstItem="PHf-2H-dTH" firstAttribute="centerY" secondItem="mMd-qu-TnM" secondAttribute="centerY" id="sfy-PM-pCP"/>
-                                    <constraint firstAttribute="trailing" secondItem="PHf-2H-dTH" secondAttribute="trailing" constant="16" id="wPs-4K-2SU"/>
-                                </constraints>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4UH-oR-j2x" userLabel="chat">
-                                <rect key="frame" x="0.0" y="65" width="375" height="602"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="mMd-qu-TnM" secondAttribute="trailing" id="0GE-uo-foD"/>
-                            <constraint firstItem="4UH-oR-j2x" firstAttribute="top" secondItem="mMd-qu-TnM" secondAttribute="bottom" id="FaV-vW-q8j"/>
-                            <constraint firstItem="mMd-qu-TnM" firstAttribute="leading" secondItem="Nkd-dR-k4z" secondAttribute="leading" id="eYy-vS-4FQ"/>
-                            <constraint firstItem="4UH-oR-j2x" firstAttribute="leading" secondItem="mMd-qu-TnM" secondAttribute="leading" id="jlK-IR-UG8"/>
-                            <constraint firstItem="4UH-oR-j2x" firstAttribute="trailing" secondItem="mMd-qu-TnM" secondAttribute="trailing" id="n48-mr-GTN"/>
-                            <constraint firstItem="dgN-V2-N7u" firstAttribute="top" secondItem="4UH-oR-j2x" secondAttribute="bottom" id="nWB-tV-I5E"/>
-                            <constraint firstItem="mMd-qu-TnM" firstAttribute="top" secondItem="niE-VC-bQG" secondAttribute="bottom" id="sMc-ZJ-PiV"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="rootView" destination="4UH-oR-j2x" id="3jE-aA-Vo1"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="HSe-w1-a3z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="Cem-4G-3cf" userLabel="back_tap">
-                    <connections>
-                        <action selector="backButtonTapped:" destination="mOC-zg-XRN" id="LYl-cp-OJD"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <tapGestureRecognizer id="mXg-lv-Q9n" userLabel="logout_tap">
-                    <connections>
-                        <action selector="logout:" destination="mOC-zg-XRN" id="mfg-RS-9xX"/>
-                    </connections>
-                </tapGestureRecognizer>
-            </objects>
-            <point key="canvasLocation" x="1386" y="902"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="qsO-Tc-fQ7">
             <objects>
@@ -357,16 +266,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="icon_back" width="9.5" height="17"/>
-        <image name="icon_logout" width="22.5" height="21"/>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
