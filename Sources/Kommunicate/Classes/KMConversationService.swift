@@ -139,7 +139,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
 
      **/
     public func awayMessageFor(
-        applicationKey: String = ALUserDefaultsHandler.getApplicationKey(),
+        applicationKey: String,
         groupId: NSNumber,
         completion: @escaping (Result<String, Error>) -> Void
     ) {
