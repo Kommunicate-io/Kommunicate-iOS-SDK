@@ -297,7 +297,13 @@ open class Kommunicate: NSObject, Localizable {
         viewController.present(navVC, animated: true, completion: nil)
     }
 
-    
+    /**
+     Launch chat list from a ViewController.
+
+     - Parameters:
+     - viewController: ViewController from which the chat list  will be added as child vc
+     - rootView: view container where chat will be loaded.
+     */
     @objc open class func embedConversationList(from viewController: UIViewController, on rootView: UIView) {
         let conversationVC = conversationListViewController()
         let navVC = KMBaseNavigationViewController(rootViewController: conversationVC)
@@ -350,30 +356,6 @@ open class Kommunicate: NSObject, Localizable {
         }
     }
     
-//    @objc open class func showConversationWithv2(
-//        groupId clientGroupId: String,
-//        from viewController: UIViewController,rootView:UIView,
-//        prefilledMessage: String? = nil,
-//        showListOnBack: Bool = false,
-//        completionHandler: @escaping (Bool) -> Void
-//    ) {
-//        let alChannelService = ALChannelService()
-//        alChannelService.getChannelInformation(nil, orClientChannelKey: clientGroupId) { channel in
-//            guard let channel = channel, let key = channel.key else {
-//                completionHandler(false)
-//                return
-//            }
-//            self.openChatWithv2(
-//                groupId: key,
-//                from: viewController,rootView: rootView,
-//                prefilledMessage: prefilledMessage,
-//                showListOnBack: showListOnBack
-//            ) { result in
-//                completionHandler(result)
-//            }
-//        }
-//    }
-
     /**
      Creates and launches the conversation. In case multiple conversations
      are present then the conversation list will be presented. If a single
@@ -381,8 +363,9 @@ open class Kommunicate: NSObject, Localizable {
 
      - Parameters:
      - viewController: ViewController from which the group chat will be launched.
-     */
+     - rootView: view container where chat will be loaded.
 
+     */
     open class func createAndShowConversation(
         from viewController: UIViewController,
         completion: @escaping (_ error: KommunicateError?) -> Void
@@ -410,6 +393,15 @@ open class Kommunicate: NSObject, Localizable {
         })
     }
     
+    /**
+     Creates and launches the conversation. In case multiple conversations
+     are present then the conversation list will be presented. If a single
+     conversation is present then that will be launched.
+
+     - Parameters:
+     - viewController: ViewController where the group chat will be launched.
+     - rootView: view container where the group chat will be loaded.
+     */
     open class func createAndEmbedConversation(from viewController: UIViewController,rootView:UIView,completion: @escaping (_ error: KommunicateError?) -> Void) {
         guard isLoggedIn else {
             completion(KommunicateError.notLoggedIn)
@@ -434,34 +426,6 @@ open class Kommunicate: NSObject, Localizable {
         })
     }
     
-//
-//    open class func createAndShowConversationV2(
-//        from viewController: UIViewController,rootView:UIView,
-//        completion: @escaping (_ error: KommunicateError?) -> Void
-//    ) {
-//        guard isLoggedIn else {
-//            completion(KommunicateError.notLoggedIn)
-//            return
-//        }
-//
-//        let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
-//        applozicClient?.getLatestMessages(false, withCompletionHandler: {
-//            messageList, error in
-//            print("Kommunicate: message list received")
-//
-//            // If more than 1 thread is present then the list will be shown
-//            if let messages = messageList, messages.count > 1, error == nil {
-//                showConversations(from: viewController,rootView: rootView)
-//                completion(nil)
-//            } else {
-//                createAConversationAndLaunchv2(from: viewController,rootView: rootView, completion: {
-//                    conversationError in
-//                    completion(conversationError)
-//                })
-//            }
-//        })
-//    }
-
     /**
      Updates the conversation parameters.
      Requires the conversation ID and the specific parameters that need to be updated for the specified conversation ID.
@@ -843,10 +807,6 @@ open class Kommunicate: NSObject, Localizable {
             let conversationListVC = conversationListViewController()
             conversationListVC.channelKey = groupId
             let navVC = KMBaseNavigationViewController(rootViewController: conversationListVC)
-//            navVC.modalPresentationStyle = .fullScreen
-//            viewController.present(navVC, animated: true) {
-//                completionHandler(true)
-//            }
             navVC.willMove(toParent: viewController)
             navVC.view.frame = rootView.bounds
             rootView.addSubview(navVC.view)
@@ -915,33 +875,6 @@ open class Kommunicate: NSObject, Localizable {
         }
     }
     
-//    private class func createAConversationAndLaunchv2(
-//        from viewController: UIViewController,rootView:UIView,
-//        completion: @escaping (_ error: KommunicateError?) -> Void
-//    ) {
-//        let kommunicateConversationBuilder = KMConversationBuilder()
-//            .useLastConversation(true)
-//        let conversation = kommunicateConversationBuilder.build()
-//        createConversation(conversation: conversation) { result in
-//            switch result {
-//            case let .success(conversationId):
-//                DispatchQueue.main.async {
-//                    showConversationWithv2(groupId: conversationId, from: viewController,rootView: rootView, completionHandler: { success in
-//                        guard success else {
-//                            completion(KommunicateError.conversationNotPresent)
-//                            return
-//                        }
-//                        print("Kommunicate: conversation was shown")
-//                        completion(nil)
-//                    })
-//                }
-//            case .failure:
-//                completion(KommunicateError.conversationCreateFailed)
-//                return
-//            }
-//        }
-//    }
-
     func defaultChatViewSettings() {
         KMUserDefaultHandler.setBASEURL(API.Backend.chat.rawValue)
         KMUserDefaultHandler.setGoogleMapAPIKey("AIzaSyCOacEeJi-ZWLLrOtYyj3PKMTOFEG7HDlw") // REPLACE WITH YOUR GOOGLE MAPKEY
