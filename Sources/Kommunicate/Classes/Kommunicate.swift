@@ -830,7 +830,9 @@ open class Kommunicate: NSObject, Localizable {
      ) {
          if showListOnBack {
              let conversationListVC = conversationListViewController()
-             conversationListVC.channelKey = groupId
+             if groupId != 0 {
+                 conversationListVC.channelKey = groupId
+             }
              let navVC = KMBaseNavigationViewController(rootViewController: conversationListVC)
              navVC.willMove(toParent: viewController)
              navVC.view.frame = rootView.bounds
