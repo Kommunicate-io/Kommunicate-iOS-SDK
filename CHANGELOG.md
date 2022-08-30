@@ -3,6 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
+- [CM-1020] Fixed Conversation is not opening on Push Notification tap when app is not running.
 - [CM-894] Added Support for Real time update of Agent Online/Offline Status
 ## [6.7.2] - 2022-08-08Z
 - Upgraded KommunicateChatUI-iOS-SDK to 0.2.5

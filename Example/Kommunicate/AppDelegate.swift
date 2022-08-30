@@ -26,7 +26,7 @@
             KMPushNotificationHandler.shared.dataConnectionNotificationHandlerWith(Kommunicate.defaultConfiguration, Kommunicate.kmConversationViewConfiguration)
             let kmApplocalNotificationHandler = KMAppLocalNotification.appLocalNotificationHandler()
             kmApplocalNotificationHandler?.dataConnectionNotificationHandler()
-
+            
             if KMUserDefaultHandler.isLoggedIn() {
                 // Get login screen from storyboard and present it
                 if let viewController = UIStoryboard(name: "Main", bundle: nil)
@@ -91,6 +91,7 @@
             }
         }
 
+        // This function will be called when the app receive notification
         func userNotificationCenter(_: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
             let service = KMPushNotificationService()
             let dict = notification.request.content.userInfo
@@ -102,6 +103,7 @@
             completionHandler([.sound, .badge, .alert])
         }
 
+        // This function will be called right after user tap on the notification
         func userNotificationCenter(_: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
             let service = KMPushNotificationService()
             let dict = response.notification.request.content.userInfo
