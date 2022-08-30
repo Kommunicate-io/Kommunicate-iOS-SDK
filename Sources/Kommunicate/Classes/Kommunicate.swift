@@ -297,19 +297,16 @@ open class Kommunicate: NSObject, Localizable {
     }
     
     /**
-      Launch chat list from a ViewController.
+      Launch chat list inside a container..
       - Parameters:
       - viewController: ViewController from which the chat list  will be added as child vc
       - rootView: view container where chat will be loaded.
       */
      @objc open class func embedConversationList(from viewController: UIViewController, on rootView: UIView) {
-         let conversationVC = conversationListViewController()
-         let navVC = KMBaseNavigationViewController(rootViewController: conversationVC)
-         navVC.willMove(toParent: viewController)
-         navVC.view.frame = rootView.bounds
-         rootView.addSubview(navVC.view)
-         viewController.addChild(navVC)
-         navVC.didMove(toParent: viewController)
+         // Update VC List
+         ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description(),viewController.description])
+         openChatIn(rootView: rootView, groupId: 0, from: viewController, showListOnBack: true,completionHandler: {_ in
+         })
      }
 
     /**
@@ -351,7 +348,7 @@ open class Kommunicate: NSObject, Localizable {
                  return
              }
             
-            openChatOnView(groupId: key, from: viewController, rootView: rootView,prefilledMessage: prefilledMessage,showListOnBack: showListOnBack){ result in
+            openChatIn(rootView: rootView, groupId: key, from: viewController, prefilledMessage: prefilledMessage,showListOnBack: showListOnBack){ result in
                 completionHandler(result)
             }
         }
@@ -407,7 +404,9 @@ open class Kommunicate: NSObject, Localizable {
             completion(KommunicateError.notLoggedIn)
             return
         }
-
+        // Update VC List
+        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description(),viewController.description])
+        
         let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
         applozicClient?.getLatestMessages(false, withCompletionHandler: {
             messageList, error in
@@ -796,17 +795,17 @@ open class Kommunicate: NSObject, Localizable {
         }
     }
     
-    class func openChatOnView(
-         groupId: NSNumber,
-         from viewController: UIViewController,
-         rootView:UIView,
-         prefilledMessage: String? = nil,
-         showListOnBack: Bool = false,
-         completionHandler: @escaping (Bool) -> Void
+    class func openChatIn(
+        rootView:UIView,
+        groupId: NSNumber,
+        from viewController: UIViewController,
+        prefilledMessage: String? = nil,
+        showListOnBack: Bool = false,
+        completionHandler: @escaping (Bool) -> Void
      ) {
          if showListOnBack {
              let conversationListVC = conversationListViewController()
-             conversationListVC.channelKey = groupId
+//             conversationListVC.channelKey = groupId
              let navVC = KMBaseNavigationViewController(rootViewController: conversationListVC)
              navVC.willMove(toParent: viewController)
              navVC.view.frame = rootView.bounds
