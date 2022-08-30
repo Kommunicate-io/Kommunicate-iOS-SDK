@@ -303,8 +303,7 @@ open class Kommunicate: NSObject, Localizable {
       - rootView: view container where chat will be loaded.
       */
      @objc open class func embedConversationList(from viewController: UIViewController, on rootView: UIView) {
-         // Update VC List
-         ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description(),viewController.description])
+         updateSettingsForEmbededMode(viewController: viewController)
          openChatIn(rootView: rootView, groupId: 0, from: viewController, showListOnBack: true,completionHandler: {_ in
          })
      }
@@ -324,7 +323,6 @@ open class Kommunicate: NSObject, Localizable {
     @objc open class func showConversationWith(
         groupId clientGroupId: String,
         from viewController: UIViewController,
-        on rootView: UIView? = nil,
         prefilledMessage: String? = nil,
         showListOnBack: Bool = false,
         completionHandler: @escaping (Bool) -> Void
@@ -335,24 +333,53 @@ open class Kommunicate: NSObject, Localizable {
                 completionHandler(false)
                 return
             }
-            guard let rootView = rootView
-            else{
-                 self.openChatWith(
-                     groupId: key,
-                     from: viewController,
-                     prefilledMessage: prefilledMessage,
-                     showListOnBack: showListOnBack
-                 ) { result in
-                     completionHandler(result)
-                 }
-                 return
+            
+            self.openChatWith(
+                groupId: key,
+                from: viewController,
+                prefilledMessage: prefilledMessage,
+                showListOnBack: showListOnBack
+             ) { result in
+                 completionHandler(result)
              }
+        }
+    }
+    
+    /**
+     Launch group chat in a container
+
+     - Parameters:
+     - rootView: UIView in which Conversation needs to be loaded
+     - clientGroupId: clientChannelKey of the Group.
+     - viewController: ViewController from which the group chat will be launched.
+     - prefilledMessage: Prefilled message for chatbox.
+     - showListOnBack: If true, then the conversation list will be shown on tap of the back button,
+     - completionHandler: Called with the information whether the conversation was
+     shown or not.
+
+     */
+    @objc open class func showConversationIn(
+        on rootView: UIView,
+        groupId clientGroupId: String,
+        from viewController: UIViewController,
+        prefilledMessage: String? = nil,
+        showListOnBack: Bool = false,
+        completionHandler: @escaping (Bool) -> Void
+    ) {
+        let alChannelService = ALChannelService()
+        alChannelService.getChannelInformation(nil, orClientChannelKey: clientGroupId) { channel in
+            guard let channel = channel, let key = channel.key else {
+                completionHandler(false)
+                return
+            }
             
             openChatIn(rootView: rootView, groupId: key, from: viewController, prefilledMessage: prefilledMessage,showListOnBack: showListOnBack){ result in
                 completionHandler(result)
             }
         }
     }
+    
+    
 
     /**
      Creates and launches the conversation. In case multiple conversations
@@ -390,6 +417,13 @@ open class Kommunicate: NSObject, Localizable {
         })
     }
     
+    class func updateSettingsForEmbededMode(viewController: UIViewController) {
+        let embeddedVC = viewController.description
+        // Update VC List
+        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description(),embeddedVC])
+        defaultConfiguration.embeddedVCName = embeddedVC
+    }
+    
     
     /**
      Creates and launches the conversation. In case multiple conversations
@@ -404,9 +438,7 @@ open class Kommunicate: NSObject, Localizable {
             completion(KommunicateError.notLoggedIn)
             return
         }
-        // Update VC List
-        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description(),viewController.description])
-        
+        updateSettingsForEmbededMode(viewController: viewController)
         let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
         applozicClient?.getLatestMessages(false, withCompletionHandler: {
             messageList, error in
@@ -805,7 +837,7 @@ open class Kommunicate: NSObject, Localizable {
      ) {
          if showListOnBack {
              let conversationListVC = conversationListViewController()
-//             conversationListVC.channelKey = groupId
+             conversationListVC.channelKey = groupId
              let navVC = KMBaseNavigationViewController(rootViewController: conversationListVC)
              navVC.willMove(toParent: viewController)
              navVC.view.frame = rootView.bounds
@@ -859,14 +891,25 @@ open class Kommunicate: NSObject, Localizable {
             switch result {
             case let .success(conversationId):
                 DispatchQueue.main.async {
-                    showConversationWith(groupId: conversationId, from: viewController, on: rootView, completionHandler: { success in
-                        guard success else {
-                            completion(KommunicateError.conversationNotPresent)
-                            return
-                        }
-                        print("Kommunicate: conversation was shown")
-                        completion(nil)
-                    })
+                    if let rootView = rootView {
+                        showConversationIn(on: rootView,groupId: conversationId, from: viewController, completionHandler: { success in
+                            guard success else {
+                                completion(KommunicateError.conversationNotPresent)
+                                return
+                            }
+                            print("Kommunicate: conversation was shown")
+                            completion(nil)
+                        })
+                    } else {
+                        showConversationWith(groupId: conversationId, from: viewController,completionHandler: { success in
+                            guard success else {
+                                completion(KommunicateError.conversationNotPresent)
+                                return
+                            }
+                            print("Kommunicate: conversation was shown")
+                            completion(nil)
+                        })
+                    }
                 }
             case .failure:
                 completion(KommunicateError.conversationCreateFailed)
