@@ -148,7 +148,7 @@ public class KMPushNotificationHelper {
         case "FaqViewController",
              "RatingViewController":
             return true
-        case configuration.embeddedVCName:
+        case Kommunicate.embeddedViewController:
             return true
         case _ where topVCName.hasPrefix("KM"):
             return true

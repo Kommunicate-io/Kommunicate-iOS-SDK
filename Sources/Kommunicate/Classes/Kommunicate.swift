@@ -83,6 +83,7 @@ open class Kommunicate: NSObject, Localizable {
     public static let shared = Kommunicate()
     public static var presentingViewController = UIViewController()
     public static var leadArray = [LeadCollectionField]()
+    static var embeddedViewController: String = ""
 
     public enum KommunicateError: Error {
         case notLoggedIn
@@ -303,7 +304,7 @@ open class Kommunicate: NSObject, Localizable {
       - rootView: view container where chat will be loaded.
       */
      @objc open class func embedConversationList(from viewController: UIViewController, on rootView: UIView) {
-         updateSettingsForEmbededMode(viewController: viewController)
+         updateSettingsForEmbeddedMode(viewController: viewController)
          openChatIn(rootView: rootView, groupId: 0, from: viewController, showListOnBack: true,completionHandler: {_ in
          })
      }
@@ -359,7 +360,7 @@ open class Kommunicate: NSObject, Localizable {
 
      */
     @objc open class func showConversationIn(
-        on rootView: UIView,
+        rootView: UIView,
         groupId clientGroupId: String,
         from viewController: UIViewController,
         prefilledMessage: String? = nil,
@@ -417,14 +418,6 @@ open class Kommunicate: NSObject, Localizable {
         })
     }
     
-    class func updateSettingsForEmbededMode(viewController: UIViewController) {
-        let embeddedVC = viewController.description
-        // Update VC List
-        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description(),embeddedVC])
-        defaultConfiguration.embeddedVCName = embeddedVC
-    }
-    
-    
     /**
      Creates and launches the conversation. In case multiple conversations
      are present then the conversation list will be presented. If a single
@@ -438,7 +431,7 @@ open class Kommunicate: NSObject, Localizable {
             completion(KommunicateError.notLoggedIn)
             return
         }
-        updateSettingsForEmbededMode(viewController: viewController)
+        updateSettingsForEmbeddedMode(viewController: viewController)
         let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
         applozicClient?.getLatestMessages(false, withCompletionHandler: {
             messageList, error in
@@ -858,6 +851,13 @@ open class Kommunicate: NSObject, Localizable {
              completionHandler(true)
          }
      }
+    
+    class func updateSettingsForEmbeddedMode(viewController: UIViewController) {
+        let embeddedVC = viewController.description
+        // Update VC List
+        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description(),embeddedVC])
+        embeddedViewController = embeddedVC
+    }
 
     // MARK: - Private methods
 
@@ -892,7 +892,7 @@ open class Kommunicate: NSObject, Localizable {
             case let .success(conversationId):
                 DispatchQueue.main.async {
                     if let rootView = rootView {
-                        showConversationIn(on: rootView,groupId: conversationId, from: viewController, completionHandler: { success in
+                        showConversationIn(rootView: rootView,groupId: conversationId, from: viewController, completionHandler: { success in
                             guard success else {
                                 completion(KommunicateError.conversationNotPresent)
                                 return
@@ -921,8 +921,7 @@ open class Kommunicate: NSObject, Localizable {
     func defaultChatViewSettings() {
         KMUserDefaultHandler.setBASEURL(API.Backend.chat.rawValue)
         KMUserDefaultHandler.setGoogleMapAPIKey("AIzaSyCOacEeJi-ZWLLrOtYyj3PKMTOFEG7HDlw") // REPLACE WITH YOUR GOOGLE MAPKEY
-        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description(),
-            Kommunicate.defaultConfiguration.embeddedVCName])
+        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description()])
         ALApplozicSettings.setFilterContactsStatus(true)
         ALUserDefaultsHandler.setDebugLogsRequire(true)
         ALApplozicSettings.setSwiftFramework(true)
@@ -939,6 +938,79 @@ open class Kommunicate: NSObject, Localizable {
         KMMessageStyle.sentMessage = KMStyle(font: KMMessageStyle.sentMessage.font, text: UIColor.white)
     }
 
+    private func clearUserDefaults() {
+        let kmAppSetting = KMAppSettingService()
+        KMAppUserDefaultHandler.shared.clear()
+        kmAppSetting.clearAppSettingsData()
+    }
+
+    private static func validateUserData(user: KMUser) -> NSError? {
+        guard let userId = user.userId, !userId.isEmpty else {
+            return NSError(domain: "User ID is not present", code: 0, userInfo: nil)
+        }
+        guard !userId.containsWhitespace else {
+            return NSError(domain: "User ID contains whitespace or newline characters", code: 0, userInfo: nil)
+        }
+        return nil
+    }
+
+    /**
+     Subscribe Chat Events
+     - Parameters:
+     - events: list of events to subscribe.
+     - callback: ALKCustomEventCallback to send subscribed event's data
+     */
+    public static func subscribeCustomEvents(events: [CustomEvent], callback: ALKCustomEventCallback) {
+        KMCustomEventHandler.shared.setSubscribedEvents(eventsList: events, eventDelegate: callback)
+    }
+    // MARK: - Deprecated methods
+
+    
+    /**
+     Updates the conversation teamid.
+     Requires the conversation  and the team ID to update
+
+     - Parameters:
+     - conversation: Conversation that needs to be updated
+     - teamId :  teamId that needs to be udpated in conversation
+
+     - completion: Called with the status of the Team ID update
+     */
+    @available(*, deprecated, message: "Use updateConversation(conversation: completion:)")
+    open class func updateTeamId(conversation: KMConversation, teamId: String, completion: @escaping (Result<String, KommunicateError>) -> Void) {
+        guard let groupID = conversation.clientConversationId, !groupID.isEmpty else { return }
+
+        guard !teamId.isEmpty else {
+            return completion(.failure(KommunicateError.teamNotPresent))
+        }
+        conversation.teamId = teamId
+        
+        updateConversation(conversation: conversation){
+            response in
+               switch response{
+               case .success(let clientConversationId):
+                   completion(.success(clientConversationId))
+                   break
+               case .failure(let error):
+                   completion(.failure(error))
+                   break
+               }
+        }
+    }
+    
+    /// Logs out the current logged in user and clears all the cache.
+    @available(*, deprecated, message: "Use logoutUser(completion:)")
+    @objc open class func logoutUser() {
+        let registerUserClientService = ALRegisterUserClientService()
+        if let _ = ALUserDefaultsHandler.getDeviceKeyString() {
+            registerUserClientService.logout(completionHandler: {
+                _, _ in
+                Kommunicate.shared.clearUserDefaults()
+                NSLog("Applozic logout")
+            })
+        }
+    }
+    
     /**
      Creates a new conversation with the details passed.
 
@@ -974,77 +1046,5 @@ open class Kommunicate: NSObject, Localizable {
                 completion("")
             }
         }
-    }
-
-    /// Logs out the current logged in user and clears all the cache.
-    @available(*, deprecated, message: "Use logoutUser(completion:)")
-    @objc open class func logoutUser() {
-        let registerUserClientService = ALRegisterUserClientService()
-        if let _ = ALUserDefaultsHandler.getDeviceKeyString() {
-            registerUserClientService.logout(completionHandler: {
-                _, _ in
-                Kommunicate.shared.clearUserDefaults()
-                NSLog("Applozic logout")
-            })
-        }
-    }
-    
-    /**
-     Updates the conversation teamid.
-     Requires the conversation  and the team ID to update
-
-     - Parameters:
-     - conversation: Conversation that needs to be updated
-     - teamId :  teamId that needs to be udpated in conversation
-
-     - completion: Called with the status of the Team ID update
-     */
-    @available(*, deprecated, message: "Use updateConversation(conversation: completion:)")
-    open class func updateTeamId(conversation: KMConversation, teamId: String, completion: @escaping (Result<String, KommunicateError>) -> Void) {
-        guard let groupID = conversation.clientConversationId, !groupID.isEmpty else { return }
-
-        guard !teamId.isEmpty else {
-            return completion(.failure(KommunicateError.teamNotPresent))
-        }
-        conversation.teamId = teamId
-        
-        updateConversation(conversation: conversation){
-            response in
-               switch response{
-               case .success(let clientConversationId):
-                   completion(.success(clientConversationId))
-                   break
-               case .failure(let error):
-                   completion(.failure(error))
-                   break
-               }
-        }
-    }
-    
-
-    private func clearUserDefaults() {
-        let kmAppSetting = KMAppSettingService()
-        KMAppUserDefaultHandler.shared.clear()
-        kmAppSetting.clearAppSettingsData()
-    }
-
-    private static func validateUserData(user: KMUser) -> NSError? {
-        guard let userId = user.userId, !userId.isEmpty else {
-            return NSError(domain: "User ID is not present", code: 0, userInfo: nil)
-        }
-        guard !userId.containsWhitespace else {
-            return NSError(domain: "User ID contains whitespace or newline characters", code: 0, userInfo: nil)
-        }
-        return nil
-    }
-
-    /**
-     Subscribe Chat Events
-     - Parameters:
-     - events: list of events to subscribe.
-     - callback: ALKCustomEventCallback to send subscribed event's data
-     */
-    public static func subscribeCustomEvents(events: [CustomEvent], callback: ALKCustomEventCallback) {
-        KMCustomEventHandler.shared.setSubscribedEvents(eventsList: events, eventDelegate: callback)
     }
 }
