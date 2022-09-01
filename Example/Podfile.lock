@@ -28,7 +28,7 @@ PODS:
 DEPENDENCIES:
   - iOSSnapshotTestCase (~> 8.0.0)
   - Kommunicate (from `../`)
-  - KommunicateChatUI-iOS-SDK (from `https://github.com/Sathyan-Elangovan/KommunicateChatUI-iOS-SDK.git`, branch `Cm-894`)
+  - KommunicateChatUI-iOS-SDK (from `https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git`, branch `dev`)
   - Nimble
   - Nimble-Snapshots
   - Quick
@@ -47,13 +47,13 @@ EXTERNAL SOURCES:
   Kommunicate:
     :path: "../"
   KommunicateChatUI-iOS-SDK:
-    :branch: Cm-894
-    :git: https://github.com/Sathyan-Elangovan/KommunicateChatUI-iOS-SDK.git
+    :branch: dev
+    :git: https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git
 
 CHECKOUT OPTIONS:
   KommunicateChatUI-iOS-SDK:
-    :commit: 3fedb13deaa2833bbd959432839044c92ab8c203
-    :git: https://github.com/Sathyan-Elangovan/KommunicateChatUI-iOS-SDK.git
+    :commit: a1aa07302c12989abedb105bf87f54e806784fe9
+    :git: https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git
 
 SPEC CHECKSUMS:
   iOSSnapshotTestCase: a670511f9ee3829c2b9c23e6e68f315fd7b6790f
@@ -66,6 +66,6 @@ SPEC CHECKSUMS:
   Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: 5bb475f6a3fdce8a4a65ac3b1d02e54721a77486
+PODFILE CHECKSUM: 71e9528497f8b4631a9d59677822ecd0231fef1c
 
 COCOAPODS: 1.11.3

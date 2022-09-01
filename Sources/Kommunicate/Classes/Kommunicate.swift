@@ -83,6 +83,7 @@ open class Kommunicate: NSObject, Localizable {
     public static let shared = Kommunicate()
     public static var presentingViewController = UIViewController()
     public static var leadArray = [LeadCollectionField]()
+    static var embeddedViewController: String = ""
 
     public enum KommunicateError: Error {
         case notLoggedIn
@@ -295,6 +296,18 @@ open class Kommunicate: NSObject, Localizable {
         navVC.modalPresentationStyle = .fullScreen
         viewController.present(navVC, animated: true, completion: nil)
     }
+    
+    /**
+      Launch chat list inside a container..
+      - Parameters:
+      - viewController: ViewController from which the chat list  will be added as child vc
+      - rootView: view container where chat will be loaded.
+      */
+     @objc open class func embedConversationList(from viewController: UIViewController, on rootView: UIView) {
+         updateSettingsForEmbeddedMode(viewController: viewController)
+         openChatIn(rootView: rootView, groupId: 0, from: viewController, showListOnBack: true,completionHandler: {_ in
+         })
+     }
 
     /**
      Launch group chat from a ViewController
@@ -321,16 +334,53 @@ open class Kommunicate: NSObject, Localizable {
                 completionHandler(false)
                 return
             }
+            
             self.openChatWith(
                 groupId: key,
                 from: viewController,
                 prefilledMessage: prefilledMessage,
                 showListOnBack: showListOnBack
-            ) { result in
+             ) { result in
+                 completionHandler(result)
+             }
+        }
+    }
+    
+    /**
+     Launch group chat in a container
+
+     - Parameters:
+     - rootView: UIView in which Conversation needs to be loaded
+     - clientGroupId: clientChannelKey of the Group.
+     - viewController: ViewController from which the group chat will be launched.
+     - prefilledMessage: Prefilled message for chatbox.
+     - showListOnBack: If true, then the conversation list will be shown on tap of the back button,
+     - completionHandler: Called with the information whether the conversation was
+     shown or not.
+
+     */
+    @objc open class func showConversationIn(
+        rootView: UIView,
+        groupId clientGroupId: String,
+        from viewController: UIViewController,
+        prefilledMessage: String? = nil,
+        showListOnBack: Bool = false,
+        completionHandler: @escaping (Bool) -> Void
+    ) {
+        let alChannelService = ALChannelService()
+        alChannelService.getChannelInformation(nil, orClientChannelKey: clientGroupId) { channel in
+            guard let channel = channel, let key = channel.key else {
+                completionHandler(false)
+                return
+            }
+            
+            openChatIn(rootView: rootView, groupId: key, from: viewController, prefilledMessage: prefilledMessage,showListOnBack: showListOnBack){ result in
                 completionHandler(result)
             }
         }
     }
+    
+    
 
     /**
      Creates and launches the conversation. In case multiple conversations
@@ -367,6 +417,39 @@ open class Kommunicate: NSObject, Localizable {
             }
         })
     }
+    
+    /**
+     Creates and launches the conversation. In case multiple conversations
+     are present then the conversation list will be presented. If a single
+     conversation is present then that will be launched.
+     - Parameters:
+     - viewController: ViewController where the group chat will be launched.
+     - rootView: view container where the group chat will be loaded.
+     */
+    open class func createAndEmbedConversation(from viewController: UIViewController,rootView:UIView,completion: @escaping (_ error: KommunicateError?) -> Void) {
+        guard isLoggedIn else {
+            completion(KommunicateError.notLoggedIn)
+            return
+        }
+        updateSettingsForEmbeddedMode(viewController: viewController)
+        let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
+        applozicClient?.getLatestMessages(false, withCompletionHandler: {
+            messageList, error in
+            print("Kommunicate: message list received")
+
+            // If more than 1 thread is present then the list will be shown
+            if let messages = messageList, messages.count > 1, error == nil {
+                embedConversationList(from: viewController, on: rootView)
+                completion(nil)
+            } else {
+                createAConversationAndLaunch(from: viewController, on: rootView,completion: {
+                    conversationError in
+                    completion(conversationError)
+                })
+            }
+        })
+    }
+
 
     /**
      Updates the conversation parameters.
@@ -736,6 +819,47 @@ open class Kommunicate: NSObject, Localizable {
             }
         }
     }
+    
+    class func openChatIn(
+        rootView:UIView,
+        groupId: NSNumber,
+        from viewController: UIViewController,
+        prefilledMessage: String? = nil,
+        showListOnBack: Bool = false,
+        completionHandler: @escaping (Bool) -> Void
+     ) {
+         if showListOnBack {
+             let conversationListVC = conversationListViewController()
+             if groupId != 0 {
+                 conversationListVC.channelKey = groupId
+             }
+             let navVC = KMBaseNavigationViewController(rootViewController: conversationListVC)
+             navVC.willMove(toParent: viewController)
+             navVC.view.frame = rootView.bounds
+             rootView.addSubview(navVC.view)
+             viewController.addChild(navVC)
+             navVC.didMove(toParent: viewController)
+             completionHandler(true)
+         } else {
+             let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName, prefilledMessage: prefilledMessage)
+             let conversationVC = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration)
+             conversationVC.viewModel = convViewModel
+             let navVC = KMBaseNavigationViewController(rootViewController: conversationVC)
+             navVC.willMove(toParent: viewController)
+             navVC.view.frame = rootView.bounds
+             rootView.addSubview(navVC.view)
+             viewController.addChild(navVC)
+             navVC.didMove(toParent: viewController)
+             completionHandler(true)
+         }
+     }
+    
+    class func updateSettingsForEmbeddedMode(viewController: UIViewController) {
+        let embeddedVC = viewController.description
+        // Update VC List
+        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description(),embeddedVC])
+        embeddedViewController = embeddedVC
+    }
 
     // MARK: - Private methods
 
@@ -759,6 +883,7 @@ open class Kommunicate: NSObject, Localizable {
 
     private class func createAConversationAndLaunch(
         from viewController: UIViewController,
+        on rootView: UIView? = nil,
         completion: @escaping (_ error: KommunicateError?) -> Void
     ) {
         let kommunicateConversationBuilder = KMConversationBuilder()
@@ -768,14 +893,25 @@ open class Kommunicate: NSObject, Localizable {
             switch result {
             case let .success(conversationId):
                 DispatchQueue.main.async {
-                    showConversationWith(groupId: conversationId, from: viewController, completionHandler: { success in
-                        guard success else {
-                            completion(KommunicateError.conversationNotPresent)
-                            return
-                        }
-                        print("Kommunicate: conversation was shown")
-                        completion(nil)
-                    })
+                    if let rootView = rootView {
+                        showConversationIn(rootView: rootView,groupId: conversationId, from: viewController, completionHandler: { success in
+                            guard success else {
+                                completion(KommunicateError.conversationNotPresent)
+                                return
+                            }
+                            print("Kommunicate: conversation was shown")
+                            completion(nil)
+                        })
+                    } else {
+                        showConversationWith(groupId: conversationId, from: viewController,completionHandler: { success in
+                            guard success else {
+                                completion(KommunicateError.conversationNotPresent)
+                                return
+                            }
+                            print("Kommunicate: conversation was shown")
+                            completion(nil)
+                        })
+                    }
                 }
             case .failure:
                 completion(KommunicateError.conversationCreateFailed)
@@ -804,6 +940,79 @@ open class Kommunicate: NSObject, Localizable {
         KMMessageStyle.sentMessage = KMStyle(font: KMMessageStyle.sentMessage.font, text: UIColor.white)
     }
 
+    private func clearUserDefaults() {
+        let kmAppSetting = KMAppSettingService()
+        KMAppUserDefaultHandler.shared.clear()
+        kmAppSetting.clearAppSettingsData()
+    }
+
+    private static func validateUserData(user: KMUser) -> NSError? {
+        guard let userId = user.userId, !userId.isEmpty else {
+            return NSError(domain: "User ID is not present", code: 0, userInfo: nil)
+        }
+        guard !userId.containsWhitespace else {
+            return NSError(domain: "User ID contains whitespace or newline characters", code: 0, userInfo: nil)
+        }
+        return nil
+    }
+
+    /**
+     Subscribe Chat Events
+     - Parameters:
+     - events: list of events to subscribe.
+     - callback: ALKCustomEventCallback to send subscribed event's data
+     */
+    public static func subscribeCustomEvents(events: [CustomEvent], callback: ALKCustomEventCallback) {
+        KMCustomEventHandler.shared.setSubscribedEvents(eventsList: events, eventDelegate: callback)
+    }
+    // MARK: - Deprecated methods
+
+    
+    /**
+     Updates the conversation teamid.
+     Requires the conversation  and the team ID to update
+
+     - Parameters:
+     - conversation: Conversation that needs to be updated
+     - teamId :  teamId that needs to be udpated in conversation
+
+     - completion: Called with the status of the Team ID update
+     */
+    @available(*, deprecated, message: "Use updateConversation(conversation: completion:)")
+    open class func updateTeamId(conversation: KMConversation, teamId: String, completion: @escaping (Result<String, KommunicateError>) -> Void) {
+        guard let groupID = conversation.clientConversationId, !groupID.isEmpty else { return }
+
+        guard !teamId.isEmpty else {
+            return completion(.failure(KommunicateError.teamNotPresent))
+        }
+        conversation.teamId = teamId
+        
+        updateConversation(conversation: conversation){
+            response in
+               switch response{
+               case .success(let clientConversationId):
+                   completion(.success(clientConversationId))
+                   break
+               case .failure(let error):
+                   completion(.failure(error))
+                   break
+               }
+        }
+    }
+    
+    /// Logs out the current logged in user and clears all the cache.
+    @available(*, deprecated, message: "Use logoutUser(completion:)")
+    @objc open class func logoutUser() {
+        let registerUserClientService = ALRegisterUserClientService()
+        if let _ = ALUserDefaultsHandler.getDeviceKeyString() {
+            registerUserClientService.logout(completionHandler: {
+                _, _ in
+                Kommunicate.shared.clearUserDefaults()
+                NSLog("Applozic logout")
+            })
+        }
+    }
+    
     /**
      Creates a new conversation with the details passed.
 
@@ -839,77 +1048,5 @@ open class Kommunicate: NSObject, Localizable {
                 completion("")
             }
         }
-    }
-
-    /// Logs out the current logged in user and clears all the cache.
-    @available(*, deprecated, message: "Use logoutUser(completion:)")
-    @objc open class func logoutUser() {
-        let registerUserClientService = ALRegisterUserClientService()
-        if let _ = ALUserDefaultsHandler.getDeviceKeyString() {
-            registerUserClientService.logout(completionHandler: {
-                _, _ in
-                Kommunicate.shared.clearUserDefaults()
-                NSLog("Applozic logout")
-            })
-        }
-    }
-    
-    /**
-     Updates the conversation teamid.
-     Requires the conversation  and the team ID to update
-
-     - Parameters:
-     - conversation: Conversation that needs to be updated
-     - teamId :  teamId that needs to be udpated in conversation
-
-     - completion: Called with the status of the Team ID update
-     */
-    @available(*, deprecated, message: "Use updateConversation(conversation: completion:)")
-    open class func updateTeamId(conversation: KMConversation, teamId: String, completion: @escaping (Result<String, KommunicateError>) -> Void) {
-        guard let groupID = conversation.clientConversationId, !groupID.isEmpty else { return }
-
-        guard !teamId.isEmpty else {
-            return completion(.failure(KommunicateError.teamNotPresent))
-        }
-        conversation.teamId = teamId
-        
-        updateConversation(conversation: conversation){
-            response in
-               switch response{
-               case .success(let clientConversationId):
-                   completion(.success(clientConversationId))
-                   break
-               case .failure(let error):
-                   completion(.failure(error))
-                   break
-               }
-        }
-    }
-    
-
-    private func clearUserDefaults() {
-        let kmAppSetting = KMAppSettingService()
-        KMAppUserDefaultHandler.shared.clear()
-        kmAppSetting.clearAppSettingsData()
-    }
-
-    private static func validateUserData(user: KMUser) -> NSError? {
-        guard let userId = user.userId, !userId.isEmpty else {
-            return NSError(domain: "User ID is not present", code: 0, userInfo: nil)
-        }
-        guard !userId.containsWhitespace else {
-            return NSError(domain: "User ID contains whitespace or newline characters", code: 0, userInfo: nil)
-        }
-        return nil
-    }
-
-    /**
-     Subscribe Chat Events
-     - Parameters:
-     - events: list of events to subscribe.
-     - callback: ALKCustomEventCallback to send subscribed event's data
-     */
-    public static func subscribeCustomEvents(events: [CustomEvent], callback: ALKCustomEventCallback) {
-        KMCustomEventHandler.shared.setSubscribedEvents(eventsList: events, eventDelegate: callback)
     }
 }
