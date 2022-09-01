@@ -4,6 +4,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 - [CM-894] Added Support for Real time update of Agent Online/Offline Status
+- [CM-1070] Added Support to embed SDK inside View and Added Support to hide Navigation Bar.
 ## [6.7.2] - 2022-08-08Z
 - Upgraded KommunicateChatUI-iOS-SDK to 0.2.5
 - [CM-1015] Added Text To Speech Feature.
