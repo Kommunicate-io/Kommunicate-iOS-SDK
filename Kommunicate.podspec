@@ -10,5 +10,5 @@ Pod::Spec.new do |s|
   s.swift_version = '5.0'
   s.source_files = 'Sources/Kommunicate/Classes/**/*.{swift}'
   s.resources = 'Sources/Resources/**/*{lproj,storyboard,xib,xcassets,json,strings}'
-  s.dependency 'KommunicateChatUI-iOS-SDK' , '~> 0.2.5'
+  s.dependency 'KommunicateChatUI-iOS-SDK' , '~> 0.2.6'
 end
