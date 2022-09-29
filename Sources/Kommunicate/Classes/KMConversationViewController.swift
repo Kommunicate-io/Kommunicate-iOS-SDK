@@ -152,7 +152,7 @@ open class KMConversationViewController: ALKConversationViewController {
 
     override open func newMessagesAdded() {
         super.newMessagesAdded()
-
+        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.messageReceive, data: nil)
         // Hide away message view whenever a new message comes.
         // Make sure the message is not from same user.
         guard !viewModel.messageModels.isEmpty else { return }
@@ -537,6 +537,7 @@ open class KMConversationViewController: ALKConversationViewController {
 
 extension KMConversationViewController: NavigationBarCallbacks {
     func backButtonPressed() {
+        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.conversationBackPress, data: nil)
         view.endEditing(true)
         let popVC = navigationController?.popViewController(animated: true)
         if popVC == nil {
