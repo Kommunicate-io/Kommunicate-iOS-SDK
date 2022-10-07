@@ -411,6 +411,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     }
 
     @objc func customBackAction() {
+        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.conversationListBackPress, data: nil)
         guard let nav = navigationController else { return }
         let poppedVC = nav.popViewController(animated: true)
         if poppedVC == nil {
