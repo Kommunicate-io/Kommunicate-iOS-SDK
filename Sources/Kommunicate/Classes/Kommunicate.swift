@@ -922,7 +922,7 @@ open class Kommunicate: NSObject, Localizable {
 
     func defaultChatViewSettings() {
         KMUserDefaultHandler.setBASEURL(API.Backend.chat.rawValue)
-        KMUserDefaultHandler.setGoogleMapAPIKey("AIzaSyCTGgLQbsvMotNNjRqPnWCln4y4LcBvxxE") // REPLACE WITH YOUR GOOGLE MAPKEY
+        KMUserDefaultHandler.setGoogleMapAPIKey("AIzaSyDHQzh-cDfo-aY9_Q1fZFiZtaurg57eY7k") // REPLACE WITH YOUR GOOGLE MAPKEY
         ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description()])
         ALApplozicSettings.setFilterContactsStatus(true)
         ALUserDefaultsHandler.setDebugLogsRequire(true)
