@@ -3,6 +3,8 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
+
+## [6.7.4] - 2022-11-02Z
 - Upgraded KommunicateChatUI-iOS-SDK to 0.2.7
 - [CM-1146] Fixed shared location preview issue by updating api key 
 - [CM-1135] Added Event Callbacks for message receive, back press on covnersation & conversation list screen
@@ -357,6 +359,7 @@ after that call  the `updateConversation` by passing above created `conversation
 
 - [AL-2853]Added support for showing Away message.
 - [AL-3062]While creating a conversation, a default agent will be fetched and added. Now it's not required  to pass the agent Ids.
+- [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
 - [AL-3188]Send notification when conversation view is launched and closed.
