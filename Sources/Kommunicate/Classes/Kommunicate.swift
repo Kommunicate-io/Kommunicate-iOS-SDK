@@ -334,6 +334,20 @@ open class Kommunicate: NSObject, Localizable {
                 completionHandler(false)
                 return
             }
+            // Fetch Chat Context & check for custom bot name in it.If its present, update KMCellConfiguration.customBotName
+            do {
+                if let messageMetadata = channel.metadata as? [String: Any],
+                      let jsonData = messageMetadata[ChannelMetadataKeys.chatContext] as? String,!jsonData.isEmpty,
+                      let data = jsonData.data(using: .utf8),
+                      let chatContextData = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any],
+                   let customBotName = chatContextData["custom_bot_name"] as? String,
+                   !customBotName.isEmpty {
+                    KMCellConfiguration.customBotName = customBotName
+                }
+            }
+            catch {
+                print("Failed to fetch custom bot name")
+            }
             
             self.openChatWith(
                 groupId: key,
