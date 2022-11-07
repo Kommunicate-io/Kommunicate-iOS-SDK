@@ -344,8 +344,8 @@ open class Kommunicate: NSObject, Localizable {
                    let customBotName = customBot["name"],
                    let customBotId = customBot["id"],
                    !customBotName.isEmpty, !customBotId.isEmpty {
-                    KMCellConfiguration.customBotName = customBotName
-                    KMCellConfiguration.customizedBotId = customBotId
+                    ALMessage.customBotName = customBotName
+                    ALMessage.customizedBotId = customBotId
                 }
             }
             catch {

@@ -52,7 +52,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   KommunicateChatUI-iOS-SDK:
-    :commit: 456e2ce84b41d6a84832e7481a1029a69d167b93
+    :commit: 219be8db87e1dc8baca95eb3a59c8cacc0cde463
     :git: https://github.com/Sathyan-Elangovan/KommunicateChatUI-iOS-SDK.git
 
 SPEC CHECKSUMS:
