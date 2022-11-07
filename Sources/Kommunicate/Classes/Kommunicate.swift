@@ -340,9 +340,12 @@ open class Kommunicate: NSObject, Localizable {
                       let jsonData = messageMetadata[ChannelMetadataKeys.chatContext] as? String,!jsonData.isEmpty,
                       let data = jsonData.data(using: .utf8),
                       let chatContextData = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any],
-                   let customBotName = chatContextData["custom_bot_name"] as? String,
-                   !customBotName.isEmpty {
+                   let customBot = chatContextData["bot_customization"] as? [String: String],
+                   let customBotName = customBot["name"],
+                   let customBotId = customBot["id"],
+                   !customBotName.isEmpty, !customBotId.isEmpty {
                     KMCellConfiguration.customBotName = customBotName
+                    KMCellConfiguration.customizedBotId = customBotId
                 }
             }
             catch {

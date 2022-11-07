@@ -203,7 +203,7 @@ class ConversationVCNavBar: UIView, Localizable {
         } else {
             profileImage.image = placeHolderImage
         }
-        profileName.text = KMCellConfiguration.customBotName.isEmpty ? name : KMCellConfiguration.customBotName
+        profileName.text = name
     }
 
     private func placeHolderImage(channel: ALChannel) -> UIImage? {
