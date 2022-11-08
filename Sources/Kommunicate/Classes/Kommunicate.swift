@@ -334,6 +334,28 @@ open class Kommunicate: NSObject, Localizable {
                 completionHandler(false)
                 return
             }
+            
+            // Fetch Chat Context & check for custom bot name in it.if its present then store it in local
+            do {
+                if let messageMetadata = channel.metadata as? [String: Any],
+                    let jsonData = messageMetadata[ChannelMetadataKeys.chatContext] as? String,
+                    !jsonData.isEmpty,
+                    let data = jsonData.data(using: .utf8),
+                    let chatContextData = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any],
+                    let customBot = chatContextData["bot_customization"] as? [String: String],
+                    let customBotName = customBot["name"],
+                    let customBotId = customBot["id"],
+                    !customBotName.isEmpty, !customBotId.isEmpty {
+                        ALApplozicSettings.setCustomBotName(customBotName)
+                        ALApplozicSettings.setCustomizedBotId(customBotId)
+                } else {
+                    ALApplozicSettings.clearCustomBotConfiguration()
+                }
+                
+            } catch {
+                print("Failed to fetch custom bot name")
+                ALApplozicSettings.clearCustomBotConfiguration()
+            }
           
             self.openChatWith(
                 groupId: key,
