@@ -447,9 +447,26 @@ public class KMConversationService: KMConservationServiceable, Localizable {
                     completion(Response(success: false, clientChannelKey: nil, error: nil))
                     return
                 }
-                var response = Response()
-                response.clientChannelKey = channel.clientChannelKey
-                completion(response)
+                
+                guard let clientChannelKey = channel.clientChannelKey,
+                      let metadata = channel.metadata,
+                      let zendeskAccountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
+                      !zendeskAccountKey.isEmpty,
+                      let conversationMetaDict = ["source":"zopim"] as NSDictionary? as! [String:Any]?,
+                      let jsonObject = try? JSONSerialization.data(withJSONObject: conversationMetaDict, options: []),
+                      let jsonString = String(data: jsonObject, encoding: .utf8) else {
+                    var response = Response()
+                    response.clientChannelKey = channel.clientChannelKey
+                    completion(response)
+                    return
+                }
+                // Update conveersation meta data with source if zendesk is integrated
+                metadata.setValue(jsonString, forKey: ChannelMetadataKeys.conversationMetaData)
+                self.updateConversationMetadata(groupId: clientChannelKey, metadata: metadata, completion: { response in
+                    var response = Response()
+                    response.clientChannelKey = channel.clientChannelKey
+                    completion(response)
+                })
             }
         )
     }

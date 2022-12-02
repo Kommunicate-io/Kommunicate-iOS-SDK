@@ -177,6 +177,9 @@ open class Kommunicate: NSObject, Localizable {
                             kmAppSetting.updateAppsettings(chatWidgetResponse: appSetting.chatWidget)
                             KMAppUserDefaultHandler.shared.isCSATEnabled
                                 = appSetting.collectFeedback ?? false
+                            if let zendeskaccountKey = appSetting.chatWidget?.zendeskChatSdkKey {
+                                ALApplozicSettings.setZendeskSdkAccountKey(zendeskaccountKey)
+                            }
                             completion(response, error as NSError?)
                         }
                     case .failure:
@@ -194,6 +197,7 @@ open class Kommunicate: NSObject, Localizable {
         let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
         applozicClient?.logoutUser(completion: { error, _ in
             Kommunicate.shared.clearUserDefaults()
+            KMZendeskChatHandler.shared.disconnectFromZendesk()
             guard error == nil else {
                 completion(.failure(KMError.api(error)))
                 return
@@ -438,6 +442,50 @@ open class Kommunicate: NSObject, Localizable {
                 })
             }
         })
+    }
+    
+    /**
+     Creates and launches the conversation based on zendesk session.
+
+     - Parameters:
+     - viewController: ViewController from which the group chat will be launched.
+     */
+    open class func openZendeskChat(from: UIViewController) {
+        let zendeskHandler = KMZendeskChatHandler.shared
+        zendeskHandler.isChatGoingOn(){ flag in
+            if flag {
+                let conversationId = zendeskHandler.getGroupId()
+                showConversationWith(
+                    groupId: conversationId,
+                    from: from,
+                    showListOnBack: false, // If true, then the conversation list will be shown on tap of the back button.
+                    completionHandler: { success in
+                    print("conversation was shown")
+                })
+            }else {
+                let kmConversation = KMConversationBuilder()
+                               .useLastConversation(false)
+                               .build()
+                
+                createConversation(conversation: kmConversation) { result in
+                   switch result {
+                    case .success(let conversationId):
+                       print("Conversation id: ",conversationId)
+                       showConversationWith(
+                           groupId: conversationId,
+                           from: from,
+                           showListOnBack: false, // If true, then the conversation list will be shown on tap of the back button.
+                           completionHandler: { success in
+                           print("conversation was shown")
+                       })
+                       // Launch conversation
+                    case .failure(let kmConversationError):
+                       print("Failed to create a conversation: ", kmConversationError)
+                   }
+               }
+            }
+            
+        }
     }
     
     /**
