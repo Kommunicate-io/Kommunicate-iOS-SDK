@@ -448,10 +448,10 @@ public class KMConversationService: KMConservationServiceable, Localizable {
                     return
                 }
                 
-                guard let clientChannelKey = channel.clientChannelKey,
-                      let metadata = channel.metadata,
-                      let zendeskAccountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
+                guard let zendeskAccountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
                       !zendeskAccountKey.isEmpty,
+                      let clientChannelKey = channel.clientChannelKey,
+                      let metadata = channel.metadata,
                       let conversationMetaDict = ["source":"zopim"] as NSDictionary? as! [String:Any]?,
                       let jsonObject = try? JSONSerialization.data(withJSONObject: conversationMetaDict, options: []),
                       let jsonString = String(data: jsonObject, encoding: .utf8) else {

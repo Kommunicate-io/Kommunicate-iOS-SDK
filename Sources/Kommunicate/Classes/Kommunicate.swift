@@ -470,7 +470,7 @@ open class Kommunicate: NSObject, Localizable {
                 createConversation(conversation: kmConversation) { result in
                    switch result {
                     case .success(let conversationId):
-                       print("Conversation id: ",conversationId)
+                       print("New Conversation is created for Zendesk Configuration. Conversation id: ",conversationId)
                        showConversationWith(
                            groupId: conversationId,
                            from: from,
