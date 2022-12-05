@@ -732,7 +732,7 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
         alMqttConversationService.retryConnection()
     }
     
-    public func handOff(toHuman conversationId: String!) {}
+    public func handOffToZendeskAgent(conversationId: NSNumber!) {}
     
 }
 
