@@ -462,7 +462,7 @@ open class Kommunicate: NSObject, Localizable {
         guard let existingZendeskConversationId = ALApplozicSettings.getLastZendeskConversationId(),
               existingZendeskConversationId != 0 else {
                 zendeskHandler.initiateZendesk(key: accountKey)
-
+                zendeskHandler.resetConfiguration()
                 // If there is no existing conversation id then create a new conversation.
                 let kmConversation = KMConversationBuilder()
                               .useLastConversation(false)
@@ -472,6 +472,7 @@ open class Kommunicate: NSObject, Localizable {
                   switch result {
                    case .success(let conversationId):
                       ALApplozicSettings.setLastZendeskConversationId(NSNumber(value: Int(conversationId) ?? 0))
+                      
                       print("New Conversation is created for Zendesk Configuration. Conversation id: ",conversationId)
                       showConversationWith(
                           groupId: conversationId,
@@ -490,7 +491,7 @@ open class Kommunicate: NSObject, Localizable {
             return
         }
         // Update group id so that messages can be fetched & stored locally
-        zendeskHandler.updategroupId(existingZendeskConversationId.stringValue)
+        zendeskHandler.setGroupIdAndUpdateLastMessageCreatedTime(existingZendeskConversationId.stringValue)
 
         guard let channel = ALChannelService().getChannelByKey(existingZendeskConversationId)  else {
             completion(.conversationNotPresent)
