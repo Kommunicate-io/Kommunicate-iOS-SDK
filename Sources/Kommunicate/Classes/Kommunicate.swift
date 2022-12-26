@@ -95,6 +95,8 @@ open class Kommunicate: NSObject, Localizable {
         case prechatFormNotFilled
         case bothTeamIDAndAssigneeIDShouldNotPresent
         case clientConversationIdNotPresent
+        case conversationOpenFailed
+        case zendeskKeyNotPresent
     }
 
     // MARK: - Private properties
@@ -450,42 +452,67 @@ open class Kommunicate: NSObject, Localizable {
      - Parameters:
      - viewController: ViewController from which the group chat will be launched.
      */
-    open class func openZendeskChat(from: UIViewController) {
+    open class func openZendeskChat(from: UIViewController,completion: @escaping (_ error: KommunicateError?) -> Void) {
         let zendeskHandler = KMZendeskChatHandler.shared
-        zendeskHandler.isChatGoingOn(){ flag in
-            if flag {
-                let conversationId = zendeskHandler.getGroupId()
-                showConversationWith(
-                    groupId: conversationId,
-                    from: from,
-                    showListOnBack: false, // If true, then the conversation list will be shown on tap of the back button.
-                    completionHandler: { success in
-                    print("conversation was shown")
-                })
-            }else {
-                let kmConversation = KMConversationBuilder()
-                               .useLastConversation(false)
-                               .build()
-                
-                createConversation(conversation: kmConversation) { result in
-                   switch result {
-                    case .success(let conversationId):
-                       print("New Conversation is created for Zendesk Configuration. Conversation id: ",conversationId)
-                       showConversationWith(
-                           groupId: conversationId,
-                           from: from,
-                           showListOnBack: false, // If true, then the conversation list will be shown on tap of the back button.
-                           completionHandler: { success in
-                           print("conversation was shown")
-                       })
-                       // Launch conversation
-                    case .failure(let kmConversationError):
-                       print("Failed to create a conversation: ", kmConversationError)
-                   }
-               }
-            }
-            
+        guard let accountKey = ALApplozicSettings.getZendeskSdkAccountKey(), !accountKey.isEmpty else {
+            completion(.zendeskKeyNotPresent)
+            return
         }
+        
+        guard let existingZendeskConversationId = ALApplozicSettings.getLastZendeskConversationId(),
+              existingZendeskConversationId != 0 else {
+                zendeskHandler.initiateZendesk(key: accountKey)
+                zendeskHandler.resetConfiguration()
+                // If there is no existing conversation id then create a new conversation.
+                let kmConversation = KMConversationBuilder()
+                              .useLastConversation(false)
+                              .build()
+
+                createConversation(conversation: kmConversation) { result in
+                  switch result {
+                   case .success(let conversationId):
+                      ALApplozicSettings.setLastZendeskConversationId(NSNumber(value: Int(conversationId) ?? 0))
+                      
+                      print("New Conversation is created for Zendesk Configuration. Conversation id: ",conversationId)
+                      showConversationWith(
+                          groupId: conversationId,
+                          from: from,
+                          showListOnBack: false, // If true, then the conversation list will be shown on tap of the back button.
+                          completionHandler: { success in
+                              success == true ? completion(nil) : completion(.conversationOpenFailed)
+                          print("conversation was shown")
+                              
+                      })
+                   case .failure(let kmConversationError):
+                      completion(.conversationCreateFailed)
+                      print("Failed to create a conversation: ", kmConversationError)
+                  }
+              }
+            return
+        }
+        // Update group id so that messages can be fetched & stored locally
+        zendeskHandler.setGroupIdAndUpdateLastMessageCreatedTime(existingZendeskConversationId.stringValue)
+
+        guard let channel = ALChannelService().getChannelByKey(existingZendeskConversationId)  else {
+            completion(.conversationNotPresent)
+            return
+        }
+        // If bot is handling the chat then we shouldn't send any messages to Zendesk.
+        if let assignee = channel.assigneeUserId, !assignee.isEmpty,
+           let contact = ALContactService().loadContact(byKey: "userId", value: assignee) {
+            if contact.roleType == NSNumber.init(value: AL_BOT.rawValue) {
+              zendeskHandler.updateHandoff(false)
+          } else {
+              zendeskHandler.updateHandoff(true)
+          }
+        }
+        
+        zendeskHandler.initiateZendesk(key: accountKey)
+        // Open Conversation
+        showConversationWith(groupId: existingZendeskConversationId.stringValue, from: from, completionHandler: { bool in
+            bool == true ? completion(nil) : completion(.conversationOpenFailed)
+            print("Opening Existing conversation which is assigned to BOT")
+        })
     }
     
     /**
