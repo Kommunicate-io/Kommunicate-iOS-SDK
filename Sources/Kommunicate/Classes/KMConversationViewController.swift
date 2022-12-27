@@ -441,6 +441,37 @@ open class KMConversationViewController: ALKConversationViewController {
                 return
             }
             weakSelf.isClosedConversationViewHidden = true
+            guard let zendeskAcckountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
+                  !zendeskAcckountKey.isEmpty else { return }
+            // if zendesk is integrated, create a new conversation instead of restarting the conversation
+            let zendeskHandler = KMZendeskChatHandler.shared
+            zendeskHandler.resetConfiguration()
+            zendeskHandler.initiateZendesk(key: zendeskAcckountKey)
+            weakSelf.loadingStarted()
+            // Create a new conversation 
+            let kmConversation = KMConversationBuilder()
+                          .useLastConversation(false)
+                          .build()
+            Kommunicate.createConversation(conversation: kmConversation) { result in
+              switch result {
+               case .success(let conversationId):
+                  ALApplozicSettings.setLastZendeskConversationId(NSNumber(value: Int(conversationId) ?? 0))
+                  let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: NSNumber(value: Int(conversationId) ?? 0), localizedStringFileName: Kommunicate.defaultConfiguration.localizedStringFileName, prefilledMessage: nil)
+                  // Update the viewmodel
+                  weakSelf.viewModel = convViewModel
+                  weakSelf.unsubscribingChannel()
+                  weakSelf.viewModel.contactId = nil
+                  weakSelf.viewModel.prefilledMessage = nil
+                  weakSelf.viewModel.channelKey = NSNumber(value: Int(conversationId) ?? 0)
+                  weakSelf.viewModel.conversationProxy = nil
+                  weakSelf.viewModel.delegate = self
+                  weakSelf.loadingFinished(error: nil)
+                  // refresh the viewcontroller after setting the viewmodel
+                  weakSelf.refreshViewController()
+               case .failure(let kmConversationError):
+                  print("Failed to create a conversation: ", kmConversationError)
+              }
+          }
         }
         view.addViewsForAutolayout(views: [conversationClosedView])
         var bottomAnchor = view.bottomAnchor
@@ -701,4 +732,7 @@ extension KMConversationViewController {
         }
         return String(format: charLimitMessage, limit.hard, charInfoText)
     }
+}
+extension UINavigationController {
+    var previousViewController: UIViewController? { viewControllers.last { $0 != topViewController } }
 }
