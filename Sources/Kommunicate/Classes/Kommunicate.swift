@@ -514,7 +514,6 @@ open class Kommunicate: NSObject, Localizable {
             bool == true ? completion(nil) : completion(.conversationOpenFailed)
             print("Opening Existing conversation which is assigned to BOT")
         })
-        
     }
     
     /**
