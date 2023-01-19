@@ -41,8 +41,8 @@ PODS:
 DEPENDENCIES:
   - iOSSnapshotTestCase (~> 8.0.0)
   - Kommunicate (from `../`)
-  - KommunicateChatUI-iOS-SDK (from `https://github.com/Sathyan-Elangovan/KommunicateChatUI-iOS-SDK.git`, branch `CM-1217`)
-  - KommunicateCore-iOS-SDK (from `https://github.com/Sathyan-Elangovan/KommunicateCore-iOS-SDK.git`, branch `CM-1217`)
+  - KommunicateChatUI-iOS-SDK (from `https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git`, branch `CM-1265`)
+  - KommunicateCore-iOS-SDK (from `https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git`, branch `dev`)
   - Nimble
   - Nimble-Snapshots
   - Quick
@@ -66,19 +66,19 @@ EXTERNAL SOURCES:
   Kommunicate:
     :path: "../"
   KommunicateChatUI-iOS-SDK:
-    :branch: CM-1217
-    :git: https://github.com/Sathyan-Elangovan/KommunicateChatUI-iOS-SDK.git
+    :branch: CM-1265
+    :git: https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git
   KommunicateCore-iOS-SDK:
-    :branch: CM-1217
-    :git: https://github.com/Sathyan-Elangovan/KommunicateCore-iOS-SDK.git
+    :branch: dev
+    :git: https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git
 
 CHECKOUT OPTIONS:
   KommunicateChatUI-iOS-SDK:
-    :commit: 2fe058eef2458a1f9488053eca1651408f98723d
-    :git: https://github.com/Sathyan-Elangovan/KommunicateChatUI-iOS-SDK.git
+    :commit: 4b8f7d28c6ee4068fc36bfdce328d61a7cfd2e6b
+    :git: https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git
   KommunicateCore-iOS-SDK:
-    :commit: 2ba1e0270f073e9422c51b970af6e5a42ed1e99f
-    :git: https://github.com/Sathyan-Elangovan/KommunicateCore-iOS-SDK.git
+    :commit: a26ffef42f02537d009b2e938d98f4a3968d1a3b
+    :git: https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git
 
 SPEC CHECKSUMS:
   iOSSnapshotTestCase: a670511f9ee3829c2b9c23e6e68f315fd7b6790f
@@ -97,6 +97,6 @@ SPEC CHECKSUMS:
   ZendeskMessagingSDK: 4f5f3d43766bb3b2ea6411d1331cfe609ff33618
   ZendeskSDKConfigurationsSDK: a5c21010e17b71d02bc2cfe73dcc9da1efa0a7b2
 
-PODFILE CHECKSUM: 2c19dd8d42956b0d3e71045166dc9eb7418060b0
+PODFILE CHECKSUM: 74e9571b933a4bda6daceefa5fa78fada87f7d24
 
 COCOAPODS: 1.11.3

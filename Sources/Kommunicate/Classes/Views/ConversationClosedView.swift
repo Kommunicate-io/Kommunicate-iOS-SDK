@@ -80,7 +80,6 @@ class ConversationClosedView: UIView {
     }
 
     @objc func restartConversationTapped() {
-        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.restartConversationClick, data: nil)
         restartTapped?()
     }
 

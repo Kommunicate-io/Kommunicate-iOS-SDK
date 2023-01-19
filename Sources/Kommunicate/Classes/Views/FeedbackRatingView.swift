@@ -73,17 +73,6 @@ class FeedbackRatingView: UIView {
     private func setupView() {
         onRatingTap = { [weak self] tag in
             self?.selectedRatingTag = tag
-//
-            switch tag {
-            case 1:
-                KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.rateConversationEmotionsClick, data: ["UserSelection": ["Emoji Clicked": KMCustomEventHandler.CSATRating.poor]])
-            case 5:
-                KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.rateConversationEmotionsClick, data: ["UserSelection": ["Emoji Clicked": KMCustomEventHandler.CSATRating.average]])
-            case 10:
-                KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.rateConversationEmotionsClick, data: ["UserSelection": ["Emoji Clicked": KMCustomEventHandler.CSATRating.great]])
-            default:
-                print("Emoji value is not registered!!")
-            }
         }
         ratingButtons.forEach { $0.ratingTapped = onRatingTap }
     }
