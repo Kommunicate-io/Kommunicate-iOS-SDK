@@ -3,8 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
-- [CM-1217] Added Authentication Flow using jwt token for Zendesk 
-- [CM-1189] Added Zendesk Integration
+- Added Zendesk Integration
 - [CM-1167] Added a feature Custom Bot Name on Conversation screen through chat context 
 ## [6.7.4] - 2022-11-02Z
 - Upgraded KommunicateChatUI-iOS-SDK to 0.2.7

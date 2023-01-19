@@ -199,7 +199,7 @@ open class Kommunicate: NSObject, Localizable {
         let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
         applozicClient?.logoutUser(completion: { error, _ in
             Kommunicate.shared.clearUserDefaults()
-            KMZendeskChatHandler.shared.disconnectFromZendesk()
+            KMZendeskChatHandler.shared.endChat()
             guard error == nil else {
                 completion(.failure(KMError.api(error)))
                 return
@@ -458,11 +458,11 @@ open class Kommunicate: NSObject, Localizable {
             completion(.zendeskKeyNotPresent)
             return
         }
-        
+
         guard let existingZendeskConversationId = ALApplozicSettings.getLastZendeskConversationId(),
               existingZendeskConversationId != 0 else {
-                zendeskHandler.initiateZendesk(key: accountKey)
                 zendeskHandler.resetConfiguration()
+                zendeskHandler.initiateZendesk(key: accountKey)
                 // If there is no existing conversation id then create a new conversation.
                 let kmConversation = KMConversationBuilder()
                               .useLastConversation(false)
@@ -490,8 +490,9 @@ open class Kommunicate: NSObject, Localizable {
               }
             return
         }
+        
         // Update group id so that messages can be fetched & stored locally
-        zendeskHandler.setGroupIdAndUpdateLastMessageCreatedTime(existingZendeskConversationId.stringValue)
+        zendeskHandler.setGroupId(existingZendeskConversationId.stringValue)
 
         guard let channel = ALChannelService().getChannelByKey(existingZendeskConversationId)  else {
             completion(.conversationNotPresent)
@@ -501,9 +502,9 @@ open class Kommunicate: NSObject, Localizable {
         if let assignee = channel.assigneeUserId, !assignee.isEmpty,
            let contact = ALContactService().loadContact(byKey: "userId", value: assignee) {
             if contact.roleType == NSNumber.init(value: AL_BOT.rawValue) {
-              zendeskHandler.updateHandoff(false)
+              zendeskHandler.updateHandoffFlag(false)
           } else {
-              zendeskHandler.updateHandoff(true)
+              zendeskHandler.updateHandoffFlag(true)
           }
         }
         

@@ -441,6 +441,31 @@ open class KMConversationViewController: ALKConversationViewController {
                 return
             }
             weakSelf.isClosedConversationViewHidden = true
+            guard let zendeskAcckountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
+                  !zendeskAcckountKey.isEmpty else { return }
+            // if zendesk is integrated, create a new conversation instead of restarting the conversation
+            let zendeskHandler = KMZendeskChatHandler.shared
+            zendeskHandler.resetConfiguration()
+            zendeskHandler.initiateZendesk(key: zendeskAcckountKey)
+            weakSelf.loadingStarted()
+            // Create a new conversation 
+            let kmConversation = KMConversationBuilder()
+                          .useLastConversation(false)
+                          .build()
+            Kommunicate.createConversation(conversation: kmConversation) { result in
+              switch result {
+               case .success(let conversationId):
+                  ALApplozicSettings.setLastZendeskConversationId(NSNumber(value: Int(conversationId) ?? 0))
+                  
+                  let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: NSNumber(value: Int(conversationId) ?? 0), localizedStringFileName: Kommunicate.defaultConfiguration.localizedStringFileName, prefilledMessage: nil)
+                 // Update the View Model & refresh the View Controller
+                  weakSelf.updateViewModelAndRefreshViewController(convViewModel, conversationId: NSNumber(value: Int(conversationId) ?? 0))
+               case .failure(let kmConversationError):
+                  print("Failed to create a conversation: ", kmConversationError)
+                  weakSelf.loadingFinished(error: kmConversationError)
+
+              }
+          }
         }
         view.addViewsForAutolayout(views: [conversationClosedView])
         var bottomAnchor = view.bottomAnchor
@@ -454,6 +479,21 @@ open class KMConversationViewController: ALKConversationViewController {
             conversationClosedView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             conversationClosedView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
+    }
+    
+    private func updateViewModelAndRefreshViewController(_ viewModel:ALKConversationViewModel, conversationId: NSNumber ) {
+        // Update the viewmodel
+        self.viewModel = viewModel
+        self.unsubscribingChannel()
+        self.viewModel.contactId = nil
+        self.viewModel.prefilledMessage = nil
+        self.viewModel.channelKey = conversationId
+        //NSNumber(value: Int(conversationId) ?? 0)
+        self.viewModel.conversationProxy = nil
+        self.viewModel.delegate = self
+        self.loadingFinished(error: nil)
+        // refresh the viewcontroller after setting the viewmodel
+        self.refreshViewController()
     }
 
     private func checkPlanAndShowSuspensionScreen() {
@@ -701,4 +741,7 @@ extension KMConversationViewController {
         }
         return String(format: charLimitMessage, limit.hard, charInfoText)
     }
+}
+extension UINavigationController {
+    var previousViewController: UIViewController? { viewControllers.last { $0 != topViewController } }
 }
