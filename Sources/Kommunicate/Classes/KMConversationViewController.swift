@@ -441,8 +441,10 @@ open class KMConversationViewController: ALKConversationViewController {
                 return
             }
             weakSelf.isClosedConversationViewHidden = true
-            guard let channelId = weakSelf.viewModel.channelKey else { return }
-            KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.restartConversationClick, data: ["conversationId":channelId])
+            if let channelId = weakSelf.viewModel.channelKey {
+                KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.restartConversationClick, data: ["conversationId":channelId])
+            }
+           
         }
         view.addViewsForAutolayout(views: [conversationClosedView])
         var bottomAnchor = view.bottomAnchor
