@@ -43,7 +43,6 @@ DEPENDENCIES:
   - Kommunicate (from `../`)
   - KommunicateChatUI-iOS-SDK (from `https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git`, branch `CM-1265`)
   - KommunicateCore-iOS-SDK (from `https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git`, branch `dev`)
-
   - Nimble
   - Nimble-Snapshots
   - Quick
@@ -98,7 +97,6 @@ SPEC CHECKSUMS:
   ZendeskMessagingSDK: 4f5f3d43766bb3b2ea6411d1331cfe609ff33618
   ZendeskSDKConfigurationsSDK: a5c21010e17b71d02bc2cfe73dcc9da1efa0a7b2
 
-PODFILE CHECKSUM: 74e9571b933a4bda6daceefa5fa78fada87f7d24
-
+PODFILE CHECKSUM: 4837dad6ea164a819b263c392def58f7a36e3cc3
 
 COCOAPODS: 1.11.3
