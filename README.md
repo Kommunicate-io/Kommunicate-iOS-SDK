@@ -11,7 +11,7 @@ An Open Source iOS Live Chat SDK for Customer Support
 
 ## Overview
 
-Kommunicate provides open source live chat SDK in iOS. The Kommunicate SDK is flexible, lightweight and easily integrable. It lets you easily add real-time live chat and in-app messaging in your mobile applications and websites for customer support. The SDK is equipped with advance messaging options such as sending attachments, sharing location and rich messaging. 
+Kommunicate provides open source AI Chatbot and live chat SDK in iOS. The Kommunicate SDK is flexible, lightweight and easily integrable. It lets you easily add real-time live chat and in-app messaging in your mobile applications and websites for customer support. The SDK is equipped with advance messaging options such as sending attachments, sharing location and rich messaging. 
 
 
 Kommunicate SDK lets you integrate custom chatbots in your mobile apps for automating tasks. It comes with multiple features to make it a full-fledged customer support SDK. 
@@ -31,15 +31,12 @@ To get started with Kommunicate iOS SDK, head over to the Kommunicate website an
 
 [Kompose](https://dashboard.kommunicate.io/bots/bot-builder) is a Kommunicate’s bot builder that help you in building your own bot, a techie, non-techie, or a person who doesn’t have any idea about chatbots can also build the bot. Anyone can create a chatbot with the Kompose without any assistance.
 
-![Kompose-build](https://user-images.githubusercontent.com/38066371/87525821-a519f000-c6a7-11ea-90d6-97e8fab4d1b3.gif)
-
+![Kompose-build](https://user-images.githubusercontent.com/91717856/213933942-906ccdd9-62bc-43b6-8735-c17b645fbfe0.gif)
 
 
 ### Following is the UI to create the BOT
 
-![Kompose](https://user-images.githubusercontent.com/38066371/87527229-71d86080-c6a9-11ea-8a2c-467c99badac9.jpeg)
-
-
+![Kompose](https://user-images.githubusercontent.com/91717856/213930902-40c5953f-e766-47e2-93c8-85165ff1ec0f.png)
 
 
 ## Dialogflow Chatbot Integration
@@ -92,6 +89,17 @@ You can add the Kommunicate SDK in your iOS app easily. More information on how 
 **Smart Rich Messaging:** Leverage rich messages using buttons, cards, carousels, forms or lists to provide an exquisite support chat experience to your customers.
 
 **Quick Replies:** Quickly respond to generic user queries using Quick Replies. Easily create and manage templated messages from your dashboard.
+Conversation Auto-resolve: Reduce redundant tasks such as manually resolving dormant conversation using automation.
+
+**Push Notifications:** Set up interactive alerts for both your agents and customers for new messages in conversations
+
+**Fallback Emails:** Get notified through email if you miss any messages from your users and vice versa.
+
+**Omnichannel Support:** Manage customer requests from live chat, email, chatbots, social media at a single place.
+
+**Team Roles:** Manage your team, and assign roles and access permission level to each of your agents.
+
+**CSAT Ratings:** Keep track of your customer's overall satisfaction and your team's performance.
 
 ------------------------
 
