@@ -316,11 +316,11 @@ open class Kommunicate: NSObject, Localizable {
      }
     
     /**
-     Close the Chat Widget Screen
+     Close the Conversation Screen
      - Parameters:
-     - viewController: ViewController from where chat widget is hosted
+     - viewController: ViewController from where ConversationVC  presented
      */
-    @objc public static func closeConversationVC(_ viewController: UIViewController) {
+    @objc public static func closeConversationVC(from viewController: UIViewController) {
         guard let navController = viewController.navigationController,let topVC = navController.visibleViewController, topVC.isKind(of: KMConversationViewController.self) || topVC.isKind(of: KMConversationListViewController.self) else { return }
         let poppedVC = navController.popViewController(animated: true)
         if poppedVC == nil {
