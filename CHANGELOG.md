@@ -3,6 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
+- [CM-1265] Improved Event Callbacks.
 - Added Zendesk Integration
 - [CM-1167] Added a feature Custom Bot Name on Conversation screen through chat context 
 ## [6.7.4] - 2022-11-02Z
