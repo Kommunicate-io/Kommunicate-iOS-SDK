@@ -2,7 +2,7 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
-## [Unreleased]
+## [6.7.5] - 2022-01-25
 - [CM-1265] Improved Event Callbacks.
 - [CM-1227] Added support to close the conversation ViewController
 - Added Zendesk Integration
