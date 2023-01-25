@@ -314,7 +314,20 @@ open class Kommunicate: NSObject, Localizable {
          openChatIn(rootView: rootView, groupId: 0, from: viewController, showListOnBack: true,completionHandler: {_ in
          })
      }
-
+    
+    /**
+     Close the Conversation Screen
+     - Parameters:
+     - viewController: ViewController from where ConversationVC  presented
+     */
+    @objc public static func closeConversationVC(from viewController: UIViewController) {
+        guard let navController = viewController.navigationController,let topVC = navController.visibleViewController, topVC.isKind(of: KMConversationViewController.self) || topVC.isKind(of: KMConversationListViewController.self) else { return }
+        let poppedVC = navController.popViewController(animated: true)
+        if poppedVC == nil {
+            topVC.dismiss(animated: true)
+        }
+    }
+    
     /**
      Launch group chat from a ViewController
 
