@@ -271,7 +271,7 @@ open class Kommunicate: NSObject, Localizable {
                             completion(.failure(KMConversationError.api(response.error)))
                             return
                         }
-                        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.newConversation, data: ["UserSelection": ["ClientConversationId": conversation.clientConversationId]])
+                        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.newConversation, data: ["conversationId": conversationId])
                         completion(.success(conversationId))
                     }
                 })

@@ -441,6 +441,11 @@ open class KMConversationViewController: ALKConversationViewController {
                 return
             }
             weakSelf.isClosedConversationViewHidden = true
+            
+            if let channelId = weakSelf.viewModel.channelKey {
+                KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.restartConversationClick, data: ["conversationId":channelId])
+            }
+           
             guard let zendeskAcckountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
                   !zendeskAcckountKey.isEmpty else { return }
             // if zendesk is integrated, create a new conversation instead of restarting the conversation
@@ -618,7 +623,6 @@ extension KMConversationViewController {
     }
 
     private func showRatingView() {
-        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.rateConversationClick, data: nil)
         guard self.ratingVC == nil else { return }
         let ratingVC = RatingViewController()
         ratingVC.closeButtontapped = { [weak self] in
@@ -626,9 +630,8 @@ extension KMConversationViewController {
         }
         ratingVC.feedbackSubmitted = { [weak self] feedback in
             print("feedback submitted with rating: \(feedback.rating)")
-            KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.submitRatingClick, data: ["UserSelection": ["SubmittedFeedback": feedback]])
+            KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.submitRatingClick, data:  ["rating": feedback.rating.rawValue,"comment":feedback.comment ?? "","conversationId": self?.viewModel.channelKey])
             self?.hideRatingView()
-
             self?.submitFeedback(feedback: feedback)
         }
 
@@ -699,10 +702,6 @@ extension KMConversationViewController {
         isAwayMessageViewHidden = true
         updateMessageListBottomPadding(isClosedViewHidden: !flag)
         topConstraintClosedView?.isActive = flag
-        if flag {
-            guard let channelId = viewModel.channelKey else { return }
-            ALKCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.resolveConversation, data: ["UserSelection": channelId])
-        }
     }
 
     private func show(feedback: Feedback) {
