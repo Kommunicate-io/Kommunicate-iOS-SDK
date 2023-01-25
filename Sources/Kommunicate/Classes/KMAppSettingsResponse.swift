@@ -44,6 +44,7 @@ struct ChatWidgetResponse: Decodable {
     let botMessageDelayInterval: Int?
     let hidePostCTAEnabled: Bool?
     let preChatGreetingMsg: String?
+    let zendeskChatSdkKey: String?
 }
 
 extension KMAppSettingsResponse {

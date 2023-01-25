@@ -731,6 +731,7 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
         print("ALKConversationListVC mqtt connection closed.")
         alMqttConversationService.retryConnection()
     }
+
 }
 
 extension KMConversationListViewController: ALKConversationListTableViewDelegate {

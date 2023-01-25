@@ -2,8 +2,11 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
-## [Unreleased]
-
+## [6.7.5] - 2022-01-25
+- [CM-1265] Improved Event Callbacks.
+- [CM-1227] Added support to close the conversation ViewController
+- Added Zendesk Integration
+- [CM-1167] Added a feature Custom Bot Name on Conversation screen through chat context 
 ## [6.7.4] - 2022-11-02Z
 - Upgraded KommunicateChatUI-iOS-SDK to 0.2.7
 - [CM-1146] Fixed shared location preview issue by updating api key 

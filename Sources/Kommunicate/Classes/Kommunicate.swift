@@ -95,6 +95,8 @@ open class Kommunicate: NSObject, Localizable {
         case prechatFormNotFilled
         case bothTeamIDAndAssigneeIDShouldNotPresent
         case clientConversationIdNotPresent
+        case conversationOpenFailed
+        case zendeskKeyNotPresent
     }
 
     // MARK: - Private properties
@@ -177,6 +179,9 @@ open class Kommunicate: NSObject, Localizable {
                             kmAppSetting.updateAppsettings(chatWidgetResponse: appSetting.chatWidget)
                             KMAppUserDefaultHandler.shared.isCSATEnabled
                                 = appSetting.collectFeedback ?? false
+                            if let zendeskaccountKey = appSetting.chatWidget?.zendeskChatSdkKey {
+                                ALApplozicSettings.setZendeskSdkAccountKey(zendeskaccountKey)
+                            }
                             completion(response, error as NSError?)
                         }
                     case .failure:
@@ -194,6 +199,7 @@ open class Kommunicate: NSObject, Localizable {
         let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
         applozicClient?.logoutUser(completion: { error, _ in
             Kommunicate.shared.clearUserDefaults()
+            KMZendeskChatHandler.shared.endChat()
             guard error == nil else {
                 completion(.failure(KMError.api(error)))
                 return
@@ -265,7 +271,7 @@ open class Kommunicate: NSObject, Localizable {
                             completion(.failure(KMConversationError.api(response.error)))
                             return
                         }
-                        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.newConversation, data: ["UserSelection": ["ClientConversationId": conversation.clientConversationId]])
+                        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.newConversation, data: ["conversationId": conversationId])
                         completion(.success(conversationId))
                     }
                 })
@@ -308,7 +314,20 @@ open class Kommunicate: NSObject, Localizable {
          openChatIn(rootView: rootView, groupId: 0, from: viewController, showListOnBack: true,completionHandler: {_ in
          })
      }
-
+    
+    /**
+     Close the Conversation Screen
+     - Parameters:
+     - viewController: ViewController from where ConversationVC  presented
+     */
+    @objc public static func closeConversationVC(from viewController: UIViewController) {
+        guard let navController = viewController.navigationController,let topVC = navController.visibleViewController, topVC.isKind(of: KMConversationViewController.self) || topVC.isKind(of: KMConversationListViewController.self) else { return }
+        let poppedVC = navController.popViewController(animated: true)
+        if poppedVC == nil {
+            topVC.dismiss(animated: true)
+        }
+    }
+    
     /**
      Launch group chat from a ViewController
 
@@ -335,6 +354,28 @@ open class Kommunicate: NSObject, Localizable {
                 return
             }
             
+            // Fetch Chat Context & check for custom bot name in it.if its present then store it in local
+            do {
+                if let messageMetadata = channel.metadata as? [String: Any],
+                    let jsonData = messageMetadata[ChannelMetadataKeys.chatContext] as? String,
+                    !jsonData.isEmpty,
+                    let data = jsonData.data(using: .utf8),
+                    let chatContextData = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any],
+                    let customBot = chatContextData["bot_customization"] as? [String: String],
+                    let customBotName = customBot["name"],
+                    let customBotId = customBot["id"],
+                    !customBotName.isEmpty, !customBotId.isEmpty {
+                        ALApplozicSettings.setCustomBotName(customBotName)
+                        ALApplozicSettings.setCustomizedBotId(customBotId)
+                } else {
+                    ALApplozicSettings.clearCustomBotConfiguration()
+                }
+                
+            } catch {
+                print("Failed to fetch custom bot name")
+                ALApplozicSettings.clearCustomBotConfiguration()
+            }
+          
             self.openChatWith(
                 groupId: key,
                 from: viewController,
@@ -415,6 +456,76 @@ open class Kommunicate: NSObject, Localizable {
                     completion(conversationError)
                 })
             }
+        })
+    }
+    
+    /**
+     Creates and launches the conversation based on zendesk session.
+
+     - Parameters:
+     - viewController: ViewController from which the group chat will be launched.
+     */
+    open class func openZendeskChat(from: UIViewController,completion: @escaping (_ error: KommunicateError?) -> Void) {
+        let zendeskHandler = KMZendeskChatHandler.shared
+        guard let accountKey = ALApplozicSettings.getZendeskSdkAccountKey(), !accountKey.isEmpty else {
+            completion(.zendeskKeyNotPresent)
+            return
+        }
+
+        guard let existingZendeskConversationId = ALApplozicSettings.getLastZendeskConversationId(),
+              existingZendeskConversationId != 0 else {
+                zendeskHandler.resetConfiguration()
+                zendeskHandler.initiateZendesk(key: accountKey)
+                // If there is no existing conversation id then create a new conversation.
+                let kmConversation = KMConversationBuilder()
+                              .useLastConversation(false)
+                              .build()
+
+                createConversation(conversation: kmConversation) { result in
+                  switch result {
+                   case .success(let conversationId):
+                      ALApplozicSettings.setLastZendeskConversationId(NSNumber(value: Int(conversationId) ?? 0))
+                      
+                      print("New Conversation is created for Zendesk Configuration. Conversation id: ",conversationId)
+                      showConversationWith(
+                          groupId: conversationId,
+                          from: from,
+                          showListOnBack: false, // If true, then the conversation list will be shown on tap of the back button.
+                          completionHandler: { success in
+                              success == true ? completion(nil) : completion(.conversationOpenFailed)
+                          print("conversation was shown")
+                              
+                      })
+                   case .failure(let kmConversationError):
+                      completion(.conversationCreateFailed)
+                      print("Failed to create a conversation: ", kmConversationError)
+                  }
+              }
+            return
+        }
+        
+        // Update group id so that messages can be fetched & stored locally
+        zendeskHandler.setGroupId(existingZendeskConversationId.stringValue)
+
+        guard let channel = ALChannelService().getChannelByKey(existingZendeskConversationId)  else {
+            completion(.conversationNotPresent)
+            return
+        }
+        // If bot is handling the chat then we shouldn't send any messages to Zendesk.
+        if let assignee = channel.assigneeUserId, !assignee.isEmpty,
+           let contact = ALContactService().loadContact(byKey: "userId", value: assignee) {
+            if contact.roleType == NSNumber.init(value: AL_BOT.rawValue) {
+              zendeskHandler.updateHandoffFlag(false)
+          } else {
+              zendeskHandler.updateHandoffFlag(true)
+          }
+        }
+        
+        zendeskHandler.initiateZendesk(key: accountKey)
+        // Open Conversation
+        showConversationWith(groupId: existingZendeskConversationId.stringValue, from: from, completionHandler: { bool in
+            bool == true ? completion(nil) : completion(.conversationOpenFailed)
+            print("Opening Existing conversation which is assigned to BOT")
         })
     }
     
