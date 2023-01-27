@@ -18,6 +18,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         static let unableToCreateConversationError = localizedString(forKey: "UnableToCreateConversationError", fileName: filename)
         static let okButton = localizedString(forKey: "OkButton", fileName: filename)
         static let waitMessage = localizedString(forKey: "WaitMessage", fileName: filename)
+        static let startNewConversationTitle = localizedString(forKey: "StartNewConversationButtonTitle", fileName: filename)
     }
 
     let faqIdentifier = 11_223_346
@@ -45,6 +46,15 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
             static let height: CGFloat = 50
             static let width: CGFloat = 50
         }
+        
+        // Start New Conversation Button at the botton
+        enum startNewConversationButton {
+            static let width = 260.0
+            static let height : CGFloat = 48.0
+            static let cornorRadius: CGFloat = height/2
+            static let bottom: CGFloat = -50.0
+            static let leading: CGFloat = -32
+        }
     }
 
     let backgroundView: UIView = {
@@ -60,6 +70,15 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         return button
     }()
 
+     fileprivate var startNewConversationBottomButton: UIButton = {
+        let button = UIButton(type: .custom)
+         button.addTarget(KMConversationListViewController.self, action: #selector(compose), for: .touchUpInside)
+         button.backgroundColor = ALKAppSettingsUserDefaults().getAppBarTintColor()
+         button.setTitle(LocalizedText.startNewConversationTitle, for: .normal)
+         button.isUserInteractionEnabled = true
+        return button
+    }()
+    
     lazy var noConversationLabel: UILabel = {
         let label = UILabel()
         label.text = localizedString(forKey: "NoConversationsLabelText", fileName: configuration.localizedStringFileName)
@@ -190,7 +209,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         image = image?.withRenderingMode(.alwaysTemplate)
         startNewButton.setImage(image, for: .normal)
 
-        backgroundView.addViewsForAutolayout(views: [startNewButton, noConversationLabel, conversationListTableViewController.view])
+        backgroundView.addViewsForAutolayout(views: [startNewButton, noConversationLabel,startNewConversationBottomButton,conversationListTableViewController.view])
         view.addViewsForAutolayout(views: [backgroundView])
 
         activityIndicator.color = UIColor.gray
@@ -204,6 +223,13 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         startNewButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
         startNewButton.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor).isActive = true
 
+        startNewConversationBottomButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
+        startNewConversationBottomButton.widthAnchor.constraint(equalToConstant: Padding.startNewConversationButton.width).isActive = true
+        startNewConversationBottomButton.heightAnchor.constraint(equalToConstant: Padding.startNewConversationButton.height).isActive = true
+        startNewConversationBottomButton.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: Padding.startNewConversationButton.bottom).isActive = true
+        startNewConversationBottomButton.layer.cornerRadius = Padding.startNewConversationButton.cornorRadius
+        backgroundView.bringSubviewToFront(startNewConversationBottomButton)
+        
         noConversationLabel.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: Padding.NoConversationLabel.leading).isActive = true
         noConversationLabel.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -Padding.NoConversationLabel.trailing).isActive = true
         noConversationLabel.topAnchor.constraint(equalTo: startNewButton.bottomAnchor).isActive = true
@@ -455,7 +481,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         conversationListTableViewController.tableView.isHidden = show
         noConversationLabel.isHidden = !show
         if !configuration.hideEmptyStateStartNewButtonInConversationList, kmConversationViewConfiguration.startNewButtonIcon != nil {
-            startNewButton.isHidden = !show
+//            startNewButton.isHidden = !show
         }
     }
 
