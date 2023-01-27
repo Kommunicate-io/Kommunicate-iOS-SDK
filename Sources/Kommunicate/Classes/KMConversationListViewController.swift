@@ -70,9 +70,9 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         return button
     }()
 
-     fileprivate var startNewConversationBottomButton: UIButton = {
+    lazy var startNewConversationBottomButton: UIButton = {
         let button = UIButton(type: .custom)
-         button.addTarget(KMConversationListViewController.self, action: #selector(compose), for: .touchUpInside)
+         button.addTarget(self, action: #selector(compose), for: .touchUpInside)
          button.backgroundColor = ALKAppSettingsUserDefaults().getAppBarTintColor()
          button.setTitle(LocalizedText.startNewConversationTitle, for: .normal)
          button.isUserInteractionEnabled = true
@@ -223,12 +223,15 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         startNewButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
         startNewButton.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor).isActive = true
 
-        startNewConversationBottomButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
-        startNewConversationBottomButton.widthAnchor.constraint(equalToConstant: Padding.startNewConversationButton.width).isActive = true
-        startNewConversationBottomButton.heightAnchor.constraint(equalToConstant: Padding.startNewConversationButton.height).isActive = true
-        startNewConversationBottomButton.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: Padding.startNewConversationButton.bottom).isActive = true
-        startNewConversationBottomButton.layer.cornerRadius = Padding.startNewConversationButton.cornorRadius
-        backgroundView.bringSubviewToFront(startNewConversationBottomButton)
+        
+        if !configuration.hideBottomStartNewConversationButton  {
+            startNewConversationBottomButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
+            startNewConversationBottomButton.widthAnchor.constraint(equalToConstant: Padding.startNewConversationButton.width).isActive = true
+            startNewConversationBottomButton.heightAnchor.constraint(equalToConstant: Padding.startNewConversationButton.height).isActive = true
+            startNewConversationBottomButton.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: Padding.startNewConversationButton.bottom).isActive = true
+            startNewConversationBottomButton.layer.cornerRadius = Padding.startNewConversationButton.cornorRadius
+            backgroundView.bringSubviewToFront(startNewConversationBottomButton)
+        }
         
         noConversationLabel.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: Padding.NoConversationLabel.leading).isActive = true
         noConversationLabel.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -Padding.NoConversationLabel.trailing).isActive = true
