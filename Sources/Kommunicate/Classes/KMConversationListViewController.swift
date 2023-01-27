@@ -484,7 +484,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         conversationListTableViewController.tableView.isHidden = show
         noConversationLabel.isHidden = !show
         if !configuration.hideEmptyStateStartNewButtonInConversationList, kmConversationViewConfiguration.startNewButtonIcon != nil {
-//            startNewButton.isHidden = !show
+            startNewButton.isHidden = !show
         }
     }
 
