@@ -162,6 +162,7 @@ NoConversationsLabelText = "No conversations";
 UnableToCreateConversationError = "Unable to create conversation";
 OkButton = "Okay";
 WaitMessage = "Please wait...";
+StartNewConversationButtonTitle = "Start New Conversation";
 
 /* Last Message of conversation */
 Photo = "photo";

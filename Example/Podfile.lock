@@ -68,12 +68,10 @@ EXTERNAL SOURCES:
   KommunicateChatUI-iOS-SDK:
     :branch: unsubscribe_event
     :git: https://github.com/Sathyan-KM/KommunicateChatUI-iOS-SDK.git
-
 CHECKOUT OPTIONS:
   KommunicateChatUI-iOS-SDK:
     :commit: a0fbd0a26c95649cbe5abefe07ae4d7d04eecbfc
     :git: https://github.com/Sathyan-KM/KommunicateChatUI-iOS-SDK.git
-
 SPEC CHECKSUMS:
   iOSSnapshotTestCase: a670511f9ee3829c2b9c23e6e68f315fd7b6790f
   Kingfisher: 5efc54fec3980f92354898532e562cc17f31efb4
