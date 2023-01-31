@@ -15,8 +15,9 @@
         "repositoryURL": "https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git",
         "state": {
           "branch": null,
-          "revision": "a773c794c43564807d790c4bf53be984869ceffd",
-          "version": "0.2.8"
+          "revision": "6578af40d4dd20ebf0bb604a798ef643e71d742a",
+          "version": "0.2.9"
+
         }
       },
       {
