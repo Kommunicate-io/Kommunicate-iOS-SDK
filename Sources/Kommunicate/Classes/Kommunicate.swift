@@ -1076,8 +1076,15 @@ open class Kommunicate: NSObject, Localizable {
     public static func subscribeCustomEvents(events: [CustomEvent], callback: ALKCustomEventCallback) {
         KMCustomEventHandler.shared.setSubscribedEvents(eventsList: events, eventDelegate: callback)
     }
+    
+    /*
+     Unsubscribe Chat Events
+     */
+    public static func unsubcribeCustomEvents() {
+        KMCustomEventHandler.shared.unsubscribeEvents()
+    }
+    
     // MARK: - Deprecated methods
-
     
     /**
      Updates the conversation teamid.
