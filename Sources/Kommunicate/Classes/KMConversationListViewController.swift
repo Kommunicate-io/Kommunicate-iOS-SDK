@@ -343,11 +343,16 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     }
 
     func setupBackButton() {
-        let back = LocalizedText.leftBarBackButtonText
-
-        let leftBarButtonItem = UIBarButtonItem(title: back, style: .plain, target: self, action: #selector(customBackAction))
-
-        if !configuration.hideBackButtonInConversationList {
+        guard !configuration.hideBackButtonInConversationList else { return }
+        if configuration.enableBackArrowOnConversationListScreen {
+            var backImage = UIImage(named: "icon_back", in: Bundle.kommunicate, compatibleWith: nil)
+            backImage = backImage?.imageFlippedForRightToLeftLayoutDirection()
+            let backButton = UIBarButtonItem(image: backImage, style: .plain, target: self, action: #selector(customBackAction))
+            backButton.accessibilityIdentifier = "BackButton"
+            navigationItem.leftBarButtonItem = backButton
+        } else {
+            let back = LocalizedText.leftBarBackButtonText
+            let leftBarButtonItem = UIBarButtonItem(title: back, style: .plain, target: self, action: #selector(customBackAction))
             navigationItem.leftBarButtonItem = leftBarButtonItem
         }
     }
