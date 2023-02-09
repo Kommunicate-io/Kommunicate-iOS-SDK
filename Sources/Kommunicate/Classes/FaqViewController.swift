@@ -41,11 +41,7 @@ public class FaqViewController: UIViewController, Localizable {
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        var backImage = UIImage(named: "icon_back", in: Bundle.kommunicate, compatibleWith: nil)
-        backImage = backImage?.imageFlippedForRightToLeftLayoutDirection()
-        let backButton = UIBarButtonItem(image: backImage, style: .plain, target: self, action: #selector(backTapped))
-        backButton.accessibilityIdentifier = "BackButton"
-        navigationItem.leftBarButtonItem = backButton
+        navigationItem.leftBarButtonItem = getBackArrowButton(target: self, action: #selector(backTapped))
         navigationItem.title = localizedString(forKey: "FaqTitle", fileName: configuration.localizedStringFileName)
     }
 
