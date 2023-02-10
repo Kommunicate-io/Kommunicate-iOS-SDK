@@ -6,17 +6,17 @@ PODS:
     - iOSSnapshotTestCase/Core
   - Kingfisher (7.0.0)
   - Kommunicate (6.7.7):
-    - KommunicateChatUI-iOS-SDK (~> 0.2.9)
-  - KommunicateChatUI-iOS-SDK (0.2.9):
-    - KommunicateChatUI-iOS-SDK/Complete (= 0.2.9)
-  - KommunicateChatUI-iOS-SDK/Complete (0.2.9):
+    - KommunicateChatUI-iOS-SDK (~> 0.3.0)
+  - KommunicateChatUI-iOS-SDK (0.3.0):
+    - KommunicateChatUI-iOS-SDK/Complete (= 0.3.0)
+  - KommunicateChatUI-iOS-SDK/Complete (0.3.0):
     - Kingfisher (~> 7.0.0)
     - KommunicateChatUI-iOS-SDK/RichMessageKit
     - KommunicateCore-iOS-SDK (~> 1.0.7)
     - SwipeCellKit (~> 2.7.1)
     - ZendeskChatProvidersSDK
     - ZendeskChatSDK
-  - KommunicateChatUI-iOS-SDK/RichMessageKit (0.2.9)
+  - KommunicateChatUI-iOS-SDK/RichMessageKit (0.3.0)
   - KommunicateCore-iOS-SDK (1.0.7)
   - Nimble (10.0.0)
   - Nimble-Snapshots (9.4.0):
@@ -41,7 +41,6 @@ PODS:
 DEPENDENCIES:
   - iOSSnapshotTestCase (~> 8.0.0)
   - Kommunicate (from `../`)
-  - KommunicateChatUI-iOS-SDK (from `https://github.com/Sathyan-KM/KommunicateChatUI-iOS-SDK.git`, branch `CM-1180`)
   - Nimble
   - Nimble-Snapshots
   - Quick
@@ -50,6 +49,7 @@ SPEC REPOS:
   trunk:
     - iOSSnapshotTestCase
     - Kingfisher
+    - KommunicateChatUI-iOS-SDK
     - KommunicateCore-iOS-SDK
     - Nimble
     - Nimble-Snapshots
@@ -65,22 +65,12 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Kommunicate:
     :path: "../"
-  KommunicateChatUI-iOS-SDK:
-    :branch: CM-1180
-
-    :git: https://github.com/Sathyan-KM/KommunicateChatUI-iOS-SDK.git
-
-CHECKOUT OPTIONS:
-  KommunicateChatUI-iOS-SDK:
-    :commit: 23ea73a1dd3479efe0f2dfa7b575b157795ee2a1
-
-    :git: https://github.com/Sathyan-KM/KommunicateChatUI-iOS-SDK.git
 
 SPEC CHECKSUMS:
   iOSSnapshotTestCase: a670511f9ee3829c2b9c23e6e68f315fd7b6790f
   Kingfisher: 5efc54fec3980f92354898532e562cc17f31efb4
-  Kommunicate: 42770b37fc73d8e927db86c61854401b419f0f6a
-  KommunicateChatUI-iOS-SDK: ff32239ebe9ae0c05496c9ff3fa76ff5bfb25459
+  Kommunicate: 17abc5fc022e6fdda8125eef59f0c7cf0a71dd6d
+  KommunicateChatUI-iOS-SDK: 757f53cd063ed168990cfc773b4731d1b905d30b
   KommunicateCore-iOS-SDK: dbcd925238d785a45181d03353a011e3634b23f9
   Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
   Nimble-Snapshots: ef281b908c604f78c8313587e25ea92c8ab513d7
@@ -93,7 +83,6 @@ SPEC CHECKSUMS:
   ZendeskMessagingSDK: 4f5f3d43766bb3b2ea6411d1331cfe609ff33618
   ZendeskSDKConfigurationsSDK: a5c21010e17b71d02bc2cfe73dcc9da1efa0a7b2
 
-PODFILE CHECKSUM: 109ab98c9cbbded1d5ecca08c55c344ecfc9a5ca
-
+PODFILE CHECKSUM: 7a4dd5c06c8cbbe3dc4e68dd3df68ff2231bb909
 
 COCOAPODS: 1.11.3
