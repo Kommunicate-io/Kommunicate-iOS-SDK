@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'Kommunicate'
-  s.version = '6.7.7'
+  s.version = '6.7.8'
   s.summary = 'Kommunicate iOS SDK for customer support.'
   s.homepage = 'https://github.com/Kommunicate-io/Kommunicate-iOS-SDK'
   s.license = { :type => 'BSD-3-Clause', :file => 'LICENSE' }

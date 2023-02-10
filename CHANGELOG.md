@@ -2,7 +2,7 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
-## [Unreleased]
+## [6.7.8] 2023-02-10
 - Upgraded KommunicateChatUI-iOS-SDK to 0.3.0
 - [CM-1302] Added customization for back button on conversation list screen
 - Fixed localisation text issue for Start New conversation Button on Conversation list screen.
