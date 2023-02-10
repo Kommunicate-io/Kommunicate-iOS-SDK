@@ -62,7 +62,8 @@ extension UIViewController {
     }
 
     class func topViewController() -> UIViewController? {
-        return topViewControllerWithRootViewController(rootViewController: UIApplication.shared.keyWindow?.rootViewController)
+        guard let application  = UIApplication.sharedUIApplication() , let keyWindow = application.keyWindow else { return nil }
+        return topViewControllerWithRootViewController(rootViewController: keyWindow.rootViewController)
     }
 
     class func topViewControllerWithRootViewController(rootViewController: UIViewController?) -> UIViewController? {
@@ -75,7 +76,6 @@ extension UIViewController {
         } else if let control = rootViewController?.presentedViewController {
             return topViewControllerWithRootViewController(rootViewController: control)
         }
-
         return rootViewController
     }
     

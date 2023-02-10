@@ -41,7 +41,7 @@ PODS:
 DEPENDENCIES:
   - iOSSnapshotTestCase (~> 8.0.0)
   - Kommunicate (from `../`)
-  - KommunicateChatUI-iOS-SDK (from `https://github.com/Sathyan-KM/KommunicateChatUI-iOS-SDK.git`, branch `CM-1308`)
+  - KommunicateChatUI-iOS-SDK (from `https://github.com/Sathyan-KM/KommunicateChatUI-iOS-SDK.git`, branch `CM-1180`)
   - Nimble
   - Nimble-Snapshots
   - Quick
@@ -66,12 +66,14 @@ EXTERNAL SOURCES:
   Kommunicate:
     :path: "../"
   KommunicateChatUI-iOS-SDK:
-    :branch: CM-1308
+    :branch: CM-1180
+
     :git: https://github.com/Sathyan-KM/KommunicateChatUI-iOS-SDK.git
 
 CHECKOUT OPTIONS:
   KommunicateChatUI-iOS-SDK:
-    :commit: abe45f00ffb3c06bf911e5ac3ca3aebb581f00ad
+    :commit: 23ea73a1dd3479efe0f2dfa7b575b157795ee2a1
+
     :git: https://github.com/Sathyan-KM/KommunicateChatUI-iOS-SDK.git
 
 SPEC CHECKSUMS:
@@ -91,6 +93,7 @@ SPEC CHECKSUMS:
   ZendeskMessagingSDK: 4f5f3d43766bb3b2ea6411d1331cfe609ff33618
   ZendeskSDKConfigurationsSDK: a5c21010e17b71d02bc2cfe73dcc9da1efa0a7b2
 
-PODFILE CHECKSUM: ca537c50529ff2ecdc894bec7de603ecdaadfbce
+PODFILE CHECKSUM: 109ab98c9cbbded1d5ecca08c55c344ecfc9a5ca
+
 
 COCOAPODS: 1.11.3

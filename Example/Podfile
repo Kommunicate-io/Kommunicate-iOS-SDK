@@ -6,8 +6,8 @@ platform :ios, '12.0'
 
 target 'Kommunicate_Example' do
   pod 'Kommunicate', :path => '../'
-  pod 'KommunicateChatUI-iOS-SDK' , :git => 'https://github.com/Sathyan-KM/KommunicateChatUI-iOS-SDK.git', :branch => 'CM-1308'
-  target 'Kommunicate_Tests' do
+  pod 'KommunicateChatUI-iOS-SDK' , :git => 'https://github.com/Sathyan-KM/KommunicateChatUI-iOS-SDK.git', :branch => 'CM-1180'  
+target 'Kommunicate_Tests' do
     inherit! :search_paths 
     pod 'iOSSnapshotTestCase' , '~> 8.0.0'
     pod 'Nimble'

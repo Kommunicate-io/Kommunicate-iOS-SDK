@@ -298,7 +298,7 @@ open class CustomPreChatFormViewController: UIViewController {
     }
 
     private func addTransparent(_ rect: CGRect) {
-        let window = UIApplication.shared.keyWindow
+        let window = UIApplication.sharedUIApplication()?.keyWindow
         transparentView.frame = window?.frame ?? view.frame
         view.addSubview(transparentView)
 
