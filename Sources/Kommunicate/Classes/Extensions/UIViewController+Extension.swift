@@ -62,7 +62,7 @@ extension UIViewController {
     }
 
     class func topViewController() -> UIViewController? {
-        guard let application  = UIApplication.main , let keyWindow = application.keyWindow else { return nil }
+        guard let application  = UIApplication.sharedUIApplication() , let keyWindow = application.keyWindow else { return nil }
         return topViewControllerWithRootViewController(rootViewController: keyWindow.rootViewController)
     }
 
