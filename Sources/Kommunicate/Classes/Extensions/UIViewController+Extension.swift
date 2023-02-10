@@ -62,7 +62,8 @@ extension UIViewController {
     }
 
     class func topViewController() -> UIViewController? {
-        return topViewControllerWithRootViewController(rootViewController: UIApplication.shared.keyWindow?.rootViewController)
+        guard let application  = UIApplication.sharedUIApplication() , let keyWindow = application.keyWindow else { return nil }
+        return topViewControllerWithRootViewController(rootViewController: keyWindow.rootViewController)
     }
 
     class func topViewControllerWithRootViewController(rootViewController: UIViewController?) -> UIViewController? {
@@ -75,7 +76,18 @@ extension UIViewController {
         } else if let control = rootViewController?.presentedViewController {
             return topViewControllerWithRootViewController(rootViewController: control)
         }
-
         return rootViewController
+    }
+    
+    public func getBackTextButton(title: String,target:Any, action: Selector) -> UIBarButtonItem {
+           return  UIBarButtonItem(title: title, style: .plain, target: target, action: action)
+    }
+    
+    public func getBackArrowButton(target:Any, action: Selector) -> UIBarButtonItem {
+        var backImage = UIImage(named: "icon_back", in: Bundle.kommunicate, compatibleWith: nil)
+        backImage = backImage?.imageFlippedForRightToLeftLayoutDirection()
+        let backButton = UIBarButtonItem(image: backImage, style: .plain, target: target, action: action)
+        backButton.accessibilityIdentifier = "BackButton"
+        return backButton
     }
 }
