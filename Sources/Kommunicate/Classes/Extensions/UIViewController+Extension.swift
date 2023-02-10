@@ -78,4 +78,16 @@ extension UIViewController {
         }
         return rootViewController
     }
+    
+    public func getBackTextButton(title: String,target:Any, action: Selector) -> UIBarButtonItem {
+           return  UIBarButtonItem(title: title, style: .plain, target: target, action: action)
+    }
+    
+    public func getBackArrowButton(target:Any, action: Selector) -> UIBarButtonItem {
+        var backImage = UIImage(named: "icon_back", in: Bundle.kommunicate, compatibleWith: nil)
+        backImage = backImage?.imageFlippedForRightToLeftLayoutDirection()
+        let backButton = UIBarButtonItem(image: backImage, style: .plain, target: target, action: action)
+        backButton.accessibilityIdentifier = "BackButton"
+        return backButton
+    }
 }

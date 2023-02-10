@@ -41,6 +41,7 @@ class ConversationClosedView: UIView {
         button.setTitleColor(.text(.warmBlue), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(LocalizedText.restartConversation, for: .normal)
+        button.isHidden = Kommunicate.defaultConfiguration.hideRestartConversationButton
         return button
     }()
 
