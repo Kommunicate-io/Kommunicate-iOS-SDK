@@ -93,3 +93,5 @@ RemainingCharMessage = "%01d characters remaining";
 CharLimit = "Keep your message within %01d characters | ( %@ )";
 /* Start New Conversation*/
 StartNewConversationButtonTitle = "Start New Conversation";
+/* Conversation List VC Title */
+ConversationListVCTitle = "My Chats";
