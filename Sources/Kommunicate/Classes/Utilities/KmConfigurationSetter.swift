@@ -8,17 +8,16 @@
 import Foundation
 import KommunicateChatUI_iOS_SDK
 
-public class KMCustomization {
+public class KMConfigurationSetter {
     
-    open class func createCustomSetting(settings: String) -> String {
+    class func createCustomSetting(settings: String) -> Bool {
         do {
             guard let data = settings.data(using: .utf8),
                   let settingDict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-                return "Invalid JSON String"
+                return false
             }
             if let sentMessageBackgroundColor = settingDict["sentMessageBackgroundColor"] as? String,!sentMessageBackgroundColor.isEmpty {
                 KMMessageStyle.sentBubble.color = UIColor(hexString: sentMessageBackgroundColor)
-                
             }
             if let receivedMessageBackgroundColor = settingDict["receivedMessageBackgroundColor"] as? String,!receivedMessageBackgroundColor.isEmpty {
                 KMMessageStyle.receivedBubble.color = UIColor(hexString: receivedMessageBackgroundColor)
@@ -43,7 +42,6 @@ public class KMCustomization {
                 kmNavigationBarProxy.barTintColor = UIColor(hexString: toolbarColor )
             }
             if let attachmentIconsBackgroundColor = settingDict["attachmentIconsBackgroundColor"] as? String,!attachmentIconsBackgroundColor.isEmpty {
-                
                 Kommunicate.defaultConfiguration.chatBarAttachmentViewBackgroundColor = UIColor(hexString:attachmentIconsBackgroundColor)
             }
             if let enableFaqOption = settingDict["enableFaqOption"] as? [Bool], !enableFaqOption.isEmpty {
@@ -80,7 +78,6 @@ public class KMCustomization {
             if let restrictMessageTypingWithBots = settingDict["restrictMessageTypingWithBots"] as? Bool {
                 Kommunicate.kmConversationViewConfiguration.restrictMessageTypingWithBots = restrictMessageTypingWithBots
             }
-            
             if let oneTimeRating = settingDict["oneTimeRating"] as? Bool {
                 Kommunicate.defaultConfiguration.oneTimeRating = oneTimeRating
             }
@@ -101,9 +98,9 @@ public class KMCustomization {
             }
             
         } catch let error as NSError {
-            return error.description
+            return false
         }
         
-        return "Successfully created settings"
+        return true
     }
 }

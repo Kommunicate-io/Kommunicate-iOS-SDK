@@ -1131,8 +1131,8 @@ open class Kommunicate: NSObject, Localizable {
         }
     }
     
-    open class func createSettings(settings: String) -> String {
-        return KMCustomization.createCustomSetting(settings: settings)
+    open class func createSettings(settings: String) -> Bool {
+        return KMConfigurationSetter.createCustomSetting(settings: settings)
     }
     
     /**
