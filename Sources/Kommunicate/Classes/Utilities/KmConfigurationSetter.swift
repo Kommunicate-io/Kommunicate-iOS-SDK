@@ -96,11 +96,9 @@ public class KMConfigurationSetter {
             if let restrictedWordRegex = settingDict["restrictedWordRegex"] as? String, !restrictedWordRegex.isEmpty {
                 Kommunicate.defaultConfiguration.restrictedMessageRegexPattern = restrictedWordRegex
             }
-            
         } catch let error as NSError {
             return false
         }
-        
         return true
     }
 }
