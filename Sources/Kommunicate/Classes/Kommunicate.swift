@@ -1131,6 +1131,10 @@ open class Kommunicate: NSObject, Localizable {
         }
     }
     
+    open class func createSettings(settings: String) -> Bool {
+        return KMConfigurationSetter.createCustomSetting(settings: settings)
+    }
+    
     /**
      Creates a new conversation with the details passed.
 
