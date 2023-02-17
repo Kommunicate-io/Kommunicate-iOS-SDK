@@ -101,16 +101,16 @@ public class KMConfigurationSetter {
                 Kommunicate.defaultConfiguration.rateConversationMenuOption = rateConversationMenuOption
             }
             
-            if let hideRestartConversationButton = settingDict["restartConversationButtonVisibility"] as? Bool {
-                Kommunicate.defaultConfiguration.hideRestartConversationButton = hideRestartConversationButton
+            if let restartButtonVisibility = settingDict["restartConversationButtonVisibility"] as? Bool {
+                Kommunicate.defaultConfiguration.hideRestartConversationButton = !restartButtonVisibility
             }
             
             if let enableBackArrowOnConversationListScreen = settingDict["enableBackArrowOnConversationListScreen"] as? Bool {
                 Kommunicate.defaultConfiguration.enableBackArrowOnConversationListScreen = enableBackArrowOnConversationListScreen
             }
             
-            if let hideBottomStartNewConversationButton = settingDict["hideBottomStartNewConversationButton"] as? Bool {
-                Kommunicate.defaultConfiguration.hideBottomStartNewConversationButton = hideBottomStartNewConversationButton
+            if let showStartNewConversation = settingDict["showStartNewConversation"] as? Bool {
+                Kommunicate.defaultConfiguration.hideBottomStartNewConversationButton = !showStartNewConversation
             }
             
         } catch let error as NSError {
