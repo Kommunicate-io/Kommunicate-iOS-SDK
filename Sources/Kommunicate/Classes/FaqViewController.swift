@@ -31,7 +31,17 @@ public class FaqViewController: UIViewController, Localizable {
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.allowsBackForwardNavigationGestures = true
         webView.navigationDelegate = self
+        webView.configuration.userContentController.addUserScript(self.getZoomDisableScript())
         view = webView
+    }
+    
+
+    private func getZoomDisableScript() -> WKUserScript {
+        let source: String = "var meta = document.createElement('meta');" +
+            "meta.name = 'viewport';" +
+            "meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';" +
+            "var head = document.getElementsByTagName('head')[0];" + "head.appendChild(meta);"
+        return WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
     }
 
     override public func viewDidLoad() {

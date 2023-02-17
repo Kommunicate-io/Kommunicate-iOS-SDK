@@ -31,6 +31,7 @@ class ConversationClosedView: UIView {
         label.backgroundColor = .clear
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = LocalizedText.otherQueries
+        label.isHidden = Kommunicate.defaultConfiguration.hideRestartConversationButton
         return label
     }()
 
