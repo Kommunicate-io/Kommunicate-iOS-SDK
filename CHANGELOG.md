@@ -7,6 +7,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 - Added Suppor rating button on conversation screen
 - Added Support for metadata for form action messages
 - Added deafult text for conversation list screen title
+
 ## [6.7.8] 2023-02-10
 - Upgraded KommunicateChatUI-iOS-SDK to 0.3.0
 - [CM-1302] Added customization for back button on conversation list screen
