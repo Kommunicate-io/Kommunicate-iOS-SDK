@@ -578,6 +578,12 @@ open class KMConversationViewController: ALKConversationViewController {
             print("Error while sending quick reply message %@", error.localizedDescription)
         }
     }
+    
+    @objc open override func showFeedback() {
+        let isCSATEnabled = !kmConversationViewConfiguration.isCSATOptionDisabled && userDefaults.isCSATEnabled
+        guard isCSATEnabled else { return }
+        self.showRatingView()
+    }
 }
 
 extension KMConversationViewController: NavigationBarCallbacks {
