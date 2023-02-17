@@ -96,7 +96,25 @@ public class KMConfigurationSetter {
             if let restrictedWordRegex = settingDict["restrictedWordRegex"] as? String, !restrictedWordRegex.isEmpty {
                 Kommunicate.defaultConfiguration.restrictedMessageRegexPattern = restrictedWordRegex
             }
+            
+            if let rateConversationMenuOption = settingDict["rateConversationMenuOption"] as? Bool {
+                Kommunicate.defaultConfiguration.rateConversationMenuOption = rateConversationMenuOption
+            }
+            
+            if let hideRestartConversationButton = settingDict["restartConversationButtonVisibility"] as? Bool {
+                Kommunicate.defaultConfiguration.hideRestartConversationButton = hideRestartConversationButton
+            }
+            
+            if let enableBackArrowOnConversationListScreen = settingDict["enableBackArrowOnConversationListScreen"] as? Bool {
+                Kommunicate.defaultConfiguration.enableBackArrowOnConversationListScreen = enableBackArrowOnConversationListScreen
+            }
+            
+            if let hideBottomStartNewConversationButton = settingDict["hideBottomStartNewConversationButton"] as? Bool {
+                Kommunicate.defaultConfiguration.hideBottomStartNewConversationButton = hideBottomStartNewConversationButton
+            }
+            
         } catch let error as NSError {
+            print("Failed to read setting json string \(error.description)")
             return false
         }
         return true
