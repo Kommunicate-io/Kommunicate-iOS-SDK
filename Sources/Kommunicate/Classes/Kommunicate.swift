@@ -159,6 +159,27 @@ open class Kommunicate: NSObject, Localizable {
             completion(nil, validationError)
             return
         }
+
+        if isLoggedIn, let appID = KMUserDefaultHandler.getApplicationKey(), let currentUserId = KMUserDefaultHandler.getUserId(), currentUserId != kmUser.userId {
+            // LOGOUT the current user & login Again
+            logoutUser(completion: { result in
+                switch result {
+                case .success:
+                    setup(applicationId: appID)
+                    registerNewUser(kmUser, completion: completion)
+                case .failure:
+                    print("Error while logging out the existing user")
+                    let errorPass = NSError(domain: "Error while logging out the existing user", code: 0, userInfo: nil)
+                    completion(nil, errorPass as NSError?)
+                }
+            })
+            return
+        }
+        registerNewUser(kmUser, completion: completion)
+    }
+    
+    
+     private class func registerNewUser(_ kmUser: KMUser, completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
         let registerUserClientService = ALRegisterUserClientService()
         registerUserClientService.initWithCompletion(kmUser, withCompletion: { response, error in
             if error != nil {
@@ -245,7 +266,8 @@ open class Kommunicate: NSObject, Localizable {
                     // then check in global app settings.
                     if !conversation.useLastConversation,
                        let chatWidget = appSettings.chatWidget,
-                       let isSingleThreaded = chatWidget.isSingleThreaded
+                       let isSingleThreaded = chatWidget.isSingleThreaded,
+                       isSingleThreaded
                     {
                         conversation.useLastConversation = isSingleThreaded
                     }
