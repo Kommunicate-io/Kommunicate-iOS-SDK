@@ -113,6 +113,10 @@ public class KMConfigurationSetter {
                 Kommunicate.defaultConfiguration.hideBottomStartNewConversationButton = !showStartNewConversation
             }
             
+            if let hideChatInHelpCenter = settingDict["hideChatInHelpcenter"] as? Bool {
+                Kommunicate.defaultConfiguration.hideChatInHelpcenter = hideChatInHelpCenter
+            }
+            
         } catch let error as NSError {
             print("Failed to read setting json string \(error.description)")
             return false
