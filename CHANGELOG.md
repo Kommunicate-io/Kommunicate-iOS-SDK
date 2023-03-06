@@ -1,7 +1,10 @@
 # CHANGELOG
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
-## [6.7.9] 2023-02-22
+
+## [Unreleased]
+- Added customization for hidding Chat Widget on Helpcenter (FAQ) Page 
+## [6.8.0] 2023-02-22
 - Fixed Auto logout issue and setting client conversation key issue 
 ## [6.7.9] 2023-02-17
 - Fixed attempt to insert section 1 but there are only 1 sections after the update crash
