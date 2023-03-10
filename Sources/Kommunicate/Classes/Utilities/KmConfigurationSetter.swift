@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 import KommunicateChatUI_iOS_SDK
 
 public class KMConfigurationSetter {

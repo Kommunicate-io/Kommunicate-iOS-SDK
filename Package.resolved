@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "ZendeskChatProvidersSDK",
+        "repositoryURL": "https://github.com/zendesk/chat_providers_sdk_ios",
+        "state": {
+          "branch": null,
+          "revision": "60db4a62dd2ec0c4cbc213b869c7df199b910ab1",
+          "version": "3.0.0"
+        }
+      },
+      {
         "package": "Kingfisher",
         "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
         "state": {
@@ -15,8 +24,8 @@
         "repositoryURL": "https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git",
         "state": {
           "branch": null,
-          "revision": "b4168d036dd91d0d9cc4c66787a802e994d93142",
-          "version": "1.0.0"
+          "revision": "6fc0894b1d41d23199e0f44af2eb150107f9f28b",
+          "version": "1.0.1"
         }
       },
       {
