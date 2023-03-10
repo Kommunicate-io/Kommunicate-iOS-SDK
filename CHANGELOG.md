@@ -1,7 +1,8 @@
 # CHANGELOG
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
-## [Unreleased]
+
+## [6.8.3] 2023-03-10
 - Fixed SPM Build Issue due to Zendesk dependencies
 - Upgraded KMChatUI-iOS-SDK to 1.0.1
 ## [6.8.1] 2023-03-09
