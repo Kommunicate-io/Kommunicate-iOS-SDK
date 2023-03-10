@@ -12,8 +12,10 @@ let package = Package(
             targets: ["Kommunicate"]
         ),
     ],
+    //a97bd3ede123f281f4b913cbe1c3fff9cc634a20
     dependencies: [
-        .package(name: "KommunicateChatUI-iOS-SDK", url: "https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git", from: "1.0.0"),
+//        .package(name: "KommunicateChatUI-iOS-SDK", url: "https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git", from: "1.0.0"),
+        .package(url:"https://github.com/Sathyan-KM/KommunicateChatUI-iOS-SDK.git",.revisionItem("a97bd3ede123f281f4b913cbe1c3fff9cc634a20"))
           ],
     targets: [
         .target(
