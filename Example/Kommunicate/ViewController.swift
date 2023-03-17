@@ -10,7 +10,7 @@
     import Kommunicate
     import UIKit
 
-class ViewController: UIViewController {
+    class ViewController: UIViewController {
         let activityIndicator = UIActivityIndicatorView(style: .gray)
 
         override func viewDidLoad() {
@@ -20,7 +20,7 @@ class ViewController: UIViewController {
             view.addSubview(activityIndicator)
             view.bringSubviewToFront(activityIndicator)
         }
-        
+
         @IBAction func launchConversation(_: Any) {
             activityIndicator.startAnimating()
             view.isUserInteractionEnabled = false
@@ -34,7 +34,7 @@ class ViewController: UIViewController {
                 }
             })
         }
-        
+
         @IBAction func logoutAction(_: Any) {
             Kommunicate.logoutUser { result in
                 switch result {
@@ -61,20 +61,4 @@ class ViewController: UIViewController {
             }
         }
     }
-extension UIApplication {
-    class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
-        if let navigationController = controller as? UINavigationController {
-            return topViewController(controller: navigationController.visibleViewController)
-        }
-        if let tabController = controller as? UITabBarController {
-            if let selected = tabController.selectedViewController {
-                return topViewController(controller: selected)
-            }
-        }
-        if let presented = controller?.presentedViewController {
-            return topViewController(controller: presented)
-        }
-        return controller
-    }
-}
 #endif
