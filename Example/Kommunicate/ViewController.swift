@@ -7,11 +7,49 @@
 //
 
 #if os(iOS)
-    import Kommunicate
 import KommunicateChatUI_iOS_SDK
-    import UIKit
+import Kommunicate
+import KommunicateCore_iOS_SDK
+import UIKit
 
-    class ViewController: UIViewController {
+class ViewController: UIViewController, ALKCustomEventCallback {
+    func messageSent(message: ALMessage) {
+        
+    }
+    
+    func messageReceived(message: ALMessage) {
+        
+    }
+    
+    func conversationRestarted(conversationId: String) {
+        
+    }
+    
+    func onBackButtonClick(isConversationOpened: Bool) {
+        
+    }
+    
+    func faqClicked(url: String) {
+        
+    }
+    
+    func conversationCreated(conversationId: String) {
+        
+    }
+    
+    func ratingSubmitted(conversationId: String, rating: Int, comment: String) {
+        
+    }
+    
+    func richMessageClicked(conversationId: String, action: [String : Any], type: String) {
+        
+    }
+    
+    func conversationInfoClicked() {
+        UIApplication.topViewController()?.dismiss(animated: false, completion: nil)
+        print("Closed conversation screen and moving to another screen")
+    }
+    
         let activityIndicator = UIActivityIndicatorView(style: .gray)
 
         override func viewDidLoad() {
@@ -21,28 +59,20 @@ import KommunicateChatUI_iOS_SDK
             view.addSubview(activityIndicator)
             view.bringSubviewToFront(activityIndicator)
         }
-
+        let event: [CustomEvent] = [.conversationInfoClick  ]
+        
         @IBAction func launchConversation(_: Any) {
-//            activityIndicator.startAnimating()
-//            view.isUserInteractionEnabled = false
-//
-//            Kommunicate.createAndShowConversation(from: self, completion: {
-//                error in
-//                self.activityIndicator.stopAnimating()
-//                self.view.isUserInteractionEnabled = true
-//                if error != nil {
-//                    print("Error while launching")
-//                }
-//            })
-//            let model = ALKContextTitleViewModel(data: ALKContextDat) ?? UICO
-            
-            let bg = UIColor(5, green: 163, blue: 191) ?? UIColor.blue
-            let trailing = UIImage(named: "next") ?? UIImage()
-            let leading = UIImage(named: "file") ?? UIImage()
-            let font = UIFont.systemFont(ofSize: 14.0, weight: .bold)
-            let model = KMConversationInfoViewModel(infoContent: "Check out your ITR Summary", leadingImage: leading, trailingImage:trailing , backgroundColor: bg, contentColor: UIColor.white, contentFont:font)
-            Kommunicate.defaultConfiguration.conversationInfoModel = model
-            Kommunicate.showConversations(from: self)
+            activityIndicator.startAnimating()
+            view.isUserInteractionEnabled = false
+
+            Kommunicate.createAndShowConversation(from: self, completion: {
+                error in
+                self.activityIndicator.stopAnimating()
+                self.view.isUserInteractionEnabled = true
+                if error != nil {
+                    print("Error while launching")
+                }
+            })
         }
         
         func getSubinfoView() {
@@ -80,4 +110,20 @@ import KommunicateChatUI_iOS_SDK
             }
         }
     }
+extension UIApplication {
+    class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+        if let navigationController = controller as? UINavigationController {
+            return topViewController(controller: navigationController.visibleViewController)
+        }
+        if let tabController = controller as? UITabBarController {
+            if let selected = tabController.selectedViewController {
+                return topViewController(controller: selected)
+            }
+        }
+        if let presented = controller?.presentedViewController {
+            return topViewController(controller: presented)
+        }
+        return controller
+    }
+}
 #endif
