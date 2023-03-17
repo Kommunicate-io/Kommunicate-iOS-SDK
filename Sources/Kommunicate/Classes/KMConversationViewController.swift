@@ -429,6 +429,14 @@ open class KMConversationViewController: ALKConversationViewController {
         viewModel.prepareController()
         ALMessageService.syncMessages()
     }
+    
+    open override func addLanguageToMetadata(language: String) {
+        do {
+            try configuration.updateUserLanguage(tag: language)
+        } catch {
+            print("Error while adding User language in metadata", error.localizedDescription)
+        }
+    }
 
     override public func loadingFinished(error _: Error?) {
         super.loadingFinished(error: nil)
