@@ -7,49 +7,10 @@
 //
 
 #if os(iOS)
-import KommunicateChatUI_iOS_SDK
-import Kommunicate
-import KommunicateCore_iOS_SDK
-import UIKit
+    import Kommunicate
+    import UIKit
 
-class ViewController: UIViewController, ALKCustomEventCallback {
-    func messageSent(message: ALMessage) {
-        
-    }
-    
-    func messageReceived(message: ALMessage) {
-        
-    }
-    
-    func conversationRestarted(conversationId: String) {
-        
-    }
-    
-    func onBackButtonClick(isConversationOpened: Bool) {
-        
-    }
-    
-    func faqClicked(url: String) {
-        
-    }
-    
-    func conversationCreated(conversationId: String) {
-        
-    }
-    
-    func ratingSubmitted(conversationId: String, rating: Int, comment: String) {
-        
-    }
-    
-    func richMessageClicked(conversationId: String, action: [String : Any], type: String) {
-        
-    }
-    
-    func conversationInfoClicked() {
-        UIApplication.topViewController()?.dismiss(animated: false, completion: nil)
-        print("Closed conversation screen and moving to another screen")
-    }
-    
+class ViewController: UIViewController {
         let activityIndicator = UIActivityIndicatorView(style: .gray)
 
         override func viewDidLoad() {
@@ -59,7 +20,6 @@ class ViewController: UIViewController, ALKCustomEventCallback {
             view.addSubview(activityIndicator)
             view.bringSubviewToFront(activityIndicator)
         }
-        let event: [CustomEvent] = [.conversationInfoClick  ]
         
         @IBAction func launchConversation(_: Any) {
             activityIndicator.startAnimating()
@@ -75,15 +35,6 @@ class ViewController: UIViewController, ALKCustomEventCallback {
             })
         }
         
-        func getSubinfoView() {
-//            let view = UIView()
-//            let leadingImage = UIImage(named: "closeIcon")
-//            let trainlingImage = UIImage(named: "icon_back")
-//            let label = UILabel()
-//            label.text = "Check out your ITR summary"
-//            view.addViewsForAutolayout(views: label,leadingImage,trainlingImage)
-//            view.
-        }
         @IBAction func logoutAction(_: Any) {
             Kommunicate.logoutUser { result in
                 switch result {
