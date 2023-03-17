@@ -139,7 +139,7 @@ public class KMPushNotificationHelper {
     /// - WARNING: Doesn't work if Kommunicate's Controller is added inside some container.
     /// - Returns: Bool value indicating whether Kommunicate view is at top.
     public func isKommunicateVCAtTop() -> Bool {
-        if NotificationHelper().isApplozicVCAtTop() {
+        if NotificationHelper().isKMVCAtTop() {
             return true
         }
         guard let topVC = ALPushAssist().topViewController else { return false }

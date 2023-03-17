@@ -5,18 +5,17 @@ PODS:
   - iOSSnapshotTestCase/SwiftSupport (8.0.0):
     - iOSSnapshotTestCase/Core
   - Kingfisher (7.0.0)
-  - Kommunicate (6.8.0):
-    - KommunicateChatUI-iOS-SDK (~> 0.3.1)
-  - KommunicateChatUI-iOS-SDK (0.3.1):
-    - KommunicateChatUI-iOS-SDK/Complete (= 0.3.1)
-  - KommunicateChatUI-iOS-SDK/Complete (0.3.1):
+  - Kommunicate (6.8.3):
+    - KommunicateChatUI-iOS-SDK (~> 1.0.1)
+  - KommunicateChatUI-iOS-SDK (1.0.1):
+    - KommunicateChatUI-iOS-SDK/Complete (= 1.0.1)
+  - KommunicateChatUI-iOS-SDK/Complete (1.0.1):
     - Kingfisher (~> 7.0.0)
     - KommunicateChatUI-iOS-SDK/RichMessageKit
     - KommunicateCore-iOS-SDK (~> 1.0.7)
     - SwipeCellKit (~> 2.7.1)
-    - ZendeskChatProvidersSDK
-    - ZendeskChatSDK
-  - KommunicateChatUI-iOS-SDK/RichMessageKit (0.3.1)
+    - ZendeskChatProvidersSDK (~> 3.0.0)
+  - KommunicateChatUI-iOS-SDK/RichMessageKit (1.0.1)
   - KommunicateCore-iOS-SDK (1.0.7)
   - Nimble (10.0.0)
   - Nimble-Snapshots (9.4.0):
@@ -27,16 +26,6 @@ PODS:
   - Quick (5.0.1)
   - SwipeCellKit (2.7.1)
   - ZendeskChatProvidersSDK (3.0.0)
-  - ZendeskChatSDK (3.0.0):
-    - ZendeskChatProvidersSDK (= 3.0.0)
-    - ZendeskMessagingSDK (= 4.0.0)
-  - ZendeskCommonUISDK (7.0.0)
-  - ZendeskMessagingAPISDK (4.0.0):
-    - ZendeskSDKConfigurationsSDK (= 2.0.0)
-  - ZendeskMessagingSDK (4.0.0):
-    - ZendeskCommonUISDK (= 7.0.0)
-    - ZendeskMessagingAPISDK (= 4.0.0)
-  - ZendeskSDKConfigurationsSDK (2.0.0)
 
 DEPENDENCIES:
   - iOSSnapshotTestCase (~> 8.0.0)
@@ -56,11 +45,6 @@ SPEC REPOS:
     - Quick
     - SwipeCellKit
     - ZendeskChatProvidersSDK
-    - ZendeskChatSDK
-    - ZendeskCommonUISDK
-    - ZendeskMessagingAPISDK
-    - ZendeskMessagingSDK
-    - ZendeskSDKConfigurationsSDK
 
 EXTERNAL SOURCES:
   Kommunicate:
@@ -69,19 +53,14 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   iOSSnapshotTestCase: a670511f9ee3829c2b9c23e6e68f315fd7b6790f
   Kingfisher: 5efc54fec3980f92354898532e562cc17f31efb4
-  Kommunicate: 1855ae6db3e537a83725fdcfa1a079f7f3b58cf1
-  KommunicateChatUI-iOS-SDK: 149115b70dd60634a83db5bbf7fca5d805a29a5b
+  Kommunicate: ef401d0adbe3979488ab370245cba43599b6eb04
+  KommunicateChatUI-iOS-SDK: 8b0fc4b31c5641b22c03ab5fc2911a2aba1ec3dd
   KommunicateCore-iOS-SDK: dbcd925238d785a45181d03353a011e3634b23f9
   Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
   Nimble-Snapshots: ef281b908c604f78c8313587e25ea92c8ab513d7
   Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
   ZendeskChatProvidersSDK: af93e02e2058875f92e6ad86e74ee51203b4079e
-  ZendeskChatSDK: fe03650a5ebe3d35fd1f4da90792021f809bcf11
-  ZendeskCommonUISDK: f06dbac6c9e74c3afff75ecdc6bec3832b23258c
-  ZendeskMessagingAPISDK: 95a99f1eab9482b4106ec88466b93a89f9f7c5fa
-  ZendeskMessagingSDK: 4f5f3d43766bb3b2ea6411d1331cfe609ff33618
-  ZendeskSDKConfigurationsSDK: a5c21010e17b71d02bc2cfe73dcc9da1efa0a7b2
 
 PODFILE CHECKSUM: 7a4dd5c06c8cbbe3dc4e68dd3df68ff2231bb909
 
