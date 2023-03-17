@@ -660,7 +660,7 @@ open class Kommunicate: NSObject, Localizable {
     }
 
     open class func openFaq(from vc: UIViewController, with configuration: ALKConfiguration) {
-        guard let url = URLBuilder.faqURL(for: ALUserDefaultsHandler.getApplicationKey()).url else {
+        guard let url = URLBuilder.faqURL(for: ALUserDefaultsHandler.getApplicationKey(), hideChat: configuration.hideChatInHelpcenter).url else {
             return
         }
         let faqVC = FaqViewController(url: url, configuration: configuration)

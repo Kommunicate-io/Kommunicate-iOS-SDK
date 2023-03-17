@@ -8,7 +8,7 @@
 import Foundation
 
 extension URLBuilder {
-    static func faqURL(for applicationKey: String) -> URLBuilder {
-        return URLBuilder.helpcenterApi.add(item: "appId", value: applicationKey)
+    static func faqURL(for applicationKey: String, hideChat : Bool) -> URLBuilder {
+        return URLBuilder.helpcenterApi.add(item: "appId", value: applicationKey).add(item: "hideChat", value: hideChat)
     }
 }
