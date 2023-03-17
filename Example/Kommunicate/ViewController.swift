@@ -8,6 +8,7 @@
 
 #if os(iOS)
     import Kommunicate
+import KommunicateChatUI_iOS_SDK
     import UIKit
 
     class ViewController: UIViewController {
@@ -22,19 +23,37 @@
         }
 
         @IBAction func launchConversation(_: Any) {
-            activityIndicator.startAnimating()
-            view.isUserInteractionEnabled = false
-
-            Kommunicate.createAndShowConversation(from: self, completion: {
-                error in
-                self.activityIndicator.stopAnimating()
-                self.view.isUserInteractionEnabled = true
-                if error != nil {
-                    print("Error while launching")
-                }
-            })
+//            activityIndicator.startAnimating()
+//            view.isUserInteractionEnabled = false
+//
+//            Kommunicate.createAndShowConversation(from: self, completion: {
+//                error in
+//                self.activityIndicator.stopAnimating()
+//                self.view.isUserInteractionEnabled = true
+//                if error != nil {
+//                    print("Error while launching")
+//                }
+//            })
+//            let model = ALKContextTitleViewModel(data: ALKContextDat) ?? UICO
+            
+            let bg = UIColor(5, green: 163, blue: 191) ?? UIColor.blue
+            let trailing = UIImage(named: "next") ?? UIImage()
+            let leading = UIImage(named: "file") ?? UIImage()
+            let font = UIFont.systemFont(ofSize: 14.0, weight: .bold)
+            let model = KMConversationInfoViewModel(infoContent: "Check out your ITR Summary", leadingImage: leading, trailingImage:trailing , backgroundColor: bg, contentColor: UIColor.white, contentFont:font)
+            Kommunicate.defaultConfiguration.conversationInfoModel = model
+            Kommunicate.showConversations(from: self)
         }
-
+        
+        func getSubinfoView() {
+//            let view = UIView()
+//            let leadingImage = UIImage(named: "closeIcon")
+//            let trainlingImage = UIImage(named: "icon_back")
+//            let label = UILabel()
+//            label.text = "Check out your ITR summary"
+//            view.addViewsForAutolayout(views: label,leadingImage,trainlingImage)
+//            view.
+        }
         @IBAction func logoutAction(_: Any) {
             Kommunicate.logoutUser { result in
                 switch result {

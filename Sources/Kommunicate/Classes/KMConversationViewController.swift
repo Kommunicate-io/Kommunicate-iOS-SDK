@@ -422,6 +422,7 @@ open class KMConversationViewController: ALKConversationViewController {
         // Fetch Assignee details every time view is launched.
         updateAssigneeDetails()
         messageStatusAndFetchBotType()
+        prepareConversationInfoView()
         // Check for group left
         isChannelLeft()
         checkUserBlock()
