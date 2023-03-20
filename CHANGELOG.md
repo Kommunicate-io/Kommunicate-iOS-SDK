@@ -2,8 +2,10 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
-## [Unreleased]
+## [6.8.4] 2023-03-17
 - Added customization for hidding Chat Widget on Helpcenter (FAQ) Page 
+- Added Support Multiple language in Speech To Text
+
 ## [6.8.3] 2023-03-10
 - Fixed SPM Build Issue due to Zendesk dependencies
 - Upgraded KMChatUI-iOS-SDK to 1.0.1
