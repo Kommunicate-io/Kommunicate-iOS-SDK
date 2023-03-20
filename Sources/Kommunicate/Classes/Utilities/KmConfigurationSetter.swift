@@ -59,7 +59,7 @@ public class KMConfigurationSetter {
                     } else if(key.elementsEqual(":file")) {
                         attachments.append(AttachmentType.document)
                     } else if(key.elementsEqual(":audio")) {
-                        Kommunicate.defaultConfiguration.hideAudioOptionInChatBar = value
+                        Kommunicate.defaultConfiguration.hideAudioOptionInChatBar = !value
                     }
                 }
                 Kommunicate.defaultConfiguration.chatBar.optionsToShow = .some(attachments)
