@@ -59,6 +59,7 @@ public class KMConfigurationSetter {
                     } else if(key.elementsEqual(":file")) {
                         attachments.append(AttachmentType.document)
                     } else if(key.elementsEqual(":audio")) {
+                        //: audio value will represent bool to enable audio option. Need to reverse it for iOS Configuration hideAudioOptionInChatBar
                         Kommunicate.defaultConfiguration.hideAudioOptionInChatBar = !value
                     }
                 }
