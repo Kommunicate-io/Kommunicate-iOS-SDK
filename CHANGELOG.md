@@ -2,6 +2,9 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [6.8.6] 2023-03-23
+- Fixed Conversation Info Tap issue & SPM Build issue 
+
 ## [6.8.5] 2023-03-23
 - Added Support for Conversation info screen
 - Added Support for multiple selection button in form template
