@@ -2,6 +2,10 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+##[6.8.7] 2023-04-05
+- Upgraded Kingfisher pod to 7.6.2 (latest)
+- Upgraded KommunicateChatUI-iOS-SDK to 1.0.5
+
 ## [6.8.6] 2023-03-23
 - Fixed Conversation Info Tap issue & SPM Build issue 
 
