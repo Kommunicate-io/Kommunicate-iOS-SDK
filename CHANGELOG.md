@@ -2,6 +2,12 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [Unreleased]
+- Added Support for delete conversation to end user. It can be enabled using below line
+```
+Kommunicate.defaultConfiguration.enableDeleteConversationOnLongpress = true
+```
+
 ##[6.8.7] 2023-04-05
 - Upgraded Kingfisher pod to 7.6.2 (latest)
 - Upgraded KommunicateChatUI-iOS-SDK to 1.0.5
