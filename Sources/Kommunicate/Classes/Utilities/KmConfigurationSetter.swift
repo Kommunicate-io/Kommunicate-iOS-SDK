@@ -119,6 +119,10 @@ public class KMConfigurationSetter {
                 Kommunicate.defaultConfiguration.hideChatInHelpcenter = hideChatInHelpCenter
             }
             
+            if let enableDeleteConversationOnLongPress = settingDict["enableDeleteConversationOnLongpress"] as? Bool {
+                Kommunicate.defaultConfiguration.enableDeleteConversationOnLongpress = enableDeleteConversationOnLongPress
+            }
+            
         } catch let error as NSError {
             print("Failed to read setting json string \(error.description)")
             return false
