@@ -1,7 +1,11 @@
 # CHANGELOG
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
-
+## [Unreleased]
+- Added Support for delete conversation to end user. It can be enabled using below line
+```
+Kommunicate.defaultConfiguration.enableDeleteConversationOnLongpress = true
+```
 ## [6.8.6] 2023-03-23
 - Fixed Conversation Info Tap issue & SPM Build issue 
 
