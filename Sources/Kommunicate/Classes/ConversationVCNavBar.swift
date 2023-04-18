@@ -151,14 +151,14 @@ class ConversationVCNavBar: UIView, Localizable {
         if let textColor = navigationBarProxy.titleTextAttributes?[.foregroundColor] as? UIColor {
             profileName.textColor = textColor
             onlineStatusText.textColor = textColor
-//            customSubtitleText.textColor = textColor
+            customSubtitleText.textColor = textColor
         }
         if let titleFont = navigationBarProxy.titleTextAttributes?[.font] as? UIFont {
             profileName.font = titleFont
         }
         if let subtitleFont = navigationBarProxy.titleTextAttributes?[.subtitleFont] as? UIFont {
             onlineStatusText.font = subtitleFont
-//            customSubtitleText.font = subtitleFont
+            customSubtitleText.font = subtitleFont
         }
         if let tintColor = navigationBarProxy.tintColor {
             backButton.tintColor = tintColor
@@ -179,7 +179,6 @@ class ConversationVCNavBar: UIView, Localizable {
         }
         if(showCustomSubtitle) {
             customSubtitleText.text = subtitleText
-//            profileView.removeArrangedSubview(self.onlineStatusText)
             profileView.addArrangedSubview(self.customSubtitleView)
         } else {
             profileView.addArrangedSubview(self.onlineStatusText)
