@@ -74,20 +74,21 @@ class ConversationVCNavBar: UIView, Localizable {
     
     var customSubtitleText: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "HelveticaNeue", size: 12) ?? UIFont.systemFont(ofSize: 12)
+        label.font = UIFont(name: "HelveticaNeue", size: 12) ?? UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor.white
         return label
     }()
     var ratingIcon: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "star_icon", in: Bundle.kommunicate, compatibleWith: nil)
-        imageView.widthAnchor.constraint(lessThanOrEqualToConstant: 20).isActive = true
+        imageView.widthAnchor.constraint(lessThanOrEqualToConstant: 15).isActive = true
+        imageView.heightAnchor.constraint(lessThanOrEqualToConstant: 15).isActive = true
         imageView.clipsToBounds = true
         return imageView
     } ()
     var customRating: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "HelveticaNeue", size: 12) ?? UIFont.systemFont(ofSize: 12)
+        label.font = UIFont(name: "HelveticaNeue", size: 13) ?? UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor.white
         return label
     } ()
@@ -152,14 +153,17 @@ class ConversationVCNavBar: UIView, Localizable {
             profileName.textColor = textColor
             onlineStatusText.textColor = textColor
             customSubtitleText.textColor = textColor
+            customRating.textColor = textColor
         }
         if let titleFont = navigationBarProxy.titleTextAttributes?[.font] as? UIFont {
             profileName.font = titleFont
         }
+        
         if let subtitleFont = navigationBarProxy.titleTextAttributes?[.subtitleFont] as? UIFont {
             onlineStatusText.font = subtitleFont
             customSubtitleText.font = subtitleFont
         }
+        
         if let tintColor = navigationBarProxy.tintColor {
             backButton.tintColor = tintColor
         }
