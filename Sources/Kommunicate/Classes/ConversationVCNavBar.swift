@@ -71,9 +71,39 @@ class ConversationVCNavBar: UIView, Localizable {
         label.textColor = UIColor(red: 113, green: 110, blue: 110)
         return label
     }()
+    
+    var customSubtitleText: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "HelveticaNeue", size: 12) ?? UIFont.systemFont(ofSize: 13)
+        label.textColor = UIColor.white
+        return label
+    }()
+    var ratingIcon: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "star_icon", in: Bundle.kommunicate, compatibleWith: nil)
+        imageView.widthAnchor.constraint(lessThanOrEqualToConstant: 15).isActive = true
+        imageView.heightAnchor.constraint(lessThanOrEqualToConstant: 15).isActive = true
+        imageView.clipsToBounds = true
+        return imageView
+    } ()
+    var customRating: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "HelveticaNeue", size: 13) ?? UIFont.systemFont(ofSize: 13)
+        label.textColor = UIColor.white
+        return label
+    } ()
+    
+    lazy var customSubtitleView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [])
+        stackView.alignment = .leading
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
+        stackView.spacing = 1
+        return stackView
+    }()
 
     lazy var profileView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [self.profileName, self.onlineStatusText])
+        let stackView = UIStackView(arrangedSubviews: [self.profileName])
         stackView.alignment = .fill
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
@@ -122,15 +152,40 @@ class ConversationVCNavBar: UIView, Localizable {
         if let textColor = navigationBarProxy.titleTextAttributes?[.foregroundColor] as? UIColor {
             profileName.textColor = textColor
             onlineStatusText.textColor = textColor
+            customSubtitleText.textColor = textColor
+            customRating.textColor = textColor
         }
         if let titleFont = navigationBarProxy.titleTextAttributes?[.font] as? UIFont {
             profileName.font = titleFont
         }
+        
         if let subtitleFont = navigationBarProxy.titleTextAttributes?[.subtitleFont] as? UIFont {
             onlineStatusText.font = subtitleFont
+            customSubtitleText.font = subtitleFont
         }
+        
         if let tintColor = navigationBarProxy.tintColor {
             backButton.tintColor = tintColor
+        }
+        var subtitleText: String = ""
+        var showCustomSubtitle: Bool = false
+        if let toolbarSubtitle = configuration.toolbarSubtitleText as? String, !toolbarSubtitle.isEmpty {
+            customSubtitleView.addArrangedSubview(customSubtitleText)
+            subtitleText = toolbarSubtitle
+            showCustomSubtitle = true
+        }
+        if let toolbarRating = configuration.toolbarSubtitleRating as? Float, !toolbarRating.isEqual(to: -1.0) {
+            subtitleText.append(subtitleText.isEmpty ? "" : " | ")
+            customSubtitleView.addArrangedSubview(ratingIcon)
+            customSubtitleView.addArrangedSubview(customRating)
+            customRating.text = toolbarRating.description
+            showCustomSubtitle = true
+        }
+        if(showCustomSubtitle) {
+            customSubtitleText.text = subtitleText
+            profileView.addArrangedSubview(self.customSubtitleView)
+        } else {
+            profileView.addArrangedSubview(self.onlineStatusText)
         }
         statusIconBackgroundColor.backgroundColor = navigationBarProxy.barTintColor
     }
