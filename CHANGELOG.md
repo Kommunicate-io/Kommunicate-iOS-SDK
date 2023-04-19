@@ -4,6 +4,8 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 
+## [6.8.8] 2023-04-19
+
 -  Added Support for Custom Subtitle in Conversation Navigation Bar. By using this you can add Experince and Rating of the Agent.
 ```
 Kommunicate.kmConversationViewConfiguration.toolbarSubtitleText = "7 Years Experience"
