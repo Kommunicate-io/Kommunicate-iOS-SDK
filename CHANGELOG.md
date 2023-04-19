@@ -3,6 +3,13 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## [Unreleased]
+
+-  Added Support for Custom Subtitle in Conversation Navigation Bar. By using this you can add Experince and Rating of the Agent.
+```
+Kommunicate.kmConversationViewConfiguration.toolbarSubtitleText = "7 Years Experience"
+Kommunicate.kmConversationViewConfiguration.toolbarSubtitleRating = 4.5
+```
+
 - Added Support for delete conversation to end user. It can be enabled using below line
 ```
 Kommunicate.defaultConfiguration.enableDeleteConversationOnLongpress = true
