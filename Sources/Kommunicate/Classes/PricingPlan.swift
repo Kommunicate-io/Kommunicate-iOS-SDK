@@ -17,7 +17,8 @@ struct PricingPlan {
 
     // Constants
     let startupPlan = 101
-
+    let startMonthlyPlan = 112
+    let startYearlyPlan = 113
     init(
         utility: ALUtilityClass.Type = ALUtilityClass.self,
         userDefaultsHandler: ALUserDefaultsHandler.Type = ALUserDefaultsHandler.self
@@ -29,8 +30,9 @@ struct PricingPlan {
     func showSuspensionScreen() -> Bool {
         let isReleaseBuild = !utility.isThisDebugBuild()
         let isFreePlan = userDefaultsHandler.getUserPricingPackage() == startupPlan
+        let isStartPlan = (userDefaultsHandler.getUserPricingPackage() == startMonthlyPlan || userDefaultsHandler.getUserPricingPackage() == startYearlyPlan)
         let isNotAgent = userDefaultsHandler.getUserRoleType() != Int16(AL_APPLICATION_WEB_ADMIN.rawValue)
-        guard isReleaseBuild, isNotAgent, isFreePlan else { return false }
+        guard isReleaseBuild, isNotAgent, (isFreePlan || isStartPlan) else { return false }
         return true
     }
 }
