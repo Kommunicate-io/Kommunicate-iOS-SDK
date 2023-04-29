@@ -2,8 +2,10 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
-## [Unreleased]
+## [6.8.9] 2023-04-28
 - Added Restriction for start plan users
+- Fixed Event data not getting passed for List Template Rich Message Event
+
 ## [6.8.8] 2023-04-19
 
 -  Added Support for Custom Subtitle in Conversation Navigation Bar. By using this you can add Experince and Rating of the Agent.
