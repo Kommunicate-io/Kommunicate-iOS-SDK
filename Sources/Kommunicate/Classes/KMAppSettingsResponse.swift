@@ -53,7 +53,6 @@ struct DefaultUploadOverride: Decodable {
     let headers: [String:String]?
 }
 
-
 extension KMAppSettingsResponse {
     init(data: Data) throws {
         self = try JSONDecoder().decode(KMAppSettingsResponse.self, from: data)
