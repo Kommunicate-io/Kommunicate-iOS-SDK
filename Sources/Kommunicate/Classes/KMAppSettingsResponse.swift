@@ -45,6 +45,12 @@ struct ChatWidgetResponse: Decodable {
     let hidePostCTAEnabled: Bool?
     let preChatGreetingMsg: String?
     let zendeskChatSdkKey: String?
+    let defaultUploadOverride : DefaultUploadOverride?
+}
+
+struct DefaultUploadOverride: Decodable {
+    let url: String?
+    let headers: [String:String]?
 }
 
 extension KMAppSettingsResponse {
