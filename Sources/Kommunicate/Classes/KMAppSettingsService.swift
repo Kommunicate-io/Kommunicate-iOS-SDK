@@ -69,6 +69,8 @@ class KMAppSettingService {
        appSettings.buttonPrimaryColor = primaryColor
        appSettings.showPoweredBy = chatWidget.showPoweredBy ?? false
        appSettings.hidePostCTAEnabled = chatWidget.hidePostCTAEnabled ?? false
+       appSettings.defaultUploadOverrideUrl = chatWidget.defaultUploadOverride?.url ?? ""
+       appSettings.defaultUploadOverrideHeaders = chatWidget.defaultUploadOverride?.headers ?? [:]
        appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
     }
 
