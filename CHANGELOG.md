@@ -1,6 +1,8 @@
 # CHANGELOG
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
+## [6.9.0] 2023-05-25
+- Added Custom Cloud support for attachments.
 
 ## [6.8.9] 2023-04-28
 - Added Restriction for start plan users
