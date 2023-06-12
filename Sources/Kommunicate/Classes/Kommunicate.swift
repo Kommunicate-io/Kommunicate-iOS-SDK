@@ -1106,6 +1106,21 @@ open class Kommunicate: NSObject, Localizable {
         KMCustomEventHandler.shared.unsubscribeEvents()
     }
     
+    /**
+     Update prefilled text on the chat bar when conversation vc on top
+     - Parameters:
+     - text: string needs to be updated on chat bar
+    */
+    open class func updatePrefilledText(_ text: String) {
+        let pushAssist = ALPushAssist()
+        guard let topVc = pushAssist.topViewController,
+              topVc is KMConversationViewController
+        else {
+            print("Failed to update prefilled text on chat bar")
+            return
+        }
+        (topVc as! KMConversationViewController).updateChatbarText(text: text)
+    }
     // MARK: - Deprecated methods
     
     /**
