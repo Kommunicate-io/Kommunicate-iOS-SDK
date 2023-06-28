@@ -1,7 +1,7 @@
 # CHANGELOG
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
-## [Unreleased]
+## [6.9.2] 2023-06-28
 - Exposed a function to show/hide the Assignee online,offine status when conversation screen is on top.
 ## [6.9.1] 2023-06-07
 - Fixed Upload attachment issue to custom cloud service
