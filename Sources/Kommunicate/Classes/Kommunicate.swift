@@ -1106,6 +1106,22 @@ open class Kommunicate: NSObject, Localizable {
         KMCustomEventHandler.shared.unsubscribeEvents()
     }
     
+    /*
+     This method will show/hide assignee's online, offline status and away message on conversation screen when its on top.
+     - Parameters:
+     - hide: boolean to show/hide the views
+     */
+    open class func hideAssigneeStatus(_ hide: Bool) {
+        let pushAssist = ALPushAssist()
+        guard let topVc = pushAssist.topViewController,
+              topVc is KMConversationViewController
+        else {
+            print("Failed to hide assignee status")
+            return
+        }
+        (topVc as! KMConversationViewController).hideAssigneeStatus(hide)
+    }
+    
     // MARK: - Deprecated methods
     
     /**
@@ -1156,6 +1172,7 @@ open class Kommunicate: NSObject, Localizable {
     open class func createSettings(settings: String) -> Bool {
         return KMConfigurationSetter.createCustomSetting(settings: settings)
     }
+    
     
     /**
      Creates a new conversation with the details passed.

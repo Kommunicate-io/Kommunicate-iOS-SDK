@@ -364,6 +364,20 @@ open class KMConversationViewController: ALKConversationViewController {
     }
     
     /*
+     This method will show/hide assignee's online, offiline status and away message
+     - Parameters:
+     - hide: boolean to show/hide the views
+     */
+    func hideAssigneeStatus(_ hide:Bool){
+        self.customNavigationView.onlineStatusIcon.isHidden = hide
+        self.customNavigationView.onlineStatusText.isHidden = hide
+        self.customNavigationView.statusIconBackgroundColor.isHidden = hide
+        if !isAwayMessageViewHidden && hide {
+            isAwayMessageViewHidden = hide
+        }
+    }
+    
+    /*
      This method will verify status changed user id & current Conversation's assignee. If both are same then it will update.
      - Parameters:
      - userId: userId whose status changed
