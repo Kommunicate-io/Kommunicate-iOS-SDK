@@ -20,6 +20,10 @@ public struct KMConversationViewConfiguration {
     public var restrictMessageTypingWithBots = false
     public var toolbarSubtitleText = ""
     public var toolbarSubtitleRating: Float = -1.0
+    /// Customize Text color of FAQ button on conversation, conversation list screen
+    public var faqTextColor : UIColor = UIColor.white
+    /// Customize background color of FAQ button on conversation, conversation list screen
+    public var faqBackgroundColor : UIColor = UIColor(hexString: "ffffff", alpha: 0.24)
 
     public init() {}
 }
