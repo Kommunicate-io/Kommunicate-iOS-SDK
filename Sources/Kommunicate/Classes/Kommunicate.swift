@@ -66,7 +66,9 @@ open class Kommunicate: NSObject, Localizable {
         config.isTapOnNavigationBarEnabled = false
         config.isProfileTapActionEnabled = false
         var navigationItemsForConversationList = [ALKNavigationItem]()
-        let faqItem = ALKNavigationItem(identifier: faqIdentifier, text: NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
+        var faqItem = ALKNavigationItem(identifier: faqIdentifier, text: NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
+        faqItem.faqTextColor = kmConversationViewConfiguration.faqTextColor
+        faqItem.faqBackgroundColor = kmConversationViewConfiguration.faqBackgroundColor
         navigationItemsForConversationList.append(faqItem)
         var navigationItemsForConversationView = [ALKNavigationItem]()
         navigationItemsForConversationView.append(faqItem)

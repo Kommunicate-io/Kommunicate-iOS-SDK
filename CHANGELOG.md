@@ -1,7 +1,8 @@
 # CHANGELOG
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
-
+## [Unreleased]
+- Added customization for FAQ button text color, background colors on conversation,conversation list screen.
 ## [6.9.1] 2023-06-07
 - Fixed Upload attachment issue to custom cloud service
 
