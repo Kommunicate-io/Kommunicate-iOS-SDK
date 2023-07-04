@@ -1,7 +1,8 @@
 # CHANGELOG
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
-
+## [Unreleased]
+- Added Cusotmization for Start New Conversaion Button on Conversation List Screen
 ## [6.9.3] 2023-06-30
 - Added customization for FAQ button text color, background colors on conversation,conversation list screen.
 - Added Support for Drop Down field in Form Template
