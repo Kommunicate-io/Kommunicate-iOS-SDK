@@ -164,11 +164,14 @@ open class KMConversationViewController: ALKConversationViewController {
     
     open override func addMessagesToList(_ messageList: [Any]) {
        guard var messages = messageList as? [ALMessage] else { return }
-    
+        
+        if (KMConversationScreenConfiguration.showTypingIndicatorWhileFetchingResponse) {
+            updateTyingStatus(status: false, userId: "")
+        }
+        
         messageArray.append(contentsOf: messages)
         if messageArray.count > 1 {
-            messageArray.sort { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime)
-            }
+            messageArray.sort { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime)}
         }
         
         if messages.count > 1 {
