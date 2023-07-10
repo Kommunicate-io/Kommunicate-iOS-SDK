@@ -72,10 +72,11 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
 
     lazy var startNewConversationBottomButton: UIButton = {
         let button = UIButton(type: .custom)
-         button.addTarget(self, action: #selector(compose), for: .touchUpInside)
-         button.backgroundColor = ALKAppSettingsUserDefaults().getAppBarTintColor()
-         button.setTitle(LocalizedText.startNewConversationTitle, for: .normal)
-         button.isUserInteractionEnabled = true
+        button.addTarget(self, action: #selector(compose), for: .touchUpInside)
+        button.backgroundColor = kmConversationViewConfiguration.startNewConversationButtonBackgroundColor == nil ? ALKAppSettingsUserDefaults().getAppBarTintColor() : kmConversationViewConfiguration.startNewConversationButtonBackgroundColor
+        button.setTitle(LocalizedText.startNewConversationTitle, for: .normal)
+        button.setTitleColor(kmConversationViewConfiguration.startNewConversationButtonTextColor, for: .normal)
+        button.isUserInteractionEnabled = true
         return button
     }()
     
@@ -217,13 +218,20 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-
-        startNewButton.widthAnchor.constraint(equalToConstant: Padding.StartNewButton.width).isActive = true
-        startNewButton.heightAnchor.constraint(equalToConstant: Padding.StartNewButton.height).isActive = true
-        startNewButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
-        startNewButton.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor).isActive = true
-
         
+        if (configuration.hideEmptyStateStartNewButtonInConversationList || kmConversationViewConfiguration.startNewButtonIcon == nil) {
+            noConversationLabel.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
+            noConversationLabel.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor).isActive = true
+        } else {
+            startNewButton.widthAnchor.constraint(equalToConstant: Padding.StartNewButton.width).isActive = true
+            startNewButton.heightAnchor.constraint(equalToConstant: Padding.StartNewButton.height).isActive = true
+            startNewButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
+            startNewButton.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor).isActive = true
+            noConversationLabel.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: Padding.NoConversationLabel.leading).isActive = true
+            noConversationLabel.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -Padding.NoConversationLabel.trailing).isActive = true
+            noConversationLabel.topAnchor.constraint(equalTo: startNewButton.bottomAnchor, constant: 10.0).isActive = true
+        }
+       
         if !configuration.hideBottomStartNewConversationButton  {
             startNewConversationBottomButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
             startNewConversationBottomButton.widthAnchor.constraint(equalToConstant: Padding.startNewConversationButton.width).isActive = true
@@ -232,11 +240,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
             startNewConversationBottomButton.layer.cornerRadius = Padding.startNewConversationButton.cornorRadius
             backgroundView.bringSubviewToFront(startNewConversationBottomButton)
         }
-        
-        noConversationLabel.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: Padding.NoConversationLabel.leading).isActive = true
-        noConversationLabel.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -Padding.NoConversationLabel.trailing).isActive = true
-        noConversationLabel.topAnchor.constraint(equalTo: startNewButton.bottomAnchor).isActive = true
-
+    
         conversationListTableViewController.view.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
         conversationListTableViewController.view.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
         conversationListTableViewController.view.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor).isActive = true
@@ -483,9 +487,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         view.isUserInteractionEnabled = true
         conversationListTableViewController.tableView.isHidden = show
         noConversationLabel.isHidden = !show
-        if !configuration.hideEmptyStateStartNewButtonInConversationList, kmConversationViewConfiguration.startNewButtonIcon != nil {
-            startNewButton.isHidden = !show
-        }
+        startNewButton.isHidden = configuration.hideEmptyStateStartNewButtonInConversationList
     }
 
     private func showAlert() {

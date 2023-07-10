@@ -1,3 +1,4 @@
+
 //
 //  CustomNavigationView.swift
 //  Kommunicate
@@ -38,8 +39,9 @@ class ConversationVCNavBar: UIView, Localizable {
     var profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "placeholder", in: Bundle.kommunicate, compatibleWith: nil)
-        imageView.layer.cornerRadius = 18
-        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 18.5
+        imageView.layer.masksToBounds = true
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
 
@@ -202,7 +204,8 @@ class ConversationVCNavBar: UIView, Localizable {
         profileImage.leadingAnchor.constraint(equalTo: backButton.trailingAnchor, constant: 10).isActive = true
         profileImage.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
         profileImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5).isActive = true
-        profileImage.widthAnchor.constraint(equalToConstant: 35).isActive = true
+        profileImage.widthAnchor.constraint(equalToConstant: 37).isActive = true
+        profileName.heightAnchor.constraint(equalToConstant: 37).isActive = true
 
         statusIconBackgroundColor.bottomAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 0).isActive = true
         statusIconBackgroundColor.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: -10).isActive = true
