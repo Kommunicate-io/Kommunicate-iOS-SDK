@@ -4,6 +4,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [Unreleased]
 - Fixed hideEmptyStateStartNewButtonInConversationList customization bug
+- Added Cusotmization for Start New Conversaion Button on Conversation List Screen
 
 ## [6.9.3] 2023-06-30
 - Added customization for FAQ button text color, background colors on conversation,conversation list screen.

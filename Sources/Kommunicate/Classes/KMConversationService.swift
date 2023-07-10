@@ -570,15 +570,3 @@ public class KMConversationService: KMConservationServiceable, Localizable {
     }
 }
 
-extension ALChannel {
-    static let ConversationAssignee = "CONVERSATION_ASSIGNEE"
-
-    var assigneeUserId: String? {
-        guard type == Int16(SUPPORT_GROUP.rawValue),
-              let assigneeId = metadata?[ALChannel.ConversationAssignee] as? String
-        else {
-            return nil
-        }
-        return assigneeId
-    }
-}

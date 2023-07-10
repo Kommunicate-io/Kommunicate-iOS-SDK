@@ -72,10 +72,11 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
 
     lazy var startNewConversationBottomButton: UIButton = {
         let button = UIButton(type: .custom)
-         button.addTarget(self, action: #selector(compose), for: .touchUpInside)
-         button.backgroundColor = ALKAppSettingsUserDefaults().getAppBarTintColor()
-         button.setTitle(LocalizedText.startNewConversationTitle, for: .normal)
-         button.isUserInteractionEnabled = true
+        button.addTarget(self, action: #selector(compose), for: .touchUpInside)
+        button.backgroundColor = kmConversationViewConfiguration.startNewConversationButtonBackgroundColor == nil ? ALKAppSettingsUserDefaults().getAppBarTintColor() : kmConversationViewConfiguration.startNewConversationButtonBackgroundColor
+        button.setTitle(LocalizedText.startNewConversationTitle, for: .normal)
+        button.setTitleColor(kmConversationViewConfiguration.startNewConversationButtonTextColor, for: .normal)
+        button.isUserInteractionEnabled = true
         return button
     }()
     
