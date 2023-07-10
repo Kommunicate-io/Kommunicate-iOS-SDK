@@ -131,6 +131,14 @@ public class KMConfigurationSetter {
                 Kommunicate.kmConversationViewConfiguration.startNewConversationButtonTextColor = UIColor(hexString: startNewConversationButtonTextColor)
             }
             
+            if let showTypingIndicatorWhileFetchingResponse = settingDict["showTypingIndicatorWhileFetchingResponse"] as? Bool {
+                KMConversationScreenConfiguration.showTypingIndicatorWhileFetchingResponse = showTypingIndicatorWhileFetchingResponse
+            }
+           
+            if let hideEmptyStateStartNewButtonInConversationList = settingDict["hideEmptyStateStartNewButtonInConversationList"] as? Bool {
+                Kommunicate.defaultConfiguration.hideEmptyStateStartNewButtonInConversationList = hideEmptyStateStartNewButtonInConversationList
+            }
+            
         } catch let error as NSError {
             print("Failed to read setting json string \(error.description)")
             return false

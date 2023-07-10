@@ -2,7 +2,7 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
-## [Unreleased]
+## [6.9.4] 2023-07-10
 - Fixed hideEmptyStateStartNewButtonInConversationList customization bug
 - Added Cusotmization for Start New Conversaion Button on Conversation List Screen
 
