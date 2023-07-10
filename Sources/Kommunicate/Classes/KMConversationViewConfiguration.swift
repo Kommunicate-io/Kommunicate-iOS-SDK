@@ -24,6 +24,8 @@ public struct KMConversationViewConfiguration {
     public var faqTextColor : UIColor = UIColor.white
     /// Customize background color of FAQ button on conversation, conversation list screen
     public var faqBackgroundColor : UIColor = UIColor(hexString: "ffffff", alpha: 0.24)
-
+    /// Customize the Start New Conversation Button (Background Color, TextColor ) on Conversation List Screen
+    public var startNewConversationButtonBackgroundColor: UIColor? = nil
+    public var startNewConversationButtonTextColor: UIColor = UIColor.white
     public init() {}
 }
