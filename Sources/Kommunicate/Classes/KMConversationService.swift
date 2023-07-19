@@ -18,6 +18,7 @@ public enum ChannelMetadataKeys {
     static let languageTag = "kmUserLanguageCode"
     static let teamId = "KM_TEAM_ID"
     static let conversationMetaData = "conversationMetadata" // dictionary mapped with this key will be shown on  ConversationInfo section
+    static let groupCreationURL = "GROUP_CREATION_URL"
 }
 
 enum LocalizationKey {
@@ -345,6 +346,16 @@ public class KMConversationService: KMConservationServiceable, Localizable {
 
         if let teamId = conversation.teamId, !teamId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             metadata.setValue(teamId, forKey: ChannelMetadataKeys.teamId)
+        }
+        
+        if let appName = conversation.appName {
+            let label = "iOS: \(appName)"
+            metadata.setValue(label, forKey: ChannelMetadataKeys.groupCreationURL)
+        } else {
+            if let appID = KMUserDefaultHandler.getApplicationKey(){
+                let label = "iOS: \(appID)"
+                metadata.setValue(label, forKey: ChannelMetadataKeys.groupCreationURL)
+            }
         }
 
         guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,

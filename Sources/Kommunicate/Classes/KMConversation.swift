@@ -22,9 +22,17 @@ import KommunicateCore_iOS_SDK
     public var conversationAssignee: String?
     public var teamId: String?
     public var defaultConversationAssignee: String?
+    public var appName: String? = Bundle.main.displayName
 
     public init(userId: String) {
         self.userId = userId
+    }
+}
+
+///  this is used to retrieve the name of the application. It's used in sending the metadata of Group Creation URL
+extension Bundle {
+    var displayName: String? {
+        return object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
     }
 }
 
