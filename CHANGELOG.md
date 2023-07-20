@@ -2,6 +2,9 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+##Unreleased
+- Fixed conversation restarting through user end via message templates even when restart conversation button is disabled
+
 ## [6.9.4] 2023-07-10
 - Fixed hideEmptyStateStartNewButtonInConversationList customization bug
 - Added Cusotmization for Start New Conversaion Button on Conversation List Screen
