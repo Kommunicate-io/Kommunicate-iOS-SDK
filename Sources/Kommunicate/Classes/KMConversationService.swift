@@ -349,13 +349,11 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         }
         
         if let appName = conversation.appName {
-            let label = "iOS: \(appName)"
-            metadata.setValue(label, forKey: ChannelMetadataKeys.groupCreationURL)
-        } else {
-            if let appID = KMUserDefaultHandler.getApplicationKey(){
-                let label = "iOS: \(appID)"
-                metadata.setValue(label, forKey: ChannelMetadataKeys.groupCreationURL)
-            }
+            let originName = "iOS: " + appName
+            metadata.setValue(originName, forKey: ChannelMetadataKeys.groupCreationURL)
+        } else if let appID = KMUserDefaultHandler.getApplicationKey(){
+            let originName = "iOS: " + appID
+            metadata.setValue(originName, forKey: ChannelMetadataKeys.groupCreationURL)
         }
 
         guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,

@@ -29,13 +29,6 @@ import KommunicateCore_iOS_SDK
     }
 }
 
-///  this is used to retrieve the name of the application. It's used in sending the metadata of Group Creation URL
-extension Bundle {
-    var displayName: String? {
-        return object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
-    }
-}
-
 /// KMConversationBuilder is used for building KMConversation object
 @objc public class KMConversationBuilder: NSObject {
     private var conversation = KMConversation(userId: KMUserDefaultHandler.getUserId() ?? Kommunicate.randomId())
@@ -131,5 +124,12 @@ extension Bundle {
     /// Finally call the build method on the KMConversationBuilder to build the KMConversation
     @objc public func build() -> KMConversation {
         return conversation
+    }
+}
+
+///  This extension is used to retrieve the name of the application. It's employed in sending the metadata of origin name, helping to identify the application being used.
+extension Bundle {
+    var displayName: String? {
+        return object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
     }
 }
