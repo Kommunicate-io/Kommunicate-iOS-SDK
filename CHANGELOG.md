@@ -2,6 +2,9 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## Unreleased
+- Added feature for sending metadata with origin name, including information on iOS device, facilitating identification of app name and user's device type.
+
 ## [6.9.4] 2023-07-10
 - Fixed hideEmptyStateStartNewButtonInConversationList customization bug
 - Added Cusotmization for Start New Conversaion Button on Conversation List Screen
