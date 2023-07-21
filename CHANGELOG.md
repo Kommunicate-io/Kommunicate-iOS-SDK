@@ -2,8 +2,11 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
-## Unreleased
+## [6.9.5] 2023-07-21
 - Added feature for sending metadata with origin name, including information on iOS device, facilitating identification of app name and user's device type.
+- Fixed the form submission with empty fields issue
+- Added Support to trigger Assignment intent when language selected for Speech to Text.
+- Fixed SPM build issue due to Dropdown dependency
 
 ## [6.9.4] 2023-07-10
 - Fixed hideEmptyStateStartNewButtonInConversationList customization bug
