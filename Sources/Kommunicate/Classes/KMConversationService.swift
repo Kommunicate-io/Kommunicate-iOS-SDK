@@ -18,6 +18,7 @@ public enum ChannelMetadataKeys {
     static let languageTag = "kmUserLanguageCode"
     static let teamId = "KM_TEAM_ID"
     static let conversationMetaData = "conversationMetadata" // dictionary mapped with this key will be shown on  ConversationInfo section
+    static let groupCreationURL = "GROUP_CREATION_URL"
 }
 
 enum LocalizationKey {
@@ -311,6 +312,16 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         }
         return newClientId
     }
+    
+    /// To check whether the app name does not contain only spaces.
+    func isValidAppName(_ checkString: String?) -> Bool {
+        guard let checkString = checkString else {
+            return false // App name is nil
+        }
+        
+        let trimmedString = checkString.trimmingCharacters(in: .whitespacesAndNewlines)
+        return !trimmedString.isEmpty
+    }
 
     func getMetaDataWith(_ conversation: KMConversation) -> NSMutableDictionary {
         let metadata = NSMutableDictionary(
@@ -345,6 +356,14 @@ public class KMConversationService: KMConservationServiceable, Localizable {
 
         if let teamId = conversation.teamId, !teamId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             metadata.setValue(teamId, forKey: ChannelMetadataKeys.teamId)
+        }
+        
+        if let appName = conversation.appName, isValidAppName(appName) {
+            let originName = "iOS: " + appName
+            metadata.setValue(originName, forKey: ChannelMetadataKeys.groupCreationURL)
+        } else if let appID = KMUserDefaultHandler.getApplicationKey() {
+            let originName = "iOS: " + appID
+            metadata.setValue(originName, forKey: ChannelMetadataKeys.groupCreationURL)
         }
 
         guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
