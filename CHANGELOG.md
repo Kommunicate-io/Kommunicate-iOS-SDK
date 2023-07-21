@@ -2,6 +2,21 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## Unreleased
+- Added feature for sending metadata with origin name, including information on iOS device, facilitating identification of app name and user's device type.
+
+## [6.9.4] 2023-07-10
+- Fixed hideEmptyStateStartNewButtonInConversationList customization bug
+- Added Cusotmization for Start New Conversaion Button on Conversation List Screen
+
+## [6.9.3] 2023-06-30
+- Added customization for FAQ button text color, background colors on conversation,conversation list screen.
+- Added Support for Drop Down field in Form Template
+- Fixed Template Message bug
+
+## [6.9.2] 2023-06-28
+- Exposed a function to show/hide the Assignee online,offine status when conversation screen is on top.
+
 ## [6.9.1] 2023-06-07
 - Fixed Upload attachment issue to custom cloud service
 

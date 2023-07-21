@@ -22,6 +22,7 @@ import KommunicateCore_iOS_SDK
     public var conversationAssignee: String?
     public var teamId: String?
     public var defaultConversationAssignee: String?
+    public var appName: String? = Bundle.main.displayName
 
     public init(userId: String) {
         self.userId = userId
@@ -123,5 +124,12 @@ import KommunicateCore_iOS_SDK
     /// Finally call the build method on the KMConversationBuilder to build the KMConversation
     @objc public func build() -> KMConversation {
         return conversation
+    }
+}
+
+///  This extension is used to retrieve the name of the application. It's employed in sending the metadata of origin name, helping to identify the application being used.
+extension Bundle {
+    var displayName: String? {
+        return object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
     }
 }

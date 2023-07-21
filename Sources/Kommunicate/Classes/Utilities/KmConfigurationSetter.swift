@@ -122,6 +122,22 @@ public class KMConfigurationSetter {
             if let enableDeleteConversationOnLongPress = settingDict["enableDeleteConversationOnLongpress"] as? Bool {
                 Kommunicate.defaultConfiguration.enableDeleteConversationOnLongpress = enableDeleteConversationOnLongPress
             }
+           
+            if let startNewConversationButtonBackgroundColor = settingDict["startNewConversationButtonBackgroundColor"] as? String {
+                Kommunicate.kmConversationViewConfiguration.startNewConversationButtonBackgroundColor = UIColor(hexString: startNewConversationButtonBackgroundColor)
+            }
+            
+            if let startNewConversationButtonTextColor = settingDict["startNewConversationButtonTextColor"] as? String {
+                Kommunicate.kmConversationViewConfiguration.startNewConversationButtonTextColor = UIColor(hexString: startNewConversationButtonTextColor)
+            }
+            
+            if let showTypingIndicatorWhileFetchingResponse = settingDict["showTypingIndicatorWhileFetchingResponse"] as? Bool {
+                KMConversationScreenConfiguration.showTypingIndicatorWhileFetchingResponse = showTypingIndicatorWhileFetchingResponse
+            }
+           
+            if let hideEmptyStateStartNewButtonInConversationList = settingDict["hideEmptyStateStartNewButtonInConversationList"] as? Bool {
+                Kommunicate.defaultConfiguration.hideEmptyStateStartNewButtonInConversationList = hideEmptyStateStartNewButtonInConversationList
+            }
             
         } catch let error as NSError {
             print("Failed to read setting json string \(error.description)")

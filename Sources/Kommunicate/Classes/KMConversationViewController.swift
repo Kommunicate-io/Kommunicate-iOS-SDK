@@ -164,11 +164,14 @@ open class KMConversationViewController: ALKConversationViewController {
     
     open override func addMessagesToList(_ messageList: [Any]) {
        guard var messages = messageList as? [ALMessage] else { return }
-    
+        
+        if (KMConversationScreenConfiguration.showTypingIndicatorWhileFetchingResponse) {
+            updateTyingStatus(status: false, userId: "")
+        }
+        
         messageArray.append(contentsOf: messages)
         if messageArray.count > 1 {
-            messageArray.sort { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime)
-            }
+            messageArray.sort { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime)}
         }
         
         if messages.count > 1 {
@@ -360,6 +363,20 @@ open class KMConversationViewController: ALKConversationViewController {
             self.hideInputBarIfAssignedToBot()
             guard let contact = contact else {return}
             self.isAwayMessageViewHidden = !contact.isInAwayMode
+        }
+    }
+    
+    /*
+     This method will show/hide assignee's online, offiline status and away message
+     - Parameters:
+     - hide: boolean to show/hide the views
+     */
+    func hideAssigneeStatus(_ hide:Bool){
+        self.customNavigationView.onlineStatusIcon.isHidden = hide
+        self.customNavigationView.onlineStatusText.isHidden = hide
+        self.customNavigationView.statusIconBackgroundColor.isHidden = hide
+        if !isAwayMessageViewHidden && hide {
+            isAwayMessageViewHidden = hide
         }
     }
     
