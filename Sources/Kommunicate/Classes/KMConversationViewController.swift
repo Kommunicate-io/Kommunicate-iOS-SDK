@@ -96,6 +96,8 @@ open class KMConversationViewController: ALKConversationViewController {
 
     private var isClosedConversationViewHidden = true {
         didSet {
+            // if the ClosedConversationView and restartConversationButton are hidden hide the message template view
+            templateView?.isHidden = !isClosedConversationViewHidden && configuration.hideRestartConversationButton
             guard oldValue != isClosedConversationViewHidden else { return }
             showClosedConversationView(!isClosedConversationViewHidden)
         }

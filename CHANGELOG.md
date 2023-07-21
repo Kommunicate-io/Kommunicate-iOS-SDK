@@ -7,6 +7,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 - Fixed the form submission with empty fields issue
 - Added Support to trigger Assignment intent when language selected for Speech to Text.
 - Fixed SPM build issue due to Dropdown dependency
+- Fixed conversation restarting through user end via message templates even when restart conversation button is disabled
 
 ## [6.9.4] 2023-07-10
 - Fixed hideEmptyStateStartNewButtonInConversationList customization bug
