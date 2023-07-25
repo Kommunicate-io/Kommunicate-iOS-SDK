@@ -650,6 +650,11 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
     }
     
     public func userOnlineStatusChanged(_ contactId: String!, status: String!) {
+        guard let viewcontroller = navigationController?.visibleViewController as? KMConversationViewController else {
+            print("Unable to update agent status : No KMConversationViewController available")
+            return
+        }
+        viewcontroller.updateAssigneeOnlineStatus(userId: contactId)
     }
 
     open func updateUserDetail(_ userId: String!) {
