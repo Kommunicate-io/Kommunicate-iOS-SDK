@@ -155,6 +155,9 @@ open class Kommunicate: NSObject, Localizable {
         _ kmUser: KMUser,
         completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void
     ) {
+        /// By incorporating the platform flag into KMUser, we can easily identify the platform from which the access is being made.
+        kmUser.platform = NSNumber(value: PLATFORM_IOS.rawValue)
+        
         let validationError = validateUserData(user: kmUser)
         guard validationError == nil else {
             print("Error while registering the user to Kommunicate: ", validationError!.localizedDescription)
