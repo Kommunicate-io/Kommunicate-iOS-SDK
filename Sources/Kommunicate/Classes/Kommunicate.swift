@@ -155,7 +155,7 @@ open class Kommunicate: NSObject, Localizable {
         _ kmUser: KMUser,
         completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void
     ) {
-        /// By incorporating the platform flag into KMUser, we can easily identify the platform from which the access is being made.
+        /// This platform's primary purpose is to identify the user's device, determining whether it is an iOS, Android, or any other type of device.
         kmUser.platform = NSNumber(value: PLATFORM_IOS.rawValue)
         
         let validationError = validateUserData(user: kmUser)
