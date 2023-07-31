@@ -3,7 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## Unreleased
-- Added a function to add platform flag in KMUser
+- Added a default value for platform. Added a function to add platform flag in Flutter and React Native.
 
 ## [6.9.5] 2023-07-21
 - Added feature for sending metadata with origin name, including information on iOS device, facilitating identification of app name and user's device type.
