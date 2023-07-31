@@ -1204,8 +1204,8 @@ open class Kommunicate: NSObject, Localizable {
         return KMConfigurationSetter.createCustomSetting(settings: settings)
     }
     
-    ///  this function is used to set platform. To access this we need to use this **Kommunicate.setPlatform(platform: )**.
-    open class func setPlatform(platform: Platforms) -> NSNumber {
+    ///  this function is used to set platform. To access this we need to use this `Kommunicate.getPlatformId(. )`.
+    open class func getPlatformId(_ platform: Platforms) -> NSNumber {
         switch platform{
         case .Android:
             return  NSNumber(value: PLATFORM_ANDROID.rawValue)
