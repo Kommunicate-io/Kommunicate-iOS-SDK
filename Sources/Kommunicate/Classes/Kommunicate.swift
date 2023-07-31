@@ -41,6 +41,19 @@ enum KMLocalizationKey {
     static let noName = "NoName"
 }
 
+public enum Platforms {
+    case Android
+    case iOS
+    case Web
+    case Phone_Gap
+    case Api
+    case Flutter
+    case React_Native
+    case Capacitor
+    case Cordova
+    case Iconic
+}
+
 @objc
 open class Kommunicate: NSObject, Localizable {
     // MARK: - Public properties
@@ -155,9 +168,6 @@ open class Kommunicate: NSObject, Localizable {
         _ kmUser: KMUser,
         completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void
     ) {
-        /// This platform's primary purpose is to identify the user's device, determining whether it is an iOS, Android, or any other type of device.
-        kmUser.platform = NSNumber(value: PLATFORM_IOS.rawValue)
-        
         let validationError = validateUserData(user: kmUser)
         guard validationError == nil else {
             print("Error while registering the user to Kommunicate: ", validationError!.localizedDescription)
@@ -1194,6 +1204,31 @@ open class Kommunicate: NSObject, Localizable {
         return KMConfigurationSetter.createCustomSetting(settings: settings)
     }
     
+    ///  this function is used to set platform. To access this we need to use this **Kommunicate.setPlatform(platform: )**.
+    open class func setPlatform(platform: Platforms) -> NSNumber {
+        switch platform{
+        case .Android:
+            return  NSNumber(value: PLATFORM_ANDROID.rawValue)
+        case .iOS:
+            return  NSNumber(value: PLATFORM_IOS.rawValue)
+        case .Web:
+            return NSNumber(value: PLATFORM_WEB.rawValue)
+        case .Phone_Gap:
+            return NSNumber(value: PLATFORM_PHONE_GAP.rawValue)
+        case .Api:
+            return NSNumber(value: PLATFORM_API.rawValue)
+        case .Flutter:
+            return NSNumber(value: PLATFORM_FLUTTER.rawValue)
+        case .React_Native:
+            return NSNumber(value: PLATFORM_REACT_NATIVE.rawValue)
+        case .Capacitor:
+            return NSNumber(value: PLATFORM_CAPACITOR.rawValue)
+        case .Cordova:
+            return NSNumber(value: PLATFORM_CORDOVA.rawValue)
+        case .Iconic:
+            return NSNumber(value: PLATFORM_IONIC.rawValue)
+        }
+    }
     
     /**
      Creates a new conversation with the details passed.
