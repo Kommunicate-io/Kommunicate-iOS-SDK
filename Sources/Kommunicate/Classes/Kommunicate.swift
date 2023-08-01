@@ -41,11 +41,6 @@ enum KMLocalizationKey {
     static let noName = "NoName"
 }
 
-public enum Platforms {
-    case Flutter
-    case React_Native
-}
-
 @objc
 open class Kommunicate: NSObject, Localizable {
     // MARK: - Public properties
@@ -1198,16 +1193,6 @@ open class Kommunicate: NSObject, Localizable {
     
     open class func createSettings(settings: String) -> Bool {
         return KMConfigurationSetter.createCustomSetting(settings: settings)
-    }
-    
-    ///  this function is used to set platform for Flutter or React Native. To access this we need to use this `Kommunicate.getPlatformId(. )`.
-    open class func getPlatformId(_ platform: Platforms) -> NSNumber {
-        switch platform{
-        case .Flutter:
-            return NSNumber(value: PLATFORM_FLUTTER.rawValue)
-        case .React_Native:
-            return NSNumber(value: PLATFORM_REACT_NATIVE.rawValue)
-        }
     }
     
     /**
