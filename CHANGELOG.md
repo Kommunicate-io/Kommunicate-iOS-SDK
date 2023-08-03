@@ -3,6 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## Unreleased
+- Fixed agent status not updating realtime when conversation is opened from conversation list
 - Fixed the Submit Button cuting issue on rating bar.
 - Increased the size of Comment section in rating bar.
 
