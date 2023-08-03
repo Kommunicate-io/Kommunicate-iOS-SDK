@@ -165,6 +165,7 @@ class RatingViewController: UIViewController {
             ratingViewHeightConstraint,
             commentsViewHeightConstraint,
             submitButtonHeightConstraint,
+            submitButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -(Size.SubmitButton.height)),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: Size.TitleLabel.top),
         ])
@@ -360,7 +361,7 @@ private extension RatingViewController {
 
         enum CommentsView {
             static let top: CGFloat = 30.0
-            static let height: CGFloat = 80.0
+            static let height: CGFloat = 120.0
         }
     }
 }
