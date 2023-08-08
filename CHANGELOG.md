@@ -2,6 +2,13 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [6.9.6] 2023-08-08
+- Fixed agent status not updating realtime when conversation is opened from conversation list
+- Fixed the Submit Button cuting issue on rating bar.
+- Fixed down arrow coming in bottom of the screen when welcome message get rendered issue.
+- Form Submit button width is corrected.
+- Added border to the form and removed paddding form the top of each cell.
+
 ## [6.9.5] 2023-07-21
 - Added feature for sending metadata with origin name, including information on iOS device, facilitating identification of app name and user's device type.
 - Fixed the form submission with empty fields issue
