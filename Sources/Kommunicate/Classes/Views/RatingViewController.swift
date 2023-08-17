@@ -165,7 +165,7 @@ class RatingViewController: UIViewController {
             ratingViewHeightConstraint,
             commentsViewHeightConstraint,
             submitButtonHeightConstraint,
-            submitButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -(Size.SubmitButton.height)),
+            submitButton.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: -(Size.SubmitButton.height)),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: Size.TitleLabel.top),
         ])
