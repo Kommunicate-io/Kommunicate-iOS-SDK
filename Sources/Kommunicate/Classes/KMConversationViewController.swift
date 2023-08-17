@@ -469,6 +469,7 @@ open class KMConversationViewController: ALKConversationViewController {
                 return
             }
             weakSelf.isClosedConversationViewHidden = true
+            self?.awayMessageView.isHidden = false
             
             if let channelId = weakSelf.viewModel.channelKey {
                 KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.restartConversationClick, data: ["conversationId":channelId])
@@ -639,6 +640,7 @@ extension KMConversationViewController {
         chatBar.clear()
         conversationClosedView.clearFeedback()
         isClosedConversationViewHidden = false
+        awayMessageView.isHidden = true
         let isCSATEnabled =
             !kmConversationViewConfiguration.isCSATOptionDisabled && userDefaults.isCSATEnabled
         guard let channelId = viewModel.channelKey, isCSATEnabled else { return }
