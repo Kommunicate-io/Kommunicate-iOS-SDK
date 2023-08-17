@@ -3,6 +3,9 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 
+## Unreleased
+- Fixed Away Message & Rating message overlapping
+
 ## [6.9.7] 2023-08-11
 - Improved UI of multiple language selection & make it similar to android
 - Refresh Icon Change
