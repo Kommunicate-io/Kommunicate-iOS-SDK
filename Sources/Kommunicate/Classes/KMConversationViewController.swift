@@ -150,6 +150,7 @@ open class KMConversationViewController: ALKConversationViewController {
         hideAwayAndClosedView()
         isConversationAssignedToDialogflowBot = false
         isChatBarHidden = false
+        awayMessageView.isHidden = false
     }
 
     override open func newMessagesAdded() {
