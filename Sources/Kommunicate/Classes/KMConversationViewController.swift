@@ -150,6 +150,7 @@ open class KMConversationViewController: ALKConversationViewController {
         hideAwayAndClosedView()
         isConversationAssignedToDialogflowBot = false
         isChatBarHidden = false
+        awayMessageView.isHidden = false
     }
 
     override open func newMessagesAdded() {
@@ -469,6 +470,7 @@ open class KMConversationViewController: ALKConversationViewController {
                 return
             }
             weakSelf.isClosedConversationViewHidden = true
+            self?.awayMessageView.isHidden = false
             
             if let channelId = weakSelf.viewModel.channelKey {
                 KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.restartConversationClick, data: ["conversationId":channelId])
@@ -639,6 +641,7 @@ extension KMConversationViewController {
         chatBar.clear()
         conversationClosedView.clearFeedback()
         isClosedConversationViewHidden = false
+        awayMessageView.isHidden = true
         let isCSATEnabled =
             !kmConversationViewConfiguration.isCSATOptionDisabled && userDefaults.isCSATEnabled
         guard let channelId = viewModel.channelKey, isCSATEnabled else { return }
@@ -733,7 +736,7 @@ extension KMConversationViewController {
 
     private func showClosedConversationView(_ flag: Bool) {
         conversationClosedView.isHidden = !flag
-        isAwayMessageViewHidden = true
+        isAwayMessageViewHidden = !flag
         updateMessageListBottomPadding(isClosedViewHidden: !flag)
         topConstraintClosedView?.isActive = flag
     }
