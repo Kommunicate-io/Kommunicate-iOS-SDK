@@ -19,6 +19,7 @@ public enum ChannelMetadataKeys {
     static let teamId = "KM_TEAM_ID"
     static let conversationMetaData = "conversationMetadata" // dictionary mapped with this key will be shown on  ConversationInfo section
     static let groupCreationURL = "GROUP_CREATION_URL"
+    static let kmUserLocale = "kmUserLocale"
 }
 
 enum LocalizationKey {
@@ -365,6 +366,20 @@ public class KMConversationService: KMConservationServiceable, Localizable {
             let originName = "iOS: " + appID
             metadata.setValue(originName, forKey: ChannelMetadataKeys.groupCreationURL)
         }
+        
+        do {
+            var languageDict : [String:String] = [:]
+            let languageCode = NSLocale.preferredLanguages.first?.prefix(2)
+            if let languageCodeString = languageCode.map(String.init) {
+                languageDict[ChannelMetadataKeys.kmUserLocale] = languageCodeString
+            }
+            let messageInfoData = try JSONSerialization.data(withJSONObject: languageDict, options: .prettyPrinted)
+            let messageInfoString = String(data: messageInfoData, encoding: .utf8) ?? ""
+            metadata[ChannelMetadataKeys.chatContext] = messageInfoString
+        } catch {
+            print("error while setting group metadata : \(error.localizedDescription)")
+        }
+        
 
         guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
               !messageMetadata.isEmpty
