@@ -2,6 +2,9 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## Unreleased
+- Passed languageCode in groupMetadata and messageMetaData
+
 ## [6.9.8] 2023-08-23
 - Fixed keyboard overlapping in Rating Screen.
 - Fixed Away Message & Rating message overlapping
