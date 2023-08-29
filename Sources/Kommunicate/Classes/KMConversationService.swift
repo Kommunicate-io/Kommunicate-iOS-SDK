@@ -367,16 +367,13 @@ public class KMConversationService: KMConservationServiceable, Localizable {
             metadata.setValue(originName, forKey: ChannelMetadataKeys.groupCreationURL)
         }
         
-        do {
-            let languageCode = NSLocale.preferredLanguages.first?.prefix(2)
-            let languageDict = [ChannelMetadataKeys.kmUserLocale : languageCode]
-            let messageInfoData = try JSONSerialization.data(withJSONObject: languageDict, options: .prettyPrinted)
-            let messageInfoString = String(data: messageInfoData, encoding: .utf8) ?? ""
-            metadata[ChannelMetadataKeys.chatContext] = messageInfoString
-        } catch {
-            print("error while setting group metadata : \(error.localizedDescription)")
-        }
+        let languageCode = NSLocale.preferredLanguages.first?.prefix(2)
+        let languageDict = [ChannelMetadataKeys.kmUserLocale : languageCode]
         
+        if let messageInfoData = try? JSONSerialization.data(withJSONObject: languageDict, options: .prettyPrinted) {
+            let messageInfoString = String(data: messageInfoData, encoding: .utf8)
+            metadata[ChannelMetadataKeys.chatContext] = messageInfoString
+        }
 
         guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
               !messageMetadata.isEmpty
