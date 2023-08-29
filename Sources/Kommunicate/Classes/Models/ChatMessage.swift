@@ -27,6 +27,7 @@ class ChatMessage: ALKChatViewModelProtocol, Localizable {
     var createdAt: String?
     var channelType: Int16
     var isMessageEmpty: Bool
+    var platformSource: String?
 
     init(message: ALKChatViewModelProtocol) {
         avatar = message.avatar
@@ -44,6 +45,7 @@ class ChatMessage: ALKChatViewModelProtocol, Localizable {
         createdAt = message.createdAt
         messageType = message.messageType
         isMessageEmpty = message.isMessageEmpty
+        platformSource = message.platformSource
 
         // Update message to show conversation assignee details
         let (_, channel) = ConversationDetail().conversationAssignee(groupId: channelKey, userId: contactId)
