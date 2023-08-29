@@ -370,8 +370,8 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         let languageCode = NSLocale.preferredLanguages.first?.prefix(2)
         let languageDict = [ChannelMetadataKeys.kmUserLocale : languageCode]
         
-        if let messageInfoData = try? JSONSerialization.data(withJSONObject: languageDict, options: .prettyPrinted) {
-            let messageInfoString = String(data: messageInfoData, encoding: .utf8)
+        if let messageInfoData = try? JSONSerialization.data(withJSONObject: languageDict, options: .prettyPrinted),
+           let messageInfoString = String(data: messageInfoData, encoding: .utf8) {
             metadata[ChannelMetadataKeys.chatContext] = messageInfoString
         }
 
