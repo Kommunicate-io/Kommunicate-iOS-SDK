@@ -6,18 +6,18 @@ PODS:
   - iOSSnapshotTestCase/SwiftSupport (8.0.0):
     - iOSSnapshotTestCase/Core
   - Kingfisher (7.6.2)
-  - Kommunicate (6.9.8):
-    - KommunicateChatUI-iOS-SDK (~> 1.1.5)
-  - KommunicateChatUI-iOS-SDK (1.1.5):
-    - KommunicateChatUI-iOS-SDK/Complete (= 1.1.5)
-  - KommunicateChatUI-iOS-SDK/Complete (1.1.5):
+  - Kommunicate (6.9.9):
+    - KommunicateChatUI-iOS-SDK (~> 1.1.6)
+  - KommunicateChatUI-iOS-SDK (1.1.6):
+    - KommunicateChatUI-iOS-SDK/Complete (= 1.1.6)
+  - KommunicateChatUI-iOS-SDK/Complete (1.1.6):
     - iOSDropDown
     - Kingfisher (~> 7.6.2)
     - KommunicateChatUI-iOS-SDK/RichMessageKit
     - KommunicateCore-iOS-SDK (~> 1.1.1)
     - SwipeCellKit (~> 2.7.1)
     - ZendeskChatProvidersSDK (~> 3.0.0)
-  - KommunicateChatUI-iOS-SDK/RichMessageKit (1.1.5)
+  - KommunicateChatUI-iOS-SDK/RichMessageKit (1.1.6)
   - KommunicateCore-iOS-SDK (1.1.1)
   - Nimble (11.2.2)
   - Nimble-Snapshots (9.5.1):
