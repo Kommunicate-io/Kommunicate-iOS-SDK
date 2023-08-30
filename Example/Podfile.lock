@@ -19,13 +19,13 @@ PODS:
     - ZendeskChatProvidersSDK (~> 3.0.0)
   - KommunicateChatUI-iOS-SDK/RichMessageKit (1.1.6)
   - KommunicateCore-iOS-SDK (1.1.1)
-  - Nimble (10.0.0)
-  - Nimble-Snapshots (9.4.0):
-    - Nimble-Snapshots/Core (= 9.4.0)
-  - Nimble-Snapshots/Core (9.4.0):
+  - Nimble (11.2.2)
+  - Nimble-Snapshots (9.5.1):
+    - Nimble-Snapshots/Core (= 9.5.1)
+  - Nimble-Snapshots/Core (9.5.1):
     - iOSSnapshotTestCase (~> 8.0)
-    - Nimble
-  - Quick (5.0.1)
+    - Nimble (~> 11.0)
+  - Quick (7.2.0)
   - SwipeCellKit (2.7.1)
   - ZendeskChatProvidersSDK (3.0.0)
 
@@ -57,15 +57,15 @@ SPEC CHECKSUMS:
   iOSDropDown: ce9daa584eaa5567cafc1b633e3cc7eb6d9cea42
   iOSSnapshotTestCase: a670511f9ee3829c2b9c23e6e68f315fd7b6790f
   Kingfisher: 6c5449c6450c5239166510ba04afe374a98afc4f
-  Kommunicate: 01d88f6a4f8a3e3efa379f8d3edb292eec97d101
-  KommunicateChatUI-iOS-SDK: dbd7a323f6679350251708547117c5d928007270
+  Kommunicate: cbd471a8dc2804adac3842fa24e2ebb98a7ffc52
+  KommunicateChatUI-iOS-SDK: 47dd750674c0f4e2c9fa19845013b035656e6ec5
   KommunicateCore-iOS-SDK: d8e2b02da96522708a8d3cb395f9616522e219dc
-  Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
-  Nimble-Snapshots: ef281b908c604f78c8313587e25ea92c8ab513d7
-  Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
+  Nimble: 01a944d4d07eab73617dfd4b32ac9f7152ac34de
+  Nimble-Snapshots: ffa513489b87160d95b09e9158c9cb2bf70e00a4
+  Quick: 73ac215f23a6a0eaa59f4ee142802b3f4dba86bb
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
   ZendeskChatProvidersSDK: af93e02e2058875f92e6ad86e74ee51203b4079e
 
-PODFILE CHECKSUM: 344e21f91eba470ba2f5e2053226372075edcff5
+PODFILE CHECKSUM: 9819a09ef609e854ff350d700e2a7355d5feb595
 
 COCOAPODS: 1.12.1
