@@ -125,6 +125,16 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         self.kmConversationViewConfiguration = kmConversationViewConfiguration
         tableView.isHidden = true
         super.init(configuration: configuration)
+        let languageCode = NSLocale.preferredLanguages.first?.prefix(2)
+        if(languageCode?.description != ALUserDefaultsHandler.getDeviceDefaultLanguage()){
+            ALUserDefaultsHandler.setDeviceDefaultLanguage(languageCode?.description)
+        }
+        do{
+            try Kommunicate.defaultConfiguration.updateChatContext(with: [ChannelMetadataKeys.kmUserLocale : languageCode])
+            self.configuration.messageMetadata = Kommunicate.defaultConfiguration.messageMetadata
+        } catch {
+            print("Unable to update chat context")
+        }
         conversationListTableViewController.delegate = self
         localizedStringFileName = configuration.localizedStringFileName
     }
