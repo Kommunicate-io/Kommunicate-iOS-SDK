@@ -19,6 +19,7 @@ public enum ChannelMetadataKeys {
     static let teamId = "KM_TEAM_ID"
     static let conversationMetaData = "conversationMetadata" // dictionary mapped with this key will be shown on  ConversationInfo section
     static let groupCreationURL = "GROUP_CREATION_URL"
+    static let kmUserLocale = "kmUserLocale"
 }
 
 enum LocalizationKey {
