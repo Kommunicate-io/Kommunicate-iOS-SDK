@@ -4,6 +4,11 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## [7.0.0] 2023-09-07
 - Passed kmUserLocale in groupMetadata and messageMetaData
+- Added support for Sending GIF from device
+- Added support for storing platform icons
+- Exposed a customisation function for a rating menu icon on conversation screen.
+- Minor Bug Fixes
+- Upgraded minimum SDK version to 13.
 
 ## [6.9.9] 2023-08-28
 - Fixed attachments upload issue
