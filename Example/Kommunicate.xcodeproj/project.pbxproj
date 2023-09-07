@@ -741,7 +741,7 @@
 				DEVELOPMENT_TEAM = 932BY3Q6F7;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 932BY3Q6F7;
 				INFOPLIST_FILE = Kommunicate/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Kommunicate.demo;
@@ -762,7 +762,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 932BY3Q6F7;
 				INFOPLIST_FILE = Kommunicate/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Kommunicate.demo;
