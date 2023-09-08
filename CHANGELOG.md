@@ -1,6 +1,10 @@
 # CHANGELOG
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
+
+## Unreleased
+- Added custom input field rich message support in IOS SDK
+
 ## [6.9.9] 2023-08-28
 - Fixed attachments upload issue
 

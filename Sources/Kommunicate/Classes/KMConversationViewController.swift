@@ -448,6 +448,7 @@ open class KMConversationViewController: ALKConversationViewController {
         checkUserBlock()
         subscribeChannelToMqtt()
         viewModel.prepareController()
+        self.updatePlaceholder()
         ALMessageService.syncMessages()
     }
     
