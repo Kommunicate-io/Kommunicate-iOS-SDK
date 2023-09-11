@@ -2,6 +2,9 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## Unreleased
+- Added Support For Auto Suggestions Rich Message
+
 ## [7.0.0] 2023-09-07
 - Upgraded minimum SDK version to 13
 - Passed kmUserLocale in groupMetadata and messageMetaData
