@@ -114,16 +114,6 @@ open class KMConversationViewController: ALKConversationViewController {
     {
         kmConversationViewConfiguration = conversationViewConfiguration
         super.init(configuration: configuration, individualLaunch: individualLaunch)
-        let languageCode = NSLocale.preferredLanguages.first?.prefix(2)
-        if(languageCode?.description != ALUserDefaultsHandler.getDeviceDefaultLanguage()){
-            ALUserDefaultsHandler.setDeviceDefaultLanguage(languageCode?.description)
-        }
-        do{
-            try Kommunicate.defaultConfiguration.updateChatContext(with: [ChannelMetadataKeys.kmUserLocale : languageCode])
-            self.configuration.messageMetadata = Kommunicate.defaultConfiguration.messageMetadata
-        } catch {
-            print("Unable to update chat context")
-        }
         addNotificationCenterObserver()
     }
 

@@ -82,15 +82,6 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         conversation: KMConversation,
         completion: @escaping (Response) -> Void
     ) {
-        let languageCode = NSLocale.preferredLanguages.first?.prefix(2)
-        if(languageCode?.description != ALUserDefaultsHandler.getDeviceDefaultLanguage()){
-            ALUserDefaultsHandler.setDeviceDefaultLanguage(languageCode?.description)
-        }
-        do{
-            try Kommunicate.defaultConfiguration.updateChatContext(with: [ChannelMetadataKeys.kmUserLocale : languageCode])
-        } catch {
-            print("Unable to update chat context")
-        }
         let dispatchGroup = DispatchGroup()
 
         if let clientId = conversation.clientConversationId, !clientId.isEmpty {
@@ -375,6 +366,16 @@ public class KMConversationService: KMConservationServiceable, Localizable {
             let originName = "iOS: " + appID
             metadata.setValue(originName, forKey: ChannelMetadataKeys.groupCreationURL)
         }
+        
+        let languageCode = NSLocale.preferredLanguages.first?.prefix(2)
+            if(languageCode?.description != ALUserDefaultsHandler.getDeviceDefaultLanguage()){
+                ALUserDefaultsHandler.setDeviceDefaultLanguage(languageCode?.description)
+            }
+            do{
+                try Kommunicate.defaultConfiguration.updateChatContext(with: [ChannelMetadataKeys.kmUserLocale : languageCode])
+            } catch {
+                print("Unable to update chat context")
+            }
 
         guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
               !messageMetadata.isEmpty

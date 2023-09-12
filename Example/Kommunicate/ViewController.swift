@@ -25,14 +25,7 @@
             activityIndicator.startAnimating()
             view.isUserInteractionEnabled = false
 
-            Kommunicate.createAndShowConversation(from: self, completion: {
-                error in
-                self.activityIndicator.stopAnimating()
-                self.view.isUserInteractionEnabled = true
-                if error != nil {
-                    print("Error while launching")
-                }
-            })
+            Kommunicate.showConversations(from: self)
         }
 
         @IBAction func logoutAction(_: Any) {
