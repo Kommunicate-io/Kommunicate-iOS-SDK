@@ -543,6 +543,7 @@ open class KMConversationViewController: ALKConversationViewController {
 
     private func checkPlanAndShowSuspensionScreen() {
         let accountVC = ALKAccountSuspensionController()
+        accountVC.isModalInPresentation = true 
         guard PricingPlan.shared.showSuspensionScreen() else { return }
         present(accountVC, animated: true, completion: nil)
         accountVC.closePressed = { [weak self] in
