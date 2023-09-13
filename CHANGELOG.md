@@ -4,6 +4,7 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## Unreleased
 - Added custom input field rich message support in IOS SDK
+- Fixed Trial Period Alert closable issue.
 - Added support for XCode 15 beta
 
 ## [7.0.0] 2023-09-07
