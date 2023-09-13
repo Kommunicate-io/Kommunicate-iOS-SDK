@@ -256,7 +256,7 @@ class ConversationVCNavBar: UIView, Localizable {
 
     func setupProfileNameAndImage(name: String, imageUrl: URL?, placeHolderImage: UIImage) {
         if let downloadURL = imageUrl {
-            let resource = ImageResource(downloadURL: downloadURL, cacheKey: downloadURL.absoluteString)
+            let resource = Kingfisher.ImageResource(downloadURL: downloadURL, cacheKey: downloadURL.absoluteString)
             profileImage.kf.setImage(with: resource, placeholder: placeHolderImage)
         } else {
             profileImage.image = placeHolderImage
