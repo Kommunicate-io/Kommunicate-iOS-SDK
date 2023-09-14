@@ -376,6 +376,12 @@ public class KMConversationService: KMConservationServiceable, Localizable {
             metadata.setValue(originName, forKey: ChannelMetadataKeys.groupCreationURL)
         }
 
+        let languageCode = NSLocale.preferredLanguages.first?.prefix(2)
+        if(languageCode?.description != ALUserDefaultsHandler.getDeviceDefaultLanguage()){
+            ALUserDefaultsHandler.setDeviceDefaultLanguage(languageCode?.description)
+        }
+        ALKConversationViewModel.updateMetadataChatContext(info: [ChannelMetadataKeys.kmUserLocale : languageCode as Any], metadata: metadata)
+        
         guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
               !messageMetadata.isEmpty
         else {

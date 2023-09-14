@@ -86,7 +86,7 @@
             if !((password.text?.isEmpty)!) {
                 kmUser.password = password.text
             }
-            registerUser(kmUser)
+            registerUser(kmUser, isVisitor: false)
         }
 
         @IBAction func loginAsVisitor(_: Any) {
@@ -95,8 +95,7 @@
             setupApplicationKey(applicationId)
 
             let kmUser = userWithUserId(Kommunicate.randomId(), andApplicationId: applicationId)
-            registerUser(kmUser)
-
+            registerUser(kmUser, isVisitor: true)
         }
 
         @objc func keyboardWillHide(notification: NSNotification) {
@@ -153,9 +152,9 @@
             return kmUser
         }
 
-        private func registerUser(_ kmUser: KMUser) {
+        private func registerUser(_ kmUser: KMUser, isVisitor: Bool) {
             activityIndicator.startAnimating()
-            Kommunicate.registerUser(kmUser, completion: {
+            Kommunicate.registerUser(kmUser, isVisitor: isVisitor, completion: {
                 response, error in
                 self.activityIndicator.stopAnimating()
                 guard error == nil else {

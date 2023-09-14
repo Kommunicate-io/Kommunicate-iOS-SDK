@@ -153,6 +153,7 @@ open class Kommunicate: NSObject, Localizable {
      */
     @objc open class func registerUser(
         _ kmUser: KMUser,
+        isVisitor : Bool,
         completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void
     ) {
         let validationError = validateUserData(user: kmUser)
@@ -168,7 +169,7 @@ open class Kommunicate: NSObject, Localizable {
                 switch result {
                 case .success:
                     setup(applicationId: appID)
-                    registerNewUser(kmUser, completion: completion)
+                    getAppSettingsAndRegisterUser(kmUser, isVisitor: isVisitor, completion: completion)
                 case .failure:
                     print("Error while logging out the existing user")
                     let errorPass = NSError(domain: "Error while logging out the existing user", code: 0, userInfo: nil)
@@ -177,11 +178,39 @@ open class Kommunicate: NSObject, Localizable {
             })
             return
         }
-        registerNewUser(kmUser, completion: completion)
+        getAppSettingsAndRegisterUser(kmUser, isVisitor: isVisitor, completion: completion)
     }
     
+    private class func getAppSettingsAndRegisterUser(_ kmUser: KMUser, isVisitor : Bool, completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
+         let kmAppSetting = KMAppSettingService()
+             kmAppSetting.appSetting { result in
+                 switch result {
+                 case let .success(appSetting):
+                     DispatchQueue.main.async {
+                         kmAppSetting.updateAppsettings(chatWidgetResponse: appSetting.chatWidget)
+                         KMAppUserDefaultHandler.shared.isCSATEnabled
+                             = appSetting.collectFeedback ?? false
+                         if let zendeskaccountKey = appSetting.chatWidget?.zendeskChatSdkKey {
+                             ALApplozicSettings.setZendeskSdkAccountKey(zendeskaccountKey)
+                         }
+                         if isVisitor,
+                            kmUser.displayName == nil,
+                            let chaWidget = appSetting.chatWidget,
+                            let pseudonymsEnabled = chaWidget.pseudonymsEnabled,
+                            pseudonymsEnabled {
+                             kmUser.displayName = appSetting.userName
+                         }
+                         registerNewUser(kmUser, completion: completion)
+                     }
+                 case .failure:
+                     DispatchQueue.main.async {
+                         registerNewUser(kmUser, completion: completion)
+                     }
+                 }
+             }
+    }
     
-     private class func registerNewUser(_ kmUser: KMUser, completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
+    private class func registerNewUser(_ kmUser: KMUser, completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
         let registerUserClientService = ALRegisterUserClientService()
         registerUserClientService.initWithCompletion(kmUser, withCompletion: { response, error in
             if error != nil {
@@ -194,25 +223,7 @@ open class Kommunicate: NSObject, Localizable {
                 completion(response, errorPass as NSError?)
             } else {
                 print("Registered the user to Kommunicate")
-                let kmAppSetting = KMAppSettingService()
-                kmAppSetting.appSetting { result in
-                    switch result {
-                    case let .success(appSetting):
-                        DispatchQueue.main.async {
-                            kmAppSetting.updateAppsettings(chatWidgetResponse: appSetting.chatWidget)
-                            KMAppUserDefaultHandler.shared.isCSATEnabled
-                                = appSetting.collectFeedback ?? false
-                            if let zendeskaccountKey = appSetting.chatWidget?.zendeskChatSdkKey {
-                                ALApplozicSettings.setZendeskSdkAccountKey(zendeskaccountKey)
-                            }
-                            completion(response, error as NSError?)
-                        }
-                    case .failure:
-                        DispatchQueue.main.async {
-                            completion(response, error as NSError?)
-                        }
-                    }
-                }
+                completion(response, error as NSError?)
             }
         })
     }
@@ -756,7 +767,7 @@ open class Kommunicate: NSObject, Localizable {
                     kmUser.userId = Kommunicate.randomId()
                     kmUser.applicationId = applicationId
 
-                    Kommunicate.registerUser(kmUser, completion: {
+                    Kommunicate.registerUser(kmUser, isVisitor: true, completion: {
                         response, error in
                         guard error == nil else {
                             print("[REGISTRATION] Kommunicate user registration error: %@", error.debugDescription)
@@ -893,7 +904,7 @@ open class Kommunicate: NSObject, Localizable {
         kmUser.displayName = name
 
         Kommunicate.setup(applicationId: appID)
-        Kommunicate.registerUser(kmUser, completion: {
+        Kommunicate.registerUser(kmUser, isVisitor: true, completion: {
             response, error in
             guard error == nil else {
                 print("[REGISTRATION] Kommunicate user registration error: %@", error.debugDescription)
