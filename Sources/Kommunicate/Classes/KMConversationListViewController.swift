@@ -125,16 +125,6 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         self.kmConversationViewConfiguration = kmConversationViewConfiguration
         tableView.isHidden = true
         super.init(configuration: configuration)
-        let languageCode = NSLocale.preferredLanguages.first?.prefix(2)
-        if(languageCode?.description != ALUserDefaultsHandler.getDeviceDefaultLanguage()){
-            ALUserDefaultsHandler.setDeviceDefaultLanguage(languageCode?.description)
-        }
-        do{
-            try Kommunicate.defaultConfiguration.updateChatContext(with: [ChannelMetadataKeys.kmUserLocale : languageCode])
-            self.configuration.messageMetadata = Kommunicate.defaultConfiguration.messageMetadata
-        } catch {
-            print("Unable to update chat context")
-        }
         conversationListTableViewController.delegate = self
         localizedStringFileName = configuration.localizedStringFileName
     }
@@ -465,6 +455,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     override public func showAccountSuspensionView() {
         let accountVC = ALKAccountSuspensionController()
         present(accountVC, animated: true, completion: nil)
+        accountVC.isModalInPresentation = true
         accountVC.closePressed = { [weak self] in
             let popVC = self?.navigationController?.popViewController(animated: true)
             if popVC == nil {
@@ -595,6 +586,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
 
     private func checkPlanAndShowSuspensionScreen() {
         let accountVC = ALKAccountSuspensionController()
+        accountVC.isModalInPresentation = true
         guard PricingPlan.shared.showSuspensionScreen() else { return }
         present(accountVC, animated: true, completion: nil)
         accountVC.closePressed = { [weak self] in

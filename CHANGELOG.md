@@ -3,7 +3,10 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## Unreleased
-- Added pseudonyms support for iOS SDK
+- Added pseudonym support for iOS SDK
+- Added custom input field rich message support in IOS SDK
+- Fixed Trial Period Alert closable issue.
+- Added support for XCode 15 beta
 
 ## [7.0.0] 2023-09-07
 - Upgraded minimum SDK version to 13
