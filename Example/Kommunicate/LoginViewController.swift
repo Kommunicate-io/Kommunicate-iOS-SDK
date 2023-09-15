@@ -166,7 +166,7 @@
             return kmUser
         }
 
-        private func registerUser(_ kmUser: KMUser, isVisitor: Bool) {
+        private func registerUser(_ kmUser: KMUser) {
             activityIndicator.startAnimating()
             Kommunicate.registerUser(kmUser, completion: {
                 response, error in

@@ -181,7 +181,7 @@ open class Kommunicate: NSObject, Localizable {
     }
     
     @objc open class func registerUserAsVistor(
-        _ kmUser: KMUser = getVisitor(),
+        _ kmUser: KMUser = createVisitorUser(),
         completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void
     ) {
         if isLoggedIn, let appID = KMUserDefaultHandler.getApplicationKey(), let currentUserId = KMUserDefaultHandler.getUserId(), currentUserId != kmUser.userId {
@@ -202,7 +202,7 @@ open class Kommunicate: NSObject, Localizable {
         registerNewUser(kmUser, isVisitor: true, completion: completion)
     }
     
-    @objc open class func getVisitor() -> KMUser {
+    @objc open class func createVisitorUser() -> KMUser {
         let kmUser = KMUser()
         kmUser.userId = randomId()
         return kmUser

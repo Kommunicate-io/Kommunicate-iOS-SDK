@@ -371,7 +371,11 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         if(languageCode?.description != ALUserDefaultsHandler.getDeviceDefaultLanguage()){
             ALUserDefaultsHandler.setDeviceDefaultLanguage(languageCode?.description)
         }
-        ALKConversationViewModel.updateMetadataChatContext(info: [ChannelMetadataKeys.kmUserLocale : languageCode as Any], metadata: metadata)
+        do {
+            try Kommunicate.defaultConfiguration.updateChatContext(with : [ChannelMetadataKeys.kmUserLocale: languageCode])
+        } catch {
+            print("Unable to update chat context")
+        }
         
         guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
               !messageMetadata.isEmpty
