@@ -368,14 +368,14 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         }
 
         let languageCode = NSLocale.preferredLanguages.first?.prefix(2)
-        if(languageCode?.description != ALUserDefaultsHandler.getDeviceDefaultLanguage()){
-            ALUserDefaultsHandler.setDeviceDefaultLanguage(languageCode?.description)
-        }
-        do {
-            try Kommunicate.defaultConfiguration.updateChatContext(with : [ChannelMetadataKeys.kmUserLocale: languageCode])
-        } catch {
-            print("Unable to update chat context")
-        }
+            if(languageCode?.description != ALUserDefaultsHandler.getDeviceDefaultLanguage()){
+                ALUserDefaultsHandler.setDeviceDefaultLanguage(languageCode?.description)
+            }
+            do{
+                try Kommunicate.defaultConfiguration.updateChatContext(with: [ChannelMetadataKeys.kmUserLocale : languageCode])
+            } catch {
+                print("Unable to update chat context")
+            }
         
         guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
               !messageMetadata.isEmpty
