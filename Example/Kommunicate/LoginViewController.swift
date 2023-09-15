@@ -86,7 +86,7 @@
             if !((password.text?.isEmpty)!) {
                 kmUser.password = password.text
             }
-            registerUser(kmUser, isVisitor: false)
+            registerUser(kmUser)
         }
 
         @IBAction func loginAsVisitor(_: Any) {
