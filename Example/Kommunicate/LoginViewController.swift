@@ -93,10 +93,23 @@
             resignFields()
             let applicationId = (UIApplication.shared.delegate as! AppDelegate).appId
             setupApplicationKey(applicationId)
-
             let kmUser = userWithUserId(Kommunicate.randomId(), andApplicationId: applicationId)
-            registerUser(kmUser)
-
+            activityIndicator.startAnimating()
+            Kommunicate.registerUserAsVistor(kmUser, completion: {
+                response, error in
+                self.activityIndicator.stopAnimating()
+                guard error == nil else {
+                    print("[REGISTRATION] Kommunicate user registration error: %@", error.debugDescription)
+                    return
+                }
+                print("User registration was successful: %@ \(String(describing: response?.isRegisteredSuccessfully()))")
+                if let viewController = UIStoryboard(name: "Main", bundle: nil)
+                    .instantiateViewController(withIdentifier: "NavViewController") as? UINavigationController
+                {
+                    viewController.modalPresentationStyle = .fullScreen
+                    self.present(viewController, animated: true, completion: nil)
+                }
+            })
         }
 
         @objc func keyboardWillHide(notification: NSNotification) {

@@ -46,6 +46,7 @@ struct ChatWidgetResponse: Decodable {
     let preChatGreetingMsg: String?
     let zendeskChatSdkKey: String?
     let defaultUploadOverride : DefaultUploadOverride?
+    let pseudonymsEnabled : Bool?
 }
 
 struct DefaultUploadOverride: Decodable {
