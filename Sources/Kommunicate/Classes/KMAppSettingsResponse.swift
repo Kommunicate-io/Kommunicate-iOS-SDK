@@ -42,7 +42,7 @@ struct ChatWidgetResponse: Decodable {
     let showPoweredBy: Bool?
     let isSingleThreaded: Bool?
     let botMessageDelayInterval: Int?
-    let hidePostCTAEnabled: Bool?
+    let hidePostCTA: Bool?
     let preChatGreetingMsg: String?
     let zendeskChatSdkKey: String?
     let defaultUploadOverride : DefaultUploadOverride?
