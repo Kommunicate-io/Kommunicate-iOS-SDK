@@ -227,6 +227,7 @@ open class Kommunicate: NSObject, Localizable {
                        let chaWidget = appSetting.chatWidget,
                        let pseudonymsEnabled = chaWidget.pseudonymsEnabled,
                        pseudonymsEnabled {
+                        kmUser.metadata = modifyVisitorMetadata(kmUser: kmUser)
                         kmUser.displayName = appSetting.userName
                     }
                     
@@ -252,6 +253,52 @@ open class Kommunicate: NSObject, Localizable {
                 }
             }
         }
+    }
+    
+    private class func modifyVisitorMetadata(kmUser : KMUser) -> NSMutableDictionary {
+        var metadata = kmUser.metadata
+        if metadata == nil {
+            metadata = NSMutableDictionary()
+        }
+        var toAdd : [String : Any] = [ChannelMetadataKeys.pseudoName : true]
+        toAdd.updateValue(true, forKey: "hidden")
+        updateVisitorMetadata(toAdd: toAdd, metadata: metadata!, updateContext: ChannelMetadataKeys.kmPseudoUser)
+        return metadata!
+    }
+    
+    private class func updateVisitorMetadata(toAdd: [String: Any], metadata : NSMutableDictionary, updateContext : String) {
+        var context: [String: Any] = [:]
+
+        do {
+            let contextDict = try alreadyPresentMetadata(metadata: metadata as? [AnyHashable : Any], context: updateContext)
+            context = contextDict ?? [:]
+            context.merge(toAdd, uniquingKeysWith: { $1 })
+
+            let messageInfoData = try JSONSerialization
+                .data(withJSONObject: context, options: .prettyPrinted)
+            let messageInfoString = String(data: messageInfoData, encoding: .utf8) ?? ""
+            metadata[updateContext] = messageInfoString
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    private class func alreadyPresentMetadata(metadata : [AnyHashable: Any]? , context : String) -> [String: Any]? {
+        guard
+            let metadata = metadata,
+            let context = metadata[context] as? String,
+            let contextData = context.data(using: .utf8)
+        else {
+            return nil
+        }
+        do {
+            let contextDict = try JSONSerialization
+                .jsonObject(with: contextData, options: .allowFragments) as? [String: Any]
+            return contextDict
+        } catch {
+            print(error.localizedDescription)
+        }
+        return nil
     }
 
     /// Logs out the current logged in user and clears all the cache.
