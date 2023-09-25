@@ -4,6 +4,11 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 
 ## Unreleased
 - Added Support For Auto Suggestions Rich Message
+- Added pseudonym support for iOS SDK
+- Added custom input field rich message support in IOS SDK
+- Fixed Trial Period Alert closable issue.
+- Added support for XCode 15 beta
+- Fixed hidePostCTA not getting reflected in IOS SDK
 
 ## [7.0.0] 2023-09-07
 - Upgraded minimum SDK version to 13
