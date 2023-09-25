@@ -450,6 +450,7 @@ open class KMConversationViewController: ALKConversationViewController {
         viewModel.prepareController()
         self.updatePlaceholder()
         ALMessageService.syncMessages()
+        syncAutoSuggestionMessage(message: viewModel?.lastMessage)
     }
     
     open override func addLanguageToMetadata(language: String) {

@@ -3,6 +3,7 @@
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
 ## Unreleased
+- Added Support For Auto Suggestions Rich Message
 - Added pseudonym support for iOS SDK
 - Added custom input field rich message support in IOS SDK
 - Fixed Trial Period Alert closable issue.
