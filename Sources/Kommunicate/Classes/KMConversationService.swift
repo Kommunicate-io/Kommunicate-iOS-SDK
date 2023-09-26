@@ -20,6 +20,8 @@ public enum ChannelMetadataKeys {
     static let conversationMetaData = "conversationMetadata" // dictionary mapped with this key will be shown on  ConversationInfo section
     static let groupCreationURL = "GROUP_CREATION_URL"
     static let kmUserLocale = "kmUserLocale"
+    static let kmPseudoUser = "KM_PSEUDO_USER"
+    static let pseudoName = "pseudoName"
 }
 
 enum LocalizationKey {
@@ -82,15 +84,6 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         conversation: KMConversation,
         completion: @escaping (Response) -> Void
     ) {
-        let languageCode = NSLocale.preferredLanguages.first?.prefix(2)
-        if(languageCode?.description != ALUserDefaultsHandler.getDeviceDefaultLanguage()){
-            ALUserDefaultsHandler.setDeviceDefaultLanguage(languageCode?.description)
-        }
-        do{
-            try Kommunicate.defaultConfiguration.updateChatContext(with: [ChannelMetadataKeys.kmUserLocale : languageCode])
-        } catch {
-            print("Unable to update chat context")
-        }
         let dispatchGroup = DispatchGroup()
 
         if let clientId = conversation.clientConversationId, !clientId.isEmpty {
@@ -376,6 +369,12 @@ public class KMConversationService: KMConservationServiceable, Localizable {
             metadata.setValue(originName, forKey: ChannelMetadataKeys.groupCreationURL)
         }
 
+        let languageCode = NSLocale.preferredLanguages.first?.prefix(2)
+        if(languageCode?.description != ALUserDefaultsHandler.getDeviceDefaultLanguage()){
+            ALUserDefaultsHandler.setDeviceDefaultLanguage(languageCode?.description)
+        }
+        updateMetadataChatContext(info: [ChannelMetadataKeys.kmUserLocale : languageCode as Any], metadata: metadata)
+        
         guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
               !messageMetadata.isEmpty
         else {
@@ -383,6 +382,41 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         }
         metadata.addEntries(from: messageMetadata)
         return metadata
+    }
+    
+    private func updateMetadataChatContext(info: [String: Any], metadata : NSMutableDictionary) {
+        var context: [String: Any] = [:]
+
+        do {
+            let contextDict = try chatContextFromMetadata(messageMetadata: metadata as? [AnyHashable : Any])
+            context = contextDict ?? [:]
+            context.merge(info, uniquingKeysWith: { $1 })
+
+            let messageInfoData = try JSONSerialization
+                .data(withJSONObject: context, options: .prettyPrinted)
+            let messageInfoString = String(data: messageInfoData, encoding: .utf8) ?? ""
+            metadata["KM_CHAT_CONTEXT"] = messageInfoString
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    private func chatContextFromMetadata(messageMetadata : [AnyHashable: Any]?) -> [String: Any]? {
+        guard
+            let messageMetadata = messageMetadata,
+            let chatContext = messageMetadata["KM_CHAT_CONTEXT"] as? String,
+            let contextData = chatContext.data(using: .utf8)
+        else {
+            return nil
+        }
+        do {
+            let contextDict = try JSONSerialization
+                .jsonObject(with: contextData, options: .allowFragments) as? [String: Any]
+            return contextDict
+        } catch {
+            print(error.localizedDescription)
+        }
+        return nil
     }
 
     // MARK: - Private methods

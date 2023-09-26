@@ -168,7 +168,7 @@ open class Kommunicate: NSObject, Localizable {
                 switch result {
                 case .success:
                     setup(applicationId: appID)
-                    registerNewUser(kmUser, completion: completion)
+                    registerNewUser(kmUser, isVisitor: false, completion: completion)
                 case .failure:
                     print("Error while logging out the existing user")
                     let errorPass = NSError(domain: "Error while logging out the existing user", code: 0, userInfo: nil)
@@ -177,44 +177,128 @@ open class Kommunicate: NSObject, Localizable {
             })
             return
         }
-        registerNewUser(kmUser, completion: completion)
+        registerNewUser(kmUser, isVisitor: false, completion: completion)
     }
     
+    @objc open class func registerUserAsVistor(
+        _ kmUser: KMUser = createVisitorUser(),
+        completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void
+    ) {
+        if isLoggedIn, let appID = KMUserDefaultHandler.getApplicationKey(), let currentUserId = KMUserDefaultHandler.getUserId(), currentUserId != kmUser.userId {
+            // LOGOUT the current user & login Again
+            logoutUser(completion: { result in
+                switch result {
+                case .success:
+                    setup(applicationId: appID)
+                    registerNewUser(kmUser, isVisitor: true, completion: completion)
+                case .failure:
+                    print("Error while logging out the existing user")
+                    let errorPass = NSError(domain: "Error while logging out the existing user", code: 0, userInfo: nil)
+                    completion(nil, errorPass as NSError?)
+                }
+            })
+            return
+        }
+        registerNewUser(kmUser, isVisitor: true, completion: completion)
+    }
     
-     private class func registerNewUser(_ kmUser: KMUser, completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
-        let registerUserClientService = ALRegisterUserClientService()
-        registerUserClientService.initWithCompletion(kmUser, withCompletion: { response, error in
-            if error != nil {
-                print("Error while registering the user to Kommunicate")
-                let errorPass = NSError(domain: "Error while registering the user to Kommunicate", code: 0, userInfo: nil)
-                completion(response, errorPass as NSError?)
-            } else if !(response?.isRegisteredSuccessfully())! {
-                let errorPass = NSError(domain: "Invalid Password", code: 0, userInfo: nil)
-                print("Error while registering the user to Kommunicate: ", errorPass.localizedDescription)
-                completion(response, errorPass as NSError?)
-            } else {
-                print("Registered the user to Kommunicate")
-                let kmAppSetting = KMAppSettingService()
-                kmAppSetting.appSetting { result in
-                    switch result {
-                    case let .success(appSetting):
-                        DispatchQueue.main.async {
-                            kmAppSetting.updateAppsettings(chatWidgetResponse: appSetting.chatWidget)
-                            KMAppUserDefaultHandler.shared.isCSATEnabled
-                                = appSetting.collectFeedback ?? false
-                            if let zendeskaccountKey = appSetting.chatWidget?.zendeskChatSdkKey {
-                                ALApplozicSettings.setZendeskSdkAccountKey(zendeskaccountKey)
-                            }
-                            completion(response, error as NSError?)
-                        }
-                    case .failure:
-                        DispatchQueue.main.async {
-                            completion(response, error as NSError?)
-                        }
+    @objc open class func createVisitorUser() -> KMUser {
+        let kmUser = KMUser()
+        kmUser.userId = randomId()
+        return kmUser
+    }
+    
+    private class func registerNewUser(_ kmUser: KMUser, isVisitor : Bool, completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
+        
+        let kmAppSetting = KMAppSettingService()
+        kmAppSetting.appSetting { result in
+            switch result {
+            case let .success(appSetting):
+                DispatchQueue.main.async {
+                    kmAppSetting.updateAppsettings(chatWidgetResponse: appSetting.chatWidget)
+                    KMAppUserDefaultHandler.shared.isCSATEnabled
+                        = appSetting.collectFeedback ?? false
+                    if let zendeskaccountKey = appSetting.chatWidget?.zendeskChatSdkKey {
+                        ALApplozicSettings.setZendeskSdkAccountKey(zendeskaccountKey)
                     }
+                    
+                    if isVisitor,
+                       kmUser.displayName == nil,
+                       let chaWidget = appSetting.chatWidget,
+                       let pseudonymsEnabled = chaWidget.pseudonymsEnabled,
+                       pseudonymsEnabled {
+                        kmUser.metadata = modifyVisitorMetadata(kmUser: kmUser)
+                        kmUser.displayName = appSetting.userName
+                    }
+                    
+                    let registerUserClientService = ALRegisterUserClientService()
+                    registerUserClientService.initWithCompletion(kmUser, withCompletion: { response, error in
+                        if error != nil {
+                            print("Error while registering the user to Kommunicate")
+                            let errorPass = NSError(domain: "Error while registering the user to Kommunicate", code: 0, userInfo: nil)
+                            completion(response, errorPass as NSError?)
+                        } else if !(response?.isRegisteredSuccessfully())! {
+                            let errorPass = NSError(domain: "Invalid Password", code: 0, userInfo: nil)
+                            print("Error while registering the user to Kommunicate: ", errorPass.localizedDescription)
+                            completion(response, errorPass as NSError?)
+                        } else {
+                            print("Registered the user to Kommunicate")
+                            completion(response, error as NSError?)
+                        }
+                    })
+                }
+            case .failure:
+                DispatchQueue.main.async {
+                    completion(nil, NSError(domain: "Error getting app settings", code: 0, userInfo: nil))
                 }
             }
-        })
+        }
+    }
+    
+    private class func modifyVisitorMetadata(kmUser : KMUser) -> NSMutableDictionary {
+        var metadata = kmUser.metadata
+        if metadata == nil {
+            metadata = NSMutableDictionary()
+        }
+        var toAdd : [String : Any] = [ChannelMetadataKeys.pseudoName : true]
+        toAdd.updateValue(true, forKey: "hidden")
+        updateVisitorMetadata(toAdd: toAdd, metadata: metadata!, updateContext: ChannelMetadataKeys.kmPseudoUser)
+        return metadata!
+    }
+    
+    private class func updateVisitorMetadata(toAdd: [String: Any], metadata : NSMutableDictionary, updateContext : String) {
+        var context: [String: Any] = [:]
+
+        do {
+            let contextDict = try alreadyPresentMetadata(metadata: metadata as? [AnyHashable : Any], context: updateContext)
+            context = contextDict ?? [:]
+            context.merge(toAdd, uniquingKeysWith: { $1 })
+
+            let messageInfoData = try JSONSerialization
+                .data(withJSONObject: context, options: .prettyPrinted)
+            let messageInfoString = String(data: messageInfoData, encoding: .utf8) ?? ""
+            metadata[updateContext] = messageInfoString
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    private class func alreadyPresentMetadata(metadata : [AnyHashable: Any]? , context : String) -> [String: Any]? {
+        guard
+            let metadata = metadata,
+            let context = metadata[context] as? String,
+            let contextData = context.data(using: .utf8)
+        else {
+            return nil
+        }
+        do {
+            let contextDict = try JSONSerialization
+                .jsonObject(with: contextData, options: .allowFragments) as? [String: Any]
+            return contextDict
+        } catch {
+            print(error.localizedDescription)
+        }
+        return nil
     }
 
     /// Logs out the current logged in user and clears all the cache.
