@@ -34,6 +34,7 @@ class RatingViewController: UIViewController {
         let label = UILabel(frame: .zero)
         label.font = Style.Font.normal(size: 16).font()
         label.numberOfLines = 1
+        label.textColor = UIColor(netHex: 0x000000)
         label.backgroundColor = .clear
         label.text = LocalizedText.title
         label.textAlignment = .center
