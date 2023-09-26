@@ -2,15 +2,16 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
-## Unreleased
+## [7.0.1] 2023-09-26
 - Added Support For Auto Suggestions Rich Message
 - Added pseudonym support for iOS SDK
 - Added custom input field rich message support in IOS SDK
 - Fixed Trial Period Alert closable issue.
-- Added support for XCode 15 beta
+- Added support for XCode 15
 - Added flag for identification of users with pseudo name
 - Fixed language metadata clashing with message metaData
-- Fixed hidePostCTA not getting reflected in IOS SDK
+- Fixed hidePostCTA not getting reflected in iOS SDK
+- Added support for elastic update of user's email
 
 ## [7.0.0] 2023-09-07
 - Upgraded minimum SDK version to 13
