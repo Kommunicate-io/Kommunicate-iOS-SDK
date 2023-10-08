@@ -2,9 +2,6 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
-## Unreleased
-- Dark Mode Support Enabled.
-
 ## [7.0.1] 2023-09-26
 - Added Support For Auto Suggestions Rich Message
 - Added pseudonym support for iOS SDK
