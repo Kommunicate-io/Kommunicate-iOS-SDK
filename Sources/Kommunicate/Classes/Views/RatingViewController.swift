@@ -175,7 +175,7 @@ class RatingViewController: UIViewController {
     func setupView() {
         transitioningDelegate = bottomSheetTransitionDelegate
         modalPresentationStyle = .custom
-        view.backgroundColor = .dynamicColor(light: .white, dark: UIColor(netHex: 0x313131))
+        view.backgroundColor = .dynamicColor(light: .white, dark: UIColor.appBarDarkColor())
         view.layer.cornerRadius = 8
         commentsView.isHidden = true
         submitButton.isHidden = true
