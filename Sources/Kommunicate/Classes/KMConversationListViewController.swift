@@ -823,10 +823,3 @@ extension KMConversationListViewController: UISearchBarDelegate {
         resultVC.clear()
     }
 }
-
-
-extension UIColor {
-    static func dynamicColor(light: UIColor, dark: UIColor) -> UIColor {
-        return UIColor { $0.userInterfaceStyle == .dark ? dark : light }
-    }
-}
