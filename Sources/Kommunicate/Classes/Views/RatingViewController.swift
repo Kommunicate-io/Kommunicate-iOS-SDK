@@ -34,7 +34,7 @@ class RatingViewController: UIViewController {
         let label = UILabel(frame: .zero)
         label.font = Style.Font.normal(size: 16).font()
         label.numberOfLines = 1
-        label.textColor = UIColor(netHex: 0x000000)
+        label.textColor = .dynamicColor(light: .black, dark: .white)
         label.backgroundColor = .clear
         label.text = LocalizedText.title
         label.textAlignment = .center
@@ -73,7 +73,7 @@ class RatingViewController: UIViewController {
         textView.layer.borderWidth = 0.7
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.backgroundColor = .clear
-        textView.textColor = .black
+        textView.textColor = .dynamicColor(light: .black, dark: .white)
         return textView
     }()
 
@@ -175,7 +175,7 @@ class RatingViewController: UIViewController {
     func setupView() {
         transitioningDelegate = bottomSheetTransitionDelegate
         modalPresentationStyle = .custom
-        view.backgroundColor = .white
+        view.backgroundColor = .dynamicColor(light: .white, dark: UIColor.appBarDarkColor())
         view.layer.cornerRadius = 8
         commentsView.isHidden = true
         submitButton.isHidden = true

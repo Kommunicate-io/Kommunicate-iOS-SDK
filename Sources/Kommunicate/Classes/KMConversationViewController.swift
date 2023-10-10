@@ -125,10 +125,6 @@ open class KMConversationViewController: ALKConversationViewController {
     override open func viewDidLoad() {
         super.viewDidLoad()
         customNavigationView.setupAppearance()
-        if #available(iOS 13.0, *) {
-            // Always adopt a light interface style.
-            overrideUserInterfaceStyle = .light
-        }
 
         checkPlanAndShowSuspensionScreen()
         addViewConstraints()

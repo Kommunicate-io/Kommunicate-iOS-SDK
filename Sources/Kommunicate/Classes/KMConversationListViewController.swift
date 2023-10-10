@@ -59,7 +59,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
 
     let backgroundView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .dynamicColor(light: .white, dark: .black)
         return view
     }()
 
@@ -83,7 +83,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     lazy var noConversationLabel: UILabel = {
         let label = UILabel()
         label.text = localizedString(forKey: "NoConversationsLabelText", fileName: configuration.localizedStringFileName)
-        label.textColor = UIColor.black
+        label.textColor = UIColor.dynamicColor(light: .black, dark: .white)
         label.textAlignment = .center
         label.numberOfLines = 3
         label.font = Font.normal(size: 18).font()

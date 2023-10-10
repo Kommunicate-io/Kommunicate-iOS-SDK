@@ -118,7 +118,7 @@ class EmojiRatingButton: UIView {
         let label = UILabel(frame: .zero)
         label.font = Style.Font.normal(size: 14).font()
         label.numberOfLines = 1
-        label.textColor = UIColor(netHex: 0x000000)
+        label.textColor = UIColor.dynamicColor(light: .black, dark: .white)
         label.backgroundColor = .clear
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
