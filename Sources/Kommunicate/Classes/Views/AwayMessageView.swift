@@ -33,7 +33,7 @@ class AwayMessageView: UIView {
         label.font = UIFont(name: "HelveticaNeue-Light", size: 14)
         label.contentMode = .center
         label.textAlignment = .center
-        label.textColor = UIColor(netHex: 0x676262)
+        label.textColor = .dynamicColor(light: UIColor(netHex: 0x676262), dark: .lightGray)
         label.numberOfLines = 4
         return label
     }()
