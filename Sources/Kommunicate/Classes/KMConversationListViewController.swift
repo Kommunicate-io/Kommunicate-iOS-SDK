@@ -59,7 +59,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
 
     let backgroundView: UIView = {
         let view = UIView()
-        view.backgroundColor = .dynamicColor(light: .white, dark: .black)
+        view.backgroundColor = .kmDynamicColor(light: .white, dark: UIColor.backgroundDarkColor())
         return view
     }()
 
@@ -73,9 +73,13 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     lazy var startNewConversationBottomButton: UIButton = {
         let button = UIButton(type: .custom)
         button.addTarget(self, action: #selector(compose), for: .touchUpInside)
-        button.backgroundColor = kmConversationViewConfiguration.startNewConversationButtonBackgroundColor == nil ? ALKAppSettingsUserDefaults().getAppBarTintColor() : kmConversationViewConfiguration.startNewConversationButtonBackgroundColor
+        let lightColor = kmConversationViewConfiguration.startNewConversationButtonBackgroundColor ?? ALKAppSettingsUserDefaults().getAppBarTintColor()
+        let darkColor = kmConversationViewConfiguration.startNewConversationButtonDarkBackgroundColor ?? ALKAppSettingsUserDefaults().getAppBarTintColor()
+        let backgroundColor = UIColor.kmDynamicColor(light: lightColor, dark: darkColor)
+        button.backgroundColor = backgroundColor
         button.setTitle(LocalizedText.startNewConversationTitle, for: .normal)
-        button.setTitleColor(kmConversationViewConfiguration.startNewConversationButtonTextColor, for: .normal)
+        let darkTitleColor = kmConversationViewConfiguration.startNewConversationButtonDarkTextColor ?? kmConversationViewConfiguration.startNewConversationButtonTextColor
+        button.setTitleColor(UIColor.kmDynamicColor(light: kmConversationViewConfiguration.startNewConversationButtonTextColor, dark: darkTitleColor), for: .normal)
         button.isUserInteractionEnabled = true
         return button
     }()
@@ -83,7 +87,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     lazy var noConversationLabel: UILabel = {
         let label = UILabel()
         label.text = localizedString(forKey: "NoConversationsLabelText", fileName: configuration.localizedStringFileName)
-        label.textColor = UIColor.dynamicColor(light: .black, dark: .white)
+        label.textColor = UIColor.kmDynamicColor(light: .black, dark: .white)
         label.textAlignment = .center
         label.numberOfLines = 3
         label.font = Font.normal(size: 18).font()
