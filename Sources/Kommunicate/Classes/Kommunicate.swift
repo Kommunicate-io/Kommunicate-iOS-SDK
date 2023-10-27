@@ -67,8 +67,8 @@ open class Kommunicate: NSObject, Localizable {
         config.isProfileTapActionEnabled = false
         var navigationItemsForConversationList = [ALKNavigationItem]()
         var faqItem = ALKNavigationItem(identifier: faqIdentifier, text: NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
-        faqItem.faqTextColor = kmConversationViewConfiguration.faqTextColor
-        faqItem.faqBackgroundColor = kmConversationViewConfiguration.faqBackgroundColor
+        faqItem.faqTextColor = .kmDynamicColor(light: kmConversationViewConfiguration.faqTextColor, dark: kmConversationViewConfiguration.faqTextDarkColor)
+        faqItem.faqBackgroundColor = .kmDynamicColor(light: kmConversationViewConfiguration.faqBackgroundColor, dark: kmConversationViewConfiguration.faqDarkBackgroundColor)
         navigationItemsForConversationList.append(faqItem)
         var navigationItemsForConversationView = [ALKNavigationItem]()
         navigationItemsForConversationView.append(faqItem)
@@ -314,7 +314,27 @@ open class Kommunicate: NSObject, Localizable {
             completion(.success("success"))
         })
     }
-
+    
+    /// Fetches appsettings, configuration set on dashbaord
+    open class func refreshAppsettings() {
+        let appSettingsService = KMAppSettingService()
+        appSettingsService.appSetting {
+            result in
+            switch result {
+            case let .success(appSettings):
+                if let chatWidget = appSettings.chatWidget,
+                   let isSingleThreaded = chatWidget.isSingleThreaded,
+                   isSingleThreaded != ALApplozicSettings.getIsSingleThreadedEnabled() {
+                    ALApplozicSettings.setIsSingleThreadedEnabled(isSingleThreaded)
+                }
+            case let .failure(error):
+                print("Failed to fetch Appsettings due to \(error.localizedDescription)")
+                return
+            }
+        }
+    }
+    
+    
     /// Creates a new conversation with the details passed.
     /// - Parameter conversation: An instance of `KMConversation` object.
     /// - Parameter completion: If successful the success callback will have a conversationId else it will be KMConversationError on failure.
@@ -322,6 +342,7 @@ open class Kommunicate: NSObject, Localizable {
         conversation: KMConversation = KMConversationBuilder().build(),
         completion: @escaping (Result<String, KMConversationError>) -> Void
     ) {
+       
         guard ALDataNetworkConnection.checkDataNetworkAvailable() else {
             completion(.failure(KMConversationError.internet))
             return
@@ -332,62 +353,43 @@ open class Kommunicate: NSObject, Localizable {
             completion(.failure(KMConversationError.invalidTitle))
             return
         }
-
+        
         let service = KMConversationService()
-        let appSettingsService = KMAppSettingService()
+        
         if KMUserDefaultHandler.isLoggedIn() {
-            var allAgentIds = conversation.agentIds
-            var allBotIds = ["bot"] // Default bot that should be added everytime.
-            if let botIds = conversation.botIds { allBotIds.append(contentsOf: botIds) }
-
-            appSettingsService.appSetting {
-                result in
-                switch result {
-                case let .success(appSettings):
-
-                    if allAgentIds.isEmpty {
-                        allAgentIds.append(appSettings.agentID)
-                    }
-                    // If single threaded is not enabled for this conversation,
-                    // then check in global app settings.
-                    if !conversation.useLastConversation,
-                       let chatWidget = appSettings.chatWidget,
-                       let isSingleThreaded = chatWidget.isSingleThreaded,
-                       isSingleThreaded
-                    {
-                        conversation.useLastConversation = isSingleThreaded
-                    }
-                case let .failure(error):
-                    completion(.failure(KMConversationError.api(error)))
-                    return
-                }
-                allAgentIds = allAgentIds.uniqueElements
-                conversation.agentIds = allAgentIds
-                conversation.botIds = allBotIds
-
-                let isClientIdEmpty = (conversation.clientConversationId ?? "").isEmpty
-                if isClientIdEmpty, conversation.useLastConversation {
-                    conversation.clientConversationId = service.createClientIdFrom(
-                        userId: conversation.userId,
-                        agentIds: conversation.agentIds,
-                        botIds: conversation.botIds ?? []
-                    )
-                }
-                service.createConversation(conversation: conversation, completion: { response in
-                    DispatchQueue.main.async {
-                        guard let conversationId = response.clientChannelKey else {
-                            completion(.failure(KMConversationError.api(response.error)))
-                            return
-                        }
-                        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.newConversation, data: ["conversationId": conversationId])
-                        completion(.success(conversationId))
-                    }
-                })
+            refreshAppsettings()
+            // If single threaded is not enabled for this conversation,
+            // then check in global app settings.
+            let isSingleThreaded = ALApplozicSettings.getIsSingleThreadedEnabled()
+            if isSingleThreaded {
+                conversation.useLastConversation = isSingleThreaded
             }
+            
+            let isClientIdEmpty = (conversation.clientConversationId ?? "").isEmpty
+            
+            if isClientIdEmpty, conversation.useLastConversation {
+                conversation.clientConversationId = service.createClientIdFrom(
+                    userId: conversation.userId,
+                    agentIds: conversation.agentIds,
+                    botIds: conversation.botIds ?? []
+                )
+            }
+            
+            service.createConversation(conversation: conversation, completion: { response in
+                DispatchQueue.main.async {
+                    guard let conversationId = response.clientChannelKey else {
+                        completion(.failure(KMConversationError.api(response.error)))
+                        return
+                    }
+                    KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.newConversation, data: ["conversationId": conversationId])
+                    completion(.success(conversationId))
+                }
+            })
         } else {
             completion(.failure(KMConversationError.notLoggedIn))
         }
     }
+    
 
     /// This method is used to return an instance of conversation list view controller.
     ///
