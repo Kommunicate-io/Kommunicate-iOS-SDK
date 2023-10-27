@@ -23,7 +23,6 @@ struct KMAppSettingsResponse: Decodable, KMAppSettingsResponseProtocol {
 }
 
 public struct AppSetting: Decodable {
-    let agentID: String
     let agentName, userName: String?
     let chatWidget: ChatWidgetResponse?
     let collectFeedback: Bool?
@@ -31,7 +30,6 @@ public struct AppSetting: Decodable {
     let leadCollection: [LeadCollectionField]?
 
     enum CodingKeys: String, CodingKey {
-        case agentID = "agentId"
         case agentName, userName, chatWidget, collectFeedback, collectLead, leadCollection
     }
 }

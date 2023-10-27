@@ -197,7 +197,6 @@ public class KMConversationService: KMConservationServiceable, Localizable {
             result in
             switch result {
             case let .success(appSettings):
-                allAgentIds.append(appSettings.agentID)
                 if let chatWidget = appSettings.chatWidget,
                    let isSingleThreaded = chatWidget.isSingleThreaded
                 {
@@ -498,7 +497,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
             andImageLink: nil,
             channelType: 10,
             andMetaData: getMetaDataWith(conversation),
-            adminUser: conversation.agentIds.first,
+            adminUser: nil,
             withGroupUsers: NSMutableArray(array: groupUsers),
             withCompletion: {
                 channel, error in
