@@ -2,6 +2,9 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [7.0.4] 2023-10-27
+- Fixed Single Threaded issue
+
 ## [7.0.3] 2023-10-27
 - Fixed Button spacing
 - Upgraded appsetttings api & optimised the create conversation flow
