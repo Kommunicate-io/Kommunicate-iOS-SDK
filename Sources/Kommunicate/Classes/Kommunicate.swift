@@ -221,6 +221,9 @@ open class Kommunicate: NSObject, Localizable {
                     if let zendeskaccountKey = appSetting.chatWidget?.zendeskChatSdkKey {
                         ALApplozicSettings.setZendeskSdkAccountKey(zendeskaccountKey)
                     }
+                    if let chatWidget = appSetting.chatWidget, let isSingleThreaded = chatWidget.isSingleThreaded, isSingleThreaded != ALApplozicSettings.getIsSingleThreadedEnabled() {
+                        ALApplozicSettings.setIsSingleThreadedEnabled(isSingleThreaded)
+                    }
                     
                     if isVisitor,
                        kmUser.displayName == nil,
@@ -361,10 +364,7 @@ open class Kommunicate: NSObject, Localizable {
             // If single threaded is not enabled for this conversation,
             // then check in global app settings.
             let isSingleThreaded = ALApplozicSettings.getIsSingleThreadedEnabled()
-            if isSingleThreaded {
-                conversation.useLastConversation = isSingleThreaded
-            }
-            
+            conversation.useLastConversation = isSingleThreaded
             let isClientIdEmpty = (conversation.clientConversationId ?? "").isEmpty
             
             if isClientIdEmpty, conversation.useLastConversation {
@@ -1108,7 +1108,6 @@ open class Kommunicate: NSObject, Localizable {
         completion: @escaping (_ error: KommunicateError?) -> Void
     ) {
         let kommunicateConversationBuilder = KMConversationBuilder()
-            .useLastConversation(true)
         let conversation = kommunicateConversationBuilder.build()
         createConversation(conversation: conversation) { result in
             switch result {
