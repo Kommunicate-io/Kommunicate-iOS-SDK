@@ -2,6 +2,13 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [7.0.5] 2023-11-02
+- Fixed iOS 17 Button issue.
+- Fixed the Typing Customization issue.
+- Fixed buttons are getting cut in form template
+- Added hidepostCTA support for all types of buttons.
+- Default configuration added for hiding the form submit button with 'hidePostFormSubmit'.
+
 ## [7.0.4] 2023-10-27
 - Fixed Single Threaded issue
 
