@@ -544,7 +544,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
             switch result {
             case let .success(conversationId):
                 self.channelService.getChannelInformation(byResponse: nil, orClientChannelKey: conversationId, withCompletion: { _, channel, _ in
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
                         self.view.isUserInteractionEnabled = true
                         alertView.dismiss(animated: true, completion: nil)
 
@@ -553,7 +553,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
                             return
                         }
                         self.launchChat(groupId: alChannel.key)
-                    }
+                    })
                 })
             case .failure:
                 DispatchQueue.main.async {
