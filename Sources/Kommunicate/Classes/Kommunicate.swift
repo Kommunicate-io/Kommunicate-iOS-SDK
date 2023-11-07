@@ -364,7 +364,9 @@ open class Kommunicate: NSObject, Localizable {
             // If single threaded is not enabled for this conversation,
             // then check in global app settings.
             let isSingleThreaded = ALApplozicSettings.getIsSingleThreadedEnabled()
-            conversation.useLastConversation = isSingleThreaded
+            if isSingleThreaded {
+                conversation.useLastConversation = isSingleThreaded
+            }
             let isClientIdEmpty = (conversation.clientConversationId ?? "").isEmpty
             
             if isClientIdEmpty, conversation.useLastConversation {
