@@ -1108,6 +1108,7 @@ open class Kommunicate: NSObject, Localizable {
         completion: @escaping (_ error: KommunicateError?) -> Void
     ) {
         let kommunicateConversationBuilder = KMConversationBuilder()
+            .useLastConversation(true)
         let conversation = kommunicateConversationBuilder.build()
         createConversation(conversation: conversation) { result in
             switch result {
