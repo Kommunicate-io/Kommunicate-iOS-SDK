@@ -6,7 +6,7 @@ PODS:
   - iOSSnapshotTestCase/SwiftSupport (8.0.0):
     - iOSSnapshotTestCase/Core
   - Kingfisher (7.6.2)
-  - Kommunicate (7.0.5):
+  - Kommunicate (7.0.6):
     - KommunicateChatUI-iOS-SDK (~> 1.2.1)
   - KommunicateChatUI-iOS-SDK (1.2.1):
     - KommunicateChatUI-iOS-SDK/Complete (= 1.2.1)
@@ -57,7 +57,7 @@ SPEC CHECKSUMS:
   iOSDropDown: ce9daa584eaa5567cafc1b633e3cc7eb6d9cea42
   iOSSnapshotTestCase: a670511f9ee3829c2b9c23e6e68f315fd7b6790f
   Kingfisher: 6c5449c6450c5239166510ba04afe374a98afc4f
-  Kommunicate: c3f2a6bac497f1357e3c5de8ac865b408474d95e
+  Kommunicate: eaa317fd3febd9b347187864f9a0f69b12dd9161
   KommunicateChatUI-iOS-SDK: bb72cdc9b2334ce12980ea342ef9cdbe9be9bcbc
   KommunicateCore-iOS-SDK: 83e2c8d5b3007417354752a457068bd07e6d2e03
   Nimble: f8a8219d16f176429b951e8f7e72df5c23ceddc0

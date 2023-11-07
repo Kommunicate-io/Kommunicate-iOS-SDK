@@ -2,6 +2,9 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [7.0.6] 2023-11-07
+- Fixed createAndShowConversation bug 
+
 ## [7.0.5] 2023-11-02
 - Fixed iOS 17 Button issue.
 - Fixed the Typing Customization issue.
