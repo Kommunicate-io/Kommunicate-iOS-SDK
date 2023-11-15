@@ -2,6 +2,10 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [7.0.7] 2023-11-25
+- Default configuration added for disabling the form submit button using 'disableFormPostSubmit'.
+- Added support of prefill checkboxes on Form Template.
+
 ## [7.0.6] 2023-11-07
 - Fixed createAndShowConversation bug 
 
