@@ -34,7 +34,9 @@ public class FaqViewController: UIViewController, Localizable {
         webView.backgroundColor = UIColor.kmDynamicColor(light: .white, dark: .backgroundDarkColor())
         webView.navigationDelegate = self
         webView.configuration.userContentController.addUserScript(self.getZoomDisableScript())
-        injectDynamicStyles()
+        if UIColor.isKMDarkModeEnabled {
+            injectDynamicStyles()
+        }
         view = webView
     }
 
