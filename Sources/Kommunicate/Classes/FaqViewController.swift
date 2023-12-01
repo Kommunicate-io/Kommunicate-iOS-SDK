@@ -30,11 +30,13 @@ public class FaqViewController: UIViewController, Localizable {
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.allowsBackForwardNavigationGestures = true
+        webView.scrollView.backgroundColor = UIColor.kmDynamicColor(light: .white, dark: .backgroundDarkColor())
+        webView.backgroundColor = UIColor.kmDynamicColor(light: .white, dark: .backgroundDarkColor())
         webView.navigationDelegate = self
         webView.configuration.userContentController.addUserScript(self.getZoomDisableScript())
+        injectDynamicStyles()
         view = webView
     }
-    
 
     private func getZoomDisableScript() -> WKUserScript {
         let source: String = "var meta = document.createElement('meta');" +
@@ -42,6 +44,30 @@ public class FaqViewController: UIViewController, Localizable {
             "meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';" +
             "var head = document.getElementsByTagName('head')[0];" + "head.appendChild(meta);"
         return WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+    }
+
+    private func injectDynamicStyles() {
+        let dynamicStylesScript = """
+            function prefersDarkMode() {
+                return window.matchMedia('(prefers-color-scheme: dark)').matches;
+            }
+
+            function applyDynamicStyles() {
+                var initialBackgroundColor = prefersDarkMode() ? '#1C1C1C' : '#ffffff';
+                document.body.style.backgroundColor = initialBackgroundColor;
+
+                if (prefersDarkMode()) {
+                    document.body.style.backgroundColor = '#1C1C1C';
+                } else {
+                    document.body.style.backgroundColor = '#ffffff';
+                }
+            }
+
+            applyDynamicStyles();
+        """
+        let dynamicStylesScriptInjection = WKUserScript(source: dynamicStylesScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+
+        webView.configuration.userContentController.addUserScript(dynamicStylesScriptInjection)
     }
 
     override public func viewDidLoad() {
