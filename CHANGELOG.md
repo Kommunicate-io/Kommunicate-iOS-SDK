@@ -2,6 +2,11 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [7.0.8] 2023-12-06
+- Added Support of Video Rich Message.
+- Fixed the attachment upload issue.
+- Fixed Conversation Missmatch issue.
+
 ## [7.0.7] 2023-11-25
 - Default configuration added for disabling the form submit button using 'disableFormPostSubmit'.
 - Added support of prefill checkboxes on Form Template.
