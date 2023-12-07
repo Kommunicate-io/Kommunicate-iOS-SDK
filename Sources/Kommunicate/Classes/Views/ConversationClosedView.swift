@@ -16,7 +16,7 @@ class ConversationClosedView: UIView {
     private let conversationResolvedLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.numberOfLines = 1
-        label.textColor = .text(.brownishGreyTwo)
+        label.textColor = UIColor.kmDynamicColor(light: .text(.brownishGreyTwo), dark: UIColor.text(.warmGrey))
         label.font = Style.Font.normal(size: 15).font()
         label.backgroundColor = .clear
         label.text = LocalizedText.conversationResolved
@@ -99,7 +99,7 @@ class ConversationClosedView: UIView {
             action: #selector(restartConversationTapped),
             for: .touchUpInside
         )
-        backgroundColor = .background(.mediumGrey)
+        backgroundColor = UIColor.kmDynamicColor(light: UIColor.background(.mediumGrey), dark: UIColor.appBarDarkColor())
         setupLayout()
     }
 
