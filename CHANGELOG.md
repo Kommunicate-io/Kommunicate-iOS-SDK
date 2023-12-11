@@ -2,6 +2,9 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [7.0.9] 2023-12-12
+- Fixed hidePostCTA message delete issue.
+
 ## [7.0.8] 2023-12-06
 - Added Support of Video Rich Message.
 - Fixed the attachment upload issue.
