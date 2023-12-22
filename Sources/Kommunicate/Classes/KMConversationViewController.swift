@@ -403,6 +403,7 @@ open class KMConversationViewController: ALKConversationViewController {
         // If the user was typing when the status changed
         view.endEditing(true)
         guard isClosedConversationViewHidden == isClosedConversation else { return }
+        ALKCustomEventHandler.shared.publish(triggeredEvent: .resolveConversation, data: ["conversationId":viewModel.channelKey?.stringValue ?? ""])
         checkFeedbackAndShowRatingView()
     }
 
