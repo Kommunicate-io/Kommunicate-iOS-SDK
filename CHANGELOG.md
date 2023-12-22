@@ -2,6 +2,13 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [7.1.0] 2023-12-23
+- Added support to trigger intents through quick reply
+- Restrict agent reply for zendesk conversation
+- Added Customisation for the line above chatbar.
+- Changed UI for typing indicator
+- Minor UI related bug fixes
+
 ## [7.0.9] 2023-12-12
 - Fixed hidePostCTA message delete issue.
 
