@@ -221,10 +221,10 @@ open class KMConversationViewController: ALKConversationViewController {
              return
          }
          
-         showNewTypingLabel(status: true)
+//         showNewTypingLabel(status: true)
          
          self.timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(delayInterval), repeats: false) {[self] timer in
-         self.viewModel.removeTypingIndicatorMessage()
+//         self.viewModel.removeTypingIndicatorMessage()
          self.viewModel.addMessagesToList([currentMessage])
          self.timer.invalidate()
          if count < messageArray.count {
@@ -403,6 +403,7 @@ open class KMConversationViewController: ALKConversationViewController {
         // If the user was typing when the status changed
         view.endEditing(true)
         guard isClosedConversationViewHidden == isClosedConversation else { return }
+        ALKCustomEventHandler.shared.publish(triggeredEvent: .resolveConversation, data: ["conversationId":viewModel.channelKey?.stringValue ?? ""])
         checkFeedbackAndShowRatingView()
     }
 
