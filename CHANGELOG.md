@@ -2,6 +2,9 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## Unreleased
+- Zendesk (Zopim) integration optimisations
+
 ## [7.1.0] 2023-12-23
 - Added support to trigger intents through quick reply
 - Restrict agent reply for zendesk conversation
