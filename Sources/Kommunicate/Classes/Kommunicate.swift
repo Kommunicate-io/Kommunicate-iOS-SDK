@@ -626,11 +626,9 @@ open class Kommunicate: NSObject, Localizable {
         // If bot is handling the chat then we shouldn't send any messages to Zendesk.
         if let assignee = channel.assigneeUserId, !assignee.isEmpty,
            let contact = ALContactService().loadContact(byKey: "userId", value: assignee) {
-            if contact.roleType == NSNumber.init(value: AL_BOT.rawValue) {
-              zendeskHandler.updateHandoffFlag(false)
-          } else {
-              zendeskHandler.updateHandoffFlag(true)
-          }
+            if contact.roleType == NSNumber.init(value: AL_APPLICATION_WEB_ADMIN.rawValue) {
+                zendeskHandler.handedOffToAgent(groupId: existingZendeskConversationId.stringValue, happendNow: false)
+            }
         }
         
         zendeskHandler.initiateZendesk(key: accountKey)
