@@ -81,6 +81,9 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         let darkTitleColor = kmConversationViewConfiguration.startNewConversationButtonDarkTextColor ?? kmConversationViewConfiguration.startNewConversationButtonTextColor
         button.setTitleColor(UIColor.kmDynamicColor(light: kmConversationViewConfiguration.startNewConversationButtonTextColor, dark: darkTitleColor), for: .normal)
         button.isUserInteractionEnabled = true
+        if configuration.hideBottomStartNewConversationButton {
+            button.isHidden = true
+        }
         return button
     }()
     
