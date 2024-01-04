@@ -61,7 +61,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   KommunicateChatUI-iOS-SDK:
-    :commit: 08d31f1b7b2bcd6d4121aa2c4be109e8d7daf865
+    :commit: 4da125a84270bc2d34f71814161ca48e725820d1
     :git: https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK
   KommunicateCore-iOS-SDK:
     :commit: 089e195cc837cc1b7d578749df547777f8ca4f71
@@ -82,4 +82,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 7e552ecc0ba087233d150914347734d3a16f1b74
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.13.0
