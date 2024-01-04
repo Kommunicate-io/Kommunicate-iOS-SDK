@@ -32,6 +32,8 @@ PODS:
 DEPENDENCIES:
   - iOSSnapshotTestCase (~> 8.0.0)
   - Kommunicate (from `../`)
+  - KommunicateChatUI-iOS-SDK (from `https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK`, branch `sanity_1.2.6`)
+  - KommunicateCore-iOS-SDK (from `https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK`, branch `sanity_1.1.7`)
   - Nimble
   - Nimble-Snapshots
   - Quick
@@ -41,8 +43,6 @@ SPEC REPOS:
     - iOSDropDown
     - iOSSnapshotTestCase
     - Kingfisher
-    - KommunicateChatUI-iOS-SDK
-    - KommunicateCore-iOS-SDK
     - Nimble
     - Nimble-Snapshots
     - Quick
@@ -52,6 +52,20 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Kommunicate:
     :path: "../"
+  KommunicateChatUI-iOS-SDK:
+    :branch: sanity_1.2.6
+    :git: https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK
+  KommunicateCore-iOS-SDK:
+    :branch: sanity_1.1.7
+    :git: https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK
+
+CHECKOUT OPTIONS:
+  KommunicateChatUI-iOS-SDK:
+    :commit: 08d31f1b7b2bcd6d4121aa2c4be109e8d7daf865
+    :git: https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK
+  KommunicateCore-iOS-SDK:
+    :commit: 089e195cc837cc1b7d578749df547777f8ca4f71
+    :git: https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK
 
 SPEC CHECKSUMS:
   iOSDropDown: ce9daa584eaa5567cafc1b633e3cc7eb6d9cea42
@@ -66,6 +80,6 @@ SPEC CHECKSUMS:
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
   ZendeskChatProvidersSDK: af93e02e2058875f92e6ad86e74ee51203b4079e
 
-PODFILE CHECKSUM: 07a36a186f5848e9c0e96beedc0b1730ca2d51e8
+PODFILE CHECKSUM: 7e552ecc0ba087233d150914347734d3a16f1b74
 
 COCOAPODS: 1.12.1
