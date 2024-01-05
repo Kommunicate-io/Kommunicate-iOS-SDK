@@ -2,6 +2,14 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [7.1.1] 2024-01-05
+- Fixed link preview showing for deep link
+- Added the caption Screen for Attachment.
+- Fixed HTML Message view in Conversation List Screen.
+- Fixed Location blue bar coming in message bubble
+- Fixed New Form UI Cutting from Bottom.
+- Updated the User Update Api
+
 ## [7.1.0] 2023-12-23
 - Added support to trigger intents through quick reply
 - Restrict agent reply for zendesk conversation
