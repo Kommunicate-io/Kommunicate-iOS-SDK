@@ -263,8 +263,8 @@ open class Kommunicate: NSObject, Localizable {
         if metadata == nil {
             metadata = NSMutableDictionary()
         }
-        var toAdd : [String : Any] = [ChannelMetadataKeys.pseudoName : true]
-        toAdd.updateValue(true, forKey: "hidden")
+        var toAdd : [String : Any] = [ChannelMetadataKeys.pseudoName : "true"]
+        toAdd.updateValue("true", forKey: "hidden")
         updateVisitorMetadata(toAdd: toAdd, metadata: metadata!, updateContext: ChannelMetadataKeys.kmPseudoUser)
         return metadata!
     }
