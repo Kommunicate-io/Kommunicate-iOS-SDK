@@ -748,6 +748,28 @@ open class Kommunicate: NSObject, Localizable {
     @objc open class func randomId() -> String {
         return String.random(length: 32)
     }
+    
+    /**
+        Fetches appsettings configuration and get the disable chat widget config.
+     - Parameter completion: returns disablechatwidget configuration value
+ 
+     */
+      @objc open class func isChatWidgetDisabled(completionHandler: @escaping (Bool) -> Void) {
+        let appSettingsService = KMAppSettingService()
+        appSettingsService.appSetting {
+            result in
+            switch result {
+            case let .success(appSettings):
+                if let chatWidget = appSettings.chatWidget,
+                   let isWidgetDisabled = chatWidget.disableChatWidget {
+                  completionHandler(isWidgetDisabled)
+                }
+                completionHandler(false)
+            case .failure:
+               completionHandler(false)
+            }
+        }
+    }
 
     open class func openFaq(from vc: UIViewController, with configuration: ALKConfiguration) {
         guard let url = URLBuilder.faqURL(for: ALUserDefaultsHandler.getApplicationKey(), hideChat: configuration.hideChatInHelpcenter).url else {
