@@ -26,8 +26,9 @@ class ConversationVCNavBar: UIView, Localizable {
     weak var delegate: NavigationBarCallbacks?
     var localizationFileName: String!
 
-    let backButton: UIButton = {
-        let button = UIButton(type: .custom)
+    let backButton: KMExtendedTouchAreaButton = {
+        let button = KMExtendedTouchAreaButton(type: .custom)
+        button.extraTouchArea = UIEdgeInsets(top: -20, left: -20, bottom: -20, right: -20)
         var image = UIImage(named: "icon_back", in: Bundle.kommunicate, compatibleWith: nil)
         image = image?.withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
         button.setImage(image, for: .normal)
@@ -196,7 +197,7 @@ class ConversationVCNavBar: UIView, Localizable {
         addViewsForAutolayout(views: [backButton, profileImage, statusIconBackgroundColor, onlineStatusIcon, profileView])
 
         // Setup constraints
-        backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0).isActive = true
+        backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -10).isActive = true
         backButton.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
         backButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
         backButton.widthAnchor.constraint(equalToConstant: 20).isActive = true
