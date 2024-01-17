@@ -760,11 +760,12 @@ open class Kommunicate: NSObject, Localizable {
             result in
             switch result {
             case let .success(appSettings):
-                if let chatWidget = appSettings.chatWidget,
-                   let isWidgetDisabled = chatWidget.disableChatWidget {
-                  completionHandler(isWidgetDisabled)
+                guard let chatWidget = appSettings.chatWidget,
+                      let isWidgetDisabled = chatWidget.disableChatWidget else {
+                    completionHandler(false)
+                    return
                 }
-                completionHandler(false)
+                completionHandler(isWidgetDisabled)
             case .failure:
                completionHandler(false)
             }
