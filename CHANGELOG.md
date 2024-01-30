@@ -2,6 +2,8 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## Unreleased
+- Zendesk (Zopim) integration optimisations
 ## [7.1.1] 2024-01-05
 - Fixed link preview showing for deep link
 - Added the caption Screen for Attachment.
