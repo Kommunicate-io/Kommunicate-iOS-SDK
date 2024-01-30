@@ -45,6 +45,7 @@ struct ChatWidgetResponse: Decodable {
     let zendeskChatSdkKey: String?
     let defaultUploadOverride : DefaultUploadOverride?
     let pseudonymsEnabled : Bool?
+    let disableChatWidget : Bool?
 }
 
 struct DefaultUploadOverride: Decodable {

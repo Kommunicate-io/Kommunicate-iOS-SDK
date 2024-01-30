@@ -263,8 +263,8 @@ open class Kommunicate: NSObject, Localizable {
         if metadata == nil {
             metadata = NSMutableDictionary()
         }
-        var toAdd : [String : Any] = [ChannelMetadataKeys.pseudoName : true]
-        toAdd.updateValue(true, forKey: "hidden")
+        var toAdd : [String : Any] = [ChannelMetadataKeys.pseudoName : "true"]
+        toAdd.updateValue("true", forKey: "hidden")
         updateVisitorMetadata(toAdd: toAdd, metadata: metadata!, updateContext: ChannelMetadataKeys.kmPseudoUser)
         return metadata!
     }
@@ -745,6 +745,29 @@ open class Kommunicate: NSObject, Localizable {
      */
     @objc open class func randomId() -> String {
         return String.random(length: 32)
+    }
+    
+    /**
+        Fetches appsettings configuration and get the disable chat widget config.
+     - Parameter completion: returns disablechatwidget configuration value
+ 
+     */
+      @objc open class func isChatWidgetDisabled(completionHandler: @escaping (Bool) -> Void) {
+        let appSettingsService = KMAppSettingService()
+        appSettingsService.appSetting {
+            result in
+            switch result {
+            case let .success(appSettings):
+                guard let chatWidget = appSettings.chatWidget,
+                      let isWidgetDisabled = chatWidget.disableChatWidget else {
+                    completionHandler(false)
+                    return
+                }
+                completionHandler(isWidgetDisabled)
+            case .failure:
+               completionHandler(false)
+            }
+        }
     }
 
     open class func openFaq(from vc: UIViewController, with configuration: ALKConfiguration) {
