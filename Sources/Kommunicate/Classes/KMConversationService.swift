@@ -84,8 +84,6 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         conversation: KMConversation,
         completion: @escaping (Response) -> Void
     ) {
-        let dispatchGroup = DispatchGroup()
-
         if let clientId = conversation.clientConversationId, !clientId.isEmpty {
             isGroupPresent(clientId: clientId, completion: { present, channel in
                 if present {
@@ -94,21 +92,18 @@ public class KMConversationService: KMConservationServiceable, Localizable {
 
                     if let currentAssignee = self.assigneeUserIdFor(groupId: groupID), let newAssignee = conversation.conversationAssignee {
                         if !(newAssignee.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty), newAssignee != currentAssignee {
-                            dispatchGroup.enter()
+                           
                             self.assignConversation(groupId: groupID, to: newAssignee) { result in
                                 switch result {
                                 case .success:
-                                    dispatchGroup.leave()
+                                    completion(response)
                                 case let .failure(error):
                                     response.error = error
                                     response.success = false
-                                    dispatchGroup.leave()
+                                    completion(response)
                                 }
                             }
                         }
-                    }
-                    dispatchGroup.notify(queue: .main) {
-                        completion(response)
                     }
                 } else {
                     self.createNewChannelAndConversation(conversation: conversation, completion: { response in
