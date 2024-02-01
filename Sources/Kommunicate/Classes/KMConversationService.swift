@@ -104,6 +104,8 @@ public class KMConversationService: KMConservationServiceable, Localizable {
                                 }
                             }
                         }
+                    } else {
+                        completion(response)
                     }
                 } else {
                     self.createNewChannelAndConversation(conversation: conversation, completion: { response in
