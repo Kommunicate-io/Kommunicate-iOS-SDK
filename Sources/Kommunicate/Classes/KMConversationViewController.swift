@@ -157,10 +157,7 @@ open class KMConversationViewController: ALKConversationViewController {
         guard !viewModel.messageModels.isEmpty else { return }
         if let lastMessage = viewModel.messageModels.last, !lastMessage.isMyMessage {
             isAwayMessageViewHidden = true
-            print(lastMessage.metadata)
         }
-        
-       
     }
     
     
@@ -204,17 +201,6 @@ open class KMConversationViewController: ALKConversationViewController {
        }
     }
     
-    func hideChatbar(){
-        if let message = self.viewModel.lastMessage,
-           let metadata = message.metadata as? [String:Any],
-           let hidechatbar = metadata["hideChatbar"] as? Bool,
-            hidechatbar {
-            isChatBarHidden = true
-        } else {
-            isChatBarHidden = false
-        }
-    }
-
     // This method is used to delay the bot message as well as to show typing indicator
     func showDelayAndTypingIndicatorForMessage() {
         if count >= messageArray.count {
