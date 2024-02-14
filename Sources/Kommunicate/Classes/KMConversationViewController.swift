@@ -200,7 +200,7 @@ open class KMConversationViewController: ALKConversationViewController {
            self.viewModel.addMessagesToList(messageList)
        }
     }
-
+    
     // This method is used to delay the bot message as well as to show typing indicator
     func showDelayAndTypingIndicatorForMessage() {
         if count >= messageArray.count {
@@ -582,29 +582,46 @@ open class KMConversationViewController: ALKConversationViewController {
                                       languageCode language: String?)
     {
         do {
-            let customMetadata = metadata ?? [String: Any]()
+            var replyMetadata = metadata ?? [String: Any]() // reply meta data
 
             if let updatedLanguage = language {
                 try configuration.updateUserLanguage(tag: updatedLanguage)
             }
-
+            
+            
+            guard !replyMetadata.isEmpty else {
+                viewModel.send(message: text, metadata: configuration.messageMetadata as? [String: Any])
+                return
+            }
+            
             guard let messageMetadata = configuration.messageMetadata as? [String: Any],
-                  let jsonData = messageMetadata[ChannelMetadataKeys.chatContext] as? String,!jsonData.isEmpty,
-                  let data = jsonData.data(using: .utf8),
-                  let chatContextData = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any]
+                  !messageMetadata.isEmpty else {
+                viewModel.send(message:text, metadata: replyMetadata)
+                return
+            }
+            
+            guard var replyChatContextData = replyMetadata[ChannelMetadataKeys.chatContext] as? [String:Any] else {
+                replyMetadata.merge(messageMetadata) { $1 }
+                viewModel.send(message: text, metadata: replyMetadata)
+                return
+            }
+            
+           
+            guard let jsonData = messageMetadata[ChannelMetadataKeys.chatContext] as? String,
+               !jsonData.isEmpty,
+               let data = jsonData.data(using: .utf8),
+               let messageChatContextData = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any],
+                !messageChatContextData.isEmpty
             else {
-                viewModel.send(message: text, metadata: customMetadata)
+                viewModel.send(message: text, metadata: replyMetadata)
                 return
             }
-
-            if customMetadata.isEmpty {
-                viewModel.send(message: text, metadata: messageMetadata)
-                return
-            }
-            var replyMetaData = customMetadata[ChannelMetadataKeys.chatContext] as? [String: Any]
-            replyMetaData?.merge(chatContextData) { $1 }
-            let metaDataToSend = [ChannelMetadataKeys.chatContext: replyMetaData]
-            viewModel.send(message: text, metadata: metaDataToSend as [AnyHashable: Any])
+          
+            replyChatContextData.merge(messageChatContextData) {$1}
+            var chatContextDataTobeSent = [ChannelMetadataKeys.chatContext:replyChatContextData]
+            replyMetadata.merge(chatContextDataTobeSent, uniquingKeysWith: {$1})
+            
+            viewModel.send(message: text, metadata: replyMetadata)
         } catch {
             print("Error while sending quick reply message %@", error.localizedDescription)
         }
