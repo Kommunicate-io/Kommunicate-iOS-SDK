@@ -15,18 +15,18 @@ PODS:
   - iOSSnapshotTestCase/SwiftSupport (8.0.0):
     - iOSSnapshotTestCase/Core
   - Kingfisher (7.6.2)
-  - Kommunicate (7.1.2):
-    - KommunicateChatUI-iOS-SDK (~> 1.2.7)
-  - KommunicateChatUI-iOS-SDK (1.2.7):
-    - KommunicateChatUI-iOS-SDK/Complete (= 1.2.7)
-  - KommunicateChatUI-iOS-SDK/Complete (1.2.7):
+  - Kommunicate (7.1.3):
+    - KommunicateChatUI-iOS-SDK (~> 1.2.8)
+  - KommunicateChatUI-iOS-SDK (1.2.8):
+    - KommunicateChatUI-iOS-SDK/Complete (= 1.2.8)
+  - KommunicateChatUI-iOS-SDK/Complete (1.2.8):
     - iOSDropDown
     - Kingfisher (~> 7.6.2)
     - KommunicateChatUI-iOS-SDK/RichMessageKit
     - KommunicateCore-iOS-SDK (~> 1.1.8)
     - SwipeCellKit (~> 2.7.1)
     - ZendeskChatProvidersSDK (~> 3.0.0)
-  - KommunicateChatUI-iOS-SDK/RichMessageKit (1.2.7)
+  - KommunicateChatUI-iOS-SDK/RichMessageKit (1.2.8)
   - KommunicateCore-iOS-SDK (1.1.8)
   - Nimble (13.1.2):
     - CwlPreconditionTesting (~> 2.1.0)
@@ -77,8 +77,8 @@ SPEC CHECKSUMS:
   iOSDropDown: ce9daa584eaa5567cafc1b633e3cc7eb6d9cea42
   iOSSnapshotTestCase: a670511f9ee3829c2b9c23e6e68f315fd7b6790f
   Kingfisher: 6c5449c6450c5239166510ba04afe374a98afc4f
-  Kommunicate: edc2eabede55e8fed60fa621663ee2199c5c0562
-  KommunicateChatUI-iOS-SDK: b8b5e2209832a99e85bd402f0b066695e3aa18d0
+  Kommunicate: 4052c4e64f61c4bdbf566eb96924b85dee913e0a
+  KommunicateChatUI-iOS-SDK: b582ccc1cc2797adfa2caa97fcf1ed884bf56ebd
   KommunicateCore-iOS-SDK: 87c6e7c9f0e1e32d258c36b70ba20ffbd4428c90
   Nimble: d733c860d832b324e9779034f12398993c536e7b
   Nimble-Snapshots: 7f2710c507469eb0fc4912f45d0f280e15f91966
