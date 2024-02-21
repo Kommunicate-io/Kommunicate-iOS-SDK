@@ -12,6 +12,13 @@ The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommun
 - Added support of form data using dialog flow fulfillment
 - Fixed minor crashes
 
+## [7.1.2] 2024-02-12
+- Zendesk (Zopim) integration optimisations
+- Fixed Suggested Reply Rich Message is not getting rendered while scrolling on conversation screen
+- Time Label Font Change
+- Added support of form data using dialog flow fulfillment
+- Fixed minor crashes
+
 ## [7.1.1] 2024-01-05
 - Fixed link preview showing for deep link
 - Added the caption Screen for Attachment.
