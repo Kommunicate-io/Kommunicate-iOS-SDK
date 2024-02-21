@@ -1,7 +1,10 @@
 # CHANGELOG
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
-
+## [7.1.3] 2024-02-21
+- Fixed Form Rich Message Rendering issue
+- Added support for showing assingment message 
+- Fixed Reply meta issue on Quick Reply Button
 ## [7.1.2] 2024-02-12
 - Zendesk (Zopim) integration optimisations
 - Fixed Suggested Reply Rich Message is not getting rendered while scrolling on conversation screen
