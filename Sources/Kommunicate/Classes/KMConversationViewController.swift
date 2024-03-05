@@ -11,7 +11,7 @@ import UIKit
 
 /// Before pushing this view Controller. Use this
 /// navigationItem.backBarButtonItem = UIBarButtonItem(customView: UIView())
-open class KMConversationViewController: ALKConversationViewController {
+open class KMConversationViewController: ALKConversationViewController, KMUpdateAssigneeStatusDelegate, Localizable {
     private let faqIdentifier = 11_223_346
     private let kmConversationViewConfiguration: KMConversationViewConfiguration
     private weak var ratingVC: RatingViewController?
@@ -23,6 +23,13 @@ open class KMConversationViewController: ALKConversationViewController {
     var count = 0
     var currentMessage = ALMessage()
     var delayInterval = 0
+    
+    enum LocalizationKey {
+        static let online = "online"
+        static let offline = "offline"
+        static let awayMode = "awayMode"
+        static let noName = "noName"
+    }
     
     lazy var customNavigationView = ConversationVCNavBar(
         delegate: self,
@@ -124,6 +131,7 @@ open class KMConversationViewController: ALKConversationViewController {
 
     override open func viewDidLoad() {
         super.viewDidLoad()
+        KMUpdateAssigneeStatus.shared.delegate = self
         customNavigationView.setupAppearance()
 
         checkPlanAndShowSuspensionScreen()
@@ -350,6 +358,10 @@ open class KMConversationViewController: ALKConversationViewController {
         NotificationCenter.default.post(notification)
     }
 
+    func updateAssigniStatus() {
+        self.updateAssigneeDetails()
+    }
+    
     open override func updateAssigneeDetails() {
         super.updateAssigneeDetails()
         conversationDetail.updatedAssigneeDetails(groupId: viewModel.channelKey, userId: viewModel.contactId) { contact, channel in
@@ -362,7 +374,35 @@ open class KMConversationViewController: ALKConversationViewController {
             self.assigneeUserId = contact?.userId
             self.hideInputBarIfAssignedToBot()
             guard let contact = contact else {return}
-            self.isAwayMessageViewHidden = !contact.isInAwayMode
+            guard let channelID = self.viewModel.channelKey as? Int, ( channelID == KMUpdateAssigneeStatus.shared.channelID || KMUpdateAssigneeStatus.shared.channelID == 0) else {
+                self.isAwayMessageViewHidden = !contact.isInAwayMode
+                return
+            }
+            switch KMUpdateAssigneeStatus.shared.status {
+            case .online:
+                self.customNavigationView.onlineStatusIcon.backgroundColor = UIColor(red: 28, green: 222, blue: 20)
+                self.customNavigationView.onlineStatusText.text = self.localizedString(
+                    forKey: LocalizationKey.online,
+                    fileName: self.configuration.localizedStringFileName
+                )
+                self.isAwayMessageViewHidden = true
+            case .offline:
+                self.customNavigationView.onlineStatusIcon.backgroundColor = UIColor(red: 165, green: 170, blue: 165)
+                self.customNavigationView.onlineStatusText.text = self.localizedString(
+                    forKey: LocalizationKey.offline,
+                    fileName: self.configuration.localizedStringFileName
+                )
+                self.isAwayMessageViewHidden = !contact.isInAwayMode
+            case .away:
+                self.customNavigationView.onlineStatusIcon.backgroundColor = .background(.darkYellow)
+                self.customNavigationView.onlineStatusText.text = self.localizedString(
+                    forKey: LocalizationKey.awayMode,
+                    fileName: self.configuration.localizedStringFileName
+                )
+                self.isAwayMessageViewHidden = !contact.isInAwayMode
+            case .default:
+                self.isAwayMessageViewHidden = !contact.isInAwayMode
+            }
         }
     }
     
