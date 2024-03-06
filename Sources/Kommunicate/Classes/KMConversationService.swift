@@ -103,6 +103,8 @@ public class KMConversationService: KMConservationServiceable, Localizable {
                                     completion(response)
                                 }
                             }
+                        } else {
+                            completion(response)
                         }
                     } else {
                         completion(response)
