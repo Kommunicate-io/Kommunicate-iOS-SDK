@@ -374,7 +374,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             self.assigneeUserId = contact?.userId
             self.hideInputBarIfAssignedToBot()
             guard let contact = contact else {return}
-            guard let channelID = self.viewModel.channelKey as? Int, ( channelID == KMUpdateAssigneeStatus.shared.channelID || KMUpdateAssigneeStatus.shared.channelID == 0) else {
+            guard let assigneeUserId = self.assigneeUserId, ( assigneeUserId == KMUpdateAssigneeStatus.shared.assigneeID || KMUpdateAssigneeStatus.shared.assigneeID == "") else {
                 self.isAwayMessageViewHidden = !contact.isInAwayMode
                 return
             }

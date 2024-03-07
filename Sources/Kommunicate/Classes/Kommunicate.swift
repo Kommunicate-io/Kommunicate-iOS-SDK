@@ -780,11 +780,10 @@ open class Kommunicate: NSObject, Localizable {
     }
     
     /// Updates the assigned status dynamically based on code logic.
-    /// - Parameters:
-    ///   - channelID: The Channel ID parameter is required to match the conversation in which the status needs to be updated. If the Channel ID is not provided, the status will be updated in all conversations.
-    ///   - status: A predefined status among 'Online', 'Offline', 'Away', and 'Default'. The 'Default' status corresponds to the assignee status fetched from MQTT.
-    open class func updateAssigneeStatus(channelID: Int = 0, status: KMUserStatus) {
-        KMUpdateAssigneeStatus.shared.channelID = channelID
+    ///  - Parameter assigneeID: The Channel ID parameter is required to match the conversation in which the status needs to be updated. If the Channel ID is not provided, the status will be updated in all conversations.
+    ///  - Parameter status: A predefined status among 'Online', 'Offline', 'Away', and 'Default'. The 'Default' status corresponds to the assignee status fetched from MQTT.
+    open class func updateAssigneeStatus(assigneeID: String = "", status: KMUserStatus) {
+        KMUpdateAssigneeStatus.shared.assigneeID = assigneeID
         KMUpdateAssigneeStatus.shared.status = status
     }
 

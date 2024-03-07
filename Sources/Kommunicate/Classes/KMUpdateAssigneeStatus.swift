@@ -18,13 +18,13 @@ public enum KMUserStatus {
     case `default`
 }
 
-public struct KMUpdateAssigneeStatus {
+struct KMUpdateAssigneeStatus {
     
     public static var shared =  KMUpdateAssigneeStatus()
     
     weak var delegate: KMUpdateAssigneeStatusDelegate?
     
-    public var channelID: Int?
+    public var assigneeID: String?
     
     public var status: KMUserStatus = .default {
         didSet {
