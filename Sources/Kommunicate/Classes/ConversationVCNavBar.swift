@@ -241,7 +241,7 @@ class ConversationVCNavBar: UIView, Localizable {
     private func setupProfile(_ contact: ALContact?, _ channel: ALChannel) {
         var url: URL?
 
-        if let imageUrl = channel.channelImageURL {
+        if let imageUrl = contact?.contactImageUrl {
             url = URL(string: imageUrl)
         }
         if channel.type == Int16(SUPPORT_GROUP.rawValue) {
