@@ -1,12 +1,6 @@
 # CHANGELOG
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
-## [7.1.5] 2024-03-11
-- Added Dynamic online/offline status Feature
-- Added the last Message icon in Conversation List Screen.
-- Fixed Link preview issue. 
-- Fixed Assignee Image not showing with custom title.
-
 ## [7.1.4] 2024-03-06
 - Fixed Build Conversation issue
 
