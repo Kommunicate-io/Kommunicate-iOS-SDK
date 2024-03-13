@@ -109,8 +109,8 @@ class ConversationVCNavBar: UIView, Localizable {
         let stackView = UIStackView(arrangedSubviews: [self.profileName])
         stackView.alignment = .fill
         stackView.axis = .vertical
-        stackView.distribution = .fillEqually
-        stackView.spacing = 2
+        stackView.distribution = .fill
+        stackView.spacing = 0.5
         return stackView
     }()
 
@@ -172,24 +172,28 @@ class ConversationVCNavBar: UIView, Localizable {
         }
         var subtitleText: String = ""
         var showCustomSubtitle: Bool = false
-        if let toolbarSubtitle = configuration.toolbarSubtitleText as? String, !toolbarSubtitle.isEmpty {
+        
+        if  !configuration.toolbarSubtitleText.isEmpty {
             customSubtitleView.addArrangedSubview(customSubtitleText)
-            subtitleText = toolbarSubtitle
+            subtitleText = configuration.toolbarSubtitleText
             showCustomSubtitle = true
         }
-        if let toolbarRating = configuration.toolbarSubtitleRating as? Float, !toolbarRating.isEqual(to: -1.0) {
+        
+        if !configuration.toolbarSubtitleRating.isEqual(to: -1.0) {
             subtitleText.append(subtitleText.isEmpty ? "" : " | ")
             customSubtitleView.addArrangedSubview(ratingIcon)
             customSubtitleView.addArrangedSubview(customRating)
-            customRating.text = toolbarRating.description
+            customRating.text = configuration.toolbarSubtitleRating.description
             showCustomSubtitle = true
         }
+        
         if(showCustomSubtitle) {
             customSubtitleText.text = subtitleText
             profileView.addArrangedSubview(self.customSubtitleView)
         } else {
             profileView.addArrangedSubview(self.onlineStatusText)
         }
+        
         statusIconBackgroundColor.backgroundColor = navigationBarProxy.barTintColor
     }
 
@@ -206,7 +210,7 @@ class ConversationVCNavBar: UIView, Localizable {
         profileImage.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
         profileImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5).isActive = true
         profileImage.widthAnchor.constraint(equalToConstant: 37).isActive = true
-        profileName.heightAnchor.constraint(equalToConstant: 37).isActive = true
+        profileImage.heightAnchor.constraint(equalToConstant: 37).isActive = true
 
         statusIconBackgroundColor.bottomAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 0).isActive = true
         statusIconBackgroundColor.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: -10).isActive = true
