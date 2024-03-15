@@ -718,7 +718,8 @@ extension KMConversationViewController {
     }
 
     private func showRatingView() {
-        guard self.ratingVC == nil else { return }
+        guard let currentViewController = topMostViewController(), currentViewController is KMConversationViewController, self.ratingVC == nil else { return }
+        
         let ratingVC = RatingViewController()
         ratingVC.closeButtontapped = { [weak self] in
             self?.hideRatingView()
@@ -733,6 +734,19 @@ extension KMConversationViewController {
         present(ratingVC, animated: true, completion: { [weak self] in
             self?.ratingVC = ratingVC
         })
+    }
+
+    private func topMostViewController() -> UIViewController? {
+        var topController: UIViewController? = UIApplication.shared.windows.first?.rootViewController
+        while let presentedViewController = topController?.presentedViewController {
+            topController = presentedViewController
+        }
+        if let navigationController = topController as? UINavigationController {
+            return navigationController.topViewController
+        } else if let tabBarController = topController as? UITabBarController {
+            return tabBarController.selectedViewController
+        }
+        return topController
     }
 
     private func hideRatingView() {
