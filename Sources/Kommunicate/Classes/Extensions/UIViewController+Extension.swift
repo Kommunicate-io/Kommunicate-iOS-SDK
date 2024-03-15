@@ -62,8 +62,16 @@ extension UIViewController {
     }
 
     class func topViewController() -> UIViewController? {
-        guard let application  = UIApplication.sharedUIApplication() , let keyWindow = application.keyWindow else { return nil }
-        return topViewControllerWithRootViewController(rootViewController: keyWindow.rootViewController)
+        var topController: UIViewController? = UIApplication.shared.windows.first?.rootViewController
+        while let presentedViewController = topController?.presentedViewController {
+            topController = presentedViewController
+        }
+        if let navigationController = topController as? UINavigationController {
+            return navigationController.topViewController
+        } else if let tabBarController = topController as? UITabBarController {
+            return tabBarController.selectedViewController
+        }
+        return topController
     }
 
     class func topViewControllerWithRootViewController(rootViewController: UIViewController?) -> UIViewController? {
