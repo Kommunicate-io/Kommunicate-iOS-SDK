@@ -1,6 +1,11 @@
 # CHANGELOG
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
+## [7.1.6] 2024-03-15
+- Fixed name getting cut issue in Navigation Bar.
+- Improved the Flow of Showing Rating Bar.
+- Improved read receipt label for messages. 
+
 ## [7.1.5] 2024-03-11
 - Added Dynamic online/offline status Feature
 - Added the last Message icon in Conversation List Screen.

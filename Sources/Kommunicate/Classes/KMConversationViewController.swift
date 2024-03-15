@@ -718,7 +718,8 @@ extension KMConversationViewController {
     }
 
     private func showRatingView() {
-        guard self.ratingVC == nil else { return }
+        guard let currentViewController = UIViewController.topViewController(), currentViewController is KMConversationViewController, self.ratingVC == nil else { return }
+        
         let ratingVC = RatingViewController()
         ratingVC.closeButtontapped = { [weak self] in
             self?.hideRatingView()
