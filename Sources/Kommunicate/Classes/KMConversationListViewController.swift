@@ -158,6 +158,8 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         NotificationCenter.default.addObserver(self, selector: #selector(updateUserDetails(notification:)), name: Notification.Name.updateUserDetails, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(updateChannelName(notification:)), name: Notification.Name.updateChannelName, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(conversationDeleted(notification: )), name: Notification.Name.conversationDeletion, object: nil)
 
         converastionListNavBarItemToken = NotificationCenter.default.observe(name: NSNotification.Name(ALKNavigationItem.NSNotificationForConversationListNavigationTap), object: nil, queue: nil) { notification in
 
@@ -345,6 +347,20 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         guard view.window != nil else { return }
         print("update group detail")
         tableView.reloadData()
+    }
+    
+    @objc func conversationDeleted(notification : NSNotification) {
+        print("Pakka101 conversation deleted called \(notification)")
+        guard let conversation = notification.object as? ALMessage else {
+            return
+        }
+       deleteConversation(conversation: conversation)
+        
+    }
+    
+    private func deleteConversation(conversation: ALMessage) {
+        ALChannelDBService().deleteChannel(conversation.groupId)
+        self.conversationListTableViewController.tableView.reloadData()
     }
 
     override public func removeObserver() {
