@@ -43,4 +43,5 @@ extension Notification.Name {
     static let updateChannelName = Notification.Name("UPDATE_CHANNEL_NAME")
     static let updateUserDetails = Notification.Name("USER_DETAILS_UPDATE_CALL")
     static let newMessageNotification = Notification.Name(NEW_MESSAGE_NOTIFICATION)
+    static let conversationDeletion = Notification.Name("CONVERSATION_DELETED")
 }
