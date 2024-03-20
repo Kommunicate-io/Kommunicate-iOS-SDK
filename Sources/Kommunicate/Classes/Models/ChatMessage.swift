@@ -28,6 +28,7 @@ class ChatMessage: ALKChatViewModelProtocol, Localizable {
     var channelType: Int16
     var isMessageEmpty: Bool
     var platformSource: String?
+    var assignedTags: [KMAssignedTags]?
 
     init(message: ALKChatViewModelProtocol) {
         avatar = message.avatar
