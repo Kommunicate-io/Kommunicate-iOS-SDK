@@ -30,7 +30,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
 
     let channelService = ALChannelService()
     var searchController: UISearchController!
-    var searchBar: CustomSearchBar!
+    var searchBar: KMCustomSearchBar!
     lazy var resultVC = ALKSearchResultViewController(configuration: configuration)
 
     public var dbService = ALMessageDBService()
@@ -396,7 +396,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     func setupSearchController() {
         searchController = resultVC.setUpSearchViewController()
         searchController.searchBar.delegate = self
-        searchBar = CustomSearchBar(searchBar: searchController.searchBar)
+        searchBar = KMCustomSearchBar(searchBar: searchController.searchBar)
         definesPresentationContext = true
     }
 
@@ -451,7 +451,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     }
 
     @objc func customBackAction() {
-        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.conversationListBackPress, data: nil)
+        KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.conversationListBackPress, data: nil)
         guard let nav = navigationController else { return }
         let poppedVC = nav.popViewController(animated: true)
         if poppedVC == nil {

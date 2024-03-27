@@ -383,7 +383,7 @@ open class Kommunicate: NSObject, Localizable {
                         completion(.failure(KMConversationError.api(response.error)))
                         return
                     }
-                    KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.newConversation, data: ["conversationId": conversationId])
+                    KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.newConversation, data: ["conversationId": conversationId])
                     completion(.success(conversationId))
                 }
             })
@@ -1214,7 +1214,7 @@ open class Kommunicate: NSObject, Localizable {
      - events: list of events to subscribe.
      - callback: ALKCustomEventCallback to send subscribed event's data
      */
-    public static func subscribeCustomEvents(events: [CustomEvent], callback: ALKCustomEventCallback) {
+    public static func subscribeCustomEvents(events: [KMCustomEvent], callback: ALKCustomEventCallback) {
         KMCustomEventHandler.shared.setSubscribedEvents(eventsList: events, eventDelegate: callback)
     }
     

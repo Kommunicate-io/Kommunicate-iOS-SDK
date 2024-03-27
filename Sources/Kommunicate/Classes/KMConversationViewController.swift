@@ -159,7 +159,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
 
     override open func newMessagesAdded() {
         super.newMessagesAdded()
-        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.messageReceive, data: nil)
+        KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.messageReceive, data: nil)
         // Hide away message view whenever a new message comes.
         // Make sure the message is not from same user.
         guard !viewModel.messageModels.isEmpty else { return }
@@ -513,7 +513,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             self?.awayMessageView.isHidden = false
             
             if let channelId = weakSelf.viewModel.channelKey {
-                KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.restartConversationClick, data: ["conversationId":channelId])
+                KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.restartConversationClick, data: ["conversationId":channelId])
             }
            
             guard let zendeskAcckountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
@@ -676,7 +676,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
 
 extension KMConversationViewController: NavigationBarCallbacks {
     func backButtonPressed() {
-        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.conversationBackPress, data: nil)
+        KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.conversationBackPress, data: nil)
         view.endEditing(true)
         let popVC = navigationController?.popViewController(animated: true)
         if popVC == nil {
@@ -726,7 +726,7 @@ extension KMConversationViewController {
         }
         ratingVC.feedbackSubmitted = { [weak self] feedback in
             print("feedback submitted with rating: \(feedback.rating)")
-            KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.submitRatingClick, data:  ["rating": feedback.rating.rawValue,"comment":feedback.comment ?? "","conversationId": self?.viewModel.channelKey])
+            KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.submitRatingClick, data:  ["rating": feedback.rating.rawValue,"comment":feedback.comment ?? "","conversationId": self?.viewModel.channelKey])
             self?.hideRatingView()
             self?.submitFeedback(feedback: feedback)
         }
