@@ -350,20 +350,15 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     }
     
     @objc func conversationDeleted(notification : NSNotification) {
-        print("Pakka101 conversation deleted called \(notification)")
-        guard let conversation = notification.object as? ALMessage else {
-            return
-        }
-       deleteConversation(conversation: conversation)
-        
+        guard let conversation = notification.object as? ALMessage else { return }
+        deleteConversation(conversation: conversation)
     }
     
     private func deleteConversation(conversation: ALMessage) {
         ALMessageService().deleteMessageThread(nil, orChannelKey: conversation.groupId, withCompletion: {
             _, error in
             guard error == nil else {
-                print("Pakka101 Failed to delete the conversation: \(error.debugDescription)")
-               
+                print("Failed to delete the conversation: \(error.debugDescription)")
                 return
             }
         })
