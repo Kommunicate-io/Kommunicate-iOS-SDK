@@ -359,8 +359,21 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     }
     
     private func deleteConversation(conversation: ALMessage) {
-        ALChannelDBService().deleteChannel(conversation.groupId)
-        self.conversationListTableViewController.tableView.reloadData()
+        ALMessageService().deleteMessageThread(nil, orChannelKey: conversation.groupId, withCompletion: {
+            _, error in
+            guard error == nil else {
+                print("Pakka101 Failed to delete the conversation: \(error.debugDescription)")
+               
+                return
+            }
+        })
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+            let channelDbService = ALChannelDBService()
+            channelDbService.deleteChannel(conversation.groupId)
+            self.viewModel.remove(message: conversation)
+            self.tableView.reloadData()
+        })
     }
 
     override public func removeObserver() {
