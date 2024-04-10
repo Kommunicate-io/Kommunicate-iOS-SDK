@@ -30,7 +30,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
 
     let channelService = ALChannelService()
     var searchController: UISearchController!
-    var searchBar: CustomSearchBar!
+    var searchBar: KMCustomSearchBar!
     lazy var resultVC = ALKSearchResultViewController(configuration: configuration)
 
     public var dbService = ALMessageDBService()
@@ -158,6 +158,8 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         NotificationCenter.default.addObserver(self, selector: #selector(updateUserDetails(notification:)), name: Notification.Name.updateUserDetails, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(updateChannelName(notification:)), name: Notification.Name.updateChannelName, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(conversationDeleted(notification: )), name: Notification.Name.conversationDeletion, object: nil)
 
         converastionListNavBarItemToken = NotificationCenter.default.observe(name: NSNotification.Name(ALKNavigationItem.NSNotificationForConversationListNavigationTap), object: nil, queue: nil) { notification in
 
@@ -346,6 +348,28 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         print("update group detail")
         tableView.reloadData()
     }
+    
+    @objc func conversationDeleted(notification : NSNotification) {
+        guard let conversation = notification.object as? ALMessage else { return }
+        deleteConversation(conversation: conversation)
+    }
+    
+    private func deleteConversation(conversation: ALMessage) {
+        ALMessageService().deleteMessageThread(nil, orChannelKey: conversation.groupId, withCompletion: {
+            _, error in
+            guard error == nil else {
+                print("Failed to delete the conversation: \(error.debugDescription)")
+                return
+            }
+        })
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+            let channelDbService = ALChannelDBService()
+            channelDbService.deleteChannel(conversation.groupId)
+            self.viewModel.remove(message: conversation)
+            self.tableView.reloadData()
+        })
+    }
 
     override public func removeObserver() {
         if alMqttConversationService != nil {
@@ -396,7 +420,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     func setupSearchController() {
         searchController = resultVC.setUpSearchViewController()
         searchController.searchBar.delegate = self
-        searchBar = CustomSearchBar(searchBar: searchController.searchBar)
+        searchBar = KMCustomSearchBar(searchBar: searchController.searchBar)
         definesPresentationContext = true
     }
 
@@ -451,7 +475,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     }
 
     @objc func customBackAction() {
-        KMCustomEventHandler.shared.publish(triggeredEvent: CustomEvent.conversationListBackPress, data: nil)
+        KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.conversationListBackPress, data: nil)
         guard let nav = navigationController else { return }
         let poppedVC = nav.popViewController(animated: true)
         if poppedVC == nil {
