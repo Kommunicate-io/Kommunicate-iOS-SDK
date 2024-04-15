@@ -1265,9 +1265,8 @@ open class Kommunicate: NSObject, Localizable {
     open class func setServerConfiguration(_ environment: KMServerConfiguration) {
         switch environment {
             case .euConfiguration:
-                ALUserDefaultsHandler.setBASEURL("https://chat.kommunicate.io")
-                ALUserDefaultsHandler.setChatBaseURL("https://chat.kommunicate.io")
-              
+                ALUserDefaultsHandler.setBASEURL("https://chat-eu.kommunicate.io")
+                ALUserDefaultsHandler.setChatBaseURL("https://api-eu.kommunicate.io")
                 break
             case .defaultConfiguration:
                 //Do nothing
