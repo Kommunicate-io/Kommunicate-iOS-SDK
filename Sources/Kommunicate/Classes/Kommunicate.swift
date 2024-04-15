@@ -41,6 +41,11 @@ enum KMLocalizationKey {
     static let noName = "NoName"
 }
 
+public enum KMServerConfiguration {
+    case euConfiguration
+    case defaultConfiguration
+}
+
 @objc
 open class Kommunicate: NSObject, Localizable {
     // MARK: - Public properties
@@ -1255,6 +1260,19 @@ open class Kommunicate: NSObject, Localizable {
             return
         }
         (topVc as! KMConversationViewController).hideAssigneeStatus(hide)
+    }
+    
+    open class func setServerConfiguration(_ environment: KMServerConfiguration) {
+        switch environment {
+            case .euConfiguration:
+                ALUserDefaultsHandler.setBASEURL("https://chat.kommunicate.io")
+                ALUserDefaultsHandler.setChatBaseURL("https://chat.kommunicate.io")
+              
+                break
+            case .defaultConfiguration:
+                //Do nothing
+                break
+        }
     }
     
     // MARK: - Deprecated methods
