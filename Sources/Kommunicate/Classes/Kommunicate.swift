@@ -1178,7 +1178,14 @@ open class Kommunicate: NSObject, Localizable {
     }
 
     func defaultChatViewSettings() {
-        KMUserDefaultHandler.setBASEURL(API.Backend.chat.rawValue)
+        if serverConfig == .euConfiguration {
+            ALUserDefaultsHandler.setBASEURL(API.Backend.chat_eu.rawValue)
+            ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi_eu.rawValue)
+        } else {
+            ALUserDefaultsHandler.setBASEURL(API.Backend.chat.rawValue)
+            ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi.rawValue)
+        }
+        
         KMUserDefaultHandler.setGoogleMapAPIKey("AIzaSyDHQzh-cDfo-aY9_Q1fZFiZtaurg57eY7k") // REPLACE WITH YOUR GOOGLE MAPKEY
         ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description()])
         ALApplozicSettings.setFilterContactsStatus(true)
@@ -1262,15 +1269,16 @@ open class Kommunicate: NSObject, Localizable {
         (topVc as! KMConversationViewController).hideAssigneeStatus(hide)
     }
     
+    var serverConfig: KMServerConfiguration = .defaultConfiguration
+    
     open class func setServerConfiguration(_ environment: KMServerConfiguration) {
-        switch environment {
-            case .euConfiguration:
-                ALUserDefaultsHandler.setBASEURL("https://chat-eu.kommunicate.io")
-                ALUserDefaultsHandler.setChatBaseURL("https://api-eu.kommunicate.io")
-                break
-            case .defaultConfiguration:
-                //Do nothing
-                break
+        Kommunicate.shared.serverConfig = environment
+        if environment == .euConfiguration {
+            ALUserDefaultsHandler.setBASEURL(API.Backend.chat_eu.rawValue)
+            ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi_eu.rawValue)
+        } else {
+            ALUserDefaultsHandler.setBASEURL(API.Backend.chat.rawValue)
+            ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi.rawValue)
         }
     }
     
