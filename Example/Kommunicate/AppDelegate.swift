@@ -120,12 +120,6 @@
             navigationBarProxy.barTintColor = UIColor(red: 0.93, green: 0.94, blue: 0.95, alpha: 1.0) // light nav blue
             navigationBarProxy.tintColor = .white
             navigationBarProxy.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-
-            // Kommunicate SDK
-            let kmNavigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [KMBaseNavigationViewController.self])
-            kmNavigationBarProxy.isTranslucent = false
-            navigationBarProxy.tintColor = UIColor.navigationOceanBlue()
-            kmNavigationBarProxy.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         }
     }
 #endif
