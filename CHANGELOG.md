@@ -1,6 +1,10 @@
 # CHANGELOG
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
+## [7.1.8] 2024-04-23
+- Added Support for EU region.
+- Updated the default color for send message text to white.
+
 ## [7.1.7] 2024-04-10
 - Iframe Support for HTML Content
 - Added prefix to the files to avoid build issue in case of same name is used by other libraries
