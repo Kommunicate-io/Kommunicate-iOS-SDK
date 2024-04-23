@@ -13,7 +13,11 @@ final class URLBuilder {
     private var pathComponents = [String]()
 
     static var kommunicateApi: URLBuilder {
-        return URLBuilder(host: "api.kommunicate.io")
+        guard let kmAPI = URL(string: ALUserDefaultsHandler.getChatBaseURL()),
+              let host = kmAPI.host else {
+            return URLBuilder(host: "api.kommunicate.io")
+        }
+        return URLBuilder(host: host)
     }
 
     static var chatApi: URLBuilder {
