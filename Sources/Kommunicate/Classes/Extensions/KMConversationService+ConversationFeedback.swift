@@ -61,7 +61,7 @@ extension KMConversationService {
     ///   - completion: A Result of type `ConversationFeedback`.
     func submitFeedback(
         groupId: Int,
-        feedback: Feedback,
+        feedback: KMFeedback,
         userId: String,
         userName: String,
         assigneeId: String,
@@ -78,7 +78,7 @@ extension KMConversationService {
         ]
         var params: [String: Any] = [
             FeedbackParamKey.groupId: groupId,
-            FeedbackParamKey.rating: feedback.rating.rawValue,
+            FeedbackParamKey.rating: feedback.rating,
             FeedbackParamKey.applicationId: applicationId,
             FeedbackParamKey.assigneeId: assigneeId,
             FeedbackParamKey.userInfo: userInfo,

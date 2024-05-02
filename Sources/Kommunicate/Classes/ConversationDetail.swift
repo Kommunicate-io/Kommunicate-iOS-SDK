@@ -72,7 +72,7 @@ class ConversationDetail {
         return channel.isClosedConversation
     }
 
-    func feedbackFor(channelId: Int, completion: @escaping (Feedback?) -> Void) {
+    func feedbackFor(channelId: Int, completion: @escaping (KMFeedback?) -> Void) {
         let conversationService = KMConversationService()
         conversationService.feedbackFor(groupId: channelId, completion: { result in
             switch result {

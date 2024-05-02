@@ -85,7 +85,7 @@ class ConversationClosedView: UIView {
         restartTapped?()
     }
 
-    func setFeedback(_ feedback: Feedback) {
+    func setFeedback(_ feedback: KMFeedback) {
         previousRatingView.feedback = feedback
     }
 

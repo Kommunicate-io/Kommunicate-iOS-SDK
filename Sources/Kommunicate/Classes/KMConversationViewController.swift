@@ -14,7 +14,7 @@ import UIKit
 open class KMConversationViewController: ALKConversationViewController, KMUpdateAssigneeStatusDelegate, Localizable {
     private let faqIdentifier = 11_223_346
     private let kmConversationViewConfiguration: KMConversationViewConfiguration
-    private weak var ratingVC: RatingViewController?
+    private weak var ratingVC: KMStarRattingViewController?
     private let registerUserClientService = ALRegisterUserClientService()
     let kmBotService = KMBotService()
     private var assigneeUserId: String?
@@ -720,13 +720,13 @@ extension KMConversationViewController {
     private func showRatingView() {
         guard let currentViewController = UIViewController.topViewController(), currentViewController is KMConversationViewController, self.ratingVC == nil else { return }
         
-        let ratingVC = RatingViewController()
+        let ratingVC = KMStarRattingViewController()
         ratingVC.closeButtontapped = { [weak self] in
             self?.hideRatingView()
         }
         ratingVC.feedbackSubmitted = { [weak self] feedback in
             print("feedback submitted with rating: \(feedback.rating)")
-            KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.submitRatingClick, data:  ["rating": feedback.rating.rawValue,"comment":feedback.comment ?? "","conversationId": self?.viewModel.channelKey])
+            KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.submitRatingClick, data:  ["rating": feedback.rating,"comment":feedback.comment ?? "","conversationId": self?.viewModel.channelKey])
             self?.hideRatingView()
             self?.submitFeedback(feedback: feedback)
         }
@@ -738,7 +738,7 @@ extension KMConversationViewController {
 
     private func hideRatingView() {
         guard let ratingVC = ratingVC,
-              UIViewController.topViewController() is RatingViewController,
+              UIViewController.topViewController() is KMStarRattingViewController,
               !ratingVC.isBeingDismissed
         else {
             return
@@ -748,7 +748,7 @@ extension KMConversationViewController {
         })
     }
 
-    private func submitFeedback(feedback: Feedback) {
+    private func submitFeedback(feedback: KMFeedback) {
         guard let channelId = viewModel.channelKey else { return }
         conversationService.submitFeedback(
             groupId: channelId.intValue,
@@ -800,7 +800,7 @@ extension KMConversationViewController {
         topConstraintClosedView?.isActive = flag
     }
 
-    private func show(feedback: Feedback) {
+    private func show(feedback: KMFeedback) {
         updateMessageListBottomPadding(isClosedViewHidden: false)
     }
 }

@@ -30,7 +30,7 @@ class SubmittedFeedbackView: UIView {
         )
     }
 
-    var feedback: Feedback? {
+    var feedback: KMFeedback? {
         didSet {
             ratingView.rating = feedback?.rating
             commentsView.text = feedback?.comment
@@ -73,12 +73,7 @@ class SubmittedFeedbackView: UIView {
 
 extension SubmittedFeedbackView {
     class RatingView: UIView {
-        var rating: RatingType? {
-            didSet {
-                emojiView.image = rating?.icon()
-                invalidateIntrinsicContentSize()
-            }
-        }
+        var rating: Int?
 
         private let ratedTitleLabel: UILabel = {
             let label = UILabel(frame: .zero)

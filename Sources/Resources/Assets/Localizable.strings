@@ -68,11 +68,13 @@ ConversationClosedRestartConversation = "Restart conversation";
 /* CSAT Rating */
 
 /* Main title */
-ConversationRatingTitle = "Rate the conversation";
+ConversationRatingTitle = "How satisfied you are with the conversation?";
+/* Conversation comment title */
+ConversationCommentTitle =  "Add feedback (optional)";
 /* Placeholder for comments input bar */
-ConversationRatingCommentsPlaceholder = "Add a comment...";
+ConversationRatingCommentsPlaceholder = "Enter your feedback...";
 /* Submit button title */
-ConversationRatingSubmitButtonTitle = "Submit your rating";
+ConversationRatingSubmitButtonTitle = "Submit";
 /* Poor rating label */
 ConversationRatingOptionPoor = "Poor";
 /* Average rating label */

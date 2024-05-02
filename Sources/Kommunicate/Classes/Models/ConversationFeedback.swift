@@ -100,9 +100,8 @@ extension FeedbackResponse {
 }
 
 extension ConversationFeedback {
-    var feedback: Feedback? {
-        guard let rating = RatingType(rawValue: rating) else { return nil }
+    var feedback: KMFeedback? {
         let comment: String? = comments?.reduce("") { $0 + $1 }
-        return Feedback(rating: rating, comment: comment)
+        return KMFeedback(rating: rating, comment: comment)
     }
 }
