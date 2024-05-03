@@ -48,6 +48,7 @@ class KMAppSettingService {
                }
 
        KMAppUserDefaultHandler.shared.botMessageDelayInterval = chatWidget.botMessageDelayInterval ?? 0
+       KMAppUserDefaultHandler.shared.csatRatingBase = chatWidget.csatRatingBase ?? 3
        
        guard let primaryColor = chatWidget.primaryColor else {
            setupDefaultSettings()
@@ -71,6 +72,8 @@ class KMAppSettingService {
        appSettings.hidePostCTAEnabled = chatWidget.hidePostCTA ?? false
        appSettings.defaultUploadOverrideUrl = chatWidget.defaultUploadOverride?.url ?? ""
        appSettings.defaultUploadOverrideHeaders = chatWidget.defaultUploadOverride?.headers ?? [:]
+       appSettings.csatRatingBase = chatWidget.csatRatingBase ?? 3
+       appSettingsUserDefaults.setCSATRatingBase(value: chatWidget.csatRatingBase ?? 3)
        appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
     }
 

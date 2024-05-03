@@ -30,6 +30,14 @@ class KMAppUserDefaultHandler: NSObject {
                  return userDefaultSuite.integer(forKey: Key.BotMessageDelayInterval)
              }
          }
+    var csatRatingBase: Int {
+        set {
+            userDefaultSuite.set(newValue, forKey: Key.CSATRatingBase)
+        }
+        get {
+            return userDefaultSuite.integer(forKey: Key.CSATRatingBase)
+        }
+    }
 
     private let userDefaultSuite: UserDefaults
 
@@ -54,5 +62,6 @@ private extension KMAppUserDefaultHandler {
     enum Key {
         static let CSATEnabled = "CSAT_ENABLED"
         static let BotMessageDelayInterval = "BOT_MESSAGE_DELAY_INTERVAL"
+        static let CSATRatingBase = "CSAT_RATTING_BASE"
     }
 }
