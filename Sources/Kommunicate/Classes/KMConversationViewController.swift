@@ -15,6 +15,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     private let faqIdentifier = 11_223_346
     private let kmConversationViewConfiguration: KMConversationViewConfiguration
     private weak var ratingVC: RatingViewController?
+    private weak var fiveStarRatingVC: KMStarRattingViewController?
     private let registerUserClientService = ALRegisterUserClientService()
     let kmBotService = KMBotService()
     private var assigneeUserId: String?
@@ -718,34 +719,65 @@ extension KMConversationViewController {
     }
 
     private func showRatingView() {
-        guard let currentViewController = UIViewController.topViewController(), currentViewController is KMConversationViewController, self.ratingVC == nil else { return }
+        guard let currentViewController = UIViewController.topViewController(), currentViewController is KMConversationViewController else { return }
         
-        let ratingVC = RatingViewController()
-        ratingVC.closeButtontapped = { [weak self] in
-            self?.hideRatingView()
-        }
-        ratingVC.feedbackSubmitted = { [weak self] feedback in
-            print("feedback submitted with rating: \(feedback.rating)")
-            KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.submitRatingClick, data:  ["rating": feedback.rating.rawValue,"comment":feedback.comment ?? "","conversationId": self?.viewModel.channelKey])
-            self?.hideRatingView()
-            self?.submitFeedback(feedback: feedback)
-        }
+        if KMAppUserDefaultHandler.shared.csatRatingBase == 5 {
+            guard self.fiveStarRatingVC == nil else { return }
+            let ratingVC =  KMStarRattingViewController()
+            ratingVC.closeButtontapped = { [weak self] in
+                self?.hideRatingView()
+            }
+            ratingVC.feedbackSubmitted = { [weak self] feedback in
+                print("feedback submitted with rating: \(feedback.rating)")
+                KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.submitRatingClick, data:  ["rating": feedback.rating,"comment":feedback.comment ?? "","conversationId": self?.viewModel.channelKey])
+                self?.hideRatingView()
+                self?.submitFiveStarFeedback(feedback: feedback)
+            }
 
-        present(ratingVC, animated: true, completion: { [weak self] in
-            self?.ratingVC = ratingVC
-        })
+            present(ratingVC, animated: true, completion: { [weak self] in
+                self?.fiveStarRatingVC = ratingVC
+            })
+        } else {
+            guard self.ratingVC == nil else { return }
+            let ratingVC =  RatingViewController()
+            ratingVC.closeButtontapped = { [weak self] in
+                self?.hideRatingView()
+            }
+            ratingVC.feedbackSubmitted = { [weak self] feedback in
+                print("feedback submitted with rating: \(feedback.rating)")
+                KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.submitRatingClick, data:  ["rating": feedback.rating.rawValue,"comment":feedback.comment ?? "","conversationId": self?.viewModel.channelKey])
+                self?.hideRatingView()
+                self?.submitFeedback(feedback: feedback)
+            }
+            
+            present(ratingVC, animated: true, completion: { [weak self] in
+                self?.ratingVC = ratingVC
+            })
+        }
     }
 
     private func hideRatingView() {
-        guard let ratingVC = ratingVC,
-              UIViewController.topViewController() is RatingViewController,
-              !ratingVC.isBeingDismissed
-        else {
-            return
+        if KMAppUserDefaultHandler.shared.csatRatingBase == 5 {
+            guard let ratingVC = fiveStarRatingVC,
+                  UIViewController.topViewController() is KMStarRattingViewController,
+                  !ratingVC.isBeingDismissed
+            else {
+                return
+            }
+            dismiss(animated: true, completion: { [weak self] in
+                self?.fiveStarRatingVC = nil
+            })
+        } else {
+            guard let ratingVC = ratingVC,
+                  UIViewController.topViewController() is RatingViewController,
+                  !ratingVC.isBeingDismissed
+            else {
+                return
+            }
+            dismiss(animated: true, completion: { [weak self] in
+                self?.ratingVC = nil
+            })
         }
-        dismiss(animated: true, completion: { [weak self] in
-            self?.ratingVC = nil
-        })
     }
 
     private func submitFeedback(feedback: Feedback) {
@@ -764,6 +796,29 @@ extension KMConversationViewController {
                 guard conversationFeedback.feedback != nil else { return }
                 DispatchQueue.main.async {
                     self?.show(feedback: feedback)
+                }
+            case let .failure(error):
+                print("feedback submit response failure: \(error)")
+            }
+        }
+    }
+    
+    private func submitFiveStarFeedback(feedback: KMFeedback) {
+        guard let channelId = viewModel.channelKey else { return }
+        conversationService.submitFiveStarFeedback(
+            groupId: channelId.intValue,
+            feedback: feedback,
+            userId: KMUserDefaultHandler.getUserId(),
+            userName: KMUserDefaultHandler.getDisplayName() ?? "",
+            assigneeId: assigneeUserId ?? "",
+            applicationId: KMUserDefaultHandler.getApplicationKey()
+        ) { [weak self] result in
+            switch result {
+            case let .success(conversationFeedback):
+                print("feedback submit response success: \(conversationFeedback)")
+                guard conversationFeedback.feedback != nil else { return }
+                DispatchQueue.main.async {
+                    self?.showFiveStar(feedback: feedback)
                 }
             case let .failure(error):
                 print("feedback submit response failure: \(error)")
@@ -801,6 +856,9 @@ extension KMConversationViewController {
     }
 
     private func show(feedback: Feedback) {
+        updateMessageListBottomPadding(isClosedViewHidden: false)
+    }
+    private func showFiveStar(feedback: KMFeedback) {
         updateMessageListBottomPadding(isClosedViewHidden: false)
     }
 }

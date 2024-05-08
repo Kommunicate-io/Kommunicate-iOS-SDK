@@ -108,4 +108,55 @@ extension KMConversationService {
             }
         }
     }
+    
+    func submitFiveStarFeedback(
+        groupId: Int,
+        feedback: KMFeedback,
+        userId: String,
+        userName: String,
+        assigneeId: String,
+        applicationId: String,
+        completion: @escaping (Result<ConversationFeedback, FeedbackError>) -> Void
+    ) {
+        guard let url = URLBuilder.feedbackURLForSubmission().url else {
+            completion(.failure(.api(.urlBuilding)))
+            return
+        }
+        let userInfo: [String: Any] = [
+            FeedbackParamKey.userName: userName,
+            FeedbackParamKey.userId: userId,
+        ]
+        var params: [String: Any] = [
+            FeedbackParamKey.groupId: groupId,
+            FeedbackParamKey.rating: feedback.rating,
+            FeedbackParamKey.applicationId: applicationId,
+            FeedbackParamKey.assigneeId: assigneeId,
+            FeedbackParamKey.userInfo: userInfo,
+        ]
+        if let comment = feedback.comment, !comment.isEmpty {
+            params[FeedbackParamKey.comment] = [comment]
+        }
+        DataLoader.postRequest(url: url, params: params) { result in
+            switch result {
+            case let .success(data):
+                guard let feedbackResponse =
+                    try? ConversationFeedbackSubmissionResponse(data: data)
+                else {
+                    completion(.failure(.api(.jsonConversion)))
+                    return
+                }
+                do {
+                    let feedback = try feedbackResponse.conversationFeedback()
+                    completion(.success(feedback))
+                } catch let error as FeedbackError {
+                    completion(.failure(error))
+                } catch {
+                    completion(.failure(.notFound))
+                }
+            case let .failure(error):
+                completion(.failure(.api(.network(error))))
+            }
+        }
+    }
+
 }
