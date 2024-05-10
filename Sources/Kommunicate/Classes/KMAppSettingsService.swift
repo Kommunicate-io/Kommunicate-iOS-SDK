@@ -73,7 +73,6 @@ class KMAppSettingService {
        appSettings.defaultUploadOverrideUrl = chatWidget.defaultUploadOverride?.url ?? ""
        appSettings.defaultUploadOverrideHeaders = chatWidget.defaultUploadOverride?.headers ?? [:]
        appSettings.csatRatingBase = chatWidget.csatRatingBase ?? 3
-       appSettingsUserDefaults.setCSATRatingBase(value: chatWidget.csatRatingBase ?? 3)
        appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
     }
 
