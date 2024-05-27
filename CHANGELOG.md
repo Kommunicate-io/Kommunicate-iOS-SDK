@@ -1,6 +1,14 @@
 # CHANGELOG
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
+## [7.1.9] 2024-05-27
+- Added Privacy Manifest File.
+- Fixed color difference in Attachment Icon.
+- Added Five Star CSAT Ratting.
+- Exposed Funtion to show or hide Attachment Options.
+- Updated Check Box UI for Form.
+- Updated Time and Date Format.(Similar to Android & Web)
+
 ## [7.1.8] 2024-04-23
 - Added Support for EU region.
 - Updated the default color for send message text to white.

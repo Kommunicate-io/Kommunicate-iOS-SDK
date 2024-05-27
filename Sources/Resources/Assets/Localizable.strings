@@ -96,3 +96,13 @@ StartNewConversationButtonTitle = "Start New Conversation";
 /* Conversation List VC Title */
 ConversationListVCTitle = "My Chats";
 
+/* 5 Star CSAT Rating */
+
+/* Rating Title */
+FiveStarConversationRatingTitle = "How satisfied you are with the conversation?";
+/* Comment Placeholder */
+FiveStarConversationRatingCommentsPlaceholder = "Enter your feedback...";
+/* Submit Button Title */
+FiveStarConversationRatingSubmitButtonTitle = "Submit";
+/* Convesation Title */
+FiveStarConversationCommentTitle = "Add feedback (optional)";
