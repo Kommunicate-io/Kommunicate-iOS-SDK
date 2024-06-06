@@ -45,7 +45,7 @@ public class KMPushNotificationHandler: Localizable {
                 case NSNumber(value: APP_STATE_ACTIVE.rawValue):
                     guard !pushNotificationHelper.isNotificationForActiveThread(notificationData) else { return }
 
-                    ALUtilityClass.thirdDisplayNotificationTS(message, andForContactId: nil, withGroupId: notificationData.groupId, completionHandler: {
+                    ALUtilityClass.thirdDisplayNotificationTS(message, andForContactId: nil, withGroupId: notificationData.groupId,titleTest: configuration.inAppBannerTextColor, contentTextColor: configuration.inAppBannerContentColor, backgroundColor: configuration.inAppBannerColor, backgroundShadowColor: configuration.inAppBannerShadowColor,shadowRadius: configuration.inAppBannerShadowRadius, cornerRadius: configuration.inAppBannerRadius, shadowOpacity: configuration.inAppBannerShadowOpacity, completionHandler: {
                         _ in
                         weakSelf.launchIndividualChatWith(notificationData: notificationData)
                     })
