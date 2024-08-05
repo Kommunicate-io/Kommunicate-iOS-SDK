@@ -223,6 +223,9 @@ open class Kommunicate: NSObject, Localizable {
                     kmAppSetting.updateAppsettings(chatWidgetResponse: appSetting.chatWidget)
                     KMAppUserDefaultHandler.shared.isCSATEnabled
                         = appSetting.collectFeedback ?? false
+                    if !KMAppUserDefaultHandler.shared.isCSATEnabled {
+                        Kommunicate.defaultConfiguration.rateConversationMenuOption = false
+                    }
                     if let zendeskaccountKey = appSetting.chatWidget?.zendeskChatSdkKey {
                         ALApplozicSettings.setZendeskSdkAccountKey(zendeskaccountKey)
                     }
