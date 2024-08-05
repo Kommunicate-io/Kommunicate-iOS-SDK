@@ -693,8 +693,8 @@ extension KMConversationViewController: NavigationBarCallbacks {
 extension KMConversationViewController {
     func checkFeedbackAndShowRatingView() {
         let isConversationRecentlyRated: Bool = {
-            guard let lastMessage = viewModel.messageModels.last else { return false }
-            return lastMessage.messageType == .information && lastMessage.message == "rated the conversation"
+            guard let lastMessage = viewModel.messageModels.last, let metadata = lastMessage.metadata else { return false }
+            return lastMessage.messageType == .information && metadata["feedback"] != nil
         }()
         guard isClosedConversation else {
             isClosedConversationViewHidden = true
