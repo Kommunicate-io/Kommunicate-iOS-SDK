@@ -116,6 +116,39 @@ open class Kommunicate: NSObject, Localizable {
         }
     }
 
+    public class func isDeviceJailbroken() -> Bool {
+        // Return false immediately if root detection is disabled in the configuration
+        guard defaultConfiguration.rootDetection else { return false }
+        
+        // Return false if the app is running on a simulator
+        #if targetEnvironment(simulator)
+        return false
+        #endif
+        
+        // List of paths for suspicious apps that indicate jailbreaking
+        let suspiciousAppsPaths = [
+            "/Applications/Cydia.app",
+            "/Applications/blackra1n.app",
+            "/Applications/FakeCarrier.app",
+            "/Applications/Icy.app",
+            "/Applications/IntelliScreen.app",
+            "/Applications/MxTube.app",
+            "/Applications/RockApp.app",
+            "/Applications/SBSettings.app",
+            "/Applications/WinterBoard.app"
+        ]
+        
+        // Check if any of the suspicious apps are installed
+        for path in suspiciousAppsPaths {
+            if FileManager.default.fileExists(atPath: path) {
+                return true
+            }
+        }
+        
+        // Return false if no suspicious apps are found
+        return false
+    }
+
     static var applozicClientType: ApplozicClient.Type = ApplozicClient.self
 
     override public init() {
@@ -133,6 +166,10 @@ open class Kommunicate: NSObject, Localizable {
      - applicationId: App ID that needs to be set up.
      */
     @objc open class func setup(applicationId: String) {
+        guard !isDeviceJailbroken() else {
+            assertionFailure("Device is Rooted: Can't use any Kommunicate's any Feature")
+            return
+        }
         guard !applicationId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             assertionFailure("Kommunicate App ID: Empty value passed")
             return
