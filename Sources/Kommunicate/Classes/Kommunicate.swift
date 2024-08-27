@@ -139,42 +139,57 @@ open class Kommunicate: NSObject, Localizable {
         return false
     }
 
+    private static var isJailbrokenCache: Bool?
+
     public class func isDeviceJailbroken() -> Bool {
-        // Return false immediately if root detection is disabled in the configuration
-        guard defaultConfiguration.rootDetection else { return false }
-        
-        // Return false if the app is running on a simulator
-        #if targetEnvironment(simulator)
-        return false
-        #endif
-        
-        // List of paths for suspicious apps that indicate jailbreaking
-        let suspiciousAppsPaths = [
-            "/Applications/Cydia.app",
-            "/Applications/blackra1n.app",
-            "/Applications/FakeCarrier.app",
-            "/Applications/Icy.app",
-            "/Applications/IntelliScreen.app",
-            "/Applications/MxTube.app",
-            "/Applications/RockApp.app",
-            "/Applications/SBSettings.app",
-            "/Applications/WinterBoard.app"
-        ]
-        
-        // Check if any of the suspicious apps are installed
-        for path in suspiciousAppsPaths {
-            if FileManager.default.fileExists(atPath: path) {
+        // If the result is already cached, return it
+        if let cachedResult = isJailbrokenCache {
+            return cachedResult
+        }
+
+        // Perform the jailbreak detection only once
+        let isJailbroken: Bool = {
+            // Return false immediately if root detection is disabled in the configuration
+            guard defaultConfiguration.rootDetection else { return false }
+                
+            // Return false if the app is running on a simulator
+            #if targetEnvironment(simulator)
+            return false
+            #endif
+                
+            // List of paths for suspicious apps that indicate jailbreaking
+            let suspiciousAppsPaths = [
+                "/Applications/Cydia.app",
+                "/Applications/blackra1n.app",
+                "/Applications/FakeCarrier.app",
+                "/Applications/Icy.app",
+                "/Applications/IntelliScreen.app",
+                "/Applications/MxTube.app",
+                "/Applications/RockApp.app",
+                "/Applications/SBSettings.app",
+                "/Applications/WinterBoard.app"
+            ]
+                
+            // Check if any of the suspicious apps are installed
+            for path in suspiciousAppsPaths {
+                if FileManager.default.fileExists(atPath: path) {
+                    return true
+                }
+            }
+                
+            // Check if Frida is running in the background
+            if isFridaRunning() {
                 return true
             }
-        }
-        
-        // Check if Frida is Running in Background.
-        if isFridaRunning() {
-            return true
-        }
-        
-        // Return false if no suspicious apps are found
-        return false
+                
+            // Return false if no suspicious apps are found
+            return false
+        }()
+            
+        // Cache the result
+        isJailbrokenCache = isJailbroken
+            
+        return isJailbroken
     }
 
     static var applozicClientType: ApplozicClient.Type = ApplozicClient.self
