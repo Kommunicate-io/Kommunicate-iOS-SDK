@@ -116,6 +116,29 @@ open class Kommunicate: NSObject, Localizable {
         }
     }
 
+    public class func isFridaRunning() -> Bool {
+        func swapBytesIfNeeded(port: in_port_t) -> in_port_t {
+            let littleEndian = Int(OSHostByteOrder()) == OSLittleEndian
+            return littleEndian ? _OSSwapInt16(port) : port
+        }
+         
+        var serverAddress = sockaddr_in()
+        serverAddress.sin_family = sa_family_t(AF_INET)
+        serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1")
+        serverAddress.sin_port = swapBytesIfNeeded(port: in_port_t(27042))
+        let sock = socket(AF_INET, SOCK_STREAM, 0)
+         
+        let result = withUnsafePointer(to: &serverAddress) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+                connect(sock, $0, socklen_t(MemoryLayout<sockaddr_in>.stride))
+            }
+        }
+        if result != -1 {
+            return true
+        }
+        return false
+    }
+
     public class func isDeviceJailbroken() -> Bool {
         // Return false immediately if root detection is disabled in the configuration
         guard defaultConfiguration.rootDetection else { return false }
@@ -145,6 +168,11 @@ open class Kommunicate: NSObject, Localizable {
             }
         }
         
+        // Check if Frida is Running in Background.
+        if isFridaRunning() {
+            return true
+        }
+        
         // Return false if no suspicious apps are found
         return false
     }
@@ -166,10 +194,6 @@ open class Kommunicate: NSObject, Localizable {
      - applicationId: App ID that needs to be set up.
      */
     @objc open class func setup(applicationId: String) {
-        guard !isDeviceJailbroken() else {
-            assertionFailure("Device is Rooted: Can't use any Kommunicate's any Feature")
-            return
-        }
         guard !applicationId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             assertionFailure("Kommunicate App ID: Empty value passed")
             return
@@ -197,6 +221,11 @@ open class Kommunicate: NSObject, Localizable {
         _ kmUser: KMUser,
         completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void
     ) {
+        guard !isDeviceJailbroken() else {
+            let errorPass = NSError(domain: "It seems that user device is rooted. Can't perform Login.", code: 0, userInfo: nil)
+            completion(nil, errorPass as NSError?)
+            return
+        }
         let validationError = validateUserData(user: kmUser)
         guard validationError == nil else {
             print("Error while registering the user to Kommunicate: ", validationError!.localizedDescription)
@@ -226,6 +255,11 @@ open class Kommunicate: NSObject, Localizable {
         _ kmUser: KMUser = createVisitorUser(),
         completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void
     ) {
+        guard !isDeviceJailbroken() else {
+            let errorPass = NSError(domain: "It seems that user device is rooted. Can't perform Login.", code: 0, userInfo: nil)
+            completion(nil, errorPass as NSError?)
+            return
+        }
         if isLoggedIn, let appID = KMUserDefaultHandler.getApplicationKey(), let currentUserId = KMUserDefaultHandler.getUserId(), currentUserId != kmUser.userId {
             // LOGOUT the current user & login Again
             logoutUser(completion: { result in
@@ -387,7 +421,11 @@ open class Kommunicate: NSObject, Localizable {
         conversation: KMConversation = KMConversationBuilder().build(),
         completion: @escaping (Result<String, KMConversationError>) -> Void
     ) {
-       
+        guard !isDeviceJailbroken() else {
+            print("The user device is suspected to be rooted.")
+            completion(.failure(KMConversationError.deviceRooted))
+            return
+        }
         guard ALDataNetworkConnection.checkDataNetworkAvailable() else {
             completion(.failure(KMConversationError.internet))
             return

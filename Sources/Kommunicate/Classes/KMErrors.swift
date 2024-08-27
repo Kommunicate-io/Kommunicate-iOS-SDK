@@ -10,6 +10,8 @@ import Foundation
 public enum KMConversationError: LocalizedError {
     /// Thrown when title is invalid.
     case invalidTitle
+    /// Thrown when user device is rooted.
+    case deviceRooted
     /// Thrown when user is not logged in.
     case notLoggedIn
     /// Thrown when Internet is not available.
@@ -23,6 +25,8 @@ public enum KMConversationError: LocalizedError {
         switch self {
         case .invalidTitle:
             errorMessage = "Please pass a valid title."
+        case .deviceRooted:
+            errorMessage = "User device is Rooted."
         case .notLoggedIn:
             errorMessage = "User is not logged in."
         case .internet:
