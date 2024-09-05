@@ -1275,8 +1275,6 @@ open class Kommunicate: NSObject, Localizable {
             ALUserDefaultsHandler.setBASEURL(API.Backend.chat.rawValue)
             ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi.rawValue)
         }
-        
-        KMUserDefaultHandler.setGoogleMapAPIKey("AIzaSyDHQzh-cDfo-aY9_Q1fZFiZtaurg57eY7k") // REPLACE WITH YOUR GOOGLE MAPKEY
         ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description()])
         ALApplozicSettings.setFilterContactsStatus(true)
         ALUserDefaultsHandler.setDebugLogsRequire(true)
