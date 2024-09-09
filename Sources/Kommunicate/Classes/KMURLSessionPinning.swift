@@ -28,9 +28,9 @@ class KMURLSessionPinningDelegate: NSObject, URLSessionDelegate {
     
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Swift.Void) {
         
-        if (challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust), let bundle = ALUtilityClass.getBundle(),
-           let plistPath = bundle.path(forResource: "KMPublicKeyList", ofType: "plist"),
-           let infoPlist = NSDictionary(contentsOfFile: plistPath) as? [String: Any],
+        if (challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust),
+           let bundle = ALUtilityClass.getBundle(),
+           let infoPlist = bundle.infoDictionary,
            let kExpectedPublicKeyHashBase64 = infoPlist["KMExpectedPublicKeyHashBase64"] as? [String] {
             if let serverTrust = challenge.protectionSpace.serverTrust {
                 var secError: CFError?
