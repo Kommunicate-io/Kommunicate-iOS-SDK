@@ -26,12 +26,23 @@ class KMURLSessionPinningDelegate: NSObject, URLSessionDelegate {
         return Data(hash).base64EncodedString()
     }
     
+    func fetchExpectedPublicKeyHashes(from bundle: Bundle) -> [String]? {
+        if let infoPlist = bundle.infoDictionary,
+           let keys = infoPlist["KMExpectedPublicKeyHashBase64"] as? [String] {
+            return keys
+        } else if let plistPath = bundle.path(forResource: "KommunicateCore-Info", ofType: "plist"),
+                  let infoPlist = NSDictionary(contentsOfFile: plistPath) as? [String: Any],
+                  let keys = infoPlist["KMExpectedPublicKeyHashBase64"] as? [String] {
+            return keys
+        }
+        return nil
+    }
+    
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Swift.Void) {
         
         if (challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust),
            let bundle = ALUtilityClass.getBundle(),
-           let infoPlist = bundle.infoDictionary,
-           let kExpectedPublicKeyHashBase64 = infoPlist["KMExpectedPublicKeyHashBase64"] as? [String] {
+           let kExpectedPublicKeyHashBase64 = fetchExpectedPublicKeyHashes(from: bundle) {
             if let serverTrust = challenge.protectionSpace.serverTrust {
                 var secError: CFError?
                 let isTrustValid = SecTrustEvaluateWithError(serverTrust, &secError)
