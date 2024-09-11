@@ -23,7 +23,11 @@ class DataLoader {
 
         // set up the session
         let config = URLSessionConfiguration.default
-        let session = URLSession(configuration: config)
+        let session = URLSession(
+            configuration: config,
+            delegate: KMURLSessionPinningDelegate(),
+            delegateQueue: nil
+        )
 
         // make the request
         let task = session.dataTask(with: urlRequest) {
