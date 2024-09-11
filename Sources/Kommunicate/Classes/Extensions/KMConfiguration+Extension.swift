@@ -121,7 +121,7 @@ public extension ALKConfiguration {
     /// - Parameter tag: Language tag to set user's language
     mutating func updateUserLanguage(tag: String) throws {
         do {
-            try updateChatContext(with: [ChannelMetadataKeys.languageTag: tag])
+            try updateChatContext(with: [ChannelMetadataKeys.kmUserLocale: tag])
         } catch {
             throw error
         }
