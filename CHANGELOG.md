@@ -1,6 +1,16 @@
 # CHANGELOG
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
+## [7.2.0] 2024-09-11
+- SSL Pining.
+- Jail Break Detection.
+- Resolved Rating Multiple Time Asking Issue.
+- Rating Option will be avilable only after CSAT Enabling.
+- Source Url UI added. 
+- Crash Fixes.
+- Improved Form and Text Area UI.
+- Delete Message Sync.
+
 ## [7.1.9] 2024-05-27
 - Added Privacy Manifest File.
 - Fixed color difference in Attachment Icon.
