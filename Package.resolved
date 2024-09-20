@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/zendesk/chat_providers_sdk_ios",
         "state": {
           "branch": null,
-          "revision": "60db4a62dd2ec0c4cbc213b869c7df199b910ab1",
-          "version": "3.0.0"
+          "revision": "cd8f46c012b33fed262fe70a0bae0da88c25cbdf",
+          "version": "5.0.0"
         }
       },
       {
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git",
         "state": {
           "branch": null,
-          "revision": "dc867d20cfd71161b39f0013f3eeed7258230245",
-          "version": "1.3.4"
+          "revision": "32b2c86f57573316a41ecdf86b278dec33a31309",
+          "version": "1.3.5"
         }
       },
       {
@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git",
         "state": {
           "branch": null,
-          "revision": "72af41b1bfc512801bf746975f16738269e1e2c6",
-          "version": "1.2.2"
+          "revision": "bdf30d6e26da03c9528fa816dc8f72e491c16716",
+          "version": "1.2.3"
         }
       },
       {
