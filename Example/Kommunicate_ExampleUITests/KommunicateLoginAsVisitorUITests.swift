@@ -54,6 +54,7 @@ class KommunicateLoginAsVisitorUITests: XCTestCase {
         if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
             app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
         }
+        sleep(5)
         let loginAsVisitorButton = app.scrollViews.otherElements
         loginAsVisitorButton.buttons[InAppButton.LaunchScreen.loginAsVisitor].tap()
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]
