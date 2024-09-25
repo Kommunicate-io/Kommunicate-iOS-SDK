@@ -42,13 +42,6 @@ class KommunicateLoginAsVisitorUITests: XCTestCase {
         waitFor(object: welcomMessageResponse) { $0.exists }
     }
 
-    override func tearDown() {
-        super.tearDown()
-        let app = XCUIApplication()
-        app.navigationBars[AppScreen.kMConversationView].buttons[InAppButton.ConversationScreen.backButton].tap()
-        app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
-    }
-
     private func createConversation_Using_LoginAsVisitorButton() -> (XCUIApplication) {
         let app = XCUIApplication()
         if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
