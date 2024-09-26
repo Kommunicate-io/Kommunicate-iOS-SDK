@@ -39,7 +39,7 @@ class MessageMetadataTests: XCTestCase {
         let context = try XCTUnwrap(chatContextFromMetadata(metadata))
         XCTAssertFalse(context.isEmpty)
 
-        let languageTag = try XCTUnwrap(context[ChannelMetadataKeys.languageTag] as? String)
+        let languageTag = try XCTUnwrap(context[ChannelMetadataKeys.kmUserLocale] as? String)
         XCTAssertEqual(languageTag, "fr")
     }
 
@@ -52,7 +52,7 @@ class MessageMetadataTests: XCTestCase {
         let context = try XCTUnwrap(chatContextFromMetadata(metadata))
         XCTAssertFalse(context.isEmpty)
 
-        let languageTag = try XCTUnwrap(context[ChannelMetadataKeys.languageTag] as? String)
+        let languageTag = try XCTUnwrap(context[ChannelMetadataKeys.kmUserLocale] as? String)
         XCTAssertEqual(languageTag, "fr")
 
         let chatInfo = try XCTUnwrap(context["chatInfo"] as? String)

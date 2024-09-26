@@ -30,13 +30,13 @@ class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
         return channel
     }()
 
-    override func spec() {
-        describe("conversationVC NavBar") {
+    func spec() {
+        ConversationVCNavBarSnapshotTests.describe("conversationVC NavBar") {
             var navigationController: UINavigationController!
             var customNavigationView: ConversationVCNavBar!
             var viewController: UIViewController!
 
-            beforeEach {
+            ConversationVCNavBarSnapshotTests.beforeEach {
                 customNavigationView = ConversationVCNavBar(
                     delegate: self,
                     localizationFileName: "Localizable",
@@ -49,14 +49,14 @@ class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
                 customNavigationView.setupAppearance()
             }
 
-            it("show agent online") {
+            ConversationVCNavBarSnapshotTests.it("show agent online") {
                 self.mockContact.connected = true
                 customNavigationView.updateView(assignee: self.mockContact, channel: self.mockChannel)
                 navigationController.navigationBar.snapshotView(afterScreenUpdates: true)
                 expect(navigationController.navigationBar).to(haveValidSnapshot())
             }
 
-            it("show agent offline") {
+            ConversationVCNavBarSnapshotTests.it("show agent offline") {
                 self.mockContact.connected = false
                 customNavigationView.updateView(assignee: self.mockContact, channel: self.mockChannel)
                 navigationController.navigationBar.snapshotView(afterScreenUpdates: true)

@@ -11,9 +11,9 @@ import XCTest
 class KommunicateFormRichMessageUITests: XCTestCase {
     enum GroupData {
         static let typeText = "Form"
-        static let AppId = "TestAppId"
-        static let fillUserId = "TestUserId"
-        static let fillPassword = "TestUserPassword"
+        static let AppId = loginCreadentials.testAppID
+        static let fillUserId = loginCreadentials.userID
+        static let fillPassword = loginCreadentials.password
     }
 
     override func setUp() {
@@ -27,7 +27,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         }
         let app = XCUIApplication()
         if let appId = appIdFromEnvVars() {
-            app.launchArguments = ["-appId", appId]
+            app.launchArguments = [GroupData.AppId, appId]
         }
         app.launch()
         sleep(5)
@@ -40,6 +40,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
     func testFormTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
+        
         app.typeText(GroupData.typeText) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         let formFirstResponse = app.tables[AppScreen.innerChatScreenTableView]
@@ -72,24 +73,44 @@ class KommunicateFormRichMessageUITests: XCTestCase {
 
     private func beforeTest_Launch_NewConversation() -> (XCUIApplication) {
         let app = XCUIApplication()
+        if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
+            app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
+        }
+        sleep(5)
+        let loginAsVisitorButton = app.scrollViews.otherElements
+        loginAsVisitorButton.buttons[InAppButton.LaunchScreen.loginAsVisitor].tap()
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]
         waitFor(object: launchConversationButton) { $0.exists }
         launchConversationButton.tap()
-        let createConversationButton = app.navigationBars[AppScreen.myChatScreen]
-        waitFor(object: createConversationButton) { $0.exists }
-        createConversationButton.buttons[InAppButton.CreatingGroup.startNewIcon].tap()
-        let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
-        waitFor(object: inputView) { $0.exists }
-        inputView.tap()
-        inputView.tap()
-        inputView.tap()
+        sleep(3)
+        // Check if the specific screen is on top
+        let isScreenOnTop = app.navigationBars[AppScreen.myChatScreen].exists
+
+        if isScreenOnTop {
+            // Perform actions only if the screen is not on top
+            let createConversationButton = app.navigationBars[AppScreen.myChatScreen]
+            waitFor(object: createConversationButton) { $0.exists }
+            createConversationButton.buttons[InAppButton.CreatingGroup.startNewIcon].tap()
+
+            let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
+            waitFor(object: inputView) { $0.exists }
+            inputView.tap()
+            inputView.tap()
+            inputView.tap()
+        } else {
+            
+            let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
+            waitFor(object: inputView) { $0.exists }
+            inputView.tap()
+            inputView.tap()
+            inputView.tap()
+        }
         return app
     }
 
     private func appIdFromEnvVars() -> String? {
         let path = Bundle(for: KommunicateRichMessageUITests.self).url(forResource: "Info", withExtension: "plist")
-        let dict = NSDictionary(contentsOf: path!) as? [String: Any]
-        let appId = dict?[GroupData.AppId] as? String
+        let appId = GroupData.AppId
         return appId
     }
 }
