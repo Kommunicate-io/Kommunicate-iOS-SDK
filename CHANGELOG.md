@@ -1,6 +1,9 @@
 # CHANGELOG
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
+## [7.2.2] 2024-10-04
+- Exposed Funtion to show or hide Chat Bar for Bot Conversations.
+
 ## [7.2.1] 2024-09-20
 - Supports Xcode version 15.5 and above.
 - Fixed the issue of placeholder in Autosuggestion while bot delay.
