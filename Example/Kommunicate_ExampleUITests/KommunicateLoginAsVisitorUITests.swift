@@ -10,8 +10,8 @@ import XCTest
 
 class KommunicateLoginAsVisitorUITests: XCTestCase {
     enum GroupData {
-        static let typeText = "verifying Login as a visitor and FAQ button."
-        static let AppId = "TestAppId"
+        static let typeText = "verifying Login as a visitor and Welcome Message."
+        static let AppId = loginCreadentials.testAppID
     }
 
     override func setUp() {
@@ -25,7 +25,7 @@ class KommunicateLoginAsVisitorUITests: XCTestCase {
         }
         let app = XCUIApplication()
         if let appId = appIdFromEnvVars() {
-            app.launchArguments = ["-appId", appId]
+            app.launchArguments = [GroupData.AppId, appId]
         }
         app.launch()
         sleep(5)
@@ -34,29 +34,12 @@ class KommunicateLoginAsVisitorUITests: XCTestCase {
         }
     }
 
-    func testFAQButton() {
+    func testLoginAsVisitorAndWelcomeMessage() {
         let app = createConversation_Using_LoginAsVisitorButton()
-        let faqButton = app.navigationBars[AppScreen.kMConversationView]
-        waitFor(object: faqButton) { $0.exists }
-        faqButton.buttons[InAppButton.ConversationScreen.faqButton].tap()
-        let hiHowCanWeHelpYouStaticText = app.webViews.otherElements[AppTextFeild.Helpcenter].staticTexts[AppTextFeild.HeadlineText]
-        waitFor(object: hiHowCanWeHelpYouStaticText) { $0.exists }
-        hiHowCanWeHelpYouStaticText.tap()
-        let backButton = app.navigationBars[InAppButton.ConversationScreen.faqButton]
-        waitFor(object: backButton) { $0.exists }
-        backButton.buttons[InAppButton.ConversationScreen.backButton].tap()
-        let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
-        waitFor(object: inputView) { $0.exists }
-        inputView.tap()
-        inputView.typeText(GroupData.typeText) // typing message
-        app.buttons[InAppButton.ConversationScreen.send].tap()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-        let app = XCUIApplication()
-        app.navigationBars[AppScreen.kMConversationView].buttons[InAppButton.ConversationScreen.backButton].tap()
-        app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
+        
+        let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
+        let welcomMessageResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.welcomeMessage]
+        waitFor(object: welcomMessageResponse) { $0.exists }
     }
 
     private func createConversation_Using_LoginAsVisitorButton() -> (XCUIApplication) {
@@ -64,6 +47,7 @@ class KommunicateLoginAsVisitorUITests: XCTestCase {
         if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
             app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
         }
+        sleep(5)
         let loginAsVisitorButton = app.scrollViews.otherElements
         loginAsVisitorButton.buttons[InAppButton.LaunchScreen.loginAsVisitor].tap()
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]
@@ -74,8 +58,7 @@ class KommunicateLoginAsVisitorUITests: XCTestCase {
 
     private func appIdFromEnvVars() -> String? {
         let path = Bundle(for: KommunicateLoginAsVisitorUITests.self).url(forResource: "Info", withExtension: "plist")
-        let dict = NSDictionary(contentsOf: path!) as? [String: Any]
-        let appId = dict?[GroupData.AppId] as? String
+        let appId = GroupData.AppId
         return appId
     }
 }

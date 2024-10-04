@@ -11,9 +11,9 @@ import XCTest
 class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
     enum GroupData {
         static let typeText = "Hello Kommunicate"
-        static let AppId = "TestAppId"
-        static let fillUserId = "TestUserId"
-        static let fillPassword = "TestUserPassword"
+        static let AppId = loginCreadentials.testAppID
+        static let fillUserId = loginCreadentials.userID
+        static let fillPassword = loginCreadentials.password
     }
 
     override func setUp() {
@@ -28,7 +28,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         }
         let app = XCUIApplication()
         if let appId = appIdFromEnvVars() {
-            app.launchArguments = ["-appId", appId]
+            app.launchArguments = [GroupData.AppId, appId]
         }
         app.launch()
         sleep(5)
@@ -110,17 +110,16 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
 
     private func login() {
         let path = Bundle(for: KommunicateCreateConversationAndSendMessagesTests.self).url(forResource: "Info", withExtension: "plist")
-        let dict = NSDictionary(contentsOf: path!) as? [String: Any]
-        let userId = dict?[GroupData.fillUserId]
-        let password = dict?[GroupData.fillPassword]
+        let userId = GroupData.fillUserId
+        let password = GroupData.fillPassword
         XCUIApplication().tap()
         let elementsQuery = XCUIApplication().scrollViews.otherElements
         let userIdTextField = elementsQuery.textFields[AppTextFeild.userId]
         userIdTextField.tap()
-        userIdTextField.typeText(userId as! String)
+        userIdTextField.typeText(userId)
         let passwordSecureTextField = elementsQuery.secureTextFields[AppTextFeild.password]
         passwordSecureTextField.tap()
-        passwordSecureTextField.typeText(password as! String)
+        passwordSecureTextField.typeText(password)
         elementsQuery.buttons[InAppButton.LaunchScreen.getStarted].tap()
     }
 
@@ -129,16 +128,36 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]
         waitFor(object: launchConversationButton) { $0.exists }
         launchConversationButton.tap()
-        let createConversationButton = app.navigationBars[AppScreen.myChatScreen]
-        waitFor(object: createConversationButton) { $0.exists }
-        createConversationButton.buttons[InAppButton.CreatingGroup.startNewIcon].tap()
+        sleep(3)
+        // Check if the specific screen is on top
+        let isScreenOnTop = app.navigationBars[AppScreen.myChatScreen].exists
+
+        if isScreenOnTop {
+            // Perform actions only if the screen is not on top
+            let createConversationButton = app.navigationBars[AppScreen.myChatScreen]
+            waitFor(object: createConversationButton) { $0.exists }
+            createConversationButton.buttons[InAppButton.CreatingGroup.startNewIcon].tap()
+
+            let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
+            waitFor(object: inputView) { $0.exists }
+            inputView.tap()
+            inputView.tap()
+            inputView.tap()
+        } else {
+            
+            let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
+            waitFor(object: inputView) { $0.exists }
+            inputView.tap()
+            inputView.tap()
+            inputView.tap()
+        }
+
         return app
     }
 
     private func appIdFromEnvVars() -> String? {
         let path = Bundle(for: KommunicateCreateConversationAndSendMessagesTests.self).url(forResource: "Info", withExtension: "plist")
-        let dict = NSDictionary(contentsOf: path!) as? [String: Any]
-        let appId = dict?[GroupData.AppId] as? String
+        let appId = GroupData.AppId
         return appId
     }
 }

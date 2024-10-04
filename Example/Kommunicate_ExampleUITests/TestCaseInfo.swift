@@ -11,17 +11,23 @@ import Foundation
 enum AppPermission {
     enum AlertMessage {
         static let accessNotificationInApplication = "“KommunicateDemo” Would Like to Send You Notifications"
-        static let accessPhoto = "“KommunicateDemo” Would Like to Access Your Photos"
+        static let accessPhoto = "“KommunicateDemo” Would Like to Access Your Photo Library"
         static let accessContact = "“KommunicateDemo” Would Like to Access Your Contacts"
         static let accessLocation = "“KommunicateDemo” to access your location while you are using the app?"
     }
 
     enum AlertButton {
-        static let allowAllPhotos = "Allow Access to All Photos"
+        static let allowAllPhotos = "Allow Full Access"
         static let allow = "Allow"
         static let ok = "OK"
         static let allowLoation = "Allow While Using App"
     }
+}
+
+enum loginCreadentials {
+    static let testAppID = "<Enter-Your-AppID>" /// Enter your AppID here
+    static let userID = "<Enter-Your-UserID>" /// Enter your UserID for testing
+    static let password = "password" /// Enter your password or you can use the same for all users.
 }
 
 enum InAppButton {
@@ -88,6 +94,7 @@ enum RichMessageButtons {
 }
 
 enum RichMessageResponseText {
+    static let welcomeMessage = "Hi, how can we help you?"
     static let suggestedButtonResponse = "Cool! send me more."
     static let linkButtonResponse = "Link Button Rich Message"
     static let differentButtonResponse1 = "optional- this message will be used as acknowledgement text when user clicks the button"
