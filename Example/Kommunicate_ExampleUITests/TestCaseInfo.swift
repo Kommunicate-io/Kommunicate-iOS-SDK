@@ -69,6 +69,7 @@ enum AppScreen {
     static let innerChatScreenTableView = "InnerChatScreenTableView"
     static let inneritemListView = "InneritemListView"
     static let kMConversationView = "Kommunicate.KMConversationView"
+    static let kmVideoPlayerView = "AVPlayerViewController"
 }
 
 enum AppTextFeild {
@@ -105,7 +106,25 @@ enum RichMessageResponseText {
     static let listTemplateResponse = "List template Rich Message"
     static let singleCardResponse = "Single card template"
     static let cardCarouselResponse = "Carousel"
+    static let htlmResponse = "This is a HTML Message."
+    static let videoMessageResponse = "This is a Video Message."
+    static let videoCaptionMessage = "Video Example"
     static let submitFirstResponse = "Submit Button Rich Message"
     static let sugggestedRepliesFirstMessage = "Suggested Replies Rich Message"
     static let formFirstResponse = "Submit your details"
+}
+
+enum CusotomInputField {
+    static let nameFieldResponse = "Hey, what's your name?"
+    static let emailFieldResponse = "Enter the email"
+    static let phoneNumberFieldResponse = "Enter your phone number"
+    static let otpFieldResponse = "Enter the OTP"
+    static let finalSuccessResponse = "Hi \(CusotomInputFieldReply.nameFieldResponse), your Email is \(CusotomInputFieldReply.emailFieldResponse) and your  Phone Number \(CusotomInputFieldReply.phoneNumberFieldResponse)"
+}
+
+enum CusotomInputFieldReply {
+    static let nameFieldResponse = "<Enter Custom Name>"
+    static let emailFieldResponse = "<Enter Custom Email>"
+    static let phoneNumberFieldResponse = "<Enter Custom Phone Number>"
+    static let otpFieldResponse = "<Enter Custom OTP>"
 }

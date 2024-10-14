@@ -18,6 +18,11 @@ class KommunicateRichMessageUITests: XCTestCase {
         static let typeText6 = "List Template"
         static let typeText7 = "Single card"
         static let typeText8 = "Card Carousel"
+        static let typeText9 = "HTML Message"
+        static let typeText10 = "Video Message"
+        static let typeText11 = "AutoSuggestion"
+        static let typeText12 = "Youtube Video"
+        static let typeText13 = "Custom Input Field"
         static let AppId = loginCreadentials.testAppID
         static let fillUserId = loginCreadentials.userID
         static let fillPassword = loginCreadentials.password
@@ -182,6 +187,63 @@ class KommunicateRichMessageUITests: XCTestCase {
         let cardCarouselResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.cardCarouselResponse]
         waitFor(object: cardCarouselResponse) { $0.exists }
+    }
+    
+    func testHTMLMessageTemplate() {
+        let app = beforeTest_Launch_NewConversation()
+        waitFor(object: app) { $0.exists }
+        app.typeText(GroupData.typeText9)
+        app.buttons[InAppButton.ConversationScreen.send].tap()
+        sleep(3)
+        app.swipeUp()
+        let htmlMessageResponse = app.tables[AppScreen.innerChatScreenTableView]
+            .textViews[RichMessageResponseText.htlmResponse]
+        waitFor(object: htmlMessageResponse) { $0.exists }
+    }
+    
+    func testCustomInputField() {
+        let app = beforeTest_Launch_NewConversation()
+        waitFor(object: app) { $0.exists }
+        app.typeText(GroupData.typeText13)
+        app.buttons[InAppButton.ConversationScreen.send].tap()
+        sleep(3)
+        app.swipeUp()
+        /// Name Test Case
+        let customInputFieldResponse = app.tables[AppScreen.innerChatScreenTableView]
+            .textViews[CusotomInputField.nameFieldResponse]
+        waitFor(object: customInputFieldResponse) { $0.exists }
+        app.typeText(CusotomInputFieldReply.nameFieldResponse)
+        app.buttons[InAppButton.ConversationScreen.send].tap()
+        sleep(3)
+        app.swipeUp()
+        /// Email Test Case
+        let customInputFieldResponse2 = app.tables[AppScreen.innerChatScreenTableView]
+            .textViews[CusotomInputField.emailFieldResponse]
+        waitFor(object: customInputFieldResponse2) { $0.exists }
+        app.typeText(CusotomInputFieldReply.emailFieldResponse)
+        app.buttons[InAppButton.ConversationScreen.send].tap()
+        sleep(3)
+        app.swipeUp()
+        /// Phone Number Test Case
+        let customInputFieldResponse3 = app.tables[AppScreen.innerChatScreenTableView]
+            .textViews[CusotomInputField.phoneNumberFieldResponse]
+        waitFor(object: customInputFieldResponse3) { $0.exists }
+        app.typeText(CusotomInputFieldReply.phoneNumberFieldResponse)
+        app.buttons[InAppButton.ConversationScreen.send].tap()
+        sleep(3)
+        app.swipeUp()
+        /// OTP Test Case
+        let customInputFieldResponse4 = app.tables[AppScreen.innerChatScreenTableView]
+            .textViews[CusotomInputField.otpFieldResponse]
+        waitFor(object: customInputFieldResponse4) { $0.exists }
+        app.typeText(CusotomInputFieldReply.otpFieldResponse)
+        app.buttons[InAppButton.ConversationScreen.send].tap()
+        sleep(3)
+        app.swipeUp()
+        /// Final Response
+        let customInputFieldResponse5 = app.tables[AppScreen.innerChatScreenTableView]
+            .textViews[CusotomInputField.finalSuccessResponse]
+        waitFor(object: customInputFieldResponse5) { $0.exists }
     }
 
     private func login() {
