@@ -124,17 +124,16 @@ struct AutoSuggestionReply {
     static let searchKey3 = ["searchKey": "California", "message": "USA"]
     static let searchKey4 = ["searchKey": "Texas", "message": "USA"]
     static let searchKey5 = ["searchKey": "Ontario", "message": "Canada"]
-    static let searchKey6 = ["searchKey": "British Columbia", "message": "Canada"]
+    static let searchKey6 = ["searchKey": "British", "message": "Canada"]
     static let searchKey7 = ["searchKey": "England", "message": "UK"]
-    static let searchKey8 = ["searchKey": "New South Wales", "message": "Australia"]
+    static let searchKey8 = ["searchKey": "New", "message": "Australia"]
     static let searchKey9 = ["searchKey": "Bavaria", "message": "Germany"]
-    static let searchKey10 = ["searchKey": "Île-de-France", "message": "France"]
-    static let searchKey11 = ["searchKey": "Tokyo", "message": "Japan"]
+    static let searchKey10 = ["searchKey": "Tokyo", "message": "Japan"]
     
     static func getRandomSearchKey() -> [String: String] {
         let allKeys = [
             searchKey1, searchKey2, searchKey3, searchKey4, searchKey5,
-            searchKey6, searchKey7, searchKey8, searchKey9, searchKey10, searchKey11
+            searchKey6, searchKey7, searchKey8, searchKey9, searchKey10
         ]
         return allKeys.randomElement() ?? [:]
     }
