@@ -245,6 +245,63 @@ class KommunicateRichMessageUITests: XCTestCase {
             .textViews[CusotomInputField.finalSuccessResponse]
         waitFor(object: customInputFieldResponse5) { $0.exists }
     }
+    
+    func testVideoMessageTamplate() {
+        let app = beforeTest_Launch_NewConversation()
+        waitFor(object: app) { $0.exists }
+        app.typeText(GroupData.typeText10)
+        app.buttons[InAppButton.ConversationScreen.send].tap()
+        sleep(3)
+        app.swipeUp()
+        
+        let videoMessage = app.tables[AppScreen.innerChatScreenTableView]
+            .textViews[RichMessageResponseText.videoMessageResponse]
+        waitFor(object: videoMessage) { $0.exists }
+        
+        let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
+        let numberOfCells = innerchatscreentableviewTable.cells.count
+        let lastCell = innerchatscreentableviewTable.cells.element(boundBy: numberOfCells - 1)
+        let iconOneButton = lastCell.buttons[AppScreen.videoPlayerCell]
+        waitFor(object: iconOneButton) { $0.exists }
+        iconOneButton.tap()
+    }
+    
+    
+    func testYouTubeMessageTemplate() {
+        let app = beforeTest_Launch_NewConversation()
+        waitFor(object: app) { $0.exists }
+        app.typeText(GroupData.typeText12)
+        app.buttons[InAppButton.ConversationScreen.send].tap()
+        sleep(3)
+        app.swipeUp()
+        
+        let videoMessage = app.tables[AppScreen.innerChatScreenTableView]
+            .textViews[RichMessageResponseText.youtubeVideoMessageResponse]
+        waitFor(object: videoMessage) { $0.exists }
+    }
+    
+    func testAutoSuggestion() {
+        let app = beforeTest_Launch_NewConversation()
+        waitFor(object: app) { $0.exists }
+        app.typeText(GroupData.typeText11)
+        app.buttons[InAppButton.ConversationScreen.send].tap()
+        sleep(3)
+        app.swipeUp()
+        
+        let autoSuggestionMessage = app.tables[AppScreen.innerChatScreenTableView]
+            .textViews[RichMessageResponseText.autoSuggestionResponse]
+        waitFor(object: autoSuggestionMessage) { $0.exists }
+        
+        let searchOptions = AutoSuggestionReply.getRandomSearchKey()
+        let searchText = searchOptions["searchKey"] ?? "Option1"
+        let responseText = searchOptions["message"] ?? "Response1"
+        app.typeText(searchText)
+        sleep(3)
+        let innerchatscreentableviewTable = app.tables[AppScreen.autoSuggestionTableView]
+        innerchatscreentableviewTable.staticTexts[responseText].tap()
+        sleep(1)
+        app.buttons[InAppButton.ConversationScreen.send].tap()
+    }
 
     private func login() {
         let path = Bundle(for: KommunicateRichMessageUITests.self).url(forResource: "Info", withExtension: "plist")
