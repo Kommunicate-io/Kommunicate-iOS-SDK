@@ -31,7 +31,7 @@ To get started with Kommunicate iOS SDK, head over to the Kommunicate website an
 
 [Kompose](https://dashboard.kommunicate.io/bots/bot-builder) is a Kommunicate’s bot builder that help you in building your own bot, a techie, non-techie, or a person who doesn’t have any idea about chatbots can also build the bot. Anyone can create a chatbot with the Kompose without any assistance.
 
-<img align="center" src="botInteg.gif" height="520" />
+<img align="center" src="Final.gif" height="520" />
 
 
 
