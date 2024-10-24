@@ -69,6 +69,9 @@ enum AppScreen {
     static let innerChatScreenTableView = "InnerChatScreenTableView"
     static let inneritemListView = "InneritemListView"
     static let kMConversationView = "Kommunicate.KMConversationView"
+    static let kmVideoPlayerView = "AVPlayerViewController"
+    static let autoSuggestionTableView = "KMAutoCompletionTableView"
+    static let videoPlayerCell = "KMVideoPlayer"
 }
 
 enum AppTextFeild {
@@ -105,7 +108,48 @@ enum RichMessageResponseText {
     static let listTemplateResponse = "List template Rich Message"
     static let singleCardResponse = "Single card template"
     static let cardCarouselResponse = "Carousel"
+    static let htlmResponse = "This is a HTML Message."
+    static let videoMessageResponse = "This is a Video Message."
+    static let youtubeVideoMessageResponse = "This is a YouTube Video Message."
+    static let videoCaptionMessage = "Video Example"
+    static let autoSuggestionResponse = "This is Auto Suggestion"
     static let submitFirstResponse = "Submit Button Rich Message"
     static let sugggestedRepliesFirstMessage = "Suggested Replies Rich Message"
     static let formFirstResponse = "Submit your details"
+}
+
+struct AutoSuggestionReply {
+    static let searchKey1 = ["searchKey": "Karnataka", "message": "India"]
+    static let searchKey2 = ["searchKey": "Maharashtra", "message": "India"]
+    static let searchKey3 = ["searchKey": "California", "message": "USA"]
+    static let searchKey4 = ["searchKey": "Texas", "message": "USA"]
+    static let searchKey5 = ["searchKey": "Ontario", "message": "Canada"]
+    static let searchKey6 = ["searchKey": "British", "message": "Canada"]
+    static let searchKey7 = ["searchKey": "England", "message": "UK"]
+    static let searchKey8 = ["searchKey": "New", "message": "Australia"]
+    static let searchKey9 = ["searchKey": "Bavaria", "message": "Germany"]
+    static let searchKey10 = ["searchKey": "Tokyo", "message": "Japan"]
+    
+    static func getRandomSearchKey() -> [String: String] {
+        let allKeys = [
+            searchKey1, searchKey2, searchKey3, searchKey4, searchKey5,
+            searchKey6, searchKey7, searchKey8, searchKey9, searchKey10
+        ]
+        return allKeys.randomElement() ?? [:]
+    }
+}
+
+enum CusotomInputField {
+    static let nameFieldResponse = "Hey, what's your name?"
+    static let emailFieldResponse = "Enter the email"
+    static let phoneNumberFieldResponse = "Enter your phone number"
+    static let otpFieldResponse = "Enter the OTP"
+    static let finalSuccessResponse = "Hi \(CusotomInputFieldReply.nameFieldResponse), your Email is \(CusotomInputFieldReply.emailFieldResponse) and your  Phone Number \(CusotomInputFieldReply.phoneNumberFieldResponse)"
+}
+
+enum CusotomInputFieldReply {
+    static let nameFieldResponse = "<Enter Custom Name>"
+    static let emailFieldResponse = "<Enter Custom Email>"
+    static let phoneNumberFieldResponse = "<Enter Custom Phone Number>"
+    static let otpFieldResponse = "<Enter Custom OTP>"
 }
