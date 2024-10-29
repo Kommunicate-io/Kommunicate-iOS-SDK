@@ -516,13 +516,14 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             if let channelId = weakSelf.viewModel.channelKey {
                 KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.restartConversationClick, data: ["conversationId":channelId])
             }
-           
-            guard let zendeskAcckountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
-                  !zendeskAcckountKey.isEmpty else { return }
-            // if zendesk is integrated, create a new conversation instead of restarting the conversation
-            let zendeskHandler = KMZendeskChatHandler.shared
-            zendeskHandler.resetConfiguration()
-            zendeskHandler.initiateZendesk(key: zendeskAcckountKey)
+            #if canImport(ChatProvidersSDK)
+                guard let zendeskAcckountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
+                      !zendeskAcckountKey.isEmpty else { return }
+                // if zendesk is integrated, create a new conversation instead of restarting the conversation
+                let zendeskHandler = KMZendeskChatHandler.shared
+                zendeskHandler.resetConfiguration()
+                zendeskHandler.initiateZendesk(key: zendeskAcckountKey)
+            #endif
             weakSelf.loadingStarted()
             // Create a new conversation 
             let kmConversation = KMConversationBuilder()
@@ -531,8 +532,9 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             Kommunicate.createConversation(conversation: kmConversation) { result in
               switch result {
                case .success(let conversationId):
+                #if canImport(ChatProvidersSDK)
                   ALApplozicSettings.setLastZendeskConversationId(NSNumber(value: Int(conversationId) ?? 0))
-                  
+                #endif
                   let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: NSNumber(value: Int(conversationId) ?? 0), localizedStringFileName: Kommunicate.defaultConfiguration.localizedStringFileName, prefilledMessage: nil)
                  // Update the View Model & refresh the View Controller
                   weakSelf.updateViewModelAndRefreshViewController(convViewModel, conversationId: NSNumber(value: Int(conversationId) ?? 0))

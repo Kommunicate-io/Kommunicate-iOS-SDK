@@ -403,7 +403,9 @@ open class Kommunicate: NSObject, Localizable {
         let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
         applozicClient?.logoutUser(completion: { error, _ in
             Kommunicate.shared.clearUserDefaults()
-            KMZendeskChatHandler.shared.endChat()
+            #if canImport(ChatProvidersSDK)
+                KMZendeskChatHandler.shared.endChat()
+            #endif
             guard error == nil else {
                 completion(.failure(KMError.api(error)))
                 return
@@ -676,6 +678,7 @@ open class Kommunicate: NSObject, Localizable {
      - viewController: ViewController from which the group chat will be launched.
      */
     open class func openZendeskChat(from: UIViewController,completion: @escaping (_ error: KommunicateError?) -> Void) {
+        #if canImport(ChatProvidersSDK)
         let zendeskHandler = KMZendeskChatHandler.shared
         guard let accountKey = ALApplozicSettings.getZendeskSdkAccountKey(), !accountKey.isEmpty else {
             completion(.zendeskKeyNotPresent)
@@ -735,6 +738,7 @@ open class Kommunicate: NSObject, Localizable {
             bool == true ? completion(nil) : completion(.conversationOpenFailed)
             print("Opening Existing conversation which is assigned to BOT")
         })
+        #endif
     }
     
     /**
