@@ -164,7 +164,10 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         // Hide away message view whenever a new message comes.
         // Make sure the message is not from same user.
         guard !viewModel.messageModels.isEmpty else { return }
-        if let lastMessage = viewModel.messageModels.last, !lastMessage.isMyMessage {
+        if let lastMessage = viewModel.messageModels.last,
+           !lastMessage.isMyMessage,
+           let currentAssignee = self.assigneeUserId,
+           lastMessage.contactId == currentAssignee {
             isAwayMessageViewHidden = true
         }
     }
