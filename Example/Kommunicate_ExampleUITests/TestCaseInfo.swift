@@ -24,6 +24,10 @@ enum AppPermission {
     }
 }
 
+enum Configuration {
+    static let resgexPattern = "restricted"
+}
+
 enum loginCreadentials {
     static let testAppID = "<Enter-Your-AppID>" /// Enter your AppID here
     static let userID = "<Enter-Your-UserID>" /// Enter your UserID for testing
