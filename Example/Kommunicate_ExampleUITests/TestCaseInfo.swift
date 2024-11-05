@@ -99,6 +99,7 @@ enum RichMessageButtons {
 
 enum RichMessageResponseText {
     static let welcomeMessage = "Hi, how can we help you?"
+    static let customWelcomeMessage = "Hi \(loginCreadentials.userID), how can we help you?"
     static let suggestedButtonResponse = "Cool! send me more."
     static let linkButtonResponse = "Link Button Rich Message"
     static let differentButtonResponse1 = "optional- this message will be used as acknowledgement text when user clicks the button"
