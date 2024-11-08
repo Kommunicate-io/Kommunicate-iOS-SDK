@@ -18,6 +18,10 @@
         var appId = ""
 
         func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+            /// For Regex Automation Testing.
+            if let regexPattern = ProcessInfo.processInfo.environment["restrictedMessageRegexPattern"] {
+                Kommunicate.defaultConfiguration.restrictedMessageRegexPattern = regexPattern
+            }
             setUpNavigationBarAppearance()
 
             UNUserNotificationCenter.current().delegate = self

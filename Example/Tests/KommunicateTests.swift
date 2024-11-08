@@ -17,11 +17,6 @@ class KommunicateTests: XCTestCase {
             showConversationsCalled = true
         }
 
-        override class func createConversation(conversation _: KMConversation = KMConversationBuilder().build(), completion: @escaping (Result<String, KMConversationError>) -> Void) {
-            createConversationsCalled = true
-            completion(.success(""))
-        }
-
         override class func createAndShowConversation(
             from viewController: UIViewController,
             completion: @escaping (_ error: KommunicateError?) -> Void
@@ -93,5 +88,236 @@ class KommunicateTests: XCTestCase {
             XCTAssertNotNil(error)
             XCTAssertEqual(error!, .notLoggedIn)
         })
+    }
+    
+    func testCreateConversationWithCustomData() {
+        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        let expectation = self.expectation(description: "Completion handler called")
+        
+        let kmConversation = KMConversationBuilder()
+            .useLastConversation(false)
+            .withMetaData(["TestMetadata": "SampleValue"])
+            .withConversationTitle("Automation Conversation")
+            .build()
+        
+        if KommunicateMock.isLoggedIn {
+            createConversation(kmConversation, expectation: expectation)
+        } else {
+            KommunicateMock.registerUserAsVistor { response, error in
+                if let error = error {
+                    XCTFail("User registration failed: \(error.localizedDescription)")
+                    expectation.fulfill()
+                    return
+                }
+                KommunicateMock.loggedIn = true
+                self.createConversation(kmConversation, expectation: expectation)
+            }
+        }
+        
+        waitForExpectations(timeout: 30)
+    }
+
+    private func createConversation(_ conversation: KMConversation, expectation: XCTestExpectation) {
+        KommunicateMock.createConversation(conversation: conversation) { result in
+            switch result {
+            case .success(let conversationId):
+                print("Conversation id:", conversationId)
+                XCTAssertTrue(true, "Conversation created successfully.")
+            case .failure(let kmConversationError):
+                XCTAssertNotNil(kmConversationError, "Conversation creation failed")
+                XCTFail("Failed to create conversation.")
+            }
+            expectation.fulfill()
+        }
+    }
+
+    
+    func testSendMessageFunction() {
+        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        let expectation = self.expectation(description: "Completion handler called")
+        
+        let kmConversation = KMConversationBuilder()
+            .useLastConversation(false)
+            .withMetaData(["TestMetadata": "SampleValue"])
+            .withConversationTitle("Automation Conversation")
+            .build()
+        
+        if KommunicateMock.isLoggedIn {
+            createConversationAndSendMessage(kmConversation, expectation: expectation)
+        } else {
+            KommunicateMock.registerUserAsVistor { response, error in
+                if let error = error {
+                    XCTFail("User registration failed: \(error.localizedDescription)")
+                    expectation.fulfill()
+                    return
+                }
+                KommunicateMock.loggedIn = true
+                self.createConversationAndSendMessage(kmConversation, expectation: expectation)
+            }
+        }
+        
+        waitForExpectations(timeout: 30)
+    }
+
+    private func createConversationAndSendMessage(_ conversation: KMConversation, expectation: XCTestExpectation) {
+        KommunicateMock.createConversation(conversation: conversation) { [weak self] result in
+            switch result {
+            case .success(let conversationId):
+                let message = KMMessageBuilder()
+                    .withConversationId(conversationId)
+                    .withText("Automation: Test Message For Send Function.")
+                    .build()
+                self?.sendMessage(message, expectation: expectation)
+                
+            case .failure(let kmConversationError):
+                XCTAssertNotNil(kmConversationError, "Conversation creation failed")
+                expectation.fulfill()
+            }
+        }
+    }
+
+    private func sendMessage(_ message: KMMessage, expectation: XCTestExpectation) {
+        Kommunicate.sendMessage(message: message) { error in
+            if let error = error {
+                print("Failed to send message: \(error.localizedDescription)")
+                XCTFail("Error sending message.")
+            } else {
+                XCTAssertTrue(true, "Message sent successfully")
+            }
+            expectation.fulfill()
+        }
+    }
+    
+    func testUpdateConversationFunction() {
+        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        let expectation = self.expectation(description: "Completion handler called")
+        
+        let kmConversation = KMConversationBuilder()
+            .useLastConversation(false)
+            .withMetaData(["TestMetadata": "SampleValue"])
+            .withConversationTitle("Automation Conversation")
+            .build()
+        
+        let metaData: [String: Any] = [
+            "testName": "randomTestCase",
+            "testID": 101,
+            "isEnabled": true,
+            "parameters": [
+                "username": "user123",
+                "password": "pass456",
+                "retries": 3,
+                "useMockData": false,
+                "url": "https://example.com"
+            ],
+            "expectedResponse": [
+                "statusCode": 200,
+                "message": "Operation successful",
+                "success": true
+            ]
+        ]
+        
+        if KommunicateMock.isLoggedIn {
+            createAndUpdateConversation(kmConversation, metaData: metaData, expectation: expectation)
+        } else {
+            KommunicateMock.registerUserAsVistor { response, error in
+                if let error = error {
+                    XCTFail("User registration failed: \(error.localizedDescription)")
+                    expectation.fulfill()
+                    return
+                }
+                KommunicateMock.loggedIn = true
+                self.createAndUpdateConversation(kmConversation, metaData: metaData, expectation: expectation)
+            }
+        }
+        
+        waitForExpectations(timeout: 30)
+    }
+
+    private func createAndUpdateConversation(_ conversation: KMConversation, metaData: [String: Any], expectation: XCTestExpectation) {
+        KommunicateMock.createConversation(conversation: conversation) { [weak self] result in
+            switch result {
+            case .success(let conversationId):
+                let updatedConversation = KMConversationBuilder()
+                    .withClientConversationId(conversationId)
+                    .withMetaData(metaData)
+                    .build()
+                self?.updateConversation(updatedConversation, expectation: expectation)
+                
+            case .failure(let kmConversationError):
+                XCTAssertNotNil(kmConversationError, "Conversation creation failed")
+                expectation.fulfill()
+            }
+        }
+    }
+
+    private func updateConversation(_ conversation: KMConversation, expectation: XCTestExpectation) {
+        Kommunicate.updateConversation(conversation: conversation) { response in
+            switch response {
+            case .success:
+                XCTAssertTrue(true)
+            case .failure(let error):
+                XCTAssertNotNil(error, "Conversation update failed")
+                XCTFail("Error during conversation update.")
+            }
+            expectation.fulfill()
+        }
+    }
+    
+    func testIsSingleThreaded() {
+        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        let expectation = self.expectation(description: "Completion handler called")
+        let kmConversation = KMConversationBuilder()
+            .useLastConversation(true)
+            .withMetaData(["TestMetadata": "SampleValue"])
+            .withConversationTitle("Automation Conversation")
+            .build()
+        
+        if KommunicateMock.isLoggedIn {
+            createAndValidateConversation(kmConversation, initialConversationId: nil, expectation: expectation)
+        } else {
+            KommunicateMock.registerUserAsVistor { response, error in
+                if let error = error {
+                    XCTFail("User registration failed: \(error.localizedDescription)")
+                    expectation.fulfill()
+                    return
+                }
+                KommunicateMock.loggedIn = true
+                self.createAndValidateConversation(kmConversation, initialConversationId: nil, expectation: expectation)
+            }
+        }
+        
+        waitForExpectations(timeout: 30)
+    }
+
+    private func createAndValidateConversation(_ conversation: KMConversation, initialConversationId: String?, expectation: XCTestExpectation) {
+        KommunicateMock.createConversation(conversation: conversation) { [weak self] result in
+            switch result {
+            case .success(let conversationID):
+                self?.validateSingleThreaded(conversation: conversation, initialConversationId: conversationID, expectation: expectation)
+            case .failure(let kmConversationError):
+                XCTAssertNotNil(kmConversationError, "Conversation creation failed")
+                expectation.fulfill()
+            }
+        }
+    }
+
+    private func validateSingleThreaded(conversation: KMConversation, initialConversationId: String, expectation: XCTestExpectation) {
+        sleep(2)
+        KommunicateMock.createConversation(conversation: conversation) { result in
+            switch result {
+            case .success(let conversationID):
+                if initialConversationId == conversationID {
+                    print("Single Threaded is working properly.")
+                    XCTAssertTrue(true)
+                } else {
+                    print("Single Threaded is not working properly.")
+                    XCTFail("New conversation ID does not match the initial one.")
+                }
+            case .failure(let kmConversationError):
+                XCTAssertNotNil(kmConversationError, "Second conversation creation failed")
+                XCTFail("Error in second conversation creation.")
+            }
+            expectation.fulfill()
+        }
     }
 }
