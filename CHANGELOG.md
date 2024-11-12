@@ -1,6 +1,9 @@
 # CHANGELOG
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
+## [7.2.3] 2024-11-12
+- Fixed response with date and time format in postback message.
+
 ## [7.2.2] 2024-10-04
 - Exposed Funtion to show or hide Chat Bar for Bot Conversations.
 
