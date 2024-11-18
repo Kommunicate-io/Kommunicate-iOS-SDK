@@ -176,3 +176,7 @@ Document = "Document";
 Contact = "Contact";
 Buttons = "Buttons";
 File = "File";
+
+/* Collect Email On Away Mode */
+CollectEmailMessageOnAwayMode = "How may we reach you?";
+InvalidEmailMessageOnAwayMode = "It seems you have entered an invalid email";

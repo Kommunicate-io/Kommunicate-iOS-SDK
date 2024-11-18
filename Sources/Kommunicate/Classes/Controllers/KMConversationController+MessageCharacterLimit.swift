@@ -9,10 +9,11 @@ import Foundation
 
 extension KMConversationViewController: MessageCharacterLimitDelegate {
     func characterLimit(manager _: MessageCharacterLimitManager, _ isHidden: Bool) {
+        let emailAndAwayViewHidden = viewModel.emailCollectionAwayModeEnabled ? false : isAwayMessageViewHidden
         if isHidden {
-            chatBar.headerViewHeight = isAwayMessageViewHidden ? 0 : awayMessageheight
+            chatBar.headerViewHeight = emailAndAwayViewHidden ? 0 : awayMessageheight
         } else {
-            chatBar.headerViewHeight = isAwayMessageViewHidden ? MessageCharacterLimitManager.charLimitViewHeight : awayMessageheight + MessageCharacterLimitManager.charLimitViewHeight
+            chatBar.headerViewHeight = emailAndAwayViewHidden ? MessageCharacterLimitManager.charLimitViewHeight : awayMessageheight + MessageCharacterLimitManager.charLimitViewHeight
         }
     }
 

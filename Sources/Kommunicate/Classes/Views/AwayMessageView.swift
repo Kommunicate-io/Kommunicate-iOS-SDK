@@ -10,7 +10,13 @@ import KommunicateChatUI_iOS_SDK
 import UIKit
 
 /// A view to show away message. It has message label and dotted line view.
-class AwayMessageView: UIView {
+class AwayMessageView: UIView , Localizable {
+    enum LocalizedText {
+        private static let filename = Kommunicate.defaultConfiguration.localizedStringFileName
+        static let CollectEmailMessageOnAwayMode = localizedString(forKey: "CollectEmailMessageOnAwayMode", fileName: filename)
+        static let InvalidEmailMessageOnAwayMode = localizedString(forKey: "InvalidEmailMessageOnAwayMode", fileName: filename)
+    }
+    
     enum ConstraintIdentifier: String {
         case awayMessageViewHeight
     }
@@ -26,20 +32,42 @@ class AwayMessageView: UIView {
             static let leading: CGFloat = 20.0
             static let trailing: CGFloat = 20.0
         }
+        
+        enum EmailMessageLabel {
+            static let top: CGFloat = 8.0
+            static let leading: CGFloat = 20.0
+            static let trailing: CGFloat = 20.0
+        }
     }
 
     private let messageLabel: UILabel = {
-        let label = UILabel(frame: CGRect.zero)
+        let label = UILabel()
         label.font = UIFont(name: "HelveticaNeue-Light", size: 14)
-        label.contentMode = .center
         label.textAlignment = .center
         label.textColor = .kmDynamicColor(light: UIColor(netHex: 0x676262), dark: .lightGray)
         label.numberOfLines = 4
         return label
     }()
 
-    private let dottedLineView = UIView(frame: CGRect.zero)
+    private let emailMessageLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "HelveticaNeue-Light", size: 16)
+        label.textColor = .kmDynamicColor(light: UIColor(netHex: 0x676262), dark: .lightGray)
+        label.numberOfLines = 1
+        
+        let attachment = NSTextAttachment()
+        attachment.image = UIImage(named: "km_email_icon", in: Bundle.kommunicate, compatibleWith: nil)?.withRenderingMode(.alwaysTemplate)
+        attachment.bounds = CGRect(x: 0, y: -5, width: 30, height: 20)
+        let attachmentString = NSAttributedString(attachment: attachment)
+        let completeText = NSMutableAttributedString(string: "")
+        completeText.append(attachmentString)
+        completeText.append(NSAttributedString(string: "  " + LocalizedText.CollectEmailMessageOnAwayMode))
+        label.attributedText = completeText
+        label.textColor = .kmDynamicColor(light: UIColor(netHex: 0x676262), dark: .lightGray)
+        return label
+    }()
 
+    private let dottedLineView = UIView()
     private let dottedLayer: CAShapeLayer = {
         let shapeLayer = CAShapeLayer()
         shapeLayer.strokeColor = UIColor(netHex: 0xBEBBBB).cgColor
@@ -52,6 +80,23 @@ class AwayMessageView: UIView {
     private let dottedLineViewHeight: CGFloat = 1.0
     private lazy var dottedLineHeightAnchor = dottedLineView.heightAnchor.constraint(equalToConstant: 0)
 
+    func switchToEmailUI(emailUIEnabled: Bool) {
+        messageLabel.isHidden = emailUIEnabled
+        emailMessageLabel.isHidden = !emailUIEnabled
+    }
+    
+    func showInvalidEmailError() {
+        let attachment = NSTextAttachment()
+        attachment.image = UIImage(named: "km_email_icon", in: Bundle.kommunicate, compatibleWith: nil)?.withRenderingMode(.alwaysTemplate)
+        attachment.bounds = CGRect(x: 0, y: -5, width: 30, height: 20)
+        let attachmentString = NSAttributedString(attachment: attachment)
+        let completeText = NSMutableAttributedString(string: "")
+        completeText.append(attachmentString)
+        completeText.append(NSAttributedString(string: "  " + LocalizedText.InvalidEmailMessageOnAwayMode))
+        emailMessageLabel.attributedText = completeText
+        emailMessageLabel.textColor = .red
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -61,9 +106,13 @@ class AwayMessageView: UIView {
         super.init(coder: aDecoder)
     }
 
-    func setupViews() {
-        addConstraints()
+    private func setupViews() {
+        addViewsForAutolayout(views: [dottedLineView, messageLabel, emailMessageLabel])
         dottedLineView.layer.addSublayer(dottedLayer)
+        dottedLineHeightAnchor.isActive = true
+        addConstraints()
+        messageLabel.isHidden = false
+        emailMessageLabel.isHidden = true
     }
 
     func set(message: String) {
@@ -85,19 +134,24 @@ class AwayMessageView: UIView {
     }
 
     private func addConstraints() {
-        addViewsForAutolayout(views: [dottedLineView, messageLabel])
-        dottedLineHeightAnchor.isActive = true
         dottedLineView.layout {
             $0.top == topAnchor
             $0.leading == leadingAnchor + Padding.DottedLineView.leading
             $0.trailing == trailingAnchor - Padding.DottedLineView.trailing
         }
-
+        
         messageLabel.layout {
             $0.bottom == bottomAnchor
             $0.top == dottedLineView.bottomAnchor + Padding.MessageLabel.top
             $0.leading == leadingAnchor + Padding.MessageLabel.leading
             $0.trailing == trailingAnchor - Padding.MessageLabel.trailing
+        }
+        
+        emailMessageLabel.layout {
+            $0.bottom == bottomAnchor
+            $0.top == dottedLineView.bottomAnchor + Padding.EmailMessageLabel.top
+            $0.leading == leadingAnchor + Padding.EmailMessageLabel.leading
+            $0.trailing == trailingAnchor - Padding.EmailMessageLabel.trailing
         }
     }
 }
