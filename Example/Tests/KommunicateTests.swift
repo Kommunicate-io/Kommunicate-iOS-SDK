@@ -188,6 +188,45 @@ class KommunicateTests: XCTestCase {
         }
     }
     
+    func testOpenPerticularConversation() {
+        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        let expectation = self.expectation(description: "Completion handler called")
+        
+        // Dummy View Controller For Testing
+        let dummyViewController = UIViewController()
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        window.rootViewController = dummyViewController
+        window.makeKeyAndVisible()
+        
+        let kmConversation = KMConversationBuilder()
+            .useLastConversation(false)
+            .withMetaData(["TestMetadata": "SampleValue"])
+            .withConversationTitle("Automation Conversation")
+            .build()
+        
+        KommunicateMock.createConversation(conversation: kmConversation) { result in
+            switch result {
+            case .success(let conversationId):
+                print("Conversation created with ID: \(conversationId)")
+                KommunicateMock.showConversationWith(groupId: conversationId, from: dummyViewController) { response in
+                    print("Show conversation response: \(response)")
+                    if !response {
+                        XCTFail("Conversation opening Failed")
+                        expectation.fulfill()
+                        return
+                    }
+                    XCTAssertTrue(true)
+                    expectation.fulfill()
+                }
+            case .failure(let kmConversationError):
+                XCTAssertNotNil(kmConversationError, "Conversation creation failed")
+                expectation.fulfill()
+            }
+        }
+
+        waitForExpectations(timeout: 30)
+    }
+    
     func testUpdateConversationFunction() {
         KommunicateMock.applozicClientType = ApplozicClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
