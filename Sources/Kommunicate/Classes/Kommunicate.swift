@@ -492,6 +492,98 @@ open class Kommunicate: NSObject, Localizable {
         }
     }
     
+    /**
+     Launch a new conversation with the details passed in group chat from a ViewController
+
+     - Parameters:
+     - conversation: An instance of `KMConversation` object.
+     - viewController: ViewController from which the group chat will be launched.
+     - completionHandler: If successful launch the conversation the success callback will have a conversationId else it will be KMConversationError on failure.
+
+     */
+    open class func launchConversation(
+        conversation: KMConversation,
+        viewController: UIViewController,
+        completion: @escaping (Result<String, KMConversationError>) -> Void
+    ) {
+        // Check if the device is jailbroken
+        guard !isDeviceJailbroken() else {
+            print("The user device is suspected to be rooted.")
+            completion(.failure(KMConversationError.deviceRooted))
+            return
+        }
+        
+        // Check network availability
+        guard ALDataNetworkConnection.checkDataNetworkAvailable() else {
+            completion(.failure(KMConversationError.internet))
+            return
+        }
+        
+        // Validate conversation title
+        if let conversationTitle = conversation.conversationTitle,
+           conversationTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            print("The conversation title should not be empty")
+            completion(.failure(KMConversationError.invalidTitle))
+            return
+        }
+
+        let service = KMConversationService()
+
+        // Check user login status
+        guard KMUserDefaultHandler.isLoggedIn() else {
+            completion(.failure(KMConversationError.notLoggedIn))
+            return
+        }
+
+        // Refresh app settings
+        refreshAppsettings()
+
+        // Determine if single-threaded conversation is enabled
+        let isSingleThreaded = ALApplozicSettings.getIsSingleThreadedEnabled()
+        if isSingleThreaded {
+            conversation.useLastConversation = isSingleThreaded
+        }
+
+        // Handle clientConversationId for single-threaded conversations
+        if (conversation.clientConversationId ?? "").isEmpty, conversation.useLastConversation {
+            conversation.clientConversationId = service.createClientIdFrom(
+                userId: conversation.userId,
+                agentIds: conversation.agentIds,
+                botIds: conversation.botIds ?? []
+            )
+        }
+
+        // Create a new conversation
+        service.createConversation(conversation: conversation) { response in
+            DispatchQueue.main.async {
+                guard let conversationId = response.clientChannelKey else {
+                    completion(.failure(KMConversationError.api(response.error)))
+                    return
+                }
+
+                // Publish a custom event for the new conversation
+                KMCustomEventHandler.shared.publish(
+                    triggeredEvent: KMCustomEvent.newConversation,
+                    data: ["conversationId": conversationId]
+                )
+
+                // Show the conversation view
+                showConversationWith(
+                    groupId: conversationId,
+                    from: viewController,
+                    prefilledMessage: conversation.prefilledMessage
+                ) { success in
+                    DispatchQueue.main.async {
+                        guard success else {
+                            completion(.failure(KMConversationError.api(KommunicateError.conversationOpenFailed)))
+                            return
+                        }
+                        completion(.success(conversationId))
+                    }
+                }
+            }
+        }
+    }
 
     /// This method is used to return an instance of conversation list view controller.
     ///
