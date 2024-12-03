@@ -84,13 +84,30 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
 
     private var converastionNavBarItemToken: NotificationToken?
     private var channelMetadataUpdateToken: NotificationToken?
+    private var isAssignedAgentOrBotOnline: Bool = false
 
     var isAwayMessageViewHidden = true {
         didSet {
-            guard oldValue != isAwayMessageViewHidden else { return }
-            showAwayMessage(!isAwayMessageViewHidden)
+            guard oldValue != isAwayMessageViewHidden else {
+                handleAwayUINoChange()
+                return
+            }
+            isAssignedAgentOrBotOnline = isAwayMessageViewHidden
+            handleAwayUIUpdate()
         }
     }
+
+    private func handleAwayUINoChange() {
+        if isAssignedAgentOrBotOnline {
+            handleAwayUIUpdate()
+        }
+    }
+
+    private func handleAwayUIUpdate() {
+        guard !viewModel.emailCollectionAwayModeEnabled else { return }
+        showAwayMessage(!isAwayMessageViewHidden)
+    }
+
 
     private var isClosedConversation: Bool {
         guard let channelId = viewModel.channelKey,
@@ -164,7 +181,10 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         // Hide away message view whenever a new message comes.
         // Make sure the message is not from same user.
         guard !viewModel.messageModels.isEmpty else { return }
-        if let lastMessage = viewModel.messageModels.last, !lastMessage.isMyMessage {
+        if let lastMessage = viewModel.messageModels.last,
+           !lastMessage.isMyMessage,
+           let currentAssignee = self.assigneeUserId,
+           lastMessage.contactId == currentAssignee {
             isAwayMessageViewHidden = true
         }
     }
@@ -319,10 +339,21 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
                 result in
                 DispatchQueue.main.async {
                     switch result {
-                    case let .success(message):
-                        guard type(of: message) == String.self, !message.isEmpty else { return }
+                    case let .success(awayMessageData):
+                        guard
+                                let awayMessageData = awayMessageData as? [String: Any],
+                                let message = awayMessageData["message"] as? String, !message.isEmpty,
+                                let emailCollection = awayMessageData["collectEmailOnAwayMessage"] as? Bool
+                            else {
+                                self.isAwayMessageViewHidden = true
+                                return
+                            }
                         self.isAwayMessageViewHidden = false
-                        self.awayMessageView.set(message: message)
+                        if !self.viewModel.emailCollectionAwayModeEnabled {
+                            self.awayMessageView.switchToEmailUI(emailUIEnabled: false)
+                            self.awayMessageView.set(message: message)
+                            self.collectEmailOnAwayMode = emailCollection
+                        }
                         /// Fetch the bot type
                         self.conversationAssignedToDialogflowBot()
                     case let .failure(error):
@@ -421,6 +452,31 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         }
     }
     
+    open override func showEmailCollectionUI() {
+        super.showEmailCollectionUI()
+        if collectEmailOnAwayMode {
+            awayMessageView.switchToEmailUI(emailUIEnabled: true)
+            viewModel.emailCollectionAwayModeEnabled = true
+        }
+    }
+
+    open override func showInvalidEmail() {
+        super.showInvalidEmail()
+        if collectEmailOnAwayMode && viewModel.emailCollectionAwayModeEnabled {
+            awayMessageView.showInvalidEmailError()
+        }
+    }
+    
+    open override func awayModeEmailUpdated() {
+        super.awayModeEmailUpdated()
+        viewModel.emailCollectionAwayModeEnabled = false
+        if isAssignedAgentOrBotOnline {
+            self.isAwayMessageViewHidden = true
+            self.awayMessageView.switchToEmailUI(emailUIEnabled: false)
+        } else {
+            self.messageStatusAndFetchBotType()
+        }
+    }
     /*
      This method will verify status changed user id & current Conversation's assignee. If both are same then it will update.
      - Parameters:
@@ -516,13 +572,14 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             if let channelId = weakSelf.viewModel.channelKey {
                 KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.restartConversationClick, data: ["conversationId":channelId])
             }
-           
-            guard let zendeskAcckountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
-                  !zendeskAcckountKey.isEmpty else { return }
-            // if zendesk is integrated, create a new conversation instead of restarting the conversation
-            let zendeskHandler = KMZendeskChatHandler.shared
-            zendeskHandler.resetConfiguration()
-            zendeskHandler.initiateZendesk(key: zendeskAcckountKey)
+            #if canImport(ChatProvidersSDK)
+                guard let zendeskAcckountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
+                      !zendeskAcckountKey.isEmpty else { return }
+                // if zendesk is integrated, create a new conversation instead of restarting the conversation
+                let zendeskHandler = KMZendeskChatHandler.shared
+                zendeskHandler.resetConfiguration()
+                zendeskHandler.initiateZendesk(key: zendeskAcckountKey)
+            #endif
             weakSelf.loadingStarted()
             // Create a new conversation 
             let kmConversation = KMConversationBuilder()
@@ -531,8 +588,9 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             Kommunicate.createConversation(conversation: kmConversation) { result in
               switch result {
                case .success(let conversationId):
+                #if canImport(ChatProvidersSDK)
                   ALApplozicSettings.setLastZendeskConversationId(NSNumber(value: Int(conversationId) ?? 0))
-                  
+                #endif
                   let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: NSNumber(value: Int(conversationId) ?? 0), localizedStringFileName: Kommunicate.defaultConfiguration.localizedStringFileName, prefilledMessage: nil)
                  // Update the View Model & refresh the View Controller
                   weakSelf.updateViewModelAndRefreshViewController(convViewModel, conversationId: NSNumber(value: Int(conversationId) ?? 0))

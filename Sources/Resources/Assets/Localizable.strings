@@ -106,3 +106,10 @@ FiveStarConversationRatingCommentsPlaceholder = "Enter your feedback...";
 FiveStarConversationRatingSubmitButtonTitle = "Submit";
 /* Convesation Title */
 FiveStarConversationCommentTitle = "Add feedback (optional)";
+
+/* Collect Email UI On Away Mode */
+
+/* Collect Email On Away Mode Message */
+CollectEmailMessageOnAwayMode = "How may we reach you?";
+/* Invalid Email On Away Mode Message */
+InvalidEmailMessageOnAwayMode = "It seems you have entered an invalid email";

@@ -24,6 +24,10 @@ enum AppPermission {
     }
 }
 
+enum Configuration {
+    static let resgexPattern = "restricted"
+}
+
 enum loginCreadentials {
     static let testAppID = "<Enter-Your-AppID>" /// Enter your AppID here
     static let userID = "<Enter-Your-UserID>" /// Enter your UserID for testing
@@ -55,6 +59,7 @@ enum InAppButton {
         static let openLocation = "locationButtonInConversationScreen"
         static let sendLocation = "Send Location"
         static let done = "Done"
+        static let doneButton = "DONE"
         static let back = "Back"
         static let backButton = "BackButton"
         static let faqButton = "FAQ"
@@ -82,6 +87,23 @@ enum AppTextFeild {
     static let Helpcenter = "Helpcenter | Helpcenter"
 }
 
+enum FormData {
+    static let name = "Alex Williams"
+    static let password = "12345678"
+    static let email = "alex@gmail.com"
+    static let phoneNumber = "1234567890"
+    static let address = "123 Maplewood Avenue, Apt 4B, Springfield, IL 62704, USA"
+}
+
+enum FormIdentifier {
+    static let name = "Enter your name"
+    static let password = "Enter your password"
+    static let email = "Enter your email"
+    static let phoneNumber = "Enter your phone number"
+    static let address = "Enter your address"
+    static let dateTime = "dd/MM/yyyy, hh:mm a"
+}
+
 enum RichMessageButtons {
     static let button = "Button"
     static let goToGoogle = "Go To Google"
@@ -98,12 +120,14 @@ enum RichMessageButtons {
 
 enum RichMessageResponseText {
     static let welcomeMessage = "Hi, how can we help you?"
+    static let customWelcomeMessage = "Hi \(loginCreadentials.userID), how can we help you?"
     static let suggestedButtonResponse = "Cool! send me more."
     static let linkButtonResponse = "Link Button Rich Message"
     static let differentButtonResponse1 = "optional- this message will be used as acknowledgement text when user clicks the button"
     static let differentButtonResponse2 = "text will be sent as message"
     static let submitButtonResponse = "optional, will be used as acknowledgement message to user in case of requestType JSON. Default value is same as name parameter"
-    static let formTemplateResponse = "optional- this message will be used as acknowledgement text when user clicks the button"
+    static let formTemplateResponse1 = "optional- this message will be used as acknowledgement text when user clicks the button"
+    static let formTemplateResponse2 = "Thank you for submitting your details!"
     static let imageResponse = "IRON MAN"
     static let listTemplateResponse = "List template Rich Message"
     static let singleCardResponse = "Single card template"

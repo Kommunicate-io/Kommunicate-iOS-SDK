@@ -135,7 +135,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
     public func awayMessageFor(
         applicationKey: String,
         groupId: NSNumber,
-        completion: @escaping (Result<String, Error>) -> Void
+        completion: @escaping (Result<[String: Any], Error>) -> Void
     ) {
         // Set up the URL request
         guard let url = URLBuilder.awayMessageURLFor(applicationKey: applicationKey, groupId: String(describing: groupId)).url else {
@@ -263,21 +263,37 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         }
     }
 
-    func makeAwayMessageFrom(json: [String: Any]) -> Result<String, Error> {
+    func makeAwayMessageFrom(json: [String: Any]) -> Result<[String: Any], Error> {
         guard
             let data = json["data"] as? [String: Any],
             let messageList = data["messageList"] as? [Any]
         else {
             return .failure(APIError.jsonConversion)
         }
-        // When the agent is online or away message is not set
-        // then the messageList will be empty.
+
+        // Check if the message list is empty
+        if messageList.isEmpty {
+            return .failure(APIError.messageNotPresent)
+        }
+
+        // Get the value of anonymousUser
+        let isAnonymousUser = data["anonymousUser"] as? Bool ?? false
+        
+        // Get the value of collectEmailOnAwayMessage
+        let collectEmailOnAwayMessage = data["collectEmailOnAwayMessage"] as? Bool ?? false
+
+        // Extract the first message if available
         guard let firstMessage = messageList.first as? [String: Any],
               let message = firstMessage["message"] as? String
         else {
             return .failure(APIError.messageNotPresent)
         }
-        return .success(message)
+
+        // Return both the message and collectEmailOnAwayMessage in a dictionary
+        return .success([
+            "message": message,
+            "collectEmailOnAwayMessage": isAnonymousUser ? collectEmailOnAwayMessage : false
+        ])
     }
 
     func agentIdFrom(json: [String: Any]) -> Result<String, Error> {
