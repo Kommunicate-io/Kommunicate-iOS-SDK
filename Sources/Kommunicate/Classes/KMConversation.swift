@@ -23,6 +23,7 @@ import KommunicateCore_iOS_SDK
     public var teamId: String?
     public var defaultConversationAssignee: String?
     public var appName: String? = Bundle.main.displayName
+    public var prefilledMessage: String? = nil
 
     public init(userId: String) {
         self.userId = userId
@@ -118,6 +119,14 @@ import KommunicateCore_iOS_SDK
     @discardableResult
     @objc public func withTeamId(_ teamId: String) -> KMConversationBuilder {
         conversation.teamId = teamId
+        return self
+    }
+    
+    /// To set pre fill message in Chat Bar while opening converwastion.
+    /// - Parameter message: Pass the text that should be vissble on chat bar while opening the conversation. Only works with `launchConversation`
+    @discardableResult
+    @objc public func setPreFilledMessage(_ messsage: String) -> KMConversationBuilder {
+        conversation.prefilledMessage = messsage
         return self
     }
 
