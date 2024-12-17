@@ -8,6 +8,7 @@ class KommunicateTests: XCTestCase {
         static var showConversationsCalled = false
         static var createConversationsCalled = false
         static var loggedIn = true
+        static var conversationID: String?
 
         override class var isLoggedIn: Bool {
             return loggedIn
@@ -130,7 +131,206 @@ class KommunicateTests: XCTestCase {
             expectation.fulfill()
         }
     }
+    
+    func testCreateAndLaunchConversationWithCustomData() {
+        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        let expectation = self.expectation(description: "Completion handler called")
+        
+        let kmConversation = KMConversationBuilder()
+            .useLastConversation(false)
+            .setPreFilledMessage("This is a sample prefilled message.")
+            .withMetaData(["TestMetadata": "SampleValue"])
+            .withConversationTitle("Automation Conversation")
+            .build()
+        
+        if KommunicateMock.isLoggedIn {
+            launchConversation(kmConversation, expectation: expectation)
+        } else {
+            KommunicateMock.registerUserAsVistor { response, error in
+                if let error = error {
+                    XCTFail("User registration failed: \(error.localizedDescription)")
+                    expectation.fulfill()
+                    return
+                }
+                KommunicateMock.loggedIn = true
+                self.launchConversation(kmConversation, expectation: expectation)
+            }
+        }
+        waitForExpectations(timeout: 30)
+    }
+    
+    private var testWindow: UIWindow? // Property to retain UIWindow during the test lifecycle
 
+    private func launchConversation(_ conversation: KMConversation, expectation: XCTestExpectation) {
+        // Retain the UIWindow to prevent deallocation
+        let dummyViewController = UIViewController()
+        testWindow = UIWindow(frame: UIScreen.main.bounds)
+        testWindow?.rootViewController = dummyViewController
+        testWindow?.makeKeyAndVisible()
+        
+        // Launch the conversation
+        KommunicateMock.launchConversation(conversation: conversation, viewController: dummyViewController) { result in
+            switch result {
+            case .success(let conversationId):
+                print("Conversation id:", conversationId)
+                XCTAssertTrue(true, "Conversation created successfully.")
+            case .failure(let kmConversationError):
+                XCTAssertNotNil(kmConversationError, "Conversation creation failed")
+                XCTFail("Failed to create conversation.")
+            }
+            expectation.fulfill()
+        }
+    }
+    
+    func testUpdateConversationAssignee() {
+        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        let expectation = self.expectation(description: "Completion handler called")
+        let assigneeId = "alex-nwqih"
+
+        // Helper function to handle conversation update
+        func updateConversation(with conversationId: String) {
+            let conversation = KMConversationBuilder()
+                .withClientConversationId(conversationId)
+                .withConversationAssignee(assigneeId)
+                .build()
+            
+            KommunicateMock.updateConversation(conversation: conversation) { response in
+                switch response {
+                case .success:
+                    XCTAssertTrue(true, "Conversation is updated successfully")
+                case .failure:
+                    XCTFail("Failed to update conversation")
+                }
+                expectation.fulfill()
+            }
+        }
+
+        if let conversationId = KommunicateMock.conversationID {
+            // If conversationID exists, update conversation
+            updateConversation(with: conversationId)
+        } else {
+            // Otherwise, create a new conversation and update
+            let kmConversation = KMConversationBuilder()
+                .useLastConversation(false)
+                .withMetaData(["TestMetadata": "SampleValue"])
+                .withConversationTitle("Automation Conversation")
+                .build()
+            
+            KommunicateMock.createConversation(conversation: kmConversation) { [weak self] result in
+                switch result {
+                case .success(let conversationId):
+                    KommunicateMock.conversationID = conversationId
+                    KommunicateMock.loggedIn = true
+                    updateConversation(with: conversationId)
+                case .failure(let error):
+                    XCTAssertNotNil(error, "Conversation creation failed")
+                    expectation.fulfill()
+                }
+            }
+        }
+        
+        waitForExpectations(timeout: 30)
+    }
+    
+    func testUpdateTeamID() {
+        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        let expectation = self.expectation(description: "Completion handler called")
+        let teamID = "107732724"
+
+        // Helper function to handle conversation update
+        func updateConversation(with conversationId: String) {
+            let conversation = KMConversationBuilder()
+                .withClientConversationId(conversationId)
+                .withTeamId(teamID)
+                .build()
+            
+            KommunicateMock.updateConversation(conversation: conversation) { response in
+                switch response {
+                case .success:
+                    XCTAssertTrue(true, "Conversation is updated successfully")
+                case .failure:
+                    XCTFail("Failed to update conversation")
+                }
+                expectation.fulfill()
+            }
+        }
+
+        if let conversationId = KommunicateMock.conversationID {
+            // If conversationID exists, update conversation
+            updateConversation(with: conversationId)
+        } else {
+            // Otherwise, create a new conversation and update
+            let kmConversation = KMConversationBuilder()
+                .useLastConversation(false)
+                .withMetaData(["TestMetadata": "SampleValue"])
+                .withConversationTitle("Automation Conversation")
+                .build()
+            
+            KommunicateMock.createConversation(conversation: kmConversation) { [weak self] result in
+                switch result {
+                case .success(let conversationId):
+                    KommunicateMock.conversationID = conversationId
+                    KommunicateMock.loggedIn = true
+                    updateConversation(with: conversationId)
+                case .failure(let error):
+                    XCTAssertNotNil(error, "Conversation creation failed")
+                    expectation.fulfill()
+                }
+            }
+        }
+        
+        waitForExpectations(timeout: 30)
+    }
+    
+    func testUpdateConversationMetadata() {
+        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        let expectation = self.expectation(description: "Completion handler called")
+        let metaData = ["name": "Alice", "city": "London", "hobby": "Painting"]
+
+        // Helper function to handle conversation update
+        func updateConversation(with conversationId: String) {
+            let conversation = KMConversationBuilder()
+                .withClientConversationId(conversationId)
+                .withMetaData(metaData)
+                .build()
+            
+            KommunicateMock.updateConversation(conversation: conversation) { response in
+                switch response {
+                case .success:
+                    XCTAssertTrue(true, "Conversation is updated successfully")
+                case .failure:
+                    XCTFail("Failed to update conversation")
+                }
+                expectation.fulfill()
+            }
+        }
+
+        if let conversationId = KommunicateMock.conversationID {
+            // If conversationID exists, update conversation
+            updateConversation(with: conversationId)
+        } else {
+            // Otherwise, create a new conversation and update
+            let kmConversation = KMConversationBuilder()
+                .useLastConversation(false)
+                .withMetaData(["TestMetadata": "SampleValue"])
+                .withConversationTitle("Automation Conversation")
+                .build()
+            
+            KommunicateMock.createConversation(conversation: kmConversation) { [weak self] result in
+                switch result {
+                case .success(let conversationId):
+                    KommunicateMock.conversationID = conversationId
+                    updateConversation(with: conversationId)
+                    KommunicateMock.loggedIn = true
+                case .failure(let error):
+                    XCTAssertNotNil(error, "Conversation creation failed")
+                    expectation.fulfill()
+                }
+            }
+        }
+        
+        waitForExpectations(timeout: 30)
+    }
     
     func testSendMessageFunction() {
         KommunicateMock.applozicClientType = ApplozicClientMock.self
