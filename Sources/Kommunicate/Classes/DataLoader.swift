@@ -23,11 +23,13 @@ class DataLoader {
 
         // set up the session
         let config = URLSessionConfiguration.default
-        let session = URLSession(
-            configuration: config,
-            delegate: KMURLSessionPinningDelegate(),
-            delegateQueue: nil
-        )
+        let session: URLSession = {
+            if Kommunicate.isKMSSLPinningEnabled {
+                return URLSession(configuration: config, delegate: KMURLSessionPinningDelegate(), delegateQueue: nil)
+            } else {
+                return URLSession(configuration: config)
+            }
+        }()
 
         // make the request
         let task = session.dataTask(with: urlRequest) {

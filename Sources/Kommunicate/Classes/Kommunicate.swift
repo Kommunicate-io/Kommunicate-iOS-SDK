@@ -83,6 +83,8 @@ open class Kommunicate: NSObject, Localizable {
         config.chatBar.optionsToShow = .some([.camera, .location, .gallery, .video, .document])
         return config
     }()
+    
+    public static var isKMSSLPinningEnabled: Bool = false
 
     /// Configuration which defines the behavior of ConversationView components.
     public static var kmConversationViewConfiguration = KMConversationViewConfiguration()
@@ -213,6 +215,7 @@ open class Kommunicate: NSObject, Localizable {
             assertionFailure("Kommunicate App ID: Empty value passed")
             return
         }
+        ALUserDefaultsHandler.setKMSSLPinningEnabled(isKMSSLPinningEnabled)
         guard KMUserDefaultHandler.isAppIdEmpty ||
             KMUserDefaultHandler.matchesCurrentAppId(applicationId)
         else {
