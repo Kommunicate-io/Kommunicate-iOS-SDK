@@ -266,7 +266,16 @@ open class Kommunicate: NSObject, Localizable {
         registerNewUser(kmUser, isVisitor: false, completion: completion)
     }
     
-    @objc open class func registerUserAsVistor(
+    /// Deprecated wrapper for backward compatibility
+    @available(*, deprecated, message: "Use `registerUserAsVisitor(_:completion:)` instead.")
+    @objc open class func registerUserAsVistor( // Note: Typo preserved intentionally
+        _ kmUser: KMUser = createVisitorUser(),
+        completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void
+    ) {
+        registerUserAsVisitor(kmUser, completion: completion)
+    }
+    
+    @objc open class func registerUserAsVisitor(
         _ kmUser: KMUser = createVisitorUser(),
         completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void
     ) {
