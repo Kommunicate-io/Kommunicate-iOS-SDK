@@ -95,7 +95,7 @@
             setupApplicationKey(applicationId)
             let kmUser = userWithUserId(Kommunicate.randomId(), andApplicationId: applicationId)
             activityIndicator.startAnimating()
-            Kommunicate.registerUserAsVistor(kmUser, completion: {
+            Kommunicate.registerUserAsVisitor(kmUser, completion: {
                 response, error in
                 self.activityIndicator.stopAnimating()
                 guard error == nil else {
