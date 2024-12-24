@@ -2,6 +2,11 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [7.2.5] 2024-12-24
+- Fixed typo of registerUserAsVistor with registerUserAsVisitor.
+- SSL pinning enable disable configuration added.
+- Fixed the issue where video thumbnails were not displaying correctly.
+
 ## [7.2.4] 2024-12-03
 - Fixed Away Message not showing in Bot Delay.
 - Fixed an issue where captions were cut off in Video Rich Messages.
