@@ -55,6 +55,15 @@ open class Kommunicate: NSObject, Localizable {
         return KMUserDefaultHandler.isLoggedIn()
     }
 
+    /// Dispatch queues for configuration management
+    private enum ConfigurationQueue {
+        /// Queue for managing `defaultConfiguration`
+        static let defaultConfig = DispatchQueue(label: "com.kommunicate.configuration.defaultConfigQueue")
+        
+        /// Queue for managing `defaultConversationConfiguration`
+        static let defaultConversationConfig = DispatchQueue(label: "com.kommunicate.configuration.defaultConversationConfigQueue")
+    }
+
     /**
      Default configuration which defines the behaviour of UI components.
      It's used while initializing any UI component or in
@@ -65,7 +74,7 @@ open class Kommunicate: NSObject, Localizable {
      which shouldn't be disabled. So use the `defaultConfiguration` and change
      it accordingly.
      */
-    public static var defaultConfiguration: KMConfiguration = {
+    public static var _defaultConfiguration: KMConfiguration = {
         var config = KMConfiguration()
 
         config.isTapOnNavigationBarEnabled = false
@@ -87,7 +96,26 @@ open class Kommunicate: NSObject, Localizable {
     public static var isKMSSLPinningEnabled: Bool = false
 
     /// Configuration which defines the behavior of ConversationView components.
-    public static var kmConversationViewConfiguration = KMConversationViewConfiguration()
+    public static var _kmConversationViewConfiguration = KMConversationViewConfiguration()
+
+    public static var defaultConfiguration: KMConfiguration {
+        get { syncAccess(queue: ConfigurationQueue.defaultConfig) { _defaultConfiguration } }
+        set { syncAccess(queue: ConfigurationQueue.defaultConfig) { _defaultConfiguration = newValue } }
+    }
+
+    public static var kmConversationViewConfiguration: KMConversationViewConfiguration {
+        get { syncAccess(queue: ConfigurationQueue.defaultConversationConfig) { _kmConversationViewConfiguration } }
+        set { syncAccess(queue: ConfigurationQueue.defaultConversationConfig) { _kmConversationViewConfiguration = newValue } }
+    }
+
+    /// Helper function to perform synchronized access
+    private static func syncAccess<T>(queue: DispatchQueue, action: () -> T) -> T {
+        return queue.sync { action() }
+    }
+
+    private static func syncAccess(queue: DispatchQueue, action: () -> Void) {
+        queue.sync { action() }
+    }
 
     public static let shared = Kommunicate()
     public static var presentingViewController = UIViewController()
