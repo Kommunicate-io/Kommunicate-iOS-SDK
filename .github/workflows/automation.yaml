@@ -1,0 +1,43 @@
+name: iOS SDK and Sample App Tests
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+
+jobs:
+  test:
+    runs-on: macos-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Xcode environment
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.0' # Specify the required Xcode version
+
+      # Step 3: Install dependencies for SDK and Sample App
+      - name: Install CocoaPods dependencies
+        run: |
+          pod install --project-directory=Example # Adjust if 'Example' is not the folder containing Podfile
+
+      # Step 4: Build and test the Sample App
+      - name: Build and Test Sample App
+        run: |
+          xcodebuild test \
+            -workspace Example/Kommunicate.xcworkspace \ # Adjust path to your sample app workspace
+            -scheme Kommunicate-SPM-Sample \                       # Replace with your scheme name for sample app
+            -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' \
+            | xcpretty
+
+      # Optional: Upload artifacts (e.g., logs, test reports)
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: build/reports/tests/
