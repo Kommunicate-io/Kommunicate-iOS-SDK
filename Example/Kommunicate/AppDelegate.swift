@@ -16,9 +16,13 @@
 
         // Pass your App Id here. You can get the App Id from install section in the dashboard.
         var appId = ""
+        
 
         func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
             /// For Regex Automation Testing.
+            if let appID = ProcessInfo.processInfo.environment["APP_ID"] {
+                appId = appID
+            }
             if let regexPattern = ProcessInfo.processInfo.environment["restrictedMessageRegexPattern"] {
                 Kommunicate.defaultConfiguration.restrictedMessageRegexPattern = regexPattern
             }

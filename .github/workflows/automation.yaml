@@ -28,6 +28,7 @@ jobs:
       # Step 4: Run tests for Example App
       - name: Run Example App Tests
         run: |
+          export APP_ID=${{ secrets.APP_ID }}
           xcodebuild test \
             -workspace Example/Kommunicate.xcworkspace \
             -scheme Kommunicate_Example \
@@ -38,6 +39,7 @@ jobs:
       # Step 5: Debug logs
       - name: Debug logs
         run: |
+          export APP_ID=${{ secrets.APP_ID }}
           set -o pipefail && xcodebuild test \
           -workspace Example/Kommunicate.xcworkspace \
           -scheme Kommunicate_Example \
