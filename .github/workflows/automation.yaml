@@ -32,4 +32,5 @@ jobs:
             -workspace Example/Kommunicate.xcworkspace \
             -scheme Kommunicate_Example \
             -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' \
+            CODE_SIGNING_ALLOWED=NO \
             | xcpretty
