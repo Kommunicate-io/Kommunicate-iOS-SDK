@@ -29,7 +29,7 @@ jobs:
       - name: Run Example App Tests
         run: |
           xcodebuild test \
-            -workspace Kommunicate.xcworkspace \
+            -workspace Example/Kommunicate.xcworkspace \
             -scheme Kommunicate_Example \
             -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' \
             | xcpretty
