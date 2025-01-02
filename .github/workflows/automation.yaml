@@ -1,4 +1,4 @@
-name: iOS SDK and Sample App Tests
+name: Automation Testing
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
         run: |
           xcodebuild test \
             -workspace Example/Kommunicate.xcworkspace \ # Adjust path to your sample app workspace
-            -scheme Kommunicate-SPM-Sample \                       # Replace with your scheme name for sample app
+            -scheme Kommunicate_Example \                       # Replace with your scheme name for sample app
             -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' \
             | xcpretty
 
