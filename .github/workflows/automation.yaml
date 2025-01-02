@@ -26,6 +26,15 @@ jobs:
         run: |
           pod install --project-directory=Example # Adjust if 'Example' is not the folder containing Podfile
 
+      # Step 4: Run tests for SDK
+      - name: Run SDK Tests
+        run: |
+          xcodebuild test \
+            -workspace Kommunicate.xcworkspace \
+            -scheme Kommunicate \
+            -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' \
+            | xcpretty
+      
       # Step 4: Build and test the Sample App
       - name: Build and Test Sample App
         run: |
