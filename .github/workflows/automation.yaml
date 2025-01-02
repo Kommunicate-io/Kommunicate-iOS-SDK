@@ -29,8 +29,8 @@ jobs:
       - name: Run Example App Tests
         run: |
           xcodebuild test \
-            -workspace Example/Kommunicate.xcworkspace \
-            -scheme Kommunicate_Example \
-            -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' \
-            CODE_SIGNING_ALLOWED=NO \
+            -workspace Example/Kommunicate.xcworkspace \ # Verify the workspace path is correct
+            -scheme Kommunicate_Example \                # Ensure this scheme exists and is shared
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
+            CODE_SIGNING_ALLOWED=NO \                    # Disable code signing for simulator builds
             | xcpretty
