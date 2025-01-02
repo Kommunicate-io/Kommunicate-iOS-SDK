@@ -1,4 +1,4 @@
-name: Automation Testing
+name: iOS Example App Tests
 
 on:
   push:
@@ -19,34 +19,17 @@ jobs:
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '15.0' # Specify the required Xcode version
+          xcode-version: '15.0' # Specify required Xcode version
 
-      # Step 3: Install dependencies for SDK and Sample App
+      # Step 3: Install dependencies (CocoaPods)
       - name: Install CocoaPods dependencies
-        run: |
-          pod install --project-directory=Example # Adjust if 'Example' is not the folder containing Podfile
+        run: pod install --project-directory=Example
 
-      # Step 4: Run tests for SDK
-      - name: Run SDK Tests
+      # Step 4: Run tests for Example App
+      - name: Run Example App Tests
         run: |
           xcodebuild test \
             -workspace Kommunicate.xcworkspace \
-            -scheme Kommunicate \
+            -scheme Kommunicate_Example \
             -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' \
             | xcpretty
-      
-      # Step 4: Build and test the Sample App
-      - name: Build and Test Sample App
-        run: |
-          xcodebuild test \
-            -workspace Example/Kommunicate.xcworkspace \ # Adjust path to your sample app workspace
-            -scheme Kommunicate_Example \                       # Replace with your scheme name for sample app
-            -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' \
-            | xcpretty
-
-      # Optional: Upload artifacts (e.g., logs, test reports)
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: build/reports/tests/
