@@ -10,8 +10,8 @@
     import UIKit
     import UserNotifications
 
-    @UIApplicationMain
-    class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+    @main
+    class AppDelegate: UIResponder, UIApplicationDelegate, @preconcurrency UNUserNotificationCenterDelegate {
         var window: UIWindow?
 
         // Pass your App Id here. You can get the App Id from install section in the dashboard.
@@ -85,7 +85,7 @@
         }
 
         func registerForNotification() {
-            UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .alert, .sound]) { granted, _ in
+            UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .alert, .sound]) { @Sendable granted, _ in
 
                 if granted {
                     DispatchQueue.main.async {
