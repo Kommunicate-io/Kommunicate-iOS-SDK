@@ -1,0 +1,42 @@
+name: iOS Automation Test Workflow
+
+on:
+  push:
+    branches:
+      - dev # Run the workflow on pushes to the main branch
+  pull_request:
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: macos-latest
+
+    steps:
+    # Checkout the code
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    # Set up Xcode
+    - name: Set up Xcode
+      uses: maxim-lobanov/setup-xcode@v2
+      with:
+        xcode-version: '16.0' # Replace with the Xcode version you need
+
+    # Install dependencies (if using CocoaPods or Carthage)
+    - name: Install Dependencies
+      run: |
+        pod install
+
+    # Set environment variable for the secret
+    - name: Export Secret Key
+      run: echo "MY_SECRET_APP_ID=${{ secrets.APP_ID }}" >> $GITHUB_ENV
+
+    # Run Tests
+    - name: Run XCTest
+      run: |
+        xcodebuild test \
+          -workspace Kommunicate.xcworkspace \
+          -scheme Kommunicate_Example \
+          -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
+          CODE_SIGNING_ALLOWED=NO || exit $?
+          -enableCodeCoverage YES

@@ -22,6 +22,11 @@
             if let regexPattern = ProcessInfo.processInfo.environment["restrictedMessageRegexPattern"] {
                 Kommunicate.defaultConfiguration.restrictedMessageRegexPattern = regexPattern
             }
+
+            if let secretKey = ProcessInfo.processInfo.environment["MY_SECRET_APP_ID"] {
+                appId = secretKey
+            }
+
             setUpNavigationBarAppearance()
 
             UNUserNotificationCenter.current().delegate = self
