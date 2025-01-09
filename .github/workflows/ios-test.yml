@@ -25,7 +25,7 @@ jobs:
     # Install dependencies (if using CocoaPods or Carthage)
     - name: Install Dependencies
       run: |
-        pod install
+        pod install --project-directory=Example
 
     # Set environment variable for the secret
     - name: Export Secret Key
