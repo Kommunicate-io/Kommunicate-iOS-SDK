@@ -35,7 +35,7 @@ jobs:
     - name: Run XCTest
       run: |
         xcodebuild test \
-          -workspace Kommunicate.xcworkspace \
+          -workspace Example/Kommunicate.xcworkspace \
           -scheme Kommunicate_Example \
           -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
           CODE_SIGNING_ALLOWED=NO || exit $?
