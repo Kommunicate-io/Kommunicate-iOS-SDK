@@ -29,8 +29,19 @@ enum Configuration {
 }
 
 enum loginCreadentials {
-    static let testAppID = "<Enter-Your-AppID>" /// Enter your AppID here
-    static let userID = "<Enter-Your-UserID>" /// Enter your UserID for testing
+    static var testAppID: String {
+        guard let appID = ProcessInfo.processInfo.environment["MY_SECRET_APP_ID"] else {
+            return "<Enter-Your-AppID>" /// Enter your appID here
+        }
+        return appID
+    }
+    static var userID: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "ddMMMyyyy" // Format: 02Jan2025
+        let currentDate = dateFormatter.string(from: Date())
+        let prefix = "Automation"
+        return "\(currentDate)_\(prefix)"
+    }
     static let password = "password" /// Enter your password or you can use the same for all users.
 }
 
