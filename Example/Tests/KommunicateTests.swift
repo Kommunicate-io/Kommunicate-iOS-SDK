@@ -104,7 +104,7 @@ class KommunicateTests: XCTestCase {
         if KommunicateMock.isLoggedIn {
             createConversation(kmConversation, expectation: expectation)
         } else {
-            KommunicateMock.registerUserAsVistor { response, error in
+            KommunicateMock.registerUserAsVisitor { response, error in
                 if let error = error {
                     XCTFail("User registration failed: \(error.localizedDescription)")
                     expectation.fulfill()
@@ -146,7 +146,7 @@ class KommunicateTests: XCTestCase {
         if KommunicateMock.isLoggedIn {
             launchConversation(kmConversation, expectation: expectation)
         } else {
-            KommunicateMock.registerUserAsVistor { response, error in
+            KommunicateMock.registerUserAsVisitor { response, error in
                 if let error = error {
                     XCTFail("User registration failed: \(error.localizedDescription)")
                     expectation.fulfill()
@@ -345,7 +345,7 @@ class KommunicateTests: XCTestCase {
         if KommunicateMock.isLoggedIn {
             createConversationAndSendMessage(kmConversation, expectation: expectation)
         } else {
-            KommunicateMock.registerUserAsVistor { response, error in
+            KommunicateMock.registerUserAsVisitor { response, error in
                 if let error = error {
                     XCTFail("User registration failed: \(error.localizedDescription)")
                     expectation.fulfill()
@@ -458,7 +458,7 @@ class KommunicateTests: XCTestCase {
         if KommunicateMock.isLoggedIn {
             createAndUpdateConversation(kmConversation, metaData: metaData, expectation: expectation)
         } else {
-            KommunicateMock.registerUserAsVistor { response, error in
+            KommunicateMock.registerUserAsVisitor { response, error in
                 if let error = error {
                     XCTFail("User registration failed: \(error.localizedDescription)")
                     expectation.fulfill()
@@ -514,7 +514,7 @@ class KommunicateTests: XCTestCase {
         if KommunicateMock.isLoggedIn {
             createAndValidateConversation(kmConversation, initialConversationId: nil, expectation: expectation)
         } else {
-            KommunicateMock.registerUserAsVistor { response, error in
+            KommunicateMock.registerUserAsVisitor { response, error in
                 if let error = error {
                     XCTFail("User registration failed: \(error.localizedDescription)")
                     expectation.fulfill()

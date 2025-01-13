@@ -59,6 +59,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.male].tap()
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.metal].tap()
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.pop].tap()
+        app.swipeUp()
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse1]
         waitFor(object: submitResponse) { $0.exists }
@@ -83,13 +84,17 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         nameField.typeText(FormData.name)
         passwordField.tap()
         passwordField.typeText(FormData.password)
+        app.swipeUp()
         emailField.tap()
         emailField.typeText(FormData.email)
         phoneField.tap()
         phoneField.typeText(FormData.phoneNumber)
+        app.swipeUp()
         addressField.tap()
         addressField.typeText(FormData.address)
+        app.tap()
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
+        app.swipeUp()
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse2]
         waitFor(object: submitResponse) { $0.exists }
@@ -119,6 +124,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         sleep(1)
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.male].tap()
+        app.swipeUp()
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse1]
         waitFor(object: submitResponse) { $0.exists }

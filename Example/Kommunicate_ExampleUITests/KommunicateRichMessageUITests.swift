@@ -212,7 +212,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         let customInputFieldResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[CusotomInputField.nameFieldResponse]
         waitFor(object: customInputFieldResponse) { $0.exists }
-        app.typeText(CusotomInputFieldReply.nameFieldResponse)
+        app.typeText(CustomInputFieldReply.nameFieldResponse)
         app.buttons[InAppButton.ConversationScreen.send].tap()
         sleep(3)
         app.swipeUp()
@@ -220,7 +220,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         let customInputFieldResponse2 = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[CusotomInputField.emailFieldResponse]
         waitFor(object: customInputFieldResponse2) { $0.exists }
-        app.typeText(CusotomInputFieldReply.emailFieldResponse)
+        app.typeText(CustomInputFieldReply.emailFieldResponse)
         app.buttons[InAppButton.ConversationScreen.send].tap()
         sleep(3)
         app.swipeUp()
@@ -228,7 +228,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         let customInputFieldResponse3 = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[CusotomInputField.phoneNumberFieldResponse]
         waitFor(object: customInputFieldResponse3) { $0.exists }
-        app.typeText(CusotomInputFieldReply.phoneNumberFieldResponse)
+        app.typeText(CustomInputFieldReply.phoneNumberFieldResponse)
         app.buttons[InAppButton.ConversationScreen.send].tap()
         sleep(3)
         app.swipeUp()
@@ -236,7 +236,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         let customInputFieldResponse4 = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[CusotomInputField.otpFieldResponse]
         waitFor(object: customInputFieldResponse4) { $0.exists }
-        app.typeText(CusotomInputFieldReply.otpFieldResponse)
+        app.typeText(CustomInputFieldReply.otpFieldResponse)
         app.buttons[InAppButton.ConversationScreen.send].tap()
         sleep(3)
         app.swipeUp()

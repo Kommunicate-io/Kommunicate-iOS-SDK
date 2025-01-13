@@ -23,7 +23,9 @@
                 Kommunicate.defaultConfiguration.restrictedMessageRegexPattern = regexPattern
             }
 
+            /// For App Id Automation Testing.
             if let secretKey = ProcessInfo.processInfo.environment["MY_SECRET_APP_ID"] {
+                NSLog("AppID Found Github Actions")
                 appId = secretKey
             }
 
