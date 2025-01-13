@@ -28,11 +28,22 @@ jobs:
         pod install --project-directory=Example
 
     # Set environment variable for the secret
-    - name: Export Secret Key
-      run: echo "${{ secrets.APP_ID }}" >> $GITHUB_ENV
+    - name: Set Environment Variable
+      run: echo "APP_ID=${{ secrets.APP_ID }}" >> $GITHUB_ENV
+
+    - name: Use Environment Variable in Script
+      run: |
+        if [ -n "$APP_ID" ]; then
+          echo "App ID is set."
+        else
+          echo "App ID is missing."
+          exit 1
+        fi
 
     # Run Tests
     - name: Run XCTest
+      env:
+        APP_ID: ${{ env.APP_ID }}
       run: |
         xcodebuild test \
           -workspace Example/Kommunicate.xcworkspace \
