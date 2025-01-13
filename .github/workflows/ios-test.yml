@@ -34,8 +34,8 @@ jobs:
     # Run Tests
     - name: Run XCTest
       run: |
+        echo "MY_SECRET_APP_ID=${{ secrets.APP_ID }}" >> $GITHUB_ENV
         xcodebuild test \
-          echo "MY_SECRET_APP_ID=${{ secrets.APP_ID }}" >> $GITHUB_ENV
           -workspace Example/Kommunicate.xcworkspace \
           -scheme Kommunicate_Example \
           -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
