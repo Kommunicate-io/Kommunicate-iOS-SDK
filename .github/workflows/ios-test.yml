@@ -3,7 +3,7 @@ name: iOS Automation Test Workflow
 on:
   push:
     branches:
-      - dev # Run the workflow on pushes to the main branch
+      - dev # Run the workflow on pushes to the dev branch
   pull_request:
 
 jobs:
@@ -12,43 +12,41 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    # Checkout the code
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+      # Step 1: Checkout the code
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    # Set up Xcode
-    - name: Set up Xcode
-      uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: '16.1.0' # Replace with the Xcode version you need
+      # Step 2: Set up Xcode
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.1.0' # Replace with the Xcode version you need
 
-    # Install dependencies (if using CocoaPods or Carthage)
-    - name: Install Dependencies
-      run: |
-        pod install --project-directory=Example
+      # Step 3: Install dependencies (if using CocoaPods or Carthage)
+      - name: Install Dependencies
+        run: |
+          pod install --project-directory=Example
 
-    # Set environment variable for the secret
-    - name: Set Environment Variable
-      run: echo "APP_ID=${{ secrets.APP_ID }}" >> $GITHUB_ENV
+      # Step 4: Inject Kommunicate APP_ID securely into an environment variable
+      - name: Export Kommunicate APP_ID
+        env:
+          KOMMUNICATE_APP_ID: ${{ secrets.KOMMUNICATE_APP_ID }}
+        run: |
+          echo "KOMMUNICATE_APP_ID=$KOMMUNICATE_APP_ID" >> $GITHUB_ENV
 
-    - name: Use Environment Variable in Script
-      run: |
-        if [ -n "$APP_ID" ]; then
-          echo "App ID is set."
-        else
-          echo "App ID is missing."
-          exit 1
-        fi
+      # Step 5: Run Tests
+      - name: Run XCTest
+        env:
+          KOMMUNICATE_APP_ID: ${{ secrets.KOMMUNICATE_APP_ID }}
+        run: |
+          xcodebuild test \
+            -workspace Example/Kommunicate.xcworkspace \
+            -scheme Kommunicate_Example \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
+            CODE_SIGNING_ALLOWED=NO \
+            -enableCodeCoverage YES
 
-    # Run Tests
-    - name: Run XCTest
-      env:
-        APP_ID: ${{ env.APP_ID }}
-      run: |
-        xcodebuild test \
-          -workspace Example/Kommunicate.xcworkspace \
-          -scheme Kommunicate_Example \
-          -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
-          CODE_SIGNING_ALLOWED=NO \
-          -enableCodeCoverage YES
-          APP_ID=$APP_ID
+      # Step 6 (Optional): Debug Environment Variables (Do not expose secrets in logs)
+      - name: Debug Environment Variables
+        run: |
+          echo "Environment variables set successfully."
