@@ -33,14 +33,13 @@ jobs:
 
     # Run Tests
     - name: Run XCTest
+      env:
+        MY_SECRET_APP_ID: ${{ secrets.APP_ID }}
+
       run: |
-        export MY_SECRET_APP_ID=${{ secrets.APP_ID }}
         xcodebuild test \
           -workspace Example/Kommunicate.xcworkspace \
           -scheme Kommunicate_Example \
           -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
           CODE_SIGNING_ALLOWED=NO \
         -enableCodeCoverage YES
-      env:
-        MY_SECRET_APP_ID: ${{ secrets.APP_ID }}
-
