@@ -24,7 +24,7 @@
             }
 
             /// For App Id Automation Testing.
-            if let secretKey = ProcessInfo.processInfo.environment["MY_SECRET_APP_ID"] {
+            if let secretKey = ProcessInfo.processInfo.environment["APP_ID"] {
                 NSLog("AppID Found in Github Actions.")
                 appId = secretKey
             }
