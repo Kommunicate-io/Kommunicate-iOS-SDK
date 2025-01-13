@@ -150,9 +150,9 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         let app = XCUIApplication()
         if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
             app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
-            sleep(5)
-            let loginAsVisitorButton = app.scrollViews.otherElements
-            loginAsVisitorButton.buttons[InAppButton.LaunchScreen.loginAsVisitor].tap()
+            let loginAsVisitorButton = app.buttons[InAppButton.LaunchScreen.loginAsVisitor]
+            waitFor(object: loginAsVisitorButton) { $0.exists }
+            loginAsVisitorButton.tap()
         }
         
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]

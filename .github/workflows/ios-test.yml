@@ -27,19 +27,12 @@ jobs:
         run: |
           pod install --project-directory=Example
 
-      # Step 4: Inject Kommunicate APP_ID securely into an environment variable
-      - name: Export Kommunicate APP_ID
-        env:
-          KOMMUNICATE_APP_ID: ${{ secrets.KOMMUNICATE_APP_ID }}
-        run: |
-          echo "KOMMUNICATE_APP_ID=$KOMMUNICATE_APP_ID" >> $GITHUB_ENV
-
-      # Step 5: Run Tests
+      # Step 4: Run Tests
       - name: Run XCTest
         env:
           KOMMUNICATE_APP_ID: ${{ secrets.KOMMUNICATE_APP_ID }}
         run: |
-          xcodebuild test \
+          KOMMUNICATE_APP_ID=${{ secrets.KOMMUNICATE_APP_ID }} xcodebuild test \
             -workspace Example/Kommunicate.xcworkspace \
             -scheme Kommunicate_Example \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \

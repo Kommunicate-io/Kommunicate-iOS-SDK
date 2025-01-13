@@ -101,7 +101,7 @@ class KommunicateTests: XCTestCase {
             .withConversationTitle("Automation Conversation")
             .build()
         
-        if KommunicateMock.isLoggedIn {
+        if Kommunicate.isLoggedIn {
             createConversation(kmConversation, expectation: expectation)
         } else {
             KommunicateMock.registerUserAsVisitor { response, error in
