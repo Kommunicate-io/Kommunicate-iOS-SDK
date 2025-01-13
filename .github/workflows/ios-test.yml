@@ -27,14 +27,15 @@ jobs:
       run: |
         pod install --project-directory=Example
 
-    # Set environment variable for the secret
-    - name: Export Secret Key
-      run: echo "MY_SECRET_APP_ID=${{ secrets.APP_ID }}" >> $GITHUB_ENV
+    # # Set environment variable for the secret
+    # - name: Export Secret Key
+    #   run: echo "MY_SECRET_APP_ID=${{ secrets.APP_ID }}" >> $GITHUB_ENV
 
     # Run Tests
     - name: Run XCTest
       run: |
         xcodebuild test \
+          echo "MY_SECRET_APP_ID=${{ secrets.APP_ID }}" >> $GITHUB_ENV
           -workspace Example/Kommunicate.xcworkspace \
           -scheme Kommunicate_Example \
           -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
