@@ -31,8 +31,8 @@ enum Configuration {
 enum loginCreadentials {
     static var testAppID: String {
         guard let appID = ProcessInfo.processInfo.environment["MY_SECRET_APP_ID"] else {
-            return "<Enter-Your-AppID>" /// Enter your appID here
             NSLog("AppID Not Found Github Actions")
+            return "<Enter-Your-AppID>" /// Enter your appID here
         }
         NSLog("AppID Found Github Actions")
         return appID
