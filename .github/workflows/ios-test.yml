@@ -50,4 +50,5 @@ jobs:
           -scheme Kommunicate_Example \
           -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
           CODE_SIGNING_ALLOWED=NO \
-        -enableCodeCoverage YES
+          -enableCodeCoverage YES
+          APP_ID=$APP_ID

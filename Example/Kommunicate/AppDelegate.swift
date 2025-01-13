@@ -27,6 +27,8 @@
             if let secretKey = ProcessInfo.processInfo.environment["APP_ID"] {
                 NSLog("AppID Found in Github Actions.")
                 appId = secretKey
+            } else  {
+                "APP_ID not found and not set"
             }
 
             setUpNavigationBarAppearance()
