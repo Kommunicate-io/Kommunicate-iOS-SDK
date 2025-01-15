@@ -63,16 +63,12 @@ class KommunicateTests: XCTestCase {
 
     func testCreateAndlaunchConversation() {
         let dummyViewController = UIViewController()
-        KommunicateMock.applozicClientType = ApplozicClientMock.self
-        let KMAppID = NSLocalizedString("KOMMUNICATE_APP_ID", tableName: "TestLocalizable", bundle: Bundle.main, comment: "")
-        
-        if let KMAppID = Bundle.main.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
-            NSLog("kommunicate_app_id : AppID Found in file. \(KMAppID)")
-            KommunicateMock.setup(applicationId: KMAppID)
-        } else {
-            NSLog("kommunicate_app_id : AppID Not Found in file.")
+        for bundle in Bundle.allBundles {
+            if let value = bundle.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
+                NSLog("kommunicate_app_id : AppID Found in file. \(value)")
+                KommunicateMock.setup(applicationId: value)
+            }
         }
-        
         
         KommunicateMock.registerUserAsVisitor { response, error in
             if let error = error {

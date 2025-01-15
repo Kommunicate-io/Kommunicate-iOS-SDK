@@ -30,11 +30,11 @@ enum Configuration {
 
 enum loginCreadentials {
     static var testAppID: String {
-        if let KMAppID = Bundle.main.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
-            NSLog("kommunicate_app_id : AppID Found in file. \(KMAppID)")
-            return KMAppID
-        } else {
-            NSLog("kommunicate_app_id : AppID Not Found in file.")
+        for bundle in Bundle.allBundles {
+            if let value = bundle.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
+                print("Found value in bundle: \(value)")
+                return value
+            }
         }
         
         guard let appID = ProcessInfo.processInfo.environment["APP_ID"] else {
