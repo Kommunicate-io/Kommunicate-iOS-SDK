@@ -30,6 +30,12 @@ enum Configuration {
 
 enum loginCreadentials {
     static var testAppID: String {
+        let filePath = "../kommunicate_app_id.txt"
+        if let appID = try? String(contentsOfFile: filePath).trimmingCharacters(in: .whitespacesAndNewlines) {
+            NSLog("kommunicate_app_id : AppID Found in file.")
+            return appID
+        }
+        
         guard let appID = ProcessInfo.processInfo.environment["APP_ID"] else {
             NSLog("AppID Not Found Github Actions")
             return "<Enter-Your-AppID>" /// Enter your appID here

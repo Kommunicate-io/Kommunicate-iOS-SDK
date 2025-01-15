@@ -22,44 +22,13 @@
             if let regexPattern = ProcessInfo.processInfo.environment["restrictedMessageRegexPattern"] {
                 Kommunicate.defaultConfiguration.restrictedMessageRegexPattern = regexPattern
             }
-
-            let environmentVariables = ProcessInfo.processInfo.environment
-            NSLog("Kooooo : Environment Variables: \(environmentVariables)")
-            environmentVariables.forEach { key, value in
-                NSLog("Kooooo : \(key) : \(value)")
-            }
-            
-            
-            if let secretKey = ProcessInfo.processInfo.environment["KOMMUNICATE_APP_ID"] {
-                NSLog("AppID Found in GitHub Actions.")
-                appId = secretKey
-            } else if let envPath = Bundle.main.path(forResource: ".env", ofType: nil),
-                      let envContents = try? String(contentsOfFile: envPath),
-                      let keyValue = envContents.split(separator: "=").last {
-                appId = String(keyValue)
-                NSLog("AppID Found in .env file.")
-            } else {
-                NSLog("AppID Not Found in GitHub Actions.")
-            }
-
-            
             
             let filePath = "kommunicate_app_id.txt"
             if let appID = try? String(contentsOfFile: filePath).trimmingCharacters(in: .whitespacesAndNewlines) {
                 appId = appID
-                NSLog("AppID Found in file.")
+                NSLog("kommunicate_app_id : AppID Found in file.")
             } else {
-                NSLog("AppID Not Found.")
-            }
-            
-            
-            
-            /// For App Id Automation Testing.
-            if let secretKey = ProcessInfo.processInfo.environment["KOMMUNICATE_APP_ID"] {
-                NSLog("AppID Found in Github Actions.")
-                appId = secretKey
-            } else {
-                NSLog("AppID Not Found in Github Actions.")
+                NSLog("kommunicate_app_id : AppID Not Found.")
             }
 
             setUpNavigationBarAppearance()
