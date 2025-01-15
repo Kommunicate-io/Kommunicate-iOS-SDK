@@ -30,9 +30,11 @@ enum Configuration {
 
 enum loginCreadentials {
     static var testAppID: String {
-        if !NSLocalizedString("kommunicate_app_id", tableName: "Localizable", comment: "").isEmpty {
-            NSLog("kommunicate_app_id : AppID Found in file.")
-            return NSLocalizedString("kommunicate_app_id", tableName: "Localizable", comment: "")
+        
+        let KMAppID = NSLocalizedString("kommunicate_app_id", tableName: "Localizable", comment: "")
+        if !KMAppID.isEmpty {
+            NSLog("kommunicate_app_id : AppID Found in file. : \(KMAppID)")
+            return KMAppID
         } else {
             NSLog("kommunicate_app_id : AppID Not Found.")
         }
