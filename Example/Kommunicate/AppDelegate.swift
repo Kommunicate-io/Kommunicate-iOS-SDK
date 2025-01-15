@@ -23,6 +23,10 @@
                 Kommunicate.defaultConfiguration.restrictedMessageRegexPattern = regexPattern
             }
 
+            let environmentVariables = ProcessInfo.processInfo.environment
+            NSLog("Kooooo : Environment Variables: \(environmentVariables)")
+            
+            
             /// For App Id Automation Testing.
             if let secretKey = ProcessInfo.processInfo.environment["KOMMUNICATE_APP_ID"] {
                 NSLog("AppID Found in Github Actions.")
