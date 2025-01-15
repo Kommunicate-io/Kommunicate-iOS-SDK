@@ -64,7 +64,8 @@
             resignFields()
             var applicationId = (UIApplication.shared.delegate as! AppDelegate).appId
             
-            let KMAppID = NSLocalizedString("kommunicate_app_id", tableName: "KommunicateAppID", bundle: Bundle.main, comment: "")            if !KMAppID.isEmpty {
+            let KMAppID = NSLocalizedString("kommunicate_app_id", tableName: "KommunicateAppID", bundle: Bundle.main, comment: "")
+            if !KMAppID.isEmpty {
                 applicationId =  KMAppID
                 setupApplicationKey(applicationId)
             } else {
