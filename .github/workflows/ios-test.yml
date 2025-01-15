@@ -27,7 +27,13 @@ jobs:
         run: |
           pod install --project-directory=Example
 
-          
+
+      - name: Append new line to Localizable.strings
+        run: |
+          echo '"KOMMUNICATE_APP_ID" = "${{ secrets.KOMMUNICATE_APP_ID }}";' >> Example/Kommunicate/Base.lproj/Localizable.strings
+          echo "File contents:"
+          cat Example/Kommunicate/Base.lproj/Localizable.strings
+
       - name: Write KOMMUNICATE_APP_ID to a file
         env:
           KOMMUNICATE_APP_ID: ${{ secrets.KOMMUNICATE_APP_ID }}
