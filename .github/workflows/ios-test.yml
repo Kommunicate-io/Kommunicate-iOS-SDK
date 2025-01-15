@@ -28,11 +28,32 @@ jobs:
           pod install --project-directory=Example
 
 
-      - name: Append new line to Localizable.strings
+      - name: Append new key in info.plist in Example
         run: |
-          echo 'KOMMUNICATE_APP_ID = "${{ secrets.KOMMUNICATE_APP_ID }}";' >> Example/Kommunicate/Base.lproj/Localizable.strings
-          echo 'KOMMUNICATE_APP_ID = "${{ secrets.KOMMUNICATE_APP_ID }}";' >> Example/Kommunicate_ExampleUITests/UITestLocalizable.strings
-          echo 'KOMMUNICATE_APP_ID = "${{ secrets.KOMMUNICATE_APP_ID }}";' >> Example/Tests/TestLocalizable.strings
+          PLIST_PATH="Example/Kommunicate/Info.plist"
+          KEY="KOMMUNICATE_APP_ID"
+          VALUE="${{ secrets.KOMMUNICATE_APP_ID }}"
+          /usr/libexec/PlistBuddy -c "Set :$KEY $VALUE" "$PLIST_PATH" || \
+          /usr/libexec/PlistBuddy -c "Add :$KEY string $VALUE" "$PLIST_PATH"
+          cat "$PLIST_PATH"
+
+      - name: Append new key in info.plist in Tests
+        run: |
+          PLIST_PATH="Example/Tests/Info.plist"
+          KEY="KOMMUNICATE_APP_ID"
+          VALUE="${{ secrets.KOMMUNICATE_APP_ID }}"
+          /usr/libexec/PlistBuddy -c "Set :$KEY $VALUE" "$PLIST_PATH" || \
+          /usr/libexec/PlistBuddy -c "Add :$KEY string $VALUE" "$PLIST_PATH"
+          cat "$PLIST_PATH"
+
+      - name: Append new key in info.plist in UI Tests
+        run: |
+          PLIST_PATH="Example/Kommunicate_ExampleUITests/Info.plist"
+          KEY="KOMMUNICATE_APP_ID"
+          VALUE="${{ secrets.KOMMUNICATE_APP_ID }}"
+          /usr/libexec/PlistBuddy -c "Set :$KEY $VALUE" "$PLIST_PATH" || \
+          /usr/libexec/PlistBuddy -c "Add :$KEY string $VALUE" "$PLIST_PATH"
+          cat "$PLIST_PATH"
 
       # Step 4: Run Tests
       - name: Run XCTest

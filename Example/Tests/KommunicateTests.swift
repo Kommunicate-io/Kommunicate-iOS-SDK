@@ -64,38 +64,47 @@ class KommunicateTests: XCTestCase {
     func testCreateAndlaunchConversation() {
         let dummyViewController = UIViewController()
         KommunicateMock.applozicClientType = ApplozicClientMock.self
-        let testBundle = Bundle(for: KommunicateTests.self)
-        let KMAppID = NSLocalizedString("KOMMUNICATE_APP_ID", tableName: "TestLocalizable", bundle: testBundle, comment: "")
+        let KMAppID = NSLocalizedString("KOMMUNICATE_APP_ID", tableName: "TestLocalizable", bundle: Bundle.main, comment: "")
         
-        if KMAppID != "KOMMUNICATE_APP_ID" {
-            NSLog("AppID Found in Github Actions.")
-            Kommunicate.setup(applicationId: KMAppID)
+        if let plistPath = Bundle.main.path(forResource: "Info", ofType: "plist"),
+           let infoPlist = NSDictionary(contentsOfFile: plistPath) as? [String: Any],
+           let KMAppID = infoPlist["KOMMUNICATE_APP_ID"] as? String {
+            NSLog("kommunicate_app_id : AppID Found in file. \(KMAppID)")
+            KommunicateMock.setup(applicationId: KMAppID)
+        } else {
+            NSLog("kommunicate_app_id : AppID Not Found in file.")
         }
         
-        // Test when single thread is present, method to create a new conversation
-        // gets called.
-        KommunicateMock.createAndShowConversation(from: dummyViewController, completion: {
-            _ in
-            XCTAssertTrue(KommunicateMock.createConversationsCalled)
-            XCTAssertFalse(KommunicateMock.showConversationsCalled)
-        })
+        
+        KommunicateMock.registerUserAsVisitor { response, error in
+            if let error = error {
+                XCTFail("User registration failed: \(error.localizedDescription)")
+                return
+            }
+            KommunicateMock.loggedIn = true
+            KommunicateMock.createAndShowConversation(from: dummyViewController, completion: {
+                _ in
+                XCTAssertTrue(KommunicateMock.createConversationsCalled)
+                XCTAssertFalse(KommunicateMock.showConversationsCalled)
+            })
 
-        // Test when multiple threads are present, method to show conversation list
-        // gets called.
-        ApplozicClientMock.messageCount = 2
-        KommunicateMock.createAndShowConversation(from: dummyViewController, completion: {
-            _ in
-            XCTAssertTrue(KommunicateMock.showConversationsCalled)
-            XCTAssertFalse(KommunicateMock.createConversationsCalled)
-        })
+            // Test when multiple threads are present, method to show conversation list
+            // gets called.
+            ApplozicClientMock.messageCount = 2
+            KommunicateMock.createAndShowConversation(from: dummyViewController, completion: {
+                _ in
+                XCTAssertTrue(KommunicateMock.showConversationsCalled)
+                XCTAssertFalse(KommunicateMock.createConversationsCalled)
+            })
 
-        // Check when a user is not logged in, it returns an error
-        KommunicateMock.loggedIn = false
-        KommunicateMock.createAndShowConversation(from: dummyViewController, completion: {
-            error in
-            XCTAssertNotNil(error)
-            XCTAssertEqual(error!, .notLoggedIn)
-        })
+            // Check when a user is not logged in, it returns an error
+            KommunicateMock.loggedIn = false
+            KommunicateMock.createAndShowConversation(from: dummyViewController, completion: {
+                error in
+                XCTAssertNotNil(error)
+                XCTAssertEqual(error!, .notLoggedIn)
+            })
+        }
     }
     
     func testCreateConversationWithCustomData() {
