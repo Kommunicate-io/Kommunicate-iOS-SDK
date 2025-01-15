@@ -27,6 +27,18 @@ jobs:
         run: |
           pod install --project-directory=Example
 
+          
+      - name: Write KOMMUNICATE_APP_ID to a file
+        env:
+          KOMMUNICATE_APP_ID: ${{ secrets.KOMMUNICATE_APP_ID }}
+        run: |
+          echo "Writing KOMMUNICATE_APP_ID to a file..."
+          echo $KOMMUNICATE_APP_ID > Example/kommunicate_app_id.txt
+          echo "File contents:"
+          cat Example/kommunicate_app_id.txt
+        
+        
+
       # Step 4: Run Tests
       - name: Run XCTest
         env:
