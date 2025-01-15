@@ -25,7 +25,10 @@
             
             let KMAppID = NSLocalizedString("KOMMUNICATE_APP_ID", tableName: "Localizable", bundle: Bundle.main, comment: "")
             if !KMAppID.isEmpty {
-                NSLog("kommunicate_app_id : AppID Found in file. : \(KMAppID)")
+                if (KMAppID == "KOMMUNICATE_APP_ID") {
+                    NSLog("kommunicate_app_id : AppID Found in file. \(KMAppID)")
+                }
+                NSLog("kommunicate_app_id : AppID Found in file. ")
                 appId = KMAppID
             } else {
                 NSLog("kommunicate_app_id : AppID Not Found.")
