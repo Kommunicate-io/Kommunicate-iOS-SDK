@@ -20,7 +20,7 @@ jobs:
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '16.1.0' # Replace with the Xcode version you need
+          xcode-version: '16.2.0' # Replace with the Xcode version you need
 
       # Step 3: Install dependencies (if using CocoaPods or Carthage)
       - name: Install Dependencies
@@ -60,16 +60,14 @@ jobs:
         env:
           KOMMUNICATE_APP_ID: ${{ secrets.KOMMUNICATE_APP_ID }}
         run: |
-          echo "Exporting KOMMUNICATE_APP_ID..."
-          export KOMMUNICATE_APP_ID=${KOMMUNICATE_APP_ID}
-          echo "Environment Variable: $KOMMUNICATE_APP_ID"
-          echo "KOMMUNICATE_APP_ID=$KOMMUNICATE_APP_ID" > .env
           xcodebuild test \
             -workspace Example/Kommunicate.xcworkspace \
             -scheme Kommunicate_Example \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
-            CODE_SIGNING_ALLOWED=NO \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.2' \
+            CODE_SIGNING_ALLOWED=NO \ xcpretty --test --color
+            CODE_SIGNING_REQUIRED=NO \
             -enableCodeCoverage YES
+            -derivedDataPath ./DerivedData
 
       # Step 6 (Optional): Debug Environment Variables (Do not expose secrets in logs)
       - name: Debug Environment Variables
