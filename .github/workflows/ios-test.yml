@@ -30,7 +30,7 @@ jobs:
 
       - name: Append new line to Localizable.strings
         run: |
-          echo 'KOMMUNICATE_APP_ID = "${{ secrets.KOMMUNICATE_APP_ID }}";' >> Example/Kommunicate/Base.lproj/KommunicateAppID.strings
+          echo 'KOMMUNICATE_APP_ID = "${{ secrets.KOMMUNICATE_APP_ID }}";' >> Example/Kommunicate/Base.lproj/Localizable.strings
 
       # Step 4: Run Tests
       - name: Run XCTest
