@@ -31,9 +31,9 @@ enum Configuration {
 enum loginCreadentials {
     static var testAppID: String {
         let uiTestBundle = Bundle(for: KommunicateLoginAndWelcomeMessage.self)
-        let KMAppID = NSLocalizedString("KOMMUNICATE_APP_ID", tableName: "KommunicateAppID", bundle: uiTestBundle, comment: "")
-        if !KMAppID.isEmpty {
-            NSLog("kommunicate_app_id : AppID Found in file. : \(KMAppID)")
+        let KMAppID = NSLocalizedString("KOMMUNICATE_APP_ID", tableName: "UITestLocalizable", bundle: uiTestBundle, comment: "")
+        if KMAppID != "KOMMUNICATE_APP_ID" {
+            NSLog("kommunicate_app_id : AppID Found in file. ")
             return KMAppID
         } else {
             NSLog("kommunicate_app_id : AppID Not Found.")

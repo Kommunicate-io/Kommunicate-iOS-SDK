@@ -64,9 +64,12 @@ class KommunicateTests: XCTestCase {
     func testCreateAndlaunchConversation() {
         let dummyViewController = UIViewController()
         KommunicateMock.applozicClientType = ApplozicClientMock.self
-        if let secretKey = ProcessInfo.processInfo.environment["KOMMUNICATE_APP_ID"] {
+        let testBundle = Bundle(for: KommunicateTests.self)
+        let KMAppID = NSLocalizedString("KOMMUNICATE_APP_ID", tableName: "TestLocalizable", bundle: testBundle, comment: "")
+        
+        if KMAppID != "KOMMUNICATE_APP_ID" {
             NSLog("AppID Found in Github Actions.")
-            Kommunicate.setup(applicationId: secretKey)
+            Kommunicate.setup(applicationId: KMAppID)
         }
         
         // Test when single thread is present, method to create a new conversation
