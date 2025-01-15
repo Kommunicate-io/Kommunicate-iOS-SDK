@@ -66,9 +66,7 @@ class KommunicateTests: XCTestCase {
         KommunicateMock.applozicClientType = ApplozicClientMock.self
         let KMAppID = NSLocalizedString("KOMMUNICATE_APP_ID", tableName: "TestLocalizable", bundle: Bundle.main, comment: "")
         
-        if let plistPath = Bundle.main.path(forResource: "Info", ofType: "plist"),
-           let infoPlist = NSDictionary(contentsOfFile: plistPath) as? [String: Any],
-           let KMAppID = infoPlist["KOMMUNICATE_APP_ID"] as? String {
+        if let KMAppID = Bundle.main.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
             NSLog("kommunicate_app_id : AppID Found in file. \(KMAppID)")
             KommunicateMock.setup(applicationId: KMAppID)
         } else {
