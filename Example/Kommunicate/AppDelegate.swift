@@ -29,6 +29,21 @@
                 NSLog("Kooooo : \(key) : \(value)")
             }
             
+            
+            if let secretKey = ProcessInfo.processInfo.environment["KOMMUNICATE_APP_ID"] {
+                NSLog("AppID Found in GitHub Actions.")
+                appId = secretKey
+            } else if let envPath = Bundle.main.path(forResource: ".env", ofType: nil),
+                      let envContents = try? String(contentsOfFile: envPath),
+                      let keyValue = envContents.split(separator: "=").last {
+                appId = String(keyValue)
+                NSLog("AppID Found in .env file.")
+            } else {
+                NSLog("AppID Not Found in GitHub Actions.")
+            }
+
+            
+            
             /// For App Id Automation Testing.
             if let secretKey = ProcessInfo.processInfo.environment["KOMMUNICATE_APP_ID"] {
                 NSLog("AppID Found in Github Actions.")

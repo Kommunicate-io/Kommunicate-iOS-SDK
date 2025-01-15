@@ -35,14 +35,13 @@ jobs:
           echo "Exporting KOMMUNICATE_APP_ID..."
           export KOMMUNICATE_APP_ID=${KOMMUNICATE_APP_ID}
           echo "Environment Variable: $KOMMUNICATE_APP_ID"
+          echo "KOMMUNICATE_APP_ID=$KOMMUNICATE_APP_ID" > .env
           xcodebuild test \
             -workspace Example/Kommunicate.xcworkspace \
             -scheme Kommunicate_Example \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
-            -KOMMUNICATE_APP_ID "$KOMMUNICATE_APP_ID" \
             CODE_SIGNING_ALLOWED=NO \
             -enableCodeCoverage YES
-
 
       # Step 6 (Optional): Debug Environment Variables (Do not expose secrets in logs)
       - name: Debug Environment Variables
