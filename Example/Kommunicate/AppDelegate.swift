@@ -23,7 +23,7 @@
                 Kommunicate.defaultConfiguration.restrictedMessageRegexPattern = regexPattern
             }
             
-            let KMAppID = NSLocalizedString("kommunicate_app_id", tableName: "Localizable", comment: "")
+            let KMAppID = NSLocalizedString("kommunicate_app_id", tableName: "KommunicateAppID", bundle: Bundle.main, comment: "")
             if !KMAppID.isEmpty {
                 NSLog("kommunicate_app_id : AppID Found in file. : \(KMAppID)")
                 appId = KMAppID

@@ -62,9 +62,15 @@
 
         @IBAction func getStartedBtn(_: AnyObject) {
             resignFields()
-            let applicationId = (UIApplication.shared.delegate as! AppDelegate).appId
-            setupApplicationKey(applicationId)
-
+            var applicationId = (UIApplication.shared.delegate as! AppDelegate).appId
+            
+            let KMAppID = NSLocalizedString("kommunicate_app_id", tableName: "KommunicateAppID", bundle: Bundle.main, comment: "")            if !KMAppID.isEmpty {
+                applicationId =  KMAppID
+                setupApplicationKey(applicationId)
+            } else {
+                setupApplicationKey(applicationId)
+            }
+            
             guard let userIdEntered = userName.text, !userIdEntered.isEmpty else {
                 let alertMessage = "Please enter a userId. If you are trying the app for the first time then just enter a random Id"
                 let alert = UIAlertController(
@@ -91,8 +97,14 @@
 
         @IBAction func loginAsVisitor(_: Any) {
             resignFields()
-            let applicationId = (UIApplication.shared.delegate as! AppDelegate).appId
-            setupApplicationKey(applicationId)
+            var applicationId = (UIApplication.shared.delegate as! AppDelegate).appId
+            let KMAppID = NSLocalizedString("kommunicate_app_id", tableName: "KommunicateAppID", bundle: Bundle.main, comment: "")
+            if !KMAppID.isEmpty {
+                applicationId =  KMAppID
+                setupApplicationKey(applicationId)
+            } else {
+                setupApplicationKey(applicationId)
+            }
             let kmUser = userWithUserId(Kommunicate.randomId(), andApplicationId: applicationId)
             activityIndicator.startAnimating()
             Kommunicate.registerUserAsVisitor(kmUser, completion: {
