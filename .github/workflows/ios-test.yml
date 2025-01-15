@@ -64,7 +64,7 @@ jobs:
             -workspace Example/Kommunicate.xcworkspace \
             -scheme Kommunicate_Example \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.2' \
-            CODE_SIGNING_ALLOWED=NO \ xcpretty --test --color
+            CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             -enableCodeCoverage YES
             -derivedDataPath ./DerivedData
