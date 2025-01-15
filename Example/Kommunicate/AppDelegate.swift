@@ -23,9 +23,8 @@
                 Kommunicate.defaultConfiguration.restrictedMessageRegexPattern = regexPattern
             }
             
-            if let filePath = Bundle.main.path(forResource: "kommunicate_app_id", ofType: "txt"),
-               let appID = try? String(contentsOfFile: filePath).trimmingCharacters(in: .whitespacesAndNewlines) {
-                appId = appID
+            if !NSLocalizedString("kommunicate_app_id", tableName: "Localizable", comment: "").isEmpty {
+                appId = NSLocalizedString("kommunicate_app_id", tableName: "Localizable", comment: "")
                 NSLog("kommunicate_app_id : AppID Found in file.")
             } else {
                 NSLog("kommunicate_app_id : AppID Not Found.")
