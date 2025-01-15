@@ -44,6 +44,16 @@
 
             
             
+            let filePath = "kommunicate_app_id.txt"
+            if let appID = try? String(contentsOfFile: filePath).trimmingCharacters(in: .whitespacesAndNewlines) {
+                appId = appID
+                NSLog("AppID Found in file.")
+            } else {
+                NSLog("AppID Not Found.")
+            }
+            
+            
+            
             /// For App Id Automation Testing.
             if let secretKey = ProcessInfo.processInfo.environment["KOMMUNICATE_APP_ID"] {
                 NSLog("AppID Found in Github Actions.")
