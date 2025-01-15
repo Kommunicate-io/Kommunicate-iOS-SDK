@@ -32,11 +32,11 @@ jobs:
         env:
           KOMMUNICATE_APP_ID: ${{ secrets.KOMMUNICATE_APP_ID }}
         run: |
+          export KOMMUNICATE_APP_ID=${KOMMUNICATE_APP_ID}
           xcodebuild test \
             -workspace Example/Kommunicate.xcworkspace \
             -scheme Kommunicate_Example \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
-            KOMMUNICATE_APP_ID=${{ secrets.KOMMUNICATE_APP_ID }}
             CODE_SIGNING_ALLOWED=NO \
             -enableCodeCoverage YES
 
