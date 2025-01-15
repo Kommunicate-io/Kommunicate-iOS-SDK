@@ -25,7 +25,9 @@
 
             let environmentVariables = ProcessInfo.processInfo.environment
             NSLog("Kooooo : Environment Variables: \(environmentVariables)")
-            
+            environmentVariables.forEach { key, value in
+                NSLog("Kooooo : \(key) : \(value)")
+            }
             
             /// For App Id Automation Testing.
             if let secretKey = ProcessInfo.processInfo.environment["KOMMUNICATE_APP_ID"] {
