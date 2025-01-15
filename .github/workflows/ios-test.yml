@@ -65,7 +65,6 @@ jobs:
             -scheme Kommunicate_Example \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
             CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
             -enableCodeCoverage YES
             -derivedDataPath ./DerivedData
 
