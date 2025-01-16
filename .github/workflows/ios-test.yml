@@ -22,12 +22,12 @@ jobs:
         with:
           xcode-version: '16.1.0' # Replace with the Xcode version you need
 
-      # Step 3: Install dependencies (if using CocoaPods or Carthage)
+      # Step 3: Install dependencies (if using CocoaPods)
       - name: Install Dependencies
         run: |
           pod install --project-directory=Example
 
-
+      # Step 4: Update Info.plist Files with Secrets
       - name: Append new key in info.plist in Example
         run: |
           PLIST_PATH="Example/Kommunicate/Info.plist"
@@ -55,7 +55,6 @@ jobs:
           /usr/libexec/PlistBuddy -c "Add :$KEY string $VALUE" "$PLIST_PATH"
           cat "$PLIST_PATH"
 
-      # Step 4: Run Tests
       - name: Run XCTest
         env:
           KOMMUNICATE_APP_ID: ${{ secrets.KOMMUNICATE_APP_ID }}
@@ -66,10 +65,15 @@ jobs:
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
-            -enableCodeCoverage YES
+            -enableCodeCoverage YES \
             -derivedDataPath ./DerivedData
 
-      # Step 6 (Optional): Debug Environment Variables (Do not expose secrets in logs)
+      # Step 6: Print Test Results
+      - name: Print Test Results
+        run: |
+          cat ./DerivedData/Logs/Test/*.xcresult/TestSummaries.plist || echo "No test results found."
+
+      # Step 7: Debug Environment Variables (Optional)
       - name: Debug Environment Variables
         run: |
           echo "Environment variables set successfully."
