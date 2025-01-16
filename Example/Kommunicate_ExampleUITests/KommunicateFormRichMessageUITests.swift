@@ -38,15 +38,8 @@ class KommunicateFormRichMessageUITests: XCTestCase {
             return
         }
     }
-    
-    
-    func shouldSkipTests() -> Bool {
-        return ProcessInfo.processInfo.environment["CI"] == "true"
-    }
 
-
-    func testFormTemplate1() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testFormTemplate1() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         sleep(4)
@@ -72,8 +65,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         waitFor(object: submitResponse) { $0.exists }
     }
     
-    func testFormTemplate2() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testFormTemplate2() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         sleep(4)
@@ -108,8 +100,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         waitFor(object: submitResponse) { $0.exists }
     }
     
-    func testFormTemplate3() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testFormTemplate3() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         sleep(4)

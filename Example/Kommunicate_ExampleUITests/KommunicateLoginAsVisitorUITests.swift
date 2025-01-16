@@ -33,13 +33,8 @@ class KommunicateLoginAsVisitorUITests: XCTestCase {
             return
         }
     }
-    
-    func shouldSkipTests() -> Bool {
-        return ProcessInfo.processInfo.environment["CI"] == "true"
-    }
 
-    func testLoginAsVisitorAndWelcomeMessage() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testLoginAsVisitorAndWelcomeMessage() {
         let app = createConversation_Using_LoginAsVisitorButton()
         
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]

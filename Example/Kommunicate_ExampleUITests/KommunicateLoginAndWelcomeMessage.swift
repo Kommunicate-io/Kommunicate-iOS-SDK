@@ -40,14 +40,8 @@ class KommunicateLoginAndWelcomeMessage: XCTestCase {
             return
         }
     }
-    
-    func shouldSkipTests() -> Bool {
-        return ProcessInfo.processInfo.environment["CI"] == "true"
-    }
 
-
-    func testLoginAndCustomWelcomeMessage() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testLoginAndCustomWelcomeMessage() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]

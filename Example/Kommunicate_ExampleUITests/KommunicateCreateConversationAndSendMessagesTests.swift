@@ -15,10 +15,6 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         static let fillUserId = loginCreadentials.userID
         static let fillPassword = loginCreadentials.password
     }
-    
-    func shouldSkipTests() -> Bool {
-        return ProcessInfo.processInfo.environment["CI"] == "true"
-    }
 
     override func setUp() {
         super.setUp()
@@ -42,8 +38,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         }
     }
 
-    func testSendImageInGroup() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testSendImageInGroup() {
         let app = beforeTest_Launch_NewConversation() // Click on launch conversation and then create a group
         let openPhotos = app.buttons[InAppButton.ConversationScreen.openPhotos]
         waitFor(object: openPhotos) { $0.exists }
@@ -69,8 +64,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         doneButton.tap()
     }
 
-    func testSendImageThroughCamera() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testSendImageThroughCamera() {
         let app = beforeTest_Launch_NewConversation() // Click on launch conversation and then create a group
         let openCamera =
             app.buttons[InAppButton.ConversationScreen.openCamera]
@@ -95,8 +89,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         sendImageButton.tap()
     }
 
-    func testSendLocationInGroup() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testSendLocationInGroup() {
         let app = beforeTest_Launch_NewConversation() // Click on launch conversation and then create a group
         let openLocation = app.buttons[InAppButton.ConversationScreen.openLocation]
         waitFor(object: openLocation) { $0.exists }

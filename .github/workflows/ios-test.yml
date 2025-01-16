@@ -58,7 +58,6 @@ jobs:
       # Step 4: Run Tests
       - name: Run XCTest
         env:
-          CI: true
           KOMMUNICATE_APP_ID: ${{ secrets.KOMMUNICATE_APP_ID }}
         run: |
           xcodebuild test \

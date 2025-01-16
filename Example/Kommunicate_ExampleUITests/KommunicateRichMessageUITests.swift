@@ -49,12 +49,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         }
     }
 
-    func shouldSkipTests() -> Bool {
-        return ProcessInfo.processInfo.environment["CI"] == "true"
-    }
-    
-    func testSuggestedRepliesTemplate() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testSuggestedRepliesTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText1) // typing message
@@ -85,8 +80,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: suggestedRepliesResponse) { $0.exists }
    }
 
-    func testLinkbuttonTemplate() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testLinkbuttonTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText2) // typing message
@@ -103,8 +97,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.goToGoogle].tap()
     }
 
-    func testSubmitButtonTemplate() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testSubmitButtonTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText3) // typing message
@@ -124,8 +117,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: submitResponse) { $0.exists }
     }
 
-    func testImageTemplate() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testImageTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText5) // typing message
@@ -137,8 +129,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: imageTemplateResponse) { $0.exists }
     }
 
-    func testListTemplate() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testListTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText6) // typing message
@@ -156,8 +147,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.seeUsOnFacebook].tap()
     }
 
-    func testSingleCardTemplate() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testSingleCardTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText7) // typing message
@@ -187,8 +177,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         specificLinkButton.tap()
     }
 
-    func testCardCarouselTemplate() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testCardCarouselTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText8) // typing message
@@ -200,8 +189,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: cardCarouselResponse) { $0.exists }
     }
     
-    func testHTMLMessageTemplate() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testHTMLMessageTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText9)
@@ -213,8 +201,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: htmlMessageResponse) { $0.exists }
     }
     
-    func testCustomInputField() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testCustomInputField() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText13)
@@ -259,8 +246,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: customInputFieldResponse5) { $0.exists }
     }
     
-    func testVideoMessageTamplate() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testVideoMessageTamplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText10)
@@ -281,8 +267,7 @@ class KommunicateRichMessageUITests: XCTestCase {
     }
     
     
-    func testYouTubeMessageTemplate() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testYouTubeMessageTemplate() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText12)
@@ -295,8 +280,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         waitFor(object: videoMessage) { $0.exists }
     }
     
-    func testAutoSuggestion() throws {
-        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
+    func testAutoSuggestion() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText11)
