@@ -40,6 +40,7 @@ PODS:
 DEPENDENCIES:
   - iOSSnapshotTestCase (~> 8.0.0)
   - Kommunicate (from `../`)
+  - KommunicateCore-iOS-SDK (from `../../KommunicateCore-iOS-SDK`)
   - Nimble
   - Nimble-Snapshots
   - Quick
@@ -55,7 +56,6 @@ SPEC REPOS:
     - iOSSnapshotTestCase
     - Kingfisher
     - KommunicateChatUI-iOS-SDK
-    - KommunicateCore-iOS-SDK
     - Nimble
     - Nimble-Snapshots
     - Quick
@@ -64,6 +64,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Kommunicate:
     :path: "../"
+  KommunicateCore-iOS-SDK:
+    :path: "../../KommunicateCore-iOS-SDK"
 
 SPEC CHECKSUMS:
   CwlCatchException: 7acc161b299a6de7f0a46a6ed741eae2c8b4d75a
@@ -82,6 +84,6 @@ SPEC CHECKSUMS:
   Quick: b8bec97cd4b9f21da0472d45580f763b801fc353
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: 07a36a186f5848e9c0e96beedc0b1730ca2d51e8
+PODFILE CHECKSUM: b53da98266228398f739941d46b3fb3fbb1692a9
 
 COCOAPODS: 1.16.2
