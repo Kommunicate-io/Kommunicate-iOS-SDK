@@ -55,6 +55,7 @@ jobs:
           /usr/libexec/PlistBuddy -c "Add :$KEY string $VALUE" "$PLIST_PATH"
           cat "$PLIST_PATH"
 
+      # Step 5: Run Tests
       - name: Run XCTest
         env:
           KOMMUNICATE_APP_ID: ${{ secrets.KOMMUNICATE_APP_ID }}
@@ -77,3 +78,33 @@ jobs:
       - name: Debug Environment Variables
         run: |
           echo "Environment variables set successfully."
+
+      # Step 8: Post Test Results as a PR Comment
+      - name: Post Test Results to PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const path = './DerivedData/Logs/Test/*.xcresult/TestSummaries.plist';
+            let content = 'Test results not found.';
+            
+            try {
+              content = fs.readFileSync(path, 'utf8');
+            } catch (err) {
+              console.log('Error reading test results:', err);
+            }
+            
+            const comment = `
+              ## iOS Automation Test Results
+              \`\`\`
+              ${content.substring(0, 65000)} <!-- GitHub has a 65k char limit -->
+              \`\`\`
+            `;
+            
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment,
+            });
