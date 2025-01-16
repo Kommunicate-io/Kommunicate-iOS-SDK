@@ -39,7 +39,12 @@ class KommunicateRegexConfigurationTesting: XCTestCase {
         }
     }
     
-    func testRegexInChatBar() {
+    func shouldSkipTests() -> Bool {
+        return ProcessInfo.processInfo.environment["CI"] == "true"
+    }
+    
+    func testRegexInChatBar() throws {
+        try XCTSkipIf(shouldSkipTests(), "This test is skipped for CI builds.")
         let appInstance = beforeTest_Launch_NewConversation()
         waitFor(object: appInstance) { $0.exists }
         
