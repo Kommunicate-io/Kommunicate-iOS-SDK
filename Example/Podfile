@@ -6,7 +6,6 @@ platform :ios, '13.0'
 
 target 'Kommunicate_Example' do
   pod 'Kommunicate', :path => '../'
-  pod 'KommunicateCore-iOS-SDK', :git => 'https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git',  :branch => ‘CM-2285’
 
 target 'Kommunicate_Tests' do
     inherit! :search_paths 
