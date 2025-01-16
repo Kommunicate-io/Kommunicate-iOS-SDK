@@ -36,13 +36,7 @@ enum loginCreadentials {
                 return value
             }
         }
-        
-        guard let appID = ProcessInfo.processInfo.environment["APP_ID"] else {
-            NSLog("AppID Not Found Github Actions")
-            return "<Enter-Your-AppID>" /// Enter your appID here
-        }
-        NSLog("AppID Found Github Actions")
-        return appID
+        return "<SET_YOUR_APP_ID>"
     }
     static var userID: String {
         let dateFormatter = DateFormatter()
