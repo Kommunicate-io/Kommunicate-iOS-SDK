@@ -1449,13 +1449,21 @@ open class Kommunicate: NSObject, Localizable {
     }
 
     /**
-     Subscribe Chat Events
+     Subscribe to chat events. Omit the events parameter to subscribe to all available events.
      - Parameters:
      - events: list of events to subscribe.
      - callback: ALKCustomEventCallback to send subscribed event's data
      */
-    public static func subscribeCustomEvents(events: [KMCustomEvent], callback: ALKCustomEventCallback) {
-        KMCustomEventHandler.shared.setSubscribedEvents(eventsList: events, eventDelegate: callback)
+    public static func subscribeCustomEvents(events: [KMCustomEvent] = KMCustomEvent.allEvents, callback: ALKCustomEventCallback) {
+        let eventList: [KMCustomEvent]
+        
+        if events == KMCustomEvent.allEvents {
+            eventList = KMCustomEventHandler.shared.availableEvents()
+        } else {
+            eventList = events
+        }
+        
+        KMCustomEventHandler.shared.setSubscribedEvents(eventsList: eventList, eventDelegate: callback)
     }
     
     /*
