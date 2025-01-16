@@ -27,7 +27,21 @@ jobs:
         run: |
           pod install --project-directory=Example
 
-      # Step 4: Update Info.plist Files with Secrets
+      # Step 4: Generate Temporary Entitlements
+      - name: Generate Temporary Entitlements
+        run: |
+          echo '<?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>keychain-access-groups</key>
+            <array>
+              <string>$(AppIdentifierPrefix)dummy.bundle.id</string>
+            </array>
+          </dict>
+          </plist>' > Example/Kommunicate/Entitlements.plist
+
+      # Step 5: Update Info.plist Files with Secrets
       - name: Append new key in info.plist in Example
         run: |
           PLIST_PATH="Example/Kommunicate/Info.plist"
@@ -55,7 +69,7 @@ jobs:
           /usr/libexec/PlistBuddy -c "Add :$KEY string $VALUE" "$PLIST_PATH"
           cat "$PLIST_PATH"
 
-      # Step 5: Run Tests
+      # Step 6: Run Tests
       - name: Run XCTest
         env:
           KOMMUNICATE_APP_ID: ${{ secrets.KOMMUNICATE_APP_ID }}
@@ -69,17 +83,17 @@ jobs:
             -enableCodeCoverage YES \
             -derivedDataPath ./DerivedData
 
-      # Step 6: Print Test Results
+      # Step 7: Print Test Results
       - name: Print Test Results
         run: |
           cat ./DerivedData/Logs/Test/*.xcresult/TestSummaries.plist || echo "No test results found."
 
-      # Step 7: Debug Environment Variables (Optional)
+      # Step 8: Debug Environment Variables (Optional)
       - name: Debug Environment Variables
         run: |
           echo "Environment variables set successfully."
 
-      # Step 8: Post Test Results as a PR Comment
+      # Step 9: Post Test Results as a PR Comment
       - name: Post Test Results to PR
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v6
