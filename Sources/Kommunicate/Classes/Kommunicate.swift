@@ -121,6 +121,7 @@ open class Kommunicate: NSObject, Localizable {
     public static var presentingViewController = UIViewController()
     public static var leadArray = [LeadCollectionField]()
     static var embeddedViewController: String = ""
+    static let appSettingCache = KMCacheMemory<AppSetting>()
 
     public enum KommunicateError: Error {
         case notLoggedIn
@@ -342,7 +343,7 @@ open class Kommunicate: NSObject, Localizable {
     private class func registerNewUser(_ kmUser: KMUser, isVisitor : Bool, completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
         
         let kmAppSetting = KMAppSettingService()
-        kmAppSetting.appSetting { result in
+        kmAppSetting.appSetting(forceRefresh: true) { result in
             switch result {
             case let .success(appSetting):
                 DispatchQueue.main.async {
@@ -988,7 +989,7 @@ open class Kommunicate: NSObject, Localizable {
      */
       @objc open class func isChatWidgetDisabled(completionHandler: @escaping (Bool) -> Void) {
         let appSettingsService = KMAppSettingService()
-        appSettingsService.appSetting {
+        appSettingsService.appSetting(forceRefresh: true) {
             result in
             switch result {
             case let .success(appSettings):
