@@ -15,6 +15,7 @@ class AwayMessageView: UIView , Localizable {
         private static let filename = Kommunicate.defaultConfiguration.localizedStringFileName
         static let CollectEmailMessageOnAwayMode = localizedString(forKey: "CollectEmailMessageOnAwayMode", fileName: filename)
         static let InvalidEmailMessageOnAwayMode = localizedString(forKey: "InvalidEmailMessageOnAwayMode", fileName: filename)
+        static let WaitingQueueMessage = localizedString(forKey: "waitingQueueMessage", fileName: filename)
     }
     
     enum ConstraintIdentifier: String {
@@ -117,6 +118,10 @@ class AwayMessageView: UIView , Localizable {
 
     func set(message: String) {
         messageLabel.text = message
+    }
+    
+    func setWaitingQueueMessage(count: Int) {
+        messageLabel.text = String(format: LocalizedText.WaitingQueueMessage, "#\(count)")
     }
 
     func drawDottedLines() {

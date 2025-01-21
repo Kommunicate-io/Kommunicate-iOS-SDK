@@ -50,6 +50,8 @@ public enum APIError: LocalizedError {
     case jsonConversion
     /// Thrown when last message is not present.
     case messageNotPresent
+    /// Thown when response is not in present.
+    case responseNotPresent
     /// Thrown in case of a network failure.
     /// - Parameter error: The underlying error object.
     case network(_ error: Error?)
@@ -69,6 +71,8 @@ public enum APIError: LocalizedError {
             } else {
                 errorMessage = "Failed to process API request"
             }
+        case .responseNotPresent:
+            errorMessage = "Failed while extracting response from the data."
         }
         return errorMessage
     }

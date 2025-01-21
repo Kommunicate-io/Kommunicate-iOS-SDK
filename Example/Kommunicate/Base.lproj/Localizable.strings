@@ -54,6 +54,12 @@ noName = "No Name";
 /* Navigation title for faq view controller */
 FaqTitle = "FAQ";
 
+
+
+/* Waiting Queue */
+waitingQueueTitle = "In queue...";
+waitingQueueMessage = "You are currently %@ in the waiting queue, our agents will get back you shortly.";
+
 /* ApplozicSwift framework's key-value pairs */
 
 Back = "Back";
