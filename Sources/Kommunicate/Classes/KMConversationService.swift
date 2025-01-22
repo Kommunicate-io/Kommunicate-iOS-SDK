@@ -175,9 +175,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
             completion(.failure(APIError.urlBuilding))
             return
         }
-        let params: [String: Any] = ["teamId" : teamID] 
-        
-        DataLoader.requestWithParameter(url: url, params: params) { result in
+        DataLoader.request(url: url) { result in
             switch result {
             case let .success(data):
                 do {

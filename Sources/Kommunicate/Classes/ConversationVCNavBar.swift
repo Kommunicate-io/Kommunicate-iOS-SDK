@@ -226,7 +226,6 @@ class ConversationVCNavBar: UIView, Localizable {
             onlineStatusIcon.isHidden = false
             profileView.isHidden = false
             waitingQueueText.isHidden = true
-            waitingQueueText.isHidden = true
         }
     }
 

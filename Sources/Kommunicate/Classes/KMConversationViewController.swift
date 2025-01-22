@@ -24,7 +24,8 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     var count = 0
     var currentMessage = ALMessage()
     var delayInterval = 0
-    
+    private var isWaitingQueueFetching: Bool = false
+
     enum LocalizationKey {
         static let online = "online"
         static let offline = "offline"
@@ -334,9 +335,14 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         if isClosedConversation {
             conversationAssignedToDialogflowBot()
         } else if viewModel.isWaitingQueueConversation, let teamID = viewModel.assignedTeamId, let conversationID = viewModel.channelKey {
-            conversationService.waitingQueueFor(teamID: teamID, completion: {
-                result in
+            // Guard against multiple waiting queue calls
+            guard !isWaitingQueueFetching else { return }
+            isWaitingQueueFetching = true
+
+            conversationService.waitingQueueFor(teamID: teamID, completion: { [weak self] result in
+                guard let self = self else { return }
                 DispatchQueue.main.async {
+                    self.isWaitingQueueFetching = false
                     switch result {
                     case let .success(waitingQueueData):
                         guard
@@ -427,7 +433,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             self.assigneeUserId = contact?.userId
             self.hideInputBarIfAssignedToBot()
             guard let contact = contact else {return}
-            if let conversationStatus = alChannel.metadata[AL_CHANNEL_CONVERSATION_STATUS], conversationStatus as! String == "7" {
+            if let conversationStatus = alChannel.metadata[AL_CHANNEL_CONVERSATION_STATUS], conversationStatus as! String == KMConversationStatus.waiting.rawValue {
                 self.customNavigationView.updateWaitingQueueUI(showWaitingQueueOnly: true)
                 return
             } else {

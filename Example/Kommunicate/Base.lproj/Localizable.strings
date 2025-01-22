@@ -58,7 +58,7 @@ FaqTitle = "FAQ";
 
 /* Waiting Queue */
 waitingQueueTitle = "In queue...";
-waitingQueueMessage = "You are currently %@ in the waiting queue, our agents will get back you shortly.";
+waitingQueueMessage = "You are currently %@ in the waiting queue, our agents will get back to you shortly.";
 
 /* ApplozicSwift framework's key-value pairs */
 

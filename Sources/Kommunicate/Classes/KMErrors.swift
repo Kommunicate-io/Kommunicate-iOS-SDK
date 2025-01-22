@@ -50,7 +50,7 @@ public enum APIError: LocalizedError {
     case jsonConversion
     /// Thrown when last message is not present.
     case messageNotPresent
-    /// Thown when response is not in present.
+    /// Thrown when response is not present.
     case responseNotPresent
     /// Thrown in case of a network failure.
     /// - Parameter error: The underlying error object.

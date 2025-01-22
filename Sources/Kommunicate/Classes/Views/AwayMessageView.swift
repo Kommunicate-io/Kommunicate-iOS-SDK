@@ -120,8 +120,10 @@ class AwayMessageView: UIView , Localizable {
         messageLabel.text = message
     }
     
+    /// Updates the message label to display the user's position in the waiting queue.
+    /// - Parameter count: The user's position number in the queue
     func setWaitingQueueMessage(count: Int) {
-        messageLabel.text = String(format: LocalizedText.WaitingQueueMessage, "#\(count)")
+        messageLabel.text = String(format: LocalizedText.WaitingQueueMessage, "#" + String(count))
     }
 
     func drawDottedLines() {
