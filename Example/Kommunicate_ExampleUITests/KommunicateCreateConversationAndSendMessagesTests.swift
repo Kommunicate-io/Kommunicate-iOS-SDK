@@ -142,7 +142,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         let allElements = app.otherElements.descendants(matching: .any).allElementsBoundByIndex
 
         // Print details of each element
-        print("Logging all elements under app.otherElements:")
+        print("231323KOmm: Logging all elements under app.otherElements:")
         for element in allElements {
             print("Element: \(element)")
             print("Identifier: \(element.identifier)")
@@ -155,7 +155,7 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         }
 
         if allElements.isEmpty {
-            print("No elements found under app.otherElements.")
+            print("231323KOmm:: No elements found under app.otherElements.")
         }
 
 
