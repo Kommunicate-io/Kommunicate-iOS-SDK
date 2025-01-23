@@ -6,6 +6,8 @@ platform :ios, '13.0'
 
 target 'Kommunicate_Example' do
   pod 'Kommunicate', :path => '../'
+  pod 'KommunicateChatUI-iOS-SDK', :git => 'https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git', :branch => ‘dev’
+  pod 'KommunicateCore-iOS-SDK', :git => 'https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git', :commit => ‘dev’
 
 target 'Kommunicate_Tests' do
     inherit! :search_paths 
