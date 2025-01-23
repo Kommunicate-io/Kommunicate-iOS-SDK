@@ -138,20 +138,26 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
             NSLog("Navigation Bar \(index): \(navigationBar.identifier)")
         }
 
-        let chatBar = app.otherElements[AppScreen.chatBar]
+        // Fetch all elements under app.otherElements
+        let allElements = app.otherElements.descendants(matching: .any).allElementsBoundByIndex
 
-        // Wait for chatBar to exist
-        waitFor(object: chatBar) { $0.exists }
-
-        // Print the entire hierarchy of chatBar
-        print("Hierarchy under chatBar:")
-        print(chatBar.debugDescription)
-
-        // Fetch all elements under chatBar without using `matching`
-        print("All elements under chatBar:")
-        for element in chatBar.descendants(matching: .any).allElementsBoundByIndex {
-            print(element.debugDescription)
+        // Print details of each element
+        print("Logging all elements under app.otherElements:")
+        for element in allElements {
+            print("Element: \(element)")
+            print("Identifier: \(element.identifier)")
+            print("Label: \(element.label)")
+            print("Value: \(element.value ?? "nil")")
+            print("Frame: \(element.frame)")
+            print("Is Hittable: \(element.isHittable)")
+            print("Debug Description: \(element.debugDescription)")
+            print("---------------------------")
         }
+
+        if allElements.isEmpty {
+            print("No elements found under app.otherElements.")
+        }
+
 
         
         if isScreenOnTop {

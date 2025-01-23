@@ -336,17 +336,24 @@ class KommunicateRichMessageUITests: XCTestCase {
         
         let chatBar = app.otherElements[AppScreen.chatBar]
 
-        // Wait for chatBar to exist
-        waitFor(object: chatBar) { $0.exists }
+        // Fetch all elements under app.otherElements
+        let allElements = app.otherElements.descendants(matching: .any).allElementsBoundByIndex
 
-        // Print the entire hierarchy of chatBar
-        print("Hierarchy under chatBar:")
-        print(chatBar.debugDescription)
+        // Print details of each element
+        print("Logging all elements under app.otherElements:")
+        for element in allElements {
+            print("Element: \(element)")
+            print("Identifier: \(element.identifier)")
+            print("Label: \(element.label)")
+            print("Value: \(element.value ?? "nil")")
+            print("Frame: \(element.frame)")
+            print("Is Hittable: \(element.isHittable)")
+            print("Debug Description: \(element.debugDescription)")
+            print("---------------------------")
+        }
 
-        // Fetch all elements under chatBar without using `matching`
-        print("All elements under chatBar:")
-        for element in chatBar.descendants(matching: .any).allElementsBoundByIndex {
-            print(element.debugDescription)
+        if allElements.isEmpty {
+            print("No elements found under app.otherElements.")
         }
 
         if isScreenOnTop {
