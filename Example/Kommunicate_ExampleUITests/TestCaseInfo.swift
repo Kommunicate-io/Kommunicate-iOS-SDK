@@ -29,9 +29,44 @@ enum Configuration {
 }
 
 enum loginCreadentials {
-    static let testAppID = "<Enter-Your-AppID>" /// Enter your AppID here
-    static let userID = "<Enter-Your-UserID>" /// Enter your UserID for testing
+    static var testAppID: String {
+        for bundle in Bundle.allBundles {
+            if let value = bundle.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
+                print("Found value in bundle: \(value)")
+                return value
+            }
+        }
+        return "<SET_YOUR_APP_ID>"
+    }
+    static var userID: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "ddMMMyyyy" // Format: 02Jan2025
+        let currentDate = dateFormatter.string(from: Date())
+        let prefix = "Automation"
+        return "\(currentDate)_\(prefix)"
+    }
     static let password = "password" /// Enter your password or you can use the same for all users.
+}
+
+
+enum loginWelcomeMessageCredentialsTest {
+    private static let _userID: String = generateRandomName()
+
+    static let userID: String = _userID
+
+    static let password = "password"
+
+    private static func generateRandomName() -> String {
+        let firstNames = ["John", "Emily", "Michael", "Sophia", "David"]
+        let lastNames = ["Smith", "Johnson", "Brown", "Taylor", "Anderson"]
+        let number = (0...999).randomElement()!
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "ddMMMyyyy" // Format: 02Jan2025
+        let currentDate = dateFormatter.string(from: Date())
+        let randomFirstName = firstNames.randomElement()!
+        let randomLastName = lastNames.randomElement()!
+        return "\(randomFirstName)_\(randomLastName)_\(number)_\(currentDate)"
+    }
 }
 
 enum InAppButton {
@@ -119,8 +154,8 @@ enum RichMessageButtons {
 }
 
 enum RichMessageResponseText {
-    static let welcomeMessage = "Hi, how can we help you?"
-    static let customWelcomeMessage = "Hi \(loginCreadentials.userID), how can we help you?"
+    static let welcomeMessage = "how can we help you?"
+    static let customWelcomeMessage = "Hi \(loginWelcomeMessageCredentialsTest.userID),"
     static let suggestedButtonResponse = "Cool! send me more."
     static let linkButtonResponse = "Link Button Rich Message"
     static let differentButtonResponse1 = "optional- this message will be used as acknowledgement text when user clicks the button"
@@ -168,12 +203,42 @@ enum CusotomInputField {
     static let emailFieldResponse = "Enter the email"
     static let phoneNumberFieldResponse = "Enter your phone number"
     static let otpFieldResponse = "Enter the OTP"
-    static let finalSuccessResponse = "Hi \(CusotomInputFieldReply.nameFieldResponse), your Email is \(CusotomInputFieldReply.emailFieldResponse) and your  Phone Number \(CusotomInputFieldReply.phoneNumberFieldResponse)"
+    static let finalSuccessResponse = "Hi \(CustomInputFieldReply.nameFieldResponse), your Email is \(CustomInputFieldReply.emailFieldResponse) and your Phone Number \(CustomInputFieldReply.phoneNumberFieldResponse)"
 }
 
-enum CusotomInputFieldReply {
-    static let nameFieldResponse = "<Enter Custom Name>"
-    static let emailFieldResponse = "<Enter Custom Email>"
-    static let phoneNumberFieldResponse = "<Enter Custom Phone Number>"
-    static let otpFieldResponse = "<Enter Custom OTP>"
+enum CustomInputFieldReply {
+     private static let name: String = generateRandomName()
+     private static let email: String = generateRandomEmail()
+     private static let phoneNumber: String = generateRandomPhoneNumber()
+     private static let otp: String = generateRandomOTP()
+
+     static let nameFieldResponse: String = name
+     static let emailFieldResponse: String = email
+     static let phoneNumberFieldResponse: String = phoneNumber
+     static let otpFieldResponse: String = otp
+
+     private static func generateRandomName() -> String {
+         let firstNames = ["John", "Emily", "Michael", "Sophia", "David"]
+         let lastNames = ["Smith", "Johnson", "Brown", "Taylor", "Anderson"]
+         let randomFirstName = firstNames.randomElement()!
+         let randomLastName = lastNames.randomElement()!
+         return "\(randomFirstName) \(randomLastName)"
+     }
+
+     private static func generateRandomEmail() -> String {
+         let domains = ["example.com", "mail.com", "test.com", "demo.org", "sample.net"]
+         let name = name.lowercased().replacingOccurrences(of: " ", with: ".")
+         let randomDomain = domains.randomElement()!
+         return "\(name)@\(randomDomain)"
+     }
+
+     private static func generateRandomPhoneNumber() -> String {
+         let countryCode = "+1"
+         let number = (100_000_0000...999_999_9999).randomElement()!
+         return "\(number)"
+     }
+
+     private static func generateRandomOTP() -> String {
+         return String((1000...9999).randomElement()!)
+     }
 }

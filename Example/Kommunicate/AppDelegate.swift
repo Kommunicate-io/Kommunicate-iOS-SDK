@@ -22,6 +22,12 @@
             if let regexPattern = ProcessInfo.processInfo.environment["restrictedMessageRegexPattern"] {
                 Kommunicate.defaultConfiguration.restrictedMessageRegexPattern = regexPattern
             }
+            
+            if let KMAppID = Bundle.main.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
+                NSLog("kommunicate_app_id : AppID Found in file. \(KMAppID)")
+                appId = KMAppID
+            }
+            
             setUpNavigationBarAppearance()
 
             UNUserNotificationCenter.current().delegate = self

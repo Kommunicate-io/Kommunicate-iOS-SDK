@@ -59,6 +59,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.male].tap()
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.metal].tap()
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.pop].tap()
+        app.swipeUp()
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse1]
         waitFor(object: submitResponse) { $0.exists }
@@ -84,12 +85,16 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         passwordField.tap()
         passwordField.typeText(FormData.password)
         emailField.tap()
+        app.swipeUp()
         emailField.typeText(FormData.email)
         phoneField.tap()
         phoneField.typeText(FormData.phoneNumber)
         addressField.tap()
+        app.swipeUp()
         addressField.typeText(FormData.address)
+        app.tap()
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
+        app.swipeUp()
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse2]
         waitFor(object: submitResponse) { $0.exists }
@@ -144,9 +149,9 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         let app = XCUIApplication()
         if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
             app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
-            sleep(5)
-            let loginAsVisitorButton = app.scrollViews.otherElements
-            loginAsVisitorButton.buttons[InAppButton.LaunchScreen.loginAsVisitor].tap()
+            let loginAsVisitorButton = app.buttons[InAppButton.LaunchScreen.loginAsVisitor]
+            waitFor(object: loginAsVisitorButton) { $0.exists }
+            loginAsVisitorButton.tap()
         }
         
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]

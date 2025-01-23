@@ -11,9 +11,11 @@ import XCTest
 class KommunicateLoginAndWelcomeMessage: XCTestCase {
     enum GroupData {
         static let AppId = loginCreadentials.testAppID
-        static let fillUserId = loginCreadentials.userID
-        static let fillPassword = loginCreadentials.password
+        static let fillUserId = loginWelcomeMessageCredentialsTest.userID
+        static let fillPassword = loginWelcomeMessageCredentialsTest.password
     }
+
+    var isfreshLogin: Bool = false
 
     override func setUp() {
         super.setUp()
@@ -49,6 +51,11 @@ class KommunicateLoginAndWelcomeMessage: XCTestCase {
     
     private func beforeTest_Launch_NewConversation() -> (XCUIApplication) {
         let app = XCUIApplication()
+        if !isfreshLogin && app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
+            app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
+            sleep(5)
+            login()
+        }
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]
         waitFor(object: launchConversationButton) { $0.exists }
         launchConversationButton.tap()
@@ -94,6 +101,7 @@ class KommunicateLoginAndWelcomeMessage: XCTestCase {
         passwordSecureTextField.tap()
         passwordSecureTextField.typeText(password)
         elementsQuery.buttons[InAppButton.LaunchScreen.getStarted].tap()
+        isfreshLogin = true
     }
 
     private func appIdFromEnvVars() -> String? {
