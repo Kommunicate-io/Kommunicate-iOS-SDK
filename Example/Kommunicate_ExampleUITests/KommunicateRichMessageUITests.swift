@@ -333,6 +333,21 @@ class KommunicateRichMessageUITests: XCTestCase {
         for (index, navigationBar) in allNavigationBars.enumerated() {
             NSLog("Navigation Bar \(index): \(navigationBar.identifier)")
         }
+        
+        let chatBar = app.otherElements[AppScreen.chatBar]
+
+        // Wait for chatBar to exist
+        waitFor(object: chatBar) { $0.exists }
+
+        // Print the entire hierarchy of chatBar
+        print("Hierarchy under chatBar:")
+        print(chatBar.debugDescription)
+
+        // Fetch all elements under chatBar without using `matching`
+        print("All elements under chatBar:")
+        for element in chatBar.descendants(matching: .any).allElementsBoundByIndex {
+            print(element.debugDescription)
+        }
 
         if isScreenOnTop {
             NSLog("Screen on top: \(AppScreen.myChatScreen)")
