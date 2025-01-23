@@ -85,6 +85,15 @@ jobs:
           /usr/libexec/PlistBuddy -c "Add :$KEY string $VALUE" "$PLIST_PATH"
           cat "$PLIST_PATH"
 
+      # Step 5.1: Setup Keychain
+      - name: Set up Keychain
+        run: |
+          security create-keychain -p github_actions temp-keychain
+          security default-keychain -s temp-keychain
+          security unlock-keychain -p github_actions temp-keychain
+          security set-keychain-settings -t 3600 -l ~/Library/Keychains/temp-keychain
+          security list-keychains -s temp-keychain
+
       # Step 6: Run Tests
       - name: Run XCTest
         env:
