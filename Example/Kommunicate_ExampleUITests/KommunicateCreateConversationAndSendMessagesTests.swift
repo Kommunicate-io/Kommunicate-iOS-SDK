@@ -132,6 +132,12 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
         // Check if the specific screen is on top
         let isScreenOnTop = app.navigationBars[AppScreen.myChatScreen].exists
 
+        // Print all navigation bars to identify the screen on top
+        let allNavigationBars = app.navigationBars.allElementsBoundByIndex
+        for (index, navigationBar) in allNavigationBars.enumerated() {
+            NSLog("Navigation Bar \(index): \(navigationBar.identifier)")
+        }
+
         if isScreenOnTop {
             // Perform actions only if the screen is not on top
             let createConversationButton = app.navigationBars[AppScreen.myChatScreen]

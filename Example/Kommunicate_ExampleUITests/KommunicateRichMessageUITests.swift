@@ -328,8 +328,16 @@ class KommunicateRichMessageUITests: XCTestCase {
         // Check if the specific screen is on top
         let isScreenOnTop = app.navigationBars[AppScreen.myChatScreen].exists
 
+        // Print all navigation bars to identify the screen on top
+        let allNavigationBars = app.navigationBars.allElementsBoundByIndex
+        for (index, navigationBar) in allNavigationBars.enumerated() {
+            NSLog("Navigation Bar \(index): \(navigationBar.identifier)")
+        }
+
         if isScreenOnTop {
-            // Perform actions only if the screen is not on top
+            NSLog("Screen on top: \(AppScreen.myChatScreen)")
+
+            // Perform actions only if the screen is on top
             let createConversationButton = app.navigationBars[AppScreen.myChatScreen]
             waitFor(object: createConversationButton) { $0.exists }
             createConversationButton.buttons[InAppButton.CreatingGroup.startNewIcon].tap()
@@ -340,13 +348,15 @@ class KommunicateRichMessageUITests: XCTestCase {
             inputView.tap()
             inputView.tap()
         } else {
-            
+            NSLog("Screen on top is not \(AppScreen.myChatScreen)")
+
             let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
             waitFor(object: inputView) { $0.exists }
             inputView.tap()
             inputView.tap()
             inputView.tap()
         }
+
 
         return app
     }
