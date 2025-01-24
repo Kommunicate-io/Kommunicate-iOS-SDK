@@ -21,7 +21,7 @@ jobs:
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: latest-stable # Ensure this version is available on the runner
+          xcode-version: latest-stable # Replace with the Xcode version you need
 
       # Step 3: Install dependencies (if using CocoaPods)
       - name: Install Dependencies
@@ -36,28 +36,30 @@ jobs:
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         run: |
-          set -x # Enable debug logging
+          # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
-          # Import certificate and provisioning profile
+          # import certificate and provisioning profile from secrets
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
 
-          # Create and configure keychain
+          # create temporary keychain
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # import certificate to keychain
           security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
 
-          # Apply provisioning profile
+          # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
       # Step 5: Update Info.plist Files with Secrets
-      - name: Update Info.plist in Example
+      - name: Append new key in info.plist in Example
         run: |
           PLIST_PATH="Example/Kommunicate/Info.plist"
           KEY="KOMMUNICATE_APP_ID"
@@ -66,7 +68,7 @@ jobs:
           /usr/libexec/PlistBuddy -c "Add :$KEY string $VALUE" "$PLIST_PATH"
           cat "$PLIST_PATH"
 
-      - name: Update Info.plist in Tests
+      - name: Append new key in info.plist in Tests
         run: |
           PLIST_PATH="Example/Tests/Info.plist"
           KEY="KOMMUNICATE_APP_ID"
@@ -75,7 +77,7 @@ jobs:
           /usr/libexec/PlistBuddy -c "Add :$KEY string $VALUE" "$PLIST_PATH"
           cat "$PLIST_PATH"
 
-      - name: Update Info.plist in UI Tests
+      - name: Append new key in info.plist in UI Tests
         run: |
           PLIST_PATH="Example/Kommunicate_ExampleUITests/Info.plist"
           KEY="KOMMUNICATE_APP_ID"
@@ -84,19 +86,16 @@ jobs:
           /usr/libexec/PlistBuddy -c "Add :$KEY string $VALUE" "$PLIST_PATH"
           cat "$PLIST_PATH"
 
-      # Step 6: Cache CocoaPods
-      - name: Cache Pods
-        uses: actions/cache@v3
-        with:
-          path: Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
+      # Step 5.1: Setup Keychain
+      - name: Set up Keychain
+        run: |
+          security create-keychain -p github_actions temp-keychain
+          security default-keychain -s temp-keychain
+          security unlock-keychain -p github_actions temp-keychain
+          security set-keychain-settings -t 3600 -l ~/Library/Keychains/temp-keychain
+          security list-keychains -s temp-keychain
 
-      - name: List available simulators
-        run: xcrun simctl list
-
-      # Step 7: Run Tests
+      # Step 6: Run Tests
       - name: Run XCTest
         env:
           KOMMUNICATE_APP_ID: ${{ secrets.KOMMUNICATE_APP_ID }}
@@ -104,21 +103,21 @@ jobs:
           xcodebuild test \
             -workspace Example/Kommunicate.xcworkspace \
             -scheme Kommunicate_Example \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -destination 'generic/platform=iOS' \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             -enableCodeCoverage YES \
             -derivedDataPath ./DerivedData
 
-      # Step 8: Parse and Print Test Results
-      - name: Parse Test Results
-        run: |
-          brew install chargepoint/xcparse/xcparse || echo "xcparse already installed"
-          xcparse xcresult ./DerivedData/Logs/Test/*.xcresult ./parsed-results || echo "Failed to parse test results."
-
+      # Step 7: Print Test Results
       - name: Print Test Results
         run: |
-          cat ./parsed-results/TestSummaries.plist || echo "No test results found."
+          cat ./DerivedData/Logs/Test/*.xcresult/TestSummaries.plist || echo "No test results found."
+
+      # Step 8: Debug Environment Variables (Optional)
+      - name: Debug Environment Variables
+        run: |
+          echo "Environment variables set successfully."
 
       # Step 9: Post Test Results as a PR Comment
       - name: Post Test Results to PR
@@ -127,7 +126,7 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const path = './parsed-results/TestSummaries.plist';
+            const path = './DerivedData/Logs/Test/*.xcresult/TestSummaries.plist';
             let content = 'Test results not found.';
             
             try {
