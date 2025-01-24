@@ -101,7 +101,7 @@ jobs:
           xcodebuild test \
             -workspace Example/Kommunicate.xcworkspace \
             -scheme Kommunicate_Example \
-            -destination 'platform=iOS Simulator,name=iPhone 14,OS=latest' \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             -enableCodeCoverage YES \
