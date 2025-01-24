@@ -93,6 +93,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pods-
 
+      - name: List available simulators
+        run: xcrun simctl list
+
       # Step 7: Run Tests
       - name: Run XCTest
         env:
