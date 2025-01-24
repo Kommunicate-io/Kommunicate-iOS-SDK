@@ -21,7 +21,7 @@ jobs:
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: latest-stable # Replace with the Xcode version you need
+          xcode-version: '16.1.0' # Replace with the Xcode version you need
 
       # Step 3: Install dependencies (if using CocoaPods)
       - name: Install Dependencies
