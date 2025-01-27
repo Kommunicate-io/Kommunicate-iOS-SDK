@@ -1,10 +1,11 @@
 name: iOS Automation Test Workflow
 
 on:
-  push:
-    branches:
-      - dev # Run the workflow on pushes to the dev branch
-  pull_request:
+  pull_request: # Trigger this workflow on pull request events
+    types:
+      - opened
+      - edited
+      - synchronize
 
 jobs:
   build-and-test:
@@ -17,38 +18,30 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Step 2: Fetch PR Comments
+      # Step 2: Fetch PR Branch Information
       - name: Fetch PR Comments
-        id: fetch-comments
+        id: fetch-branches
         uses: actions/github-script@v6
         with:
           script: |
-            const prNumber = context.payload.pull_request?.number || context.payload.issue?.number;
-            if (!prNumber) {
-              core.setFailed("No pull request or issue found.");
+            const prBody = context.payload.pull_request?.body;
+            if (!prBody) {
+              core.setFailed("No pull request body found.");
               return;
             }
 
-            const comments = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber,
-            });
+            console.log("Pull request body:", prBody); // Debugging: log the PR body
 
-            const templateComment = comments.data.find(comment =>
-              comment.body.includes('## Testing Branches')
-            );
+            const kmChatUIBranchMatch = prBody.match(/KM_ChatUI_Branch\s*:\s*`([^`]+)`/);
+            const kmCoreBranchMatch = prBody.match(/KM_Core_Branch\s*:\s*`([^`]+)`/);
 
-            if (!templateComment) {
-              core.setFailed("No comment with testing branches found.");
+            if (!kmChatUIBranchMatch || !kmCoreBranchMatch) {
+              core.setFailed("No branch information found in the pull request body.");
               return;
             }
 
-            const kmChatUIBranchMatch = templateComment.body.match(/KM_ChatUI_Branch\s*:\s*`([^`]+)`/);
-            const kmCoreBranchMatch = templateComment.body.match(/KM_Core_Branch\s*:\s*`([^`]+)`/);
-
-            core.setOutput("kmChatUIBranch", kmChatUIBranchMatch ? kmChatUIBranchMatch[1].trim() : "");
-            core.setOutput("kmCoreBranch", kmCoreBranchMatch ? kmCoreBranchMatch[1].trim() : "");
+            core.setOutput("kmChatUIBranch", kmChatUIBranchMatch[1].trim());
+            core.setOutput("kmCoreBranch", kmCoreBranchMatch[1].trim());
 
       # Step 3: Set up Xcode
       - name: Set up Xcode
