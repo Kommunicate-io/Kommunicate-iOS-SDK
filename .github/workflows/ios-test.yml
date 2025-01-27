@@ -52,8 +52,8 @@ jobs:
       # Step 4: Set Environment Variables
       - name: Set Environment Variables
         run: |
-          echo "KM_CHATUI_BRANCH=${{ steps.fetch-comments.outputs.kmChatUIBranch }}" >> $GITHUB_ENV
-          echo "KM_CORE_BRANCH=${{ steps.fetch-comments.outputs.kmCoreBranch }}" >> $GITHUB_ENV
+          echo "KM_CHATUI_BRANCH=${{ steps.fetch-branches.outputs.kmChatUIBranch }}" >> $GITHUB_ENV
+          echo "KM_CORE_BRANCH=${{ steps.fetch-branches.outputs.kmCoreBranch }}" >> $GITHUB_ENV
 
       # Step 5: Install dependencies
       - name: Install Dependencies
