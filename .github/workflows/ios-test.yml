@@ -28,38 +28,38 @@ jobs:
         run: |
           pod install --project-directory=Example
 
-      # Step 4: Install Certificates and Provisioning Profiles
-      - name: Install the Apple certificate and provisioning profile
+      # Step 4: Install Certificates, Provisioning Profiles, and Set Up Keychain
+      - name: Install Apple Certificate, Provisioning Profile, and Set Up Keychain
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         run: |
-          # create variables
+          # Define file paths
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
-          # import certificate and provisioning profile from secrets
+          # Decode the certificate and provisioning profile from secrets
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
 
-          # create temporary keychain
+          # Create and configure a temporary keychain
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security set-keychain-settings -lut 3600 $KEYCHAIN_PATH
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-
-          # import certificate to keychain
-          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
 
-          # apply provisioning profile
+          # Import the certificate into the keychain
+          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+
+          # Copy the provisioning profile to the expected location
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
       # Step 5: Update Info.plist Files with Secrets
-      - name: Append new key in info.plist in Example
+      - name: Append new key in Info.plist for Example
         run: |
           PLIST_PATH="Example/Kommunicate/Info.plist"
           KEY="KOMMUNICATE_APP_ID"
@@ -68,7 +68,7 @@ jobs:
           /usr/libexec/PlistBuddy -c "Add :$KEY string $VALUE" "$PLIST_PATH"
           cat "$PLIST_PATH"
 
-      - name: Append new key in info.plist in Tests
+      - name: Append new key in Info.plist for Tests
         run: |
           PLIST_PATH="Example/Tests/Info.plist"
           KEY="KOMMUNICATE_APP_ID"
@@ -77,7 +77,7 @@ jobs:
           /usr/libexec/PlistBuddy -c "Add :$KEY string $VALUE" "$PLIST_PATH"
           cat "$PLIST_PATH"
 
-      - name: Append new key in info.plist in UI Tests
+      - name: Append new key in Info.plist for UI Tests
         run: |
           PLIST_PATH="Example/Kommunicate_ExampleUITests/Info.plist"
           KEY="KOMMUNICATE_APP_ID"
@@ -85,15 +85,6 @@ jobs:
           /usr/libexec/PlistBuddy -c "Set :$KEY $VALUE" "$PLIST_PATH" || \
           /usr/libexec/PlistBuddy -c "Add :$KEY string $VALUE" "$PLIST_PATH"
           cat "$PLIST_PATH"
-
-      # Step 5.1: Setup Keychain
-      - name: Set up Keychain
-        run: |
-          security create-keychain -p github_actions temp-keychain
-          security default-keychain -s temp-keychain
-          security unlock-keychain -p github_actions temp-keychain
-          security set-keychain-settings -t 3600 -l ~/Library/Keychains/temp-keychain
-          security list-keychains -s temp-keychain
 
       # Step 6: Run Tests
       - name: Run XCTest
@@ -128,20 +119,20 @@ jobs:
             const fs = require('fs');
             const path = './DerivedData/Logs/Test/*.xcresult/TestSummaries.plist';
             let content = 'Test results not found.';
-            
+
             try {
               content = fs.readFileSync(path, 'utf8');
             } catch (err) {
               console.log('Error reading test results:', err);
             }
-            
+
             const comment = `
               ## iOS Automation Test Results
               \`\`\`
               ${content.substring(0, 65000)} <!-- GitHub has a 65k char limit -->
               \`\`\`
             `;
-            
+
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
