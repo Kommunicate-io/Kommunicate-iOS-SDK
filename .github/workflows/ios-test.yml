@@ -96,6 +96,7 @@ jobs:
           TEAM_ID: ${{ secrets.TEAM_ID }}  # Apple Developer Team ID
         run: |
           # Unlock the keychain for signing during tests
+          echo "Unlocking Keychain at $KEYCHAIN_PATH"
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           
           # Run the tests, ensuring code signing is handled
