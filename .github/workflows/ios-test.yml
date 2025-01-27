@@ -86,17 +86,26 @@ jobs:
           /usr/libexec/PlistBuddy -c "Add :$KEY string $VALUE" "$PLIST_PATH"
           cat "$PLIST_PATH"
 
-      # Step 6: Run Tests
-      - name: Run XCTest
+      # Step 6: Run Tests with Keychain Management
+      - name: Run XCTest with Keychain
         env:
           KOMMUNICATE_APP_ID: ${{ secrets.KOMMUNICATE_APP_ID }}
+          KEYCHAIN_PATH: $RUNNER_TEMP/app-signing.keychain-db  # Path to the keychain
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}  # Keychain password
         run: |
+          # Unlock the keychain for signing during tests
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          
+          # Run the tests, ensuring code signing is handled
           xcodebuild test \
             -workspace Example/Kommunicate.xcworkspace \
             -scheme Kommunicate_Example \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="iPhone Developer" \
+            CODE_SIGNING_ALLOWED=YES \
+            CODE_SIGNING_REQUIRED=YES \
+            DEVELOPMENT_TEAM=YOUR_TEAM_ID \
+            KEYCHAIN="$KEYCHAIN_PATH" \
             -enableCodeCoverage YES \
             -derivedDataPath ./DerivedData
 
