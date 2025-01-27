@@ -17,13 +17,52 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up Xcode
+      # Step 2: Fetch PR Comments
+      - name: Fetch PR Comments
+        id: fetch-comments
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = context.payload.pull_request?.number || context.payload.issue?.number;
+            if (!prNumber) {
+              core.setFailed("No pull request or issue found.");
+              return;
+            }
+
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+            });
+
+            const templateComment = comments.data.find(comment =>
+              comment.body.includes('## Testing Branches')
+            );
+
+            if (!templateComment) {
+              core.setFailed("No comment with testing branches found.");
+              return;
+            }
+
+            const kmChatUIBranchMatch = templateComment.body.match(/KM_ChatUI_Branch\s*:\s*`([^`]+)`/);
+            const kmCoreBranchMatch = templateComment.body.match(/KM_Core_Branch\s*:\s*`([^`]+)`/);
+
+            core.setOutput("kmChatUIBranch", kmChatUIBranchMatch ? kmChatUIBranchMatch[1].trim() : "");
+            core.setOutput("kmCoreBranch", kmCoreBranchMatch ? kmCoreBranchMatch[1].trim() : "");
+
+      # Step 3: Set up Xcode
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '16.1.0' # Replace with the Xcode version you need
+          xcode-version: '16.1.0'
 
-      # Step 3: Install dependencies (if using CocoaPods)
+      # Step 4: Set Environment Variables
+      - name: Set Environment Variables
+        run: |
+          echo "KM_CHATUI_BRANCH=${{ steps.fetch-comments.outputs.kmChatUIBranch }}" >> $GITHUB_ENV
+          echo "KM_CORE_BRANCH=${{ steps.fetch-comments.outputs.kmCoreBranch }}" >> $GITHUB_ENV
+
+      # Step 5: Install dependencies
       - name: Install Dependencies
         run: |
           pod install --project-directory=Example

@@ -5,9 +5,14 @@ use_frameworks!
 platform :ios, '13.0'
 
 target 'Kommunicate_Example' do
-  pod 'Kommunicate', :path => '../'
-  pod 'KommunicateChatUI-iOS-SDK', :git => 'https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git', :branch => ‘dev’
-  pod 'KommunicateCore-iOS-SDK', :git => 'https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git', :commit => ‘dev’
+  
+  if ENV['GITHUB_ACTIONS'] == 'true'
+    pod 'Kommunicate', :path => '../'
+    pod 'KommunicateChatUI', :git => 'https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git', :branch => ENV['KM_CHATUI_BRANCH']
+    pod 'KommunicateCore', :git => 'https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git', :branch => ENV['KM_CORE_BRANCH']
+  else
+    pod 'Kommunicate', :path => '../'
+  end
 
 target 'Kommunicate_Tests' do
     inherit! :search_paths 
