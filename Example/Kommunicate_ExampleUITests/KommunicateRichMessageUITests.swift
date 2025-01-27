@@ -240,6 +240,8 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.buttons[InAppButton.ConversationScreen.send].tap()
         sleep(3)
         app.swipeUp()
+        app.swipeUp()
+        sleep(3)
         /// Final Response
         let customInputFieldResponse5 = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[CusotomInputField.finalSuccessResponse]

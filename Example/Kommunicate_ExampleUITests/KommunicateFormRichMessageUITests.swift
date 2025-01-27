@@ -60,6 +60,8 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.metal].tap()
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.pop].tap()
         app.swipeUp()
+        app.swipeUp()
+        sleep(2)
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse1]
         waitFor(object: submitResponse) { $0.exists }
@@ -124,6 +126,8 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         sleep(1)
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.male].tap()
+        app.swipeUp()
+        sleep(2)
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse1]
         waitFor(object: submitResponse) { $0.exists }
