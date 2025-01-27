@@ -40,6 +40,7 @@ jobs:
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          echo "Keychain Path: $KEYCHAIN_PATH"
 
           # Decode the certificate and provisioning profile from secrets
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
@@ -57,10 +58,6 @@ jobs:
           # Copy the provisioning profile to the expected location
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-
-      - name: Debug Keychain Path
-        run: |
-          echo "Keychain Path: $KEYCHAIN_PATH"
 
       # Step 5: Update Info.plist Files with Secrets
       - name: Append new key in Info.plist for Example
