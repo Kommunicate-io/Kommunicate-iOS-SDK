@@ -8,8 +8,8 @@ target 'Kommunicate_Example' do
   
   if ENV['GITHUB_ACTIONS'] == 'true'
     pod 'Kommunicate', :path => '../'
-    pod 'KommunicateChatUI', :git => 'https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git', :branch => ENV['KM_CHATUI_BRANCH']
-    pod 'KommunicateCore', :git => 'https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git', :branch => ENV['KM_CORE_BRANCH']
+    pod 'KommunicateChatUI-iOS-SDK', :git => 'https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git', :branch => ENV['KM_CHATUI_BRANCH']
+    pod 'KommunicateCore-iOS-SDK', :git => 'https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git', :branch => ENV['KM_CORE_BRANCH']
   else
     pod 'Kommunicate', :path => '../'
   end
