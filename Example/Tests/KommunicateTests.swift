@@ -117,7 +117,7 @@ class KommunicateTests: XCTestCase {
         if KommunicateMock.isLoggedIn {
             createConversation(kmConversation, expectation: expectation)
         } else {
-            KommunicateMock.registerUserAsVistor { response, error in
+            KommunicateMock.registerUserAsVisitor { response, error in
                 if let error = error {
                     XCTFail("User registration failed: \(error.localizedDescription)")
                     expectation.fulfill()
@@ -159,7 +159,7 @@ class KommunicateTests: XCTestCase {
         if Kommunicate.isLoggedIn {
             launchConversation(kmConversation, expectation: expectation)
         } else {
-            KommunicateMock.registerUserAsVistor { response, error in
+            KommunicateMock.registerUserAsVisitor { response, error in
                 if let error = error {
                     XCTFail("User registration failed: \(error.localizedDescription)")
                     expectation.fulfill()
@@ -229,7 +229,7 @@ class KommunicateTests: XCTestCase {
                 .withConversationTitle("Automation Conversation")
                 .build()
             
-            KommunicateMock.createConversation(conversation: kmConversation) { [weak self] result in
+            KommunicateMock.createConversation(conversation: kmConversation) { result in
                 switch result {
                 case .success(let conversationId):
                     KommunicateMock.conversationID = conversationId
@@ -279,7 +279,7 @@ class KommunicateTests: XCTestCase {
                 .withConversationTitle("Automation Conversation")
                 .build()
             
-            KommunicateMock.createConversation(conversation: kmConversation) { [weak self] result in
+            KommunicateMock.createConversation(conversation: kmConversation) { result in
                 switch result {
                 case .success(let conversationId):
                     KommunicateMock.conversationID = conversationId
@@ -329,7 +329,7 @@ class KommunicateTests: XCTestCase {
                 .withConversationTitle("Automation Conversation")
                 .build()
             
-            KommunicateMock.createConversation(conversation: kmConversation) { [weak self] result in
+            KommunicateMock.createConversation(conversation: kmConversation) { result in
                 switch result {
                 case .success(let conversationId):
                     KommunicateMock.conversationID = conversationId
@@ -358,7 +358,7 @@ class KommunicateTests: XCTestCase {
         if KommunicateMock.isLoggedIn {
             createConversationAndSendMessage(kmConversation, expectation: expectation)
         } else {
-            KommunicateMock.registerUserAsVistor { response, error in
+            KommunicateMock.registerUserAsVisitor { response, error in
                 if let error = error {
                     XCTFail("User registration failed: \(error.localizedDescription)")
                     expectation.fulfill()
@@ -471,7 +471,7 @@ class KommunicateTests: XCTestCase {
         if KommunicateMock.isLoggedIn {
             createAndUpdateConversation(kmConversation, metaData: metaData, expectation: expectation)
         } else {
-            KommunicateMock.registerUserAsVistor { response, error in
+            KommunicateMock.registerUserAsVisitor { response, error in
                 if let error = error {
                     XCTFail("User registration failed: \(error.localizedDescription)")
                     expectation.fulfill()
@@ -527,7 +527,7 @@ class KommunicateTests: XCTestCase {
         if KommunicateMock.isLoggedIn {
             createAndValidateConversation(kmConversation, initialConversationId: nil, expectation: expectation)
         } else {
-            KommunicateMock.registerUserAsVistor { response, error in
+            KommunicateMock.registerUserAsVisitor { response, error in
                 if let error = error {
                     XCTFail("User registration failed: \(error.localizedDescription)")
                     expectation.fulfill()
