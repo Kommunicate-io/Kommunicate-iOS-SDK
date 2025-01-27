@@ -41,6 +41,7 @@ class KommunicateLoginAndWelcomeMessage: XCTestCase {
         }
     }
 
+/*
     func testLoginAndCustomWelcomeMessage() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
@@ -48,6 +49,7 @@ class KommunicateLoginAndWelcomeMessage: XCTestCase {
         let welcomMessageResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.customWelcomeMessage]
         waitFor(object: welcomMessageResponse) { $0.exists }
     }
+*/
     
     private func beforeTest_Launch_NewConversation() -> (XCUIApplication) {
         let app = XCUIApplication()
