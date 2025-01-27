@@ -40,7 +40,6 @@ jobs:
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-          echo "Keychain Path: $KEYCHAIN_PATH"
 
           # Decode the certificate and provisioning profile from secrets
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
@@ -91,12 +90,11 @@ jobs:
       - name: Run XCTest with Keychain
         env:
           KOMMUNICATE_APP_ID: ${{ secrets.KOMMUNICATE_APP_ID }}
-          KEYCHAIN_PATH: $RUNNER_TEMP/app-signing.keychain-db  # Path to the keychain
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}  # Keychain password
           TEAM_ID: ${{ secrets.TEAM_ID }}  # Apple Developer Team ID
         run: |
           # Unlock the keychain for signing during tests
-          echo "Unlocking Keychain at $KEYCHAIN_PATH"
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           
           # Run the tests, ensuring code signing is handled
