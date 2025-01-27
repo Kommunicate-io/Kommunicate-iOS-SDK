@@ -32,7 +32,6 @@ enum loginCreadentials {
     static var testAppID: String {
         for bundle in Bundle.allBundles {
             if let value = bundle.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
-                print("Found value in bundle: \(value)")
                 return value
             }
         }

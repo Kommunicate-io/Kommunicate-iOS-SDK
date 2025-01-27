@@ -49,6 +49,9 @@ class KommunicateTests: XCTestCase {
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        if let KMAppID = Bundle.main.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
+            KommunicateMock.setup(applicationId: KMAppID)
+        }
     }
 
     func testRandomId() {
@@ -153,7 +156,7 @@ class KommunicateTests: XCTestCase {
             .withConversationTitle("Automation Conversation")
             .build()
         
-        if KommunicateMock.isLoggedIn {
+        if Kommunicate.isLoggedIn {
             launchConversation(kmConversation, expectation: expectation)
         } else {
             KommunicateMock.registerUserAsVistor { response, error in
