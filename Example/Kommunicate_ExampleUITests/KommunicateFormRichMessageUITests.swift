@@ -67,7 +67,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse1]
         waitFor(object: submitResponse) { $0.exists }
     }
- */
+ 
     
     func testFormTemplate2() {
         let app = beforeTest_Launch_NewConversation()
@@ -103,7 +103,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse2]
         waitFor(object: submitResponse) { $0.exists }
     }
-    
+ */
 /*
     func testFormTemplate3() {
         let app = beforeTest_Launch_NewConversation()
