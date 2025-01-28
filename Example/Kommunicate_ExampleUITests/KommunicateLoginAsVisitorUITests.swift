@@ -36,7 +36,7 @@ class KommunicateLoginAsVisitorUITests: XCTestCase {
 
     func testLoginAsVisitorAndWelcomeMessage() {
         let app = createConversation_Using_LoginAsVisitorButton()
-        
+        sleep(5)
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         let welcomMessageResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.welcomeMessage]
         waitFor(object: welcomMessageResponse) { $0.exists }

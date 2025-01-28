@@ -11,7 +11,7 @@ class KommunicateTests: XCTestCase {
         static var conversationID: String?
 
         override class var isLoggedIn: Bool {
-            return loggedIn
+            return Kommunicate.isLoggedIn
         }
 
         override class func showConversations(from _: UIViewController) {
@@ -49,8 +49,11 @@ class KommunicateTests: XCTestCase {
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        if let KMAppID = Bundle.main.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
-            KommunicateMock.setup(applicationId: KMAppID)
+        for bundle in Bundle.allBundles {
+            if let KMAppID = bundle.object(forInfoDictionaryKey:  "KOMMUNICATE_APP_ID") as? String {
+                KommunicateMock.setup(applicationId: KMAppID)
+                Kommunicate.setup(applicationId: KMAppID)
+            }
         }
     }
 
@@ -68,7 +71,6 @@ class KommunicateTests: XCTestCase {
         let dummyViewController = UIViewController()
         for bundle in Bundle.allBundles {
              if let value = bundle.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
-                 NSLog("kommunicate_app_id : AppID Found in file. \(value)")
                  KommunicateMock.setup(applicationId: value)
              }
          }
@@ -108,13 +110,20 @@ class KommunicateTests: XCTestCase {
         KommunicateMock.applozicClientType = ApplozicClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
         
+        for bundle in Bundle.allBundles {
+             if let value = bundle.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
+                 NSLog("kommunicate_app_id : AppID Found in file. \(value)")
+                 KommunicateMock.setup(applicationId: value)
+             }
+        }
+        
         let kmConversation = KMConversationBuilder()
             .useLastConversation(false)
             .withMetaData(["TestMetadata": "SampleValue"])
             .withConversationTitle("Automation Conversation")
             .build()
         
-        if KommunicateMock.isLoggedIn {
+        if Kommunicate.isLoggedIn {
             createConversation(kmConversation, expectation: expectation)
         } else {
             KommunicateMock.registerUserAsVisitor { response, error in
@@ -148,6 +157,13 @@ class KommunicateTests: XCTestCase {
     func testCreateAndLaunchConversationWithCustomData() {
         KommunicateMock.applozicClientType = ApplozicClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
+        
+        for bundle in Bundle.allBundles {
+             if let value = bundle.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
+                 NSLog("kommunicate_app_id : AppID Found in file. \(value)")
+                 KommunicateMock.setup(applicationId: value)
+             }
+        }
         
         let kmConversation = KMConversationBuilder()
             .useLastConversation(false)

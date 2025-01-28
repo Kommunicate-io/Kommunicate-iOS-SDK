@@ -133,7 +133,7 @@ jobs:
           xcodebuild test \
             -workspace Example/Kommunicate.xcworkspace \
             -scheme Kommunicate_Example \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
+            -destination 'platform=iOS Simulator,name=iPhone 16 Pro Max,OS=18.1' \
             -enableCodeCoverage YES \
             -derivedDataPath ./DerivedData \
             CODE_SIGN_IDENTITY="iPhone Developer" \

@@ -53,6 +53,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         waitFor(object: nameField) { $0.exists }
         nameField.tap()
         nameField.typeText(FormData.name)
+        app.swipeUp()
         passwordField.tap()
         passwordField.typeText(FormData.password)
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
@@ -60,8 +61,6 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.metal].tap()
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.pop].tap()
         app.swipeUp()
-        app.swipeUp()
-        sleep(2)
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse1]
         waitFor(object: submitResponse) { $0.exists }
@@ -85,19 +84,20 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         waitFor(object: nameField) { $0.exists }
         nameField.tap()
         nameField.typeText(FormData.name)
+        app.swipeUp()
         passwordField.tap()
         passwordField.typeText(FormData.password)
-        emailField.tap()
         app.swipeUp()
+        emailField.tap()
         emailField.typeText(FormData.email)
+        app.swipeUp()
         phoneField.tap()
         phoneField.typeText(FormData.phoneNumber)
+        app.swipeUp()
         addressField.tap()
-        app.swipeUp()
         addressField.typeText(FormData.address)
-        app.tap()
-        let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         app.swipeUp()
+        let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse2]
         waitFor(object: submitResponse) { $0.exists }
@@ -108,6 +108,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         waitFor(object: app) { $0.exists }
         sleep(4)
         app.typeText(GroupData.typeText3) // typing message
+        sleep(2)
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         let formFirstResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.formFirstResponse]
@@ -117,18 +118,18 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         waitFor(object: nameField) { $0.exists }
         nameField.tap()
         nameField.typeText(FormData.name)
+        app.swipeUp()
         passwordField.tap()
         passwordField.typeText(FormData.password)
-        
+        app.swipeUp()
         let dateField = app.tables.textFields[FormIdentifier.dateTime]
         dateField.tap()
         sleep(1)
         app.buttons[InAppButton.ConversationScreen.doneButton].tap()
         sleep(1)
+        app.swipeUp()
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.male].tap()
-        app.swipeUp()
-        sleep(2)
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse1]
         waitFor(object: submitResponse) { $0.exists }
