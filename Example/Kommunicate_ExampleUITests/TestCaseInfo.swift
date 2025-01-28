@@ -197,7 +197,7 @@ struct AutoSuggestionReply {
     }
 }
 
-enum CusotomInputField {
+enum CustomInputField {
     static let nameFieldResponse = "Hey, what's your name?"
     static let emailFieldResponse = "Enter the email"
     static let phoneNumberFieldResponse = "Enter your phone number"
