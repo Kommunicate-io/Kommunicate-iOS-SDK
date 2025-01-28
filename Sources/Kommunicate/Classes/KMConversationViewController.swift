@@ -572,8 +572,8 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             if let channelId = weakSelf.viewModel.channelKey {
                 KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.restartConversationClick, data: ["conversationId":channelId])
             }
-            guard let zendeskAcckountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
-                  !zendeskAcckountKey.isEmpty else { return }
+            guard let zendeskAccountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
+                  !zendeskAccountKey.isEmpty else { return }
             #if canImport(ChatProvidersSDK)
                 // if zendesk is integrated, create a new conversation instead of restarting the conversation
                 let zendeskHandler = KMZendeskChatHandler.shared
