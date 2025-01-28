@@ -56,6 +56,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         sleep(3) /// To wait for response
         app.swipeUp() /// To get to bottom of the screen.
+        sleep(2)
         let suggestedReplyFirstResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.sugggestedRepliesFirstMessage]
         waitFor(object: suggestedReplyFirstResponse) { $0.exists }
@@ -239,6 +240,8 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.typeText(CustomInputFieldReply.otpFieldResponse)
         app.buttons[InAppButton.ConversationScreen.send].tap()
         /// Final Response
+        app.tap()
+        sleep(5)
         app.swipeUp()
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         let customInputFieldResponse5 = innerchatscreentableviewTable.textViews[CusotomInputField.finalSuccessResponse]
