@@ -56,11 +56,11 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         app.swipeUp()
         passwordField.tap()
         passwordField.typeText(FormData.password)
+        app.swipeUp()
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.male].tap()
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.metal].tap()
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.pop].tap()
-        app.swipeUp()
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse1]
         waitFor(object: submitResponse) { $0.exists }

@@ -239,8 +239,9 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.typeText(CustomInputFieldReply.otpFieldResponse)
         app.buttons[InAppButton.ConversationScreen.send].tap()
         /// Final Response
-        let customInputFieldResponse5 = app.tables[AppScreen.innerChatScreenTableView]
-            .textViews[CusotomInputField.finalSuccessResponse]
+        app.swipeUp()
+        let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
+        let customInputFieldResponse5 = innerchatscreentableviewTable.textViews[CusotomInputField.finalSuccessResponse]
         waitFor(object: customInputFieldResponse5) { $0.exists }
     }
     

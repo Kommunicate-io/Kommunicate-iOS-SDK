@@ -7,11 +7,11 @@ class KommunicateTests: XCTestCase {
     class KommunicateMock: Kommunicate {
         static var showConversationsCalled = false
         static var createConversationsCalled = false
-        static var loggedIn = true
+        static var loggedIn = false
         static var conversationID: String?
 
         override class var isLoggedIn: Bool {
-            return Kommunicate.isLoggedIn
+            return loggedIn
         }
 
         override class func showConversations(from _: UIViewController) {
@@ -123,7 +123,7 @@ class KommunicateTests: XCTestCase {
             .withConversationTitle("Automation Conversation")
             .build()
         
-        if Kommunicate.isLoggedIn {
+        if KommunicateMock.isLoggedIn {
             createConversation(kmConversation, expectation: expectation)
         } else {
             KommunicateMock.registerUserAsVisitor { response, error in
@@ -160,7 +160,6 @@ class KommunicateTests: XCTestCase {
         
         for bundle in Bundle.allBundles {
              if let value = bundle.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
-                 NSLog("kommunicate_app_id : AppID Found in file. \(value)")
                  KommunicateMock.setup(applicationId: value)
              }
         }
@@ -172,7 +171,7 @@ class KommunicateTests: XCTestCase {
             .withConversationTitle("Automation Conversation")
             .build()
         
-        if Kommunicate.isLoggedIn {
+        if KommunicateMock.isLoggedIn {
             launchConversation(kmConversation, expectation: expectation)
         } else {
             KommunicateMock.registerUserAsVisitor { response, error in
