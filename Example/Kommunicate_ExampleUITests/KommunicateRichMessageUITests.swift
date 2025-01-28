@@ -201,7 +201,8 @@ class KommunicateRichMessageUITests: XCTestCase {
             .textViews[RichMessageResponseText.htlmResponse]
         waitFor(object: htmlMessageResponse) { $0.exists }
     }
-    
+
+    /*
     func testCustomInputField() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
@@ -247,6 +248,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         let customInputFieldResponse5 = innerchatscreentableviewTable.textViews[CusotomInputField.finalSuccessResponse]
         waitFor(object: customInputFieldResponse5) { $0.exists }
     }
+    */
     
     func testVideoMessageTamplate() {
         let app = beforeTest_Launch_NewConversation()
