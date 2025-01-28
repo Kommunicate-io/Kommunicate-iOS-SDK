@@ -578,7 +578,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
                 // if zendesk is integrated, create a new conversation instead of restarting the conversation
                 let zendeskHandler = KMZendeskChatHandler.shared
                 zendeskHandler.resetConfiguration()
-                zendeskHandler.initiateZendesk(key: zendeskAcckountKey)
+                zendeskHandler.initiateZendesk(key: zendeskAccountKey)
             #endif
             weakSelf.loadingStarted()
             // Create a new conversation 
