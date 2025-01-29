@@ -245,14 +245,10 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.buttons[InAppButton.ConversationScreen.send].tap()
         
         /// Final Response
-        app.tap()
         sleep(5)
+        app.tap()
         app.swipeUp()
-        let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
-        let customInputFieldResponse5 = innerchatscreentableviewTable.textViews[CustomInputField.finalSuccessResponse]
-        while !customInputFieldResponse5.exists {
-            app.swipeUp()
-        }
+        let customInputFieldResponse5 = app.tables[AppScreen.innerChatScreenTableView].textViews[CustomInputField.finalSuccessResponse]
         waitFor(object: customInputFieldResponse5) { $0.exists }
     }
     
