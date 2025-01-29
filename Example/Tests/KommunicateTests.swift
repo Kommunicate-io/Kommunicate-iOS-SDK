@@ -7,7 +7,7 @@ class KommunicateTests: XCTestCase {
     class KommunicateMock: Kommunicate {
         static var showConversationsCalled = false
         static var createConversationsCalled = false
-        static var loggedIn = true
+        static var loggedIn = false
         static var conversationID: String?
 
         override class var isLoggedIn: Bool {
@@ -49,6 +49,12 @@ class KommunicateTests: XCTestCase {
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        for bundle in Bundle.allBundles {
+            if let KMAppID = bundle.object(forInfoDictionaryKey:  "KOMMUNICATE_APP_ID") as? String {
+                KommunicateMock.setup(applicationId: KMAppID)
+                Kommunicate.setup(applicationId: KMAppID)
+            }
+        }
     }
 
     func testRandomId() {
@@ -63,37 +69,53 @@ class KommunicateTests: XCTestCase {
 
     func testCreateAndlaunchConversation() {
         let dummyViewController = UIViewController()
-        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        for bundle in Bundle.allBundles {
+             if let value = bundle.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
+                 KommunicateMock.setup(applicationId: value)
+             }
+         }
 
-        // Test when single thread is present, method to create a new conversation
-        // gets called.
-        KommunicateMock.createAndShowConversation(from: dummyViewController, completion: {
-            _ in
-            XCTAssertTrue(KommunicateMock.createConversationsCalled)
-            XCTAssertFalse(KommunicateMock.showConversationsCalled)
-        })
+         KommunicateMock.registerUserAsVisitor { response, error in
+             if let error = error {
+                 XCTFail("User registration failed: \(error.localizedDescription)")
+                 return
+             }
+             KommunicateMock.loggedIn = true
+             KommunicateMock.createAndShowConversation(from: dummyViewController, completion: {
+                 _ in
+                 XCTAssertTrue(KommunicateMock.createConversationsCalled)
+                 XCTAssertFalse(KommunicateMock.showConversationsCalled)
+             })
 
-        // Test when multiple threads are present, method to show conversation list
-        // gets called.
-        ApplozicClientMock.messageCount = 2
-        KommunicateMock.createAndShowConversation(from: dummyViewController, completion: {
-            _ in
-            XCTAssertTrue(KommunicateMock.showConversationsCalled)
-            XCTAssertFalse(KommunicateMock.createConversationsCalled)
-        })
+             // Test when multiple threads are present, method to show conversation list
+             // gets called.
+             ApplozicClientMock.messageCount = 2
+             KommunicateMock.createAndShowConversation(from: dummyViewController, completion: {
+                 _ in
+                 XCTAssertTrue(KommunicateMock.showConversationsCalled)
+                 XCTAssertFalse(KommunicateMock.createConversationsCalled)
+             })
 
-        // Check when a user is not logged in, it returns an error
-        KommunicateMock.loggedIn = false
-        KommunicateMock.createAndShowConversation(from: dummyViewController, completion: {
-            error in
-            XCTAssertNotNil(error)
-            XCTAssertEqual(error!, .notLoggedIn)
-        })
+             // Check when a user is not logged in, it returns an error
+             KommunicateMock.loggedIn = false
+             KommunicateMock.createAndShowConversation(from: dummyViewController, completion: {
+                 error in
+                 XCTAssertNotNil(error)
+                 XCTAssertEqual(error!, .notLoggedIn)
+             })
+         }
     }
     
     func testCreateConversationWithCustomData() {
         KommunicateMock.applozicClientType = ApplozicClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
+        
+        for bundle in Bundle.allBundles {
+             if let value = bundle.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
+                 NSLog("kommunicate_app_id : AppID Found in file. \(value)")
+                 KommunicateMock.setup(applicationId: value)
+             }
+        }
         
         let kmConversation = KMConversationBuilder()
             .useLastConversation(false)
@@ -104,7 +126,7 @@ class KommunicateTests: XCTestCase {
         if KommunicateMock.isLoggedIn {
             createConversation(kmConversation, expectation: expectation)
         } else {
-            KommunicateMock.registerUserAsVistor { response, error in
+            KommunicateMock.registerUserAsVisitor { response, error in
                 if let error = error {
                     XCTFail("User registration failed: \(error.localizedDescription)")
                     expectation.fulfill()
@@ -136,6 +158,12 @@ class KommunicateTests: XCTestCase {
         KommunicateMock.applozicClientType = ApplozicClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
         
+        for bundle in Bundle.allBundles {
+             if let value = bundle.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
+                 KommunicateMock.setup(applicationId: value)
+             }
+        }
+        
         let kmConversation = KMConversationBuilder()
             .useLastConversation(false)
             .setPreFilledMessage("This is a sample prefilled message.")
@@ -146,7 +174,7 @@ class KommunicateTests: XCTestCase {
         if KommunicateMock.isLoggedIn {
             launchConversation(kmConversation, expectation: expectation)
         } else {
-            KommunicateMock.registerUserAsVistor { response, error in
+            KommunicateMock.registerUserAsVisitor { response, error in
                 if let error = error {
                     XCTFail("User registration failed: \(error.localizedDescription)")
                     expectation.fulfill()
@@ -216,7 +244,7 @@ class KommunicateTests: XCTestCase {
                 .withConversationTitle("Automation Conversation")
                 .build()
             
-            KommunicateMock.createConversation(conversation: kmConversation) { [weak self] result in
+            KommunicateMock.createConversation(conversation: kmConversation) { result in
                 switch result {
                 case .success(let conversationId):
                     KommunicateMock.conversationID = conversationId
@@ -266,7 +294,7 @@ class KommunicateTests: XCTestCase {
                 .withConversationTitle("Automation Conversation")
                 .build()
             
-            KommunicateMock.createConversation(conversation: kmConversation) { [weak self] result in
+            KommunicateMock.createConversation(conversation: kmConversation) { result in
                 switch result {
                 case .success(let conversationId):
                     KommunicateMock.conversationID = conversationId
@@ -316,7 +344,7 @@ class KommunicateTests: XCTestCase {
                 .withConversationTitle("Automation Conversation")
                 .build()
             
-            KommunicateMock.createConversation(conversation: kmConversation) { [weak self] result in
+            KommunicateMock.createConversation(conversation: kmConversation) { result in
                 switch result {
                 case .success(let conversationId):
                     KommunicateMock.conversationID = conversationId
@@ -345,7 +373,7 @@ class KommunicateTests: XCTestCase {
         if KommunicateMock.isLoggedIn {
             createConversationAndSendMessage(kmConversation, expectation: expectation)
         } else {
-            KommunicateMock.registerUserAsVistor { response, error in
+            KommunicateMock.registerUserAsVisitor { response, error in
                 if let error = error {
                     XCTFail("User registration failed: \(error.localizedDescription)")
                     expectation.fulfill()
@@ -458,7 +486,7 @@ class KommunicateTests: XCTestCase {
         if KommunicateMock.isLoggedIn {
             createAndUpdateConversation(kmConversation, metaData: metaData, expectation: expectation)
         } else {
-            KommunicateMock.registerUserAsVistor { response, error in
+            KommunicateMock.registerUserAsVisitor { response, error in
                 if let error = error {
                     XCTFail("User registration failed: \(error.localizedDescription)")
                     expectation.fulfill()
@@ -514,7 +542,7 @@ class KommunicateTests: XCTestCase {
         if KommunicateMock.isLoggedIn {
             createAndValidateConversation(kmConversation, initialConversationId: nil, expectation: expectation)
         } else {
-            KommunicateMock.registerUserAsVistor { response, error in
+            KommunicateMock.registerUserAsVisitor { response, error in
                 if let error = error {
                     XCTFail("User registration failed: \(error.localizedDescription)")
                     expectation.fulfill()

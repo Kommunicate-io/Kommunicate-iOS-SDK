@@ -56,6 +56,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         sleep(3) /// To wait for response
         app.swipeUp() /// To get to bottom of the screen.
+        sleep(2)
         let suggestedReplyFirstResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.sugggestedRepliesFirstMessage]
         waitFor(object: suggestedReplyFirstResponse) { $0.exists }
@@ -200,7 +201,7 @@ class KommunicateRichMessageUITests: XCTestCase {
             .textViews[RichMessageResponseText.htlmResponse]
         waitFor(object: htmlMessageResponse) { $0.exists }
     }
-    
+
     func testCustomInputField() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
@@ -208,41 +209,46 @@ class KommunicateRichMessageUITests: XCTestCase {
         app.buttons[InAppButton.ConversationScreen.send].tap()
         sleep(3)
         app.swipeUp()
+        
         /// Name Test Case
         let customInputFieldResponse = app.tables[AppScreen.innerChatScreenTableView]
-            .textViews[CusotomInputField.nameFieldResponse]
+            .textViews[CustomInputField.nameFieldResponse]
         waitFor(object: customInputFieldResponse) { $0.exists }
-        app.typeText(CusotomInputFieldReply.nameFieldResponse)
+        app.typeText(CustomInputFieldReply.nameFieldResponse)
         app.buttons[InAppButton.ConversationScreen.send].tap()
         sleep(3)
         app.swipeUp()
+        
         /// Email Test Case
         let customInputFieldResponse2 = app.tables[AppScreen.innerChatScreenTableView]
-            .textViews[CusotomInputField.emailFieldResponse]
+            .textViews[CustomInputField.emailFieldResponse]
         waitFor(object: customInputFieldResponse2) { $0.exists }
-        app.typeText(CusotomInputFieldReply.emailFieldResponse)
+        app.typeText(CustomInputFieldReply.emailFieldResponse)
         app.buttons[InAppButton.ConversationScreen.send].tap()
         sleep(3)
         app.swipeUp()
+        
         /// Phone Number Test Case
         let customInputFieldResponse3 = app.tables[AppScreen.innerChatScreenTableView]
-            .textViews[CusotomInputField.phoneNumberFieldResponse]
+            .textViews[CustomInputField.phoneNumberFieldResponse]
         waitFor(object: customInputFieldResponse3) { $0.exists }
-        app.typeText(CusotomInputFieldReply.phoneNumberFieldResponse)
+        app.typeText(CustomInputFieldReply.phoneNumberFieldResponse)
         app.buttons[InAppButton.ConversationScreen.send].tap()
         sleep(3)
         app.swipeUp()
+        
         /// OTP Test Case
         let customInputFieldResponse4 = app.tables[AppScreen.innerChatScreenTableView]
-            .textViews[CusotomInputField.otpFieldResponse]
+            .textViews[CustomInputField.otpFieldResponse]
         waitFor(object: customInputFieldResponse4) { $0.exists }
-        app.typeText(CusotomInputFieldReply.otpFieldResponse)
+        app.typeText(CustomInputFieldReply.otpFieldResponse)
         app.buttons[InAppButton.ConversationScreen.send].tap()
-        sleep(3)
-        app.swipeUp()
+        
         /// Final Response
-        let customInputFieldResponse5 = app.tables[AppScreen.innerChatScreenTableView]
-            .textViews[CusotomInputField.finalSuccessResponse]
+        sleep(5)
+        app.tap()
+        app.swipeUp()
+        let customInputFieldResponse5 = app.tables[AppScreen.innerChatScreenTableView].textViews[CustomInputField.finalSuccessResponse]
         waitFor(object: customInputFieldResponse5) { $0.exists }
     }
     
@@ -329,7 +335,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         let isScreenOnTop = app.navigationBars[AppScreen.myChatScreen].exists
 
         if isScreenOnTop {
-            // Perform actions only if the screen is not on top
+            // Perform actions only if the screen is on top
             let createConversationButton = app.navigationBars[AppScreen.myChatScreen]
             waitFor(object: createConversationButton) { $0.exists }
             createConversationButton.buttons[InAppButton.CreatingGroup.startNewIcon].tap()
@@ -340,13 +346,13 @@ class KommunicateRichMessageUITests: XCTestCase {
             inputView.tap()
             inputView.tap()
         } else {
-            
             let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
             waitFor(object: inputView) { $0.exists }
             inputView.tap()
             inputView.tap()
             inputView.tap()
         }
+
 
         return app
     }
