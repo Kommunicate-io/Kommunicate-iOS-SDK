@@ -173,7 +173,7 @@ enum RichMessageResponseText {
     static let autoSuggestionResponse = "This is Auto Suggestion"
     static let submitFirstResponse = "Submit Button Rich Message"
     static let sugggestedRepliesFirstMessage = "Suggested Replies Rich Message"
-    static let formFirstResponse = "Submit your details"
+    static let formFirstResponse = "Input your details"
 }
 
 struct AutoSuggestionReply {
