@@ -6,5 +6,5 @@
 
 ## Testing Branches
 <!-- How was the code tested? Be as specific as possible. -->
-KM_ChatUI_Branch : "dev"
-KM_Core_Branch: "dev"
+KM_ChatUI_Branch : `dev`
+KM_Core_Branch: `dev`
