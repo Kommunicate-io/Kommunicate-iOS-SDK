@@ -4,8 +4,6 @@ on:
   pull_request: # Trigger this workflow on pull request events
     types:
       - opened
-      - edited
-      - synchronize
 
 jobs:
   build-and-test:
