@@ -170,7 +170,7 @@ jobs:
 
             const comment = `
               ## iOS Automation Test Results
-                - **Congratulations All Tests Passed!** 🎉
+                Congratulations All Tests Passed! 🎉
             `;
 
             await github.rest.issues.createComment({
