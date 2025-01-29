@@ -125,13 +125,19 @@ class KommunicateCreateConversationAndSendMessagesTests: XCTestCase {
 
     private func beforeTest_Launch_NewConversation() -> (XCUIApplication) {
         let app = XCUIApplication()
+        if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
+            app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
+            let loginAsVisitorButton = app.buttons[InAppButton.LaunchScreen.loginAsVisitor]
+            waitFor(object: loginAsVisitorButton) { $0.exists }
+            loginAsVisitorButton.tap()
+        }
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]
         waitFor(object: launchConversationButton) { $0.exists }
         launchConversationButton.tap()
         sleep(3)
         // Check if the specific screen is on top
         let isScreenOnTop = app.navigationBars[AppScreen.myChatScreen].exists
-
+        
         if isScreenOnTop {
             // Perform actions only if the screen is not on top
             let createConversationButton = app.navigationBars[AppScreen.myChatScreen]

@@ -53,8 +53,10 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         waitFor(object: nameField) { $0.exists }
         nameField.tap()
         nameField.typeText(FormData.name)
+        app.swipeUp()
         passwordField.tap()
         passwordField.typeText(FormData.password)
+        app.swipeUp()
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.male].tap()
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.metal].tap()
@@ -63,6 +65,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse1]
         waitFor(object: submitResponse) { $0.exists }
     }
+ 
     
     func testFormTemplate2() {
         let app = beforeTest_Launch_NewConversation()
@@ -81,25 +84,31 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         waitFor(object: nameField) { $0.exists }
         nameField.tap()
         nameField.typeText(FormData.name)
+        app.swipeUp()
         passwordField.tap()
         passwordField.typeText(FormData.password)
+        app.swipeUp()
         emailField.tap()
         emailField.typeText(FormData.email)
+        app.swipeUp()
         phoneField.tap()
         phoneField.typeText(FormData.phoneNumber)
+        app.swipeUp()
         addressField.tap()
         addressField.typeText(FormData.address)
+        app.swipeUp()
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse2]
         waitFor(object: submitResponse) { $0.exists }
     }
-    
+
     func testFormTemplate3() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
         sleep(4)
         app.typeText(GroupData.typeText3) // typing message
+        sleep(2)
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         let formFirstResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.formFirstResponse]
@@ -109,20 +118,23 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         waitFor(object: nameField) { $0.exists }
         nameField.tap()
         nameField.typeText(FormData.name)
+        app.swipeUp()
         passwordField.tap()
         passwordField.typeText(FormData.password)
-        
+        app.swipeUp()
         let dateField = app.tables.textFields[FormIdentifier.dateTime]
         dateField.tap()
         sleep(1)
         app.buttons[InAppButton.ConversationScreen.doneButton].tap()
         sleep(1)
+        app.swipeUp()
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.male].tap()
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse1]
         waitFor(object: submitResponse) { $0.exists }
     }
+
     
     private func login() {
         let path = Bundle(for: KommunicateRichMessageUITests.self).url(forResource: "Info", withExtension: "plist")
@@ -144,9 +156,9 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         let app = XCUIApplication()
         if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
             app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
-            sleep(5)
-            let loginAsVisitorButton = app.scrollViews.otherElements
-            loginAsVisitorButton.buttons[InAppButton.LaunchScreen.loginAsVisitor].tap()
+            let loginAsVisitorButton = app.buttons[InAppButton.LaunchScreen.loginAsVisitor]
+            waitFor(object: loginAsVisitorButton) { $0.exists }
+            loginAsVisitorButton.tap()
         }
         
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]

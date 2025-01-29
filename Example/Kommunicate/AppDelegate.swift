@@ -22,6 +22,11 @@
             if let regexPattern = ProcessInfo.processInfo.environment["restrictedMessageRegexPattern"] {
                 Kommunicate.defaultConfiguration.restrictedMessageRegexPattern = regexPattern
             }
+            
+            if let KMAppID = Bundle.main.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
+                appId = KMAppID
+            }
+            
             setUpNavigationBarAppearance()
 
             UNUserNotificationCenter.current().delegate = self
