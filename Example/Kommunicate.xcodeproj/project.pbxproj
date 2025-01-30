@@ -20,6 +20,7 @@
 		778B59CFD2A9AA01B2C8BB47 /* Pods_Kommunicate_ExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C12430200CB714F7C6EC6DE /* Pods_Kommunicate_ExampleUITests.framework */; };
 		8213687C2CDA2CEE00B09F37 /* KommunicateConfigurationTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8213687B2CDA2CEE00B09F37 /* KommunicateConfigurationTesting.swift */; };
 		8213687E2CDA332100B09F37 /* KommunicateLoginAndWelcomeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8213687D2CDA332100B09F37 /* KommunicateLoginAndWelcomeMessage.swift */; };
+		8237AC4C2D4A5DF8008BC1AC /* KommunicateResolveAndAssignmentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8237AC4B2D4A5DF8008BC1AC /* KommunicateResolveAndAssignmentUITests.swift */; };
 		8B33037F2226A494003BF306 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B33037E2226A494003BF306 /* LoginViewController.swift */; };
 		8B5BC12A22002FDC00F39956 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8B5BC12822002FDC00F39956 /* Localizable.strings */; };
 		8B8FFA9421D5171F00C8ED57 /* PaymentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8FFA9321D5171F00C8ED57 /* PaymentTests.swift */; };
@@ -67,6 +68,7 @@
 		78226602544E9745BB6CB084 /* Pods_Kommunicate_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Kommunicate_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8213687B2CDA2CEE00B09F37 /* KommunicateConfigurationTesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KommunicateConfigurationTesting.swift; sourceTree = "<group>"; };
 		8213687D2CDA332100B09F37 /* KommunicateLoginAndWelcomeMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KommunicateLoginAndWelcomeMessage.swift; sourceTree = "<group>"; };
+		8237AC4B2D4A5DF8008BC1AC /* KommunicateResolveAndAssignmentUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KommunicateResolveAndAssignmentUITests.swift; sourceTree = "<group>"; };
 		8AFCF2C4706B87B553819E20 /* Pods-Kommunicate_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kommunicate_Tests.debug.xcconfig"; path = "Target Support Files/Pods-Kommunicate_Tests/Pods-Kommunicate_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		8B33037E2226A494003BF306 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8B5BC12422002C4000F39956 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 			isa = PBXGroup;
 			children = (
 				8213687B2CDA2CEE00B09F37 /* KommunicateConfigurationTesting.swift */,
+				8237AC4B2D4A5DF8008BC1AC /* KommunicateResolveAndAssignmentUITests.swift */,
 				C698B48F24AB76A5008BB4D9 /* KommunicateCreateConversationAndSendMessagesTests.swift */,
 				C698B48E24AB76A5008BB4D9 /* TestCaseInfo.swift */,
 				C698B49D24AB77D5008BB4D9 /* Info.plist */,
@@ -588,6 +591,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C698B4A424AB7803008BB4D9 /* KommunicateCreateConversationAndSendMessagesTests.swift in Sources */,
+				8237AC4C2D4A5DF8008BC1AC /* KommunicateResolveAndAssignmentUITests.swift in Sources */,
 				C67D56E824AE439A001BA419 /* KommunicateLoginAsVisitorUITests.swift in Sources */,
 				C698B4A324AB7803008BB4D9 /* TestCaseInfo.swift in Sources */,
 				8213687E2CDA332100B09F37 /* KommunicateLoginAndWelcomeMessage.swift in Sources */,

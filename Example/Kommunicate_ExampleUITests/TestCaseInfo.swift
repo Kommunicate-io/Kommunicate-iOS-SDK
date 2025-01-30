@@ -99,12 +99,14 @@ enum InAppButton {
         static let faqButton = "FAQ"
         static let loadingIndicator = "loadingIndicator"
         static let activityIndicator = "activityIndicator"
+        static let restartConversation = "Restart conversation"
     }
 }
 
 enum AppScreen {
     static let myChatScreen = "My Chats"
     static let chatBar = "chatBar"
+    static let awayMessageView = "awayMessageView"
     static let innerChatScreenTableView = "InnerChatScreenTableView"
     static let inneritemListView = "InneritemListView"
     static let kMConversationView = "Kommunicate.KMConversationView"
@@ -117,6 +119,8 @@ enum AppTextFeild {
     static let userId = "User id (Use a random id for the first time login)"
     static let password = "Password"
     static let chatTextView = "chatTextView"
+    static let awayMessageLabel = "awayMessageLabel"
+    static let emailMessageLabel = "emailMessageLabel"
     static let HeadlineText = "Hi, how can we help you?"
     static let Helpcenter = "Helpcenter | Helpcenter"
 }
@@ -140,6 +144,7 @@ enum FormIdentifier {
 
 enum RichMessageButtons {
     static let button = "Button"
+    static let resolveButton = "Resolve Conversation"
     static let goToGoogle = "Go To Google"
     static let pay = "Pay"
     static let male = "Male"
@@ -174,6 +179,11 @@ enum RichMessageResponseText {
     static let submitFirstResponse = "Submit Button Rich Message"
     static let sugggestedRepliesFirstMessage = "Suggested Replies Rich Message"
     static let formFirstResponse = "Input your details"
+    static let resolveConversationSuggestedButtonMessage = "Are you sure you want to close the conversation."
+    static let resolveConversationButtonResponseMessage = "We are resolving this conversation. Please reach out to us in case of any more queries."
+    static let restartConversationResponse = "The conversation restarted successfully."
+    static let assignementMessageResponse = "Now this conversation is Assigned to Human."
+    static let awayMessageResponse = "The agent is currently unavailable. Please wait for sometime the agent will connect with you."
 }
 
 struct AutoSuggestionReply {

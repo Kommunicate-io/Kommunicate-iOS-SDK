@@ -164,6 +164,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        awayMessageView.accessibilityIdentifier = "awayMessageView"
         awayMessageView.drawDottedLines()
         charLimitView.drawDottedLines()
     }
@@ -613,13 +614,13 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             if let channelId = weakSelf.viewModel.channelKey {
                 KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.restartConversationClick, data: ["conversationId":channelId])
             }
+            guard let zendeskAccountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
+                  !zendeskAccountKey.isEmpty else { return }
             #if canImport(ChatProvidersSDK)
-                guard let zendeskAcckountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
-                      !zendeskAcckountKey.isEmpty else { return }
                 // if zendesk is integrated, create a new conversation instead of restarting the conversation
                 let zendeskHandler = KMZendeskChatHandler.shared
                 zendeskHandler.resetConfiguration()
-                zendeskHandler.initiateZendesk(key: zendeskAcckountKey)
+                zendeskHandler.initiateZendesk(key: zendeskAccountKey)
             #endif
             weakSelf.loadingStarted()
             // Create a new conversation 

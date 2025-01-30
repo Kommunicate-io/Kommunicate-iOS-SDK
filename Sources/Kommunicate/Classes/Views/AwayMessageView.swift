@@ -47,6 +47,7 @@ class AwayMessageView: UIView , Localizable {
         label.textAlignment = .center
         label.textColor = .kmDynamicColor(light: UIColor(netHex: 0x676262), dark: .lightGray)
         label.numberOfLines = 4
+        label.accessibilityIdentifier = "awayMessageLabel"
         return label
     }()
 
@@ -65,6 +66,7 @@ class AwayMessageView: UIView , Localizable {
         completeText.append(NSAttributedString(string: "  " + LocalizedText.CollectEmailMessageOnAwayMode))
         label.attributedText = completeText
         label.textColor = .kmDynamicColor(light: UIColor(netHex: 0x676262), dark: .lightGray)
+        label.accessibilityIdentifier = "emailMessageLabel"
         return label
     }()
 
