@@ -29,7 +29,8 @@ class ChatMessage: ALKChatViewModelProtocol, Localizable {
     var isMessageEmpty: Bool
     var platformSource: String?
     var assignedTags: [KMAssignedTags]?
-
+    var isWaitingQueueConversation: Bool
+    
     init(message: ALKChatViewModelProtocol) {
         avatar = message.avatar
         avatarImage = message.avatarImage
@@ -47,6 +48,7 @@ class ChatMessage: ALKChatViewModelProtocol, Localizable {
         messageType = message.messageType
         isMessageEmpty = message.isMessageEmpty
         platformSource = message.platformSource
+        isWaitingQueueConversation = message.isWaitingQueueConversation
 
         // Update message to show conversation assignee details
         let (_, channel) = ConversationDetail().conversationAssignee(groupId: channelKey, userId: contactId)

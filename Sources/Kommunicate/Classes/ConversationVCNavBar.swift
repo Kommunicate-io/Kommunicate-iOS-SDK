@@ -96,6 +96,14 @@ class ConversationVCNavBar: UIView, Localizable {
         return label
     } ()
     
+    var waitingQueueText: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "HelveticaNeue", size: 20) ?? UIFont.systemFont(ofSize: 20)
+        label.textColor = UIColor(red: 113, green: 110, blue: 110)
+        label.isHidden = true
+        return label
+    }()
+    
     lazy var customSubtitleView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [])
         stackView.alignment = .leading
@@ -119,6 +127,7 @@ class ConversationVCNavBar: UIView, Localizable {
         static let offline = "offline"
         static let awayMode = "awayMode"
         static let noName = "noName"
+        static let waitingQueTitle = "waitingQueueTitle"
     }
 
     required init(
@@ -154,12 +163,14 @@ class ConversationVCNavBar: UIView, Localizable {
         let navigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [KMBaseNavigationViewController.self])
         if let textColor = navigationBarProxy.titleTextAttributes?[.foregroundColor] as? UIColor {
             profileName.textColor = textColor
+            waitingQueueText.textColor = textColor
             onlineStatusText.textColor = textColor
             customSubtitleText.textColor = textColor
             customRating.textColor = textColor
         }
         if let titleFont = navigationBarProxy.titleTextAttributes?[.font] as? UIFont {
             profileName.font = titleFont
+            waitingQueueText.font = titleFont
         }
         
         if let subtitleFont = navigationBarProxy.titleTextAttributes?[.subtitleFont] as? UIFont {
@@ -172,6 +183,11 @@ class ConversationVCNavBar: UIView, Localizable {
         }
         var subtitleText: String = ""
         var showCustomSubtitle: Bool = false
+        
+        waitingQueueText.text = localizedString(
+            forKey: LocalizationKey.waitingQueTitle,
+            fileName: localizationFileName
+        )
         
         if  !configuration.toolbarSubtitleText.isEmpty {
             customSubtitleView.addArrangedSubview(customSubtitleText)
@@ -196,9 +212,25 @@ class ConversationVCNavBar: UIView, Localizable {
         
         statusIconBackgroundColor.backgroundColor = navigationBarProxy.barTintColor
     }
+    
+    @objc func updateWaitingQueueUI(showWaitingQueueOnly: Bool) {
+        if showWaitingQueueOnly {
+            profileImage.isHidden = true
+            statusIconBackgroundColor.isHidden = true
+            onlineStatusIcon.isHidden = true
+            profileView.isHidden = true
+            waitingQueueText.isHidden = false
+        } else {
+            profileImage.isHidden = false
+            statusIconBackgroundColor.isHidden = false
+            onlineStatusIcon.isHidden = false
+            profileView.isHidden = false
+            waitingQueueText.isHidden = true
+        }
+    }
 
     private func setupConstraints() {
-        addViewsForAutolayout(views: [backButton, profileImage, statusIconBackgroundColor, onlineStatusIcon, profileView])
+        addViewsForAutolayout(views: [backButton, waitingQueueText,profileImage, statusIconBackgroundColor, onlineStatusIcon, profileView])
 
         // Setup constraints
         backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -10).isActive = true
@@ -206,6 +238,9 @@ class ConversationVCNavBar: UIView, Localizable {
         backButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
         backButton.widthAnchor.constraint(equalToConstant: 20).isActive = true
 
+        waitingQueueText.leadingAnchor.constraint(equalTo: backButton.trailingAnchor, constant: 20).isActive = true
+        waitingQueueText.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
+        waitingQueueText.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5).isActive = true
         profileImage.leadingAnchor.constraint(equalTo: backButton.trailingAnchor, constant: 10).isActive = true
         profileImage.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
         profileImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5).isActive = true

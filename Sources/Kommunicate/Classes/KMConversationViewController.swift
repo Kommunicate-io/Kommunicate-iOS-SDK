@@ -24,7 +24,8 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     var count = 0
     var currentMessage = ALMessage()
     var delayInterval = 0
-    
+    private var isWaitingQueueFetching: Bool = false
+
     enum LocalizationKey {
         static let online = "online"
         static let offline = "offline"
@@ -333,6 +334,32 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     func messageStatusAndFetchBotType() {
         if isClosedConversation {
             conversationAssignedToDialogflowBot()
+        } else if viewModel.isWaitingQueueConversation, let teamID = viewModel.assignedTeamId, let conversationID = viewModel.channelKey {
+            // Guard against multiple waiting queue calls
+            guard !isWaitingQueueFetching else { return }
+            isWaitingQueueFetching = true
+
+            conversationService.waitingQueueFor(teamID: teamID, completion: { [weak self] result in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    self.isWaitingQueueFetching = false
+                    switch result {
+                    case let .success(waitingQueueData):
+                        guard
+                            let index = waitingQueueData.firstIndex(of: conversationID.intValue) else {
+                            self.isAwayMessageViewHidden = true
+                            self.awayMessageView.setWaitingQueueMessage(count: 0)
+                            return
+                        }
+                        self.awayMessageView.switchToEmailUI(emailUIEnabled: false)
+                        self.isAwayMessageViewHidden = false
+                        self.awayMessageView.setWaitingQueueMessage(count: index + 1)
+                    case .failure(_):
+                        self.isAwayMessageViewHidden = true
+                        return
+                    }
+                }
+            })
         } else {
             guard let channelKey = viewModel.channelKey, let applicationKey =  ALUserDefaultsHandler.getApplicationKey() else { return }
             conversationService.awayMessageFor(applicationKey: applicationKey,groupId: channelKey, completion: {
@@ -406,6 +433,12 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             self.assigneeUserId = contact?.userId
             self.hideInputBarIfAssignedToBot()
             guard let contact = contact else {return}
+            if let conversationStatus = alChannel.metadata[AL_CHANNEL_CONVERSATION_STATUS], conversationStatus as! String == KMConversationStatus.waiting.rawValue {
+                self.customNavigationView.updateWaitingQueueUI(showWaitingQueueOnly: true)
+                return
+            } else {
+                self.customNavigationView.updateWaitingQueueUI(showWaitingQueueOnly: false)
+            }
             guard let assigneeUserId = self.assigneeUserId,let changeStatusAssigneeID = KMUpdateAssigneeStatus.shared.assigneeID, ( assigneeUserId == changeStatusAssigneeID || changeStatusAssigneeID.isEmpty) else {
                 self.isAwayMessageViewHidden = !contact.isInAwayMode
                 return
@@ -454,7 +487,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     
     open override func showEmailCollectionUI() {
         super.showEmailCollectionUI()
-        if collectEmailOnAwayMode {
+        if collectEmailOnAwayMode, !viewModel.isWaitingQueueConversation {
             awayMessageView.switchToEmailUI(emailUIEnabled: true)
             viewModel.emailCollectionAwayModeEnabled = true
         }
@@ -470,7 +503,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     open override func awayModeEmailUpdated() {
         super.awayModeEmailUpdated()
         viewModel.emailCollectionAwayModeEnabled = false
-        if isAssignedAgentOrBotOnline {
+        if isAssignedAgentOrBotOnline, !viewModel.isWaitingQueueConversation {
             self.isAwayMessageViewHidden = true
             self.awayMessageView.switchToEmailUI(emailUIEnabled: false)
         } else {
@@ -505,6 +538,14 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     }
 
     private func setupNavigation() {
+        
+        /// To verify the waiting Queue UI for Navigation Bar
+        if viewModel.isWaitingQueueConversation {
+            customNavigationView.updateWaitingQueueUI(showWaitingQueueOnly: true)
+        } else {
+            customNavigationView.updateWaitingQueueUI(showWaitingQueueOnly: false)
+        }
+        
         // Remove current title from center of navigation bar
         navigationItem.titleView = UIView()
         navigationItem.leftBarButtonItems = nil
