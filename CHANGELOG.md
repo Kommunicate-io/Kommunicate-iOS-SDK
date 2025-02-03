@@ -2,6 +2,12 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [7.2.6] 2025-02-03
+- Added Waiting Queue UI and related functions.
+- Synchronized Default configuration for Swift 6 support.
+- AWS-ENCRYPTED- prefix removed from attachment upload in Conversation Screen.
+- Fixed Restart Button not working.
+
 ## [7.2.5] 2024-12-24
 - Fixed typo of registerUserAsVistor with registerUserAsVisitor.
 - SSL pinning enable disable configuration added.
