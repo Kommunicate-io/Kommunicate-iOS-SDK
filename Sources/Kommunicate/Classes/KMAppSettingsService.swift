@@ -7,15 +7,33 @@
 
 import Foundation
 import KommunicateChatUI_iOS_SDK
+import KommunicateCore_iOS_SDK
 import UIKit
 
 class KMAppSettingService {
     let appSettingsUserDefaults = ALKAppSettingsUserDefaults()
-
+    let appSettingCacheMemoryKey = "KM_APP_SETTING_CACHE_MEMORY"
+    let cacheTimeInterval: TimeInterval = 5 * 60 // 5 minutes in seconds
+    
+    /*
+     By default, this method utilizes in-memory caching with a 5-minute retention period. When the `forceRefresh` parameter is set to `true`, the system will bypass the existing cache and retrieve the most current data directly from the appSetting Api.
+     
+     Key Behaviors:
+     - Default Behavior: Cache data for 5 minutes
+     - Forced Refresh: Retrieve real-time data by setting `forceRefresh = true`
+     - App Launch Behavior: Upon app launch, real-time data is fetched as the cache is cleared during app closure or termination.
+     */
     func appSetting(
         applicationKey: String = KMUserDefaultHandler.getApplicationKey(),
+        forceRefresh: Bool = false,
         completion: @escaping (Result<AppSetting, KMAppSettingsError>) -> Void
     ) {
+        
+        if let cacheAppSettingData = Kommunicate.appSettingCache.getItem(forKey: appSettingCacheMemoryKey), !forceRefresh {
+            completion(.success(cacheAppSettingData))
+            return
+        }
+
         guard let url = URLBuilder.appSettings(for: applicationKey).url else {
             completion(.failure(.api(.urlBuilding)))
             return
@@ -30,6 +48,7 @@ class KMAppSettingService {
                 }
                 do {
                     let appSetting = try appSettingResponse.appSettings()
+                    Kommunicate.appSettingCache.setItem(forKey: self.appSettingCacheMemoryKey, value: appSetting, expiry: self.cacheTimeInterval)
                     completion(.success(appSetting))
                 } catch let error as KMAppSettingsError {
                     completion(.failure(error))

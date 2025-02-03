@@ -166,6 +166,39 @@ public class KMConversationService: KMConservationServiceable, Localizable {
             }
         })
     }
+    
+    func waitingQueueFor(
+        teamID: String,
+        completion: @escaping (Result<[Int], Error>) -> Void
+    ) {
+        guard let url = URLBuilder.waitingQueueFor(teamID: teamID).url else {
+            completion(.failure(APIError.urlBuilding))
+            return
+        }
+        DataLoader.request(url: url) { result in
+            switch result {
+            case let .success(data):
+                do {
+                    // Attempt to decode the JSON data
+                    guard let waitingQueData = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+                        print("Error: Unable to convert data to JSON")
+                        completion(.failure(APIError.jsonConversion))
+                        return
+                    }
+                    
+                    // Call the method to extract and process the response
+                    completion(self.extractWaitingQueResponse(from: waitingQueData))
+                } catch {
+                    // Handle JSON decoding errors
+                    print("Error decoding JSON: \(error.localizedDescription)")
+                    completion(.failure(APIError.jsonConversion))
+                }
+            case let .failure(error):
+                // Handle the network or request error
+                completion(.failure(error))
+            }
+        }
+    }
 
     @available(*, deprecated, message: "Use createConversation(conversation:completion:)")
     public func createConversation(
@@ -294,6 +327,22 @@ public class KMConversationService: KMConservationServiceable, Localizable {
             "message": message,
             "collectEmailOnAwayMessage": isAnonymousUser ? collectEmailOnAwayMessage : false
         ])
+    }
+
+    func extractWaitingQueResponse(from json: [String: Any]) -> Result<[Int], Error> {
+        guard
+            let status = json["status"] as? String, status == "success",
+            let response = json["response"] as? [Int]
+        else {
+            return .failure(APIError.jsonConversion)
+        }
+
+        // Ensure the response is not empty
+        if response.isEmpty {
+            return .failure(APIError.responseNotPresent)
+        }
+
+        return .success(response)
     }
 
     func agentIdFrom(json: [String: Any]) -> Result<String, Error> {

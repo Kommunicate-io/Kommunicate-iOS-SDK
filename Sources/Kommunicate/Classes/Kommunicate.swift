@@ -55,6 +55,15 @@ open class Kommunicate: NSObject, Localizable {
         return KMUserDefaultHandler.isLoggedIn()
     }
 
+    /// Dispatch queues for configuration management
+    private enum ConfigurationQueue {
+        /// Queue for managing `defaultConfiguration`
+        static let defaultConfig = DispatchQueue(label: "com.kommunicate.configuration.defaultConfigQueue")
+        
+        /// Queue for managing `defaultConversationConfiguration`
+        static let defaultConversationConfig = DispatchQueue(label: "com.kommunicate.configuration.defaultConversationConfigQueue")
+    }
+
     /**
      Default configuration which defines the behaviour of UI components.
      It's used while initializing any UI component or in
@@ -65,7 +74,7 @@ open class Kommunicate: NSObject, Localizable {
      which shouldn't be disabled. So use the `defaultConfiguration` and change
      it accordingly.
      */
-    public static var defaultConfiguration: KMConfiguration = {
+    public static var _defaultConfiguration: KMConfiguration = {
         var config = KMConfiguration()
 
         config.isTapOnNavigationBarEnabled = false
@@ -87,12 +96,32 @@ open class Kommunicate: NSObject, Localizable {
     public static var isKMSSLPinningEnabled: Bool = false
 
     /// Configuration which defines the behavior of ConversationView components.
-    public static var kmConversationViewConfiguration = KMConversationViewConfiguration()
+    public static var _kmConversationViewConfiguration = KMConversationViewConfiguration()
+
+    public static var defaultConfiguration: KMConfiguration {
+        get { syncAccess(queue: ConfigurationQueue.defaultConfig) { _defaultConfiguration } }
+        set { syncAccess(queue: ConfigurationQueue.defaultConfig) { _defaultConfiguration = newValue } }
+    }
+
+    public static var kmConversationViewConfiguration: KMConversationViewConfiguration {
+        get { syncAccess(queue: ConfigurationQueue.defaultConversationConfig) { _kmConversationViewConfiguration } }
+        set { syncAccess(queue: ConfigurationQueue.defaultConversationConfig) { _kmConversationViewConfiguration = newValue } }
+    }
+
+    /// Helper function to perform synchronized access
+    private static func syncAccess<T>(queue: DispatchQueue, action: () -> T) -> T {
+        return queue.sync { action() }
+    }
+
+    private static func syncAccess(queue: DispatchQueue, action: () -> Void) {
+        queue.sync { action() }
+    }
 
     public static let shared = Kommunicate()
     public static var presentingViewController = UIViewController()
     public static var leadArray = [LeadCollectionField]()
     static var embeddedViewController: String = ""
+    static let appSettingCache = KMCacheMemory<AppSetting>()
 
     public enum KommunicateError: Error {
         case notLoggedIn
@@ -314,7 +343,7 @@ open class Kommunicate: NSObject, Localizable {
     private class func registerNewUser(_ kmUser: KMUser, isVisitor : Bool, completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
         
         let kmAppSetting = KMAppSettingService()
-        kmAppSetting.appSetting { result in
+        kmAppSetting.appSetting(forceRefresh: true) { result in
             switch result {
             case let .success(appSetting):
                 DispatchQueue.main.async {
@@ -960,7 +989,7 @@ open class Kommunicate: NSObject, Localizable {
      */
       @objc open class func isChatWidgetDisabled(completionHandler: @escaping (Bool) -> Void) {
         let appSettingsService = KMAppSettingService()
-        appSettingsService.appSetting {
+        appSettingsService.appSetting(forceRefresh: true) {
             result in
             switch result {
             case let .success(appSettings):
@@ -1420,13 +1449,21 @@ open class Kommunicate: NSObject, Localizable {
     }
 
     /**
-     Subscribe Chat Events
+     Subscribe to chat events. Omit the events parameter to subscribe to all available events.
      - Parameters:
      - events: list of events to subscribe.
      - callback: ALKCustomEventCallback to send subscribed event's data
      */
-    public static func subscribeCustomEvents(events: [KMCustomEvent], callback: ALKCustomEventCallback) {
-        KMCustomEventHandler.shared.setSubscribedEvents(eventsList: events, eventDelegate: callback)
+    public static func subscribeCustomEvents(events: [KMCustomEvent] = KMCustomEvent.allEvents, callback: ALKCustomEventCallback) {
+        let eventList: [KMCustomEvent]
+        
+        if events == KMCustomEvent.allEvents {
+            eventList = KMCustomEventHandler.shared.availableEvents()
+        } else {
+            eventList = events
+        }
+        
+        KMCustomEventHandler.shared.setSubscribedEvents(eventsList: eventList, eventDelegate: callback)
     }
     
     /*
