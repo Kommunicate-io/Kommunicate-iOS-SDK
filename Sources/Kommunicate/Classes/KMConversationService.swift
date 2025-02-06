@@ -442,7 +442,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         var context: [String: Any] = [:]
 
         do {
-            let contextDict = try chatContextFromMetadata(messageMetadata: metadata as? [AnyHashable : Any])
+            let contextDict = chatContextFromMetadata(messageMetadata: metadata as? [AnyHashable : Any])
             context = contextDict ?? [:]
             context.merge(info, uniquingKeysWith: { $1 })
 

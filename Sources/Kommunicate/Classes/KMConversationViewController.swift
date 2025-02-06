@@ -369,7 +369,6 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
                     switch result {
                     case let .success(awayMessageData):
                         guard
-                                let awayMessageData = awayMessageData as? [String: Any],
                                 let message = awayMessageData["message"] as? String, !message.isEmpty,
                                 let emailCollection = awayMessageData["collectEmailOnAwayMessage"] as? Bool
                             else {
@@ -759,7 +758,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             }
           
             replyChatContextData.merge(messageChatContextData) {$1}
-            var chatContextDataTobeSent = [ChannelMetadataKeys.chatContext:replyChatContextData]
+            let chatContextDataTobeSent = [ChannelMetadataKeys.chatContext:replyChatContextData]
             replyMetadata.merge(chatContextDataTobeSent, uniquingKeysWith: {$1})
             
             viewModel.send(message: text, metadata: replyMetadata)
@@ -833,7 +832,7 @@ extension KMConversationViewController {
             }
             ratingVC.feedbackSubmitted = { [weak self] feedback in
                 print("feedback submitted with rating: \(feedback.rating)")
-                KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.submitRatingClick, data:  ["rating": feedback.rating,"comment":feedback.comment ?? "","conversationId": self?.viewModel.channelKey])
+                KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.submitRatingClick, data:  ["rating": feedback.rating,"comment":feedback.comment ?? "","conversationId": self?.viewModel.channelKey ?? "Conversation Id Not Found"])
                 self?.hideRatingView()
                 self?.submitFiveStarFeedback(feedback: feedback)
             }
@@ -849,7 +848,7 @@ extension KMConversationViewController {
             }
             ratingVC.feedbackSubmitted = { [weak self] feedback in
                 print("feedback submitted with rating: \(feedback.rating)")
-                KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.submitRatingClick, data:  ["rating": feedback.rating.rawValue,"comment":feedback.comment ?? "","conversationId": self?.viewModel.channelKey])
+                KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.submitRatingClick, data:  ["rating": feedback.rating.rawValue,"comment":feedback.comment ?? "","conversationId": self?.viewModel.channelKey ?? "Conversation Id Not Found"])
                 self?.hideRatingView()
                 self?.submitFeedback(feedback: feedback)
             }
