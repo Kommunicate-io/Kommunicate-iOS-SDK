@@ -117,7 +117,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     private var converastionListNavBarItemToken: NotificationToken?
     fileprivate var tapToDismiss: UITapGestureRecognizer!
     fileprivate var alMqttConversationService: ALMQTTConversationService!
-    fileprivate let activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
+    fileprivate let activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
     fileprivate var localizedStringFileName: String!
 
     public required init(configuration: ALKConfiguration, kmConversationViewConfiguration: KMConversationViewConfiguration) {
@@ -650,14 +650,14 @@ extension KMConversationListViewController: ALMessagesDelegate {
 }
 
 extension KMConversationListViewController: ALKConversationListViewModelDelegate {
-    open func startedLoading() {
+    public func startedLoading() {
         DispatchQueue.main.async {
             self.activityIndicator.startAnimating()
             self.tableView.isUserInteractionEnabled = false
         }
     }
 
-    open func listUpdated() {
+    public func listUpdated() {
         DispatchQueue.main.async {
             print("Number of rows \(self.tableView.numberOfRows(inSection: 0))")
             if self.viewModel.getChatList().isEmpty {
@@ -669,7 +669,7 @@ extension KMConversationListViewController: ALKConversationListViewModelDelegate
         }
     }
 
-    open func rowUpdatedAt(position: Int) {
+    public func rowUpdatedAt(position: Int) {
         tableView.reloadRows(at: [IndexPath(row: position, section: 0)], with: .automatic)
     }
 }
