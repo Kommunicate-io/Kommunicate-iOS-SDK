@@ -11,7 +11,7 @@
     import UIKit
 
     class ViewController: UIViewController {
-        let activityIndicator = UIActivityIndicatorView(style: .gray)
+        let activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
 
         override func viewDidLoad() {
             super.viewDidLoad()
