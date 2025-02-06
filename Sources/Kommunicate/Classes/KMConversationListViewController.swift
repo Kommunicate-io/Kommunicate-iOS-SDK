@@ -35,6 +35,8 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
 
     public var dbService = ALMessageDBService()
     public var viewModel = ALKConversationListViewModel()
+    
+    var isSingleThreadedEnabled = ALApplozicSettings.getIsSingleThreadedEnabled()
 
     enum Padding {
         enum NoConversationLabel {
@@ -81,7 +83,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         let darkTitleColor = kmConversationViewConfiguration.startNewConversationButtonDarkTextColor ?? kmConversationViewConfiguration.startNewConversationButtonTextColor
         button.setTitleColor(UIColor.kmDynamicColor(light: kmConversationViewConfiguration.startNewConversationButtonTextColor, dark: darkTitleColor), for: .normal)
         button.isUserInteractionEnabled = true
-        if configuration.hideBottomStartNewConversationButton {
+        if configuration.hideBottomStartNewConversationButton || isSingleThreadedEnabled {
             button.isHidden = true
         }
         return button
@@ -190,6 +192,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         super.viewDidLoad()
         setupMqtt()
         subscribeToConversation()
+        isSingleThreadedEnabled = ALApplozicSettings.getIsSingleThreadedEnabled()
         dbService.delegate = self
         viewModel.delegate = self
         setupSearchController()
@@ -241,7 +244,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
             noConversationLabel.topAnchor.constraint(equalTo: startNewButton.bottomAnchor, constant: 10.0).isActive = true
         }
        
-        if !configuration.hideBottomStartNewConversationButton  {
+        if !(configuration.hideBottomStartNewConversationButton || isSingleThreadedEnabled)  {
             startNewConversationBottomButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
             startNewConversationBottomButton.widthAnchor.constraint(equalToConstant: Padding.startNewConversationButton.width).isActive = true
             startNewConversationBottomButton.heightAnchor.constraint(equalToConstant: Padding.startNewConversationButton.height).isActive = true
@@ -519,6 +522,9 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         view.isUserInteractionEnabled = true
         conversationListTableViewController.tableView.isHidden = show
         noConversationLabel.isHidden = !show
+        if configuration.hideBottomStartNewConversationButton || isSingleThreadedEnabled {
+            startNewConversationBottomButton.isHidden = true
+        }
         startNewButton.isHidden = configuration.hideEmptyStateStartNewButtonInConversationList
     }
 
