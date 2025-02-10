@@ -207,7 +207,7 @@ class KMBottomSheetController: UIPresentationController {
 
     @objc func keyboardWillShow(notification: Notification) {
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
-        if let containerView = containerView, let presentedView = presentedView {
+        if let presentedView = presentedView {
             var frame = frameOfPresentedViewInContainerView
             frame.origin.y -= keyboardSize.height
             presentedView.frame = frame

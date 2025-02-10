@@ -408,7 +408,7 @@ open class Kommunicate: NSObject, Localizable {
         var context: [String: Any] = [:]
 
         do {
-            let contextDict = try alreadyPresentMetadata(metadata: metadata as? [AnyHashable : Any], context: updateContext)
+            let contextDict = alreadyPresentMetadata(metadata: metadata as? [AnyHashable : Any], context: updateContext)
             context = contextDict ?? [:]
             context.merge(toAdd, uniquingKeysWith: { $1 })
 
