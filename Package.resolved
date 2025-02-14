@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
         "state": {
           "branch": null,
-          "revision": "af4be924ad984cf4d16f4ae4df424e79a443d435",
-          "version": "7.6.2"
+          "revision": "277f1ab2c6664b19b4a412e32b094b201e2d5757",
+          "version": "7.10.0"
         }
       },
       {
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git",
         "state": {
           "branch": null,
-          "revision": "372f954250124540d30df79edb7e555175a1d274",
-          "version": "1.4.0"
+          "revision": "375de3088bf5843f22ffafc90b7ae179d1bdb6d3",
+          "version": "1.4.1"
         }
       },
       {
