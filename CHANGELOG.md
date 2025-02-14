@@ -2,6 +2,9 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [7.2.7] 2025-02-14
+- Updated Kingfisher from 7.6.2 to 7.10.0 to align with Privacy Manifest requirements.
+
 ## [7.2.6] 2025-02-03
 - Added Waiting Queue UI and related functions.
 - Synchronized Default configuration for Swift 6 support.
