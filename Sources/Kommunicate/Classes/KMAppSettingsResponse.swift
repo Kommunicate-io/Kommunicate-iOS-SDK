@@ -47,6 +47,7 @@ struct ChatWidgetResponse: Decodable {
     let pseudonymsEnabled : Bool?
     let csatRatingBase : Int?
     let disableChatWidget : Bool?
+    let botTypingIndicatorInterval: Int?
 }
 
 struct DefaultUploadOverride: Decodable {

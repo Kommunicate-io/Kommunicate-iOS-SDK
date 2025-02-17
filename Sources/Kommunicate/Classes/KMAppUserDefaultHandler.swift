@@ -38,7 +38,14 @@ class KMAppUserDefaultHandler: NSObject {
             return userDefaultSuite.integer(forKey: Key.CSATRatingBase)
         }
     }
-
+    var botTypingIndicatorInterval: Int {
+        set {
+            userDefaultSuite.set(newValue, forKey: Key.BotTypingIndicatorInterval)
+        }
+        get {
+            return userDefaultSuite.integer(forKey: Key.BotTypingIndicatorInterval)
+        }
+    }
     private let userDefaultSuite: UserDefaults
 
     init(userDefaultSuite: UserDefaults) {
@@ -63,5 +70,6 @@ private extension KMAppUserDefaultHandler {
         static let CSATEnabled = "CSAT_ENABLED"
         static let BotMessageDelayInterval = "BOT_MESSAGE_DELAY_INTERVAL"
         static let CSATRatingBase = "CSAT_RATTING_BASE"
+        static let BotTypingIndicatorInterval = "BOT_TYPING_INDICATOR_INTERVAL"
     }
 }
