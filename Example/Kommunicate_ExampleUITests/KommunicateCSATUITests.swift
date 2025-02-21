@@ -64,7 +64,7 @@ class KommunicateCSATUITests: XCTestCase {
             app.buttons[InAppButton.ConversationScreen.ratingButtonTitle].tap()
         }
             
-        sleep(5)
+        sleep(10)
         let ratingOptionIdentifier = InAppButton.RatingOptions.randomRating
         let rating = ratingOptionIdentifier.rating
         let comment = ratingOptionIdentifier.comment
