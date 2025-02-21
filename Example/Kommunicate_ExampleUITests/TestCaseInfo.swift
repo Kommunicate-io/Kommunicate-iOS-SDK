@@ -103,6 +103,7 @@ enum InAppButton {
         static let moreButton = "more_button"
         static let ratingButtonTitle = "Rate this conversation"
         static let ratingSubmitButton = "Submit your rating"
+        static let cancelRatingButton = "cancel icon"
     }
     
     enum RatingOptions {
