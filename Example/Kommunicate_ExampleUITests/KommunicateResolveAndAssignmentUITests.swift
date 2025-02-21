@@ -70,6 +70,10 @@ class KommunicateResolveAndAssignmentUITests: XCTestCase {
         waitFor(object: resolveConversationButtonResponse) { $0.exists }
         
         sleep(5)
+        
+        app.buttons[InAppButton.ConversationScreen.cancelRatingButton].tap()
+        sleep(2)
+        
         app.buttons[InAppButton.ConversationScreen.restartConversation].tap()
         
         let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
