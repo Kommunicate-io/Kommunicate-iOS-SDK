@@ -67,6 +67,7 @@ class KMAppSettingService {
                }
 
        KMAppUserDefaultHandler.shared.botMessageDelayInterval = chatWidget.botMessageDelayInterval ?? 0
+       KMAppUserDefaultHandler.shared.botTypingIndicatorInterval = chatWidget.botTypingIndicatorInterval ?? 0
        KMAppUserDefaultHandler.shared.csatRatingBase = chatWidget.csatRatingBase ?? 3
        
        guard let primaryColor = chatWidget.primaryColor else {
@@ -92,6 +93,7 @@ class KMAppSettingService {
        appSettings.defaultUploadOverrideUrl = chatWidget.defaultUploadOverride?.url ?? ""
        appSettings.defaultUploadOverrideHeaders = chatWidget.defaultUploadOverride?.headers ?? [:]
        appSettings.csatRatingBase = chatWidget.csatRatingBase ?? 3
+       appSettings.botTypingIndicatorInterval = chatWidget.botTypingIndicatorInterval ?? 0
        appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
     }
 
