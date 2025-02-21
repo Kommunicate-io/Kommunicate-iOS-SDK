@@ -41,6 +41,7 @@ class KommunicatePreChatUITests: XCTestCase {
         
         if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
             app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
+            sleep(4) // Give it time to process logout
         }
         
         let loginAsVisitorButton = app.buttons[InAppButton.LaunchScreen.loginAsVisitor]
@@ -84,6 +85,7 @@ class KommunicatePreChatUITests: XCTestCase {
         
         if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
             app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
+            sleep(4) // Give it time to process logout
         }
         
         let loginAsVisitorButton = app.buttons[InAppButton.LaunchScreen.loginAsVisitor]
@@ -148,6 +150,7 @@ class KommunicatePreChatUITests: XCTestCase {
         let app = XCUIApplication()
         if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
             app.buttons[InAppButton.LaunchScreen.logoutButton].tap()
+            sleep(4) // Give it time to process logout
         }
     }
     
