@@ -100,6 +100,21 @@ enum InAppButton {
         static let loadingIndicator = "loadingIndicator"
         static let activityIndicator = "activityIndicator"
         static let restartConversation = "Restart conversation"
+        static let moreButton = "more_button"
+        static let ratingButtonTitle = "Rate this conversation"
+        static let ratingSubmitButton = "Submit your rating"
+    }
+    
+    enum RatingOptions {
+        static let ratingOptions: [RatingFeedback] = [
+            RatingFeedback(rating: "sad emoji", comment: "The conversation was not handled properly. Not satisfied with the result."),
+            RatingFeedback(rating: "confused emoji", comment: "The response was unclear. Need better clarification."),
+            RatingFeedback(rating: "happy emoji", comment: "Great experience! Satisfied with the support.")
+        ]
+
+        static var randomRating: RatingFeedback {
+            return ratingOptions.randomElement() ?? RatingFeedback(rating: "confused emoji", comment: "The response was unclear. Need better clarification.")
+        }
     }
 }
 
@@ -123,6 +138,7 @@ enum AppTextFeild {
     static let emailMessageLabel = "emailMessageLabel"
     static let HeadlineText = "Hi, how can we help you?"
     static let Helpcenter = "Helpcenter | Helpcenter"
+    static let ratingCommnetTextView = "KMRatingCommentsTextView"
 }
 
 enum FormData {
@@ -184,6 +200,8 @@ enum RichMessageResponseText {
     static let restartConversationResponse = "The conversation restarted successfully."
     static let assignementMessageResponse = "Now this conversation is Assigned to Human."
     static let awayMessageResponse = "The agent is currently unavailable. Please wait for sometime the agent will connect with you."
+    static let csatResponseMessage = "Please share the Rating for the Conversation."
+    static let csatIntentResponseMessage = "We are resolving this conversation. Please reach out to us in case of any more queries."
 }
 
 struct AutoSuggestionReply {
@@ -250,4 +268,51 @@ enum CustomInputFieldReply {
      private static func generateRandomOTP() -> String {
          return String((1000...9999).randomElement()!)
      }
+}
+
+enum PreChatFormText {
+    static let email = "Email"
+    static let name = "Name"
+    static let phoneNumber = "Phone number"
+    static let submit = "SUBMIT"
+    static let startConversation =  "Start Conversation"
+}
+
+enum PreChatFormReply {
+    private static let name: String = generateRandomName()
+    private static let email: String = generateRandomEmail()
+    private static let phoneNumber: String = generateRandomPhoneNumber()
+    
+    
+    static let nameFieldResponse: String = name
+    static let emailFieldResponse: String = email
+    static let phoneNumberFieldResponse: String = phoneNumber
+    
+    
+    private static func generateRandomEmail() -> String {
+        let domains = ["gmail.com", "yahoo.com", "outlook.com", "icloud.com"]
+        let randomString = UUID().uuidString.prefix(8)
+        let randomNumber = Int.random(in: 100...999)
+
+        return "user\(randomString)\(randomNumber)@\(domains.randomElement()!)"
+    }
+    
+    private static func generateRandomName() -> String {
+        let firstNames = ["Alice", "Bob", "Charlie", "David", "Emma"]
+        let lastNames = ["Anderson", "Brown", "Clark", "Davis", "Evans"]
+        
+        return "\(firstNames.randomElement()!) \(lastNames.randomElement()!)"
+    }
+    
+    private static func generateRandomPhoneNumber() -> String {
+        let firstDigit = Int.random(in: 6...9)
+        let remainingDigits = (1...9).map { _ in String(Int.random(in: 0...9)) }.joined()
+        
+        return "\(firstDigit)\(remainingDigits)"
+    }
+}
+
+struct RatingFeedback {
+    let rating: String
+    let comment: String
 }

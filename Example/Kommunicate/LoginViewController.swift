@@ -10,7 +10,7 @@
     import Kommunicate
     import UIKit
 
-    class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, KMPreChatFormViewControllerDelegate {
         @IBOutlet var scrollView: UIScrollView!
         @IBOutlet var userName: UITextField!
         @IBOutlet var password: UITextField!
@@ -89,8 +89,25 @@
             registerUser(kmUser)
         }
 
-        @IBAction func loginAsVisitor(_: Any) {
-            resignFields()
+    @IBAction func loginAsVisitor(_: Any) {
+        resignFields()
+        
+        if ProcessInfo.processInfo.environment["isFaqUIFromDashboardTestEnabled"] != nil {
+            let applicationId = (UIApplication.shared.delegate as! AppDelegate).appId
+            setupApplicationKey(applicationId)
+            let conversation = KMConversation(userId: Kommunicate.randomId())
+            Kommunicate.createConversationWithPreChat(appID: applicationId, conversation: conversation, viewController: self) { error in
+                if error != nil {
+                    return
+                }
+            }
+        } else if ProcessInfo.processInfo.environment["isFaqUITestEnabled"] != nil {
+            let preChatVC = KMPreChatFormViewController(configuration: Kommunicate.defaultConfiguration)
+            preChatVC.delegate = self // Set the delegate to self to receive callbacks
+            preChatVC.preChatConfiguration.optionsToShow = [.email, .name, .phoneNumber] // Configure options to be visible in pre-chat
+            preChatVC.preChatConfiguration.mandatoryOptions = [.email, .name, .phoneNumber] // Configure mandatory options
+            self.present(preChatVC, animated: false, completion: nil) // Present the pre-chat view
+        } else {
             let applicationId = (UIApplication.shared.delegate as! AppDelegate).appId
             setupApplicationKey(applicationId)
             let kmUser = userWithUserId(Kommunicate.randomId(), andApplicationId: applicationId)
@@ -111,7 +128,25 @@
                 }
             })
         }
-
+    }
+    
+        func userSubmittedResponse(name: String, email: String, phoneNumber: String, password: String) {
+            dismiss(animated: true)
+            let applicationId = (UIApplication.shared.delegate as! AppDelegate).appId
+            setupApplicationKey(applicationId)
+            let kmUser = userWithUserId(Kommunicate.randomId(), andApplicationId: applicationId)
+            kmUser.displayName = name
+            kmUser.email = email
+            kmUser.contactNumber = phoneNumber
+            kmUser.password = password
+            activityIndicator.startAnimating()
+            registerUser(kmUser)
+        }
+    
+        func closeButtonTapped() {
+            dismiss(animated: true)
+        }
+    
         @objc func keyboardWillHide(notification: NSNotification) {
             guard isKeyboardVisible,
                   let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval

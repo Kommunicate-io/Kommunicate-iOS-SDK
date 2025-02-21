@@ -74,6 +74,7 @@ class RatingViewController: UIViewController {
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.backgroundColor = .clear
         textView.textColor = .kmDynamicColor(light: .black, dark: .white)
+        textView.accessibilityIdentifier = "KMRatingCommentsTextView"
         return textView
     }()
 
