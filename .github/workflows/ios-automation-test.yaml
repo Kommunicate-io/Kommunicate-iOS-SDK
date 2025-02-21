@@ -9,35 +9,18 @@ on:
       - created
 
 jobs:
-  check-comment:
-    if: github.event_name == 'issue_comment' && contains(github.event.comment.body, 'Restart Automation')
+  debug-event:
+    name: Debug Event
     runs-on: ubuntu-latest
     steps:
-      - name: Cancel Running Workflows
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const runs = await github.rest.actions.listWorkflowRuns({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'ios-automation-test-workflow.yml',
-              status: 'in_progress',
-            });
-
-            for (const run of runs.data.workflow_runs) {
-              await github.rest.actions.cancelWorkflowRun({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                run_id: run.id,
-              });
-              console.log(`Cancelled existing workflow run: ${run.id}`);
-            }
+      - name: Print Event Payload
+        run: echo '${{ toJSON(github.event) }}'
 
   build-and-test:
     name: Build and Test
     runs-on: macos-latest
-    timeout-minutes: 45 # Prevents the workflow from hanging indefinitely
+    timeout-minutes: 45
+    if: github.event.issue.pull_request && contains(github.event.comment.body, 'Restart Automation')
 
     steps:
       # Step 1: Checkout the code
