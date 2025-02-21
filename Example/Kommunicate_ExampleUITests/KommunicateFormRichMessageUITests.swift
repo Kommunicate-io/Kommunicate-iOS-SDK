@@ -105,6 +105,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         addressField.tap()
         addressField.typeText(FormData.address)
         app.swipeUp()
+        app.tap()
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse2]
@@ -139,6 +140,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         app.buttons[InAppButton.ConversationScreen.doneButton].tap()
         sleep(1)
         app.swipeUp()
+        app.tap()
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.male].tap()
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
