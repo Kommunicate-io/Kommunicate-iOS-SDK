@@ -40,7 +40,6 @@ class KommunicateResolveAndAssignmentUITests: XCTestCase {
     
     func testRestartConversation () {
         let app = beforeTest_Launch_NewConversation()
-        sleep(3)
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group

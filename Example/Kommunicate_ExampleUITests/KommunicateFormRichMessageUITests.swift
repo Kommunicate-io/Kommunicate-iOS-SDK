@@ -42,7 +42,6 @@ class KommunicateFormRichMessageUITests: XCTestCase {
     func testFormTemplate1() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
-        sleep(4)
         app.typeText(GroupData.typeText1) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         let formFirstResponse = app.tables[AppScreen.innerChatScreenTableView]
@@ -70,7 +69,6 @@ class KommunicateFormRichMessageUITests: XCTestCase {
     func testFormTemplate2() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
-        sleep(4)
         app.typeText(GroupData.typeText2) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         let formFirstResponse = app.tables[AppScreen.innerChatScreenTableView]

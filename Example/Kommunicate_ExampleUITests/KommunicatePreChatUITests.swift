@@ -36,7 +36,7 @@ class KommunicatePreChatUITests: XCTestCase {
         }
     }
     
-    func testFAQLeadCollection() {
+    func testPreChatLeadCollection() {
         let app = XCUIApplication()
         
         if app.buttons[InAppButton.LaunchScreen.logoutButton].exists {
@@ -74,7 +74,7 @@ class KommunicatePreChatUITests: XCTestCase {
         waitFor(object: launchConversationButton) { $0.exists }
     }
     
-    func testFAQLeadCollectionFromDashborad() {
+    func testPreChatLeadCollectionFromDashborad() {
         let app = XCUIApplication()
         app.launchEnvironment["isFaqUIFromDashboardTestEnabled"] = "true"
         if let appId = appIdFromEnvVars() {
