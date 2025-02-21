@@ -4,24 +4,18 @@ on:
   pull_request:
     types:
       - opened
-  issue_comment:
-    types:
-      - created
+      - synchronize  # Triggers when a new commit is pushed to the PR
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
-  debug-event:
-    name: Debug Event
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print Event Payload
-        run: echo '${{ toJSON(github.event) }}'
-
   build-and-test:
     name: Build and Test
     runs-on: macos-latest
     timeout-minutes: 45
-    if: github.event.issue.pull_request && contains(github.event.comment.body, 'Restart Automation')
-
+    
     steps:
       # Step 1: Checkout the code
       - name: Checkout Repository
