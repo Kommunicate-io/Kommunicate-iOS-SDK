@@ -1,16 +1,21 @@
 name: iOS Automation Test Workflow
 
 on:
-  pull_request: # Trigger this workflow on pull request events
+  pull_request:
     types:
       - opened
+      - synchronize  # Triggers when a new commit is pushed to the PR
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   build-and-test:
     name: Build and Test
     runs-on: macos-latest
-    timeout-minutes: 45 # Prevents the workflow from hanging indefinitely
-
+    timeout-minutes: 45
+    
     steps:
       # Step 1: Checkout the code
       - name: Checkout Repository

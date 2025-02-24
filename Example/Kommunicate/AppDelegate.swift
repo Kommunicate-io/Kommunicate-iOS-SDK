@@ -23,6 +23,10 @@
                 Kommunicate.defaultConfiguration.restrictedMessageRegexPattern = regexPattern
             }
             
+            if ProcessInfo.processInfo.environment["isCSATRatingButtonEnabled"] != nil {
+                Kommunicate.defaultConfiguration.rateConversationMenuOption = true
+            }
+            
             if let KMAppID = Bundle.main.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
                 appId = KMAppID
             }
