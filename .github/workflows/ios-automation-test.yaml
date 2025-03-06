@@ -15,16 +15,45 @@ jobs:
   lint:
     name: "Run Lint Checks"
     runs-on: macos-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Fetch PR Comments
+        id: fetch-branches
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prBody = context.payload.pull_request?.body;
+            if (!prBody) {
+              core.setFailed("No pull request body found.");
+              return;
+            }
+
+            console.log("Pull request body:", prBody); // Debugging: log the PR body
+
+            const kmChatUIBranchMatch = prBody.match(/KM_ChatUI_Branch\s*:\s*`([^`]+)`/);
+            const kmCoreBranchMatch = prBody.match(/KM_Core_Branch\s*:\s*`([^`]+)`/);
+
+            if (!kmChatUIBranchMatch || !kmCoreBranchMatch) {
+              core.setFailed("No branch information found in the pull request body.");
+              return;
+            }
+
+            core.setOutput("kmChatUIBranch", kmChatUIBranchMatch[1].trim());
+            core.setOutput("kmCoreBranch", kmCoreBranchMatch[1].trim());
+
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: '16.1.0'
+
+      - name: Set Environment Variables
+        run: |
+          echo "KM_CHATUI_BRANCH=${{ steps.fetch-branches.outputs.kmChatUIBranch }}" >> $GITHUB_ENV
+          echo "KM_CORE_BRANCH=${{ steps.fetch-branches.outputs.kmCoreBranch }}" >> $GITHUB_ENV
 
       - name: Install Certificates and Provisioning Profiles
         env:
