@@ -8,10 +8,10 @@
 import Foundation
 /// `KMAppUserDefaultHandler` will have all the user defaults related to kommunicate sdk
 class KMAppUserDefaultHandler: NSObject {
-    static let DEFAULT_SUITE_NAME = "group.kommunicate.sdk"
+    static let defaultSuiteName = "group.kommunicate.sdk"
 
     static let shared = KMAppUserDefaultHandler(
-        userDefaultSuite: UserDefaults(suiteName: DEFAULT_SUITE_NAME) ?? .standard
+        userDefaultSuite: UserDefaults(suiteName: defaultSuiteName) ?? .standard
     )
 
     var isCSATEnabled: Bool {
@@ -61,7 +61,7 @@ class KMAppUserDefaultHandler: NSObject {
     }
 
     func clear() {
-        userDefaultSuite.removePersistentDomain(forName: KMAppUserDefaultHandler.DEFAULT_SUITE_NAME)
+        userDefaultSuite.removePersistentDomain(forName: KMAppUserDefaultHandler.defaultSuiteName)
     }
 }
 

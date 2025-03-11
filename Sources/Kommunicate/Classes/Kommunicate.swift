@@ -1409,8 +1409,8 @@ open class Kommunicate: NSObject, Localizable {
 
     func defaultChatViewSettings() {
         if serverConfig == .euConfiguration {
-            ALUserDefaultsHandler.setBASEURL(API.Backend.chat_eu.rawValue)
-            ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi_eu.rawValue)
+            ALUserDefaultsHandler.setBASEURL(API.Backend.chatEu.rawValue)
+            ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApiEu.rawValue)
         } else {
             ALUserDefaultsHandler.setBASEURL(API.Backend.chat.rawValue)
             ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi.rawValue)
@@ -1510,8 +1510,8 @@ open class Kommunicate: NSObject, Localizable {
     open class func setServerConfiguration(_ environment: KMServerConfiguration) {
         Kommunicate.shared.serverConfig = environment
         if environment == .euConfiguration {
-            ALUserDefaultsHandler.setBASEURL(API.Backend.chat_eu.rawValue)
-            ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi_eu.rawValue)
+            ALUserDefaultsHandler.setBASEURL(API.Backend.chatEu.rawValue)
+            ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApiEu.rawValue)
         } else {
             ALUserDefaultsHandler.setBASEURL(API.Backend.chat.rawValue)
             ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi.rawValue)

@@ -239,8 +239,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
 
                 // Sort and combine bot ids other than the default bot id.
                 if let botIds = self.removeDefaultBotIdFrom(botIds: botIds) {
-                    newClientId =
-                        newClientId + Set(botIds)
+                    newClientId += Set(botIds)
                             .sorted(by: <)
                             .reduce("") { $0 + "_" + $1.lowercased() }
                 }
@@ -362,8 +361,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
 
         // Sort and combine bot ids other than the default bot id.
         if let botIds = removeDefaultBotIdFrom(botIds: botIds) {
-            newClientId =
-                newClientId + Set(botIds)
+            newClientId += Set(botIds)
                     .sorted(by: <)
                     .reduce("") { $0 + "_" + $1.lowercased() }
         }

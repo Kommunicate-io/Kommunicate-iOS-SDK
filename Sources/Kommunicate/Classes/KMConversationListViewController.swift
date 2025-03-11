@@ -50,7 +50,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         }
         
         // Start New Conversation Button at the botton
-        enum startNewConversationButton {
+        enum StartNewConversationButton {
             static let width = 260.0
             static let height : CGFloat = 48.0
             static let cornorRadius: CGFloat = height/2
@@ -246,10 +246,10 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
        
         if !(configuration.hideBottomStartNewConversationButton || isSingleThreadedEnabled)  {
             startNewConversationBottomButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
-            startNewConversationBottomButton.widthAnchor.constraint(equalToConstant: Padding.startNewConversationButton.width).isActive = true
-            startNewConversationBottomButton.heightAnchor.constraint(equalToConstant: Padding.startNewConversationButton.height).isActive = true
-            startNewConversationBottomButton.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: Padding.startNewConversationButton.bottom).isActive = true
-            startNewConversationBottomButton.layer.cornerRadius = Padding.startNewConversationButton.cornorRadius
+            startNewConversationBottomButton.widthAnchor.constraint(equalToConstant: Padding.StartNewConversationButton.width).isActive = true
+            startNewConversationBottomButton.heightAnchor.constraint(equalToConstant: Padding.StartNewConversationButton.height).isActive = true
+            startNewConversationBottomButton.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: Padding.StartNewConversationButton.bottom).isActive = true
+            startNewConversationBottomButton.layer.cornerRadius = Padding.StartNewConversationButton.cornorRadius
             backgroundView.bringSubviewToFront(startNewConversationBottomButton)
         }
     
