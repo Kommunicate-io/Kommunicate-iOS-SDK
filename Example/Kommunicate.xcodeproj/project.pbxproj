@@ -562,7 +562,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]\nthen\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif command -v swiftlint >/dev/null 2>&1\nthen\n    swiftlint\nelse\n    echo \"warning: `swiftlint` command not found - See https://github.com/realm/SwiftLint#installation for installation instructions.\"\nfi\n\n";
+			shellScript = "#!/bin/bash\n\n# Set Homebrew path for Apple Silicon Macs\nif [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\n# Define valid paths for SwiftLint\nVALID_PATHS=(\n    \"../sources\"\n    \"../../KommunicateChatUI-iOS-SDK/sources\"\n    \"../../KommunicateCore-iOS-SDK/sources\"\n)\n\n# Check if at least one path exists before running SwiftLint\nFOUND_VALID_PATH=false\n\nfor path in \"${VALID_PATHS[@]}\"; do\n    if [ -d \"$path\" ]; then\n        FOUND_VALID_PATH=true\n        break\n    fi\ndone\n\nif [ \"$FOUND_VALID_PATH\" = false ]; then\n    echo \"No valid SwiftLint paths found. Skipping linting.\"\n    exit 0\nfi\n\n# Run SwiftLint if installed\nif command -v swiftlint >/dev/null 2>&1; then\n    swiftlint --fix\n    swiftlint\nelse\n    echo \"warning: 'swiftlint' command not found - See https://github.com/realm/SwiftLint#installation for installation instructions.\"\nfi\n";
 		};
 		F47AF37523481C3B162F3C1B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

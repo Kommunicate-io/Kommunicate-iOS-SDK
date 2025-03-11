@@ -13,8 +13,7 @@ public extension ALPushNotificationService {
     }
 
     func processPushNotification(_ dict: [AnyHashable: Any],
-                                 appState: UIApplication.State)
-    {
+                                 appState: UIApplication.State) {
         switch appState {
         case .active:
             processPushNotification(dict, updateUI: NSNumber(value: APP_STATE_ACTIVE.rawValue))

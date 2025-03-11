@@ -123,8 +123,7 @@ open class KMPreChatFormViewController: UIViewController {
         }
         if preChatConfiguration.allowEmailOrPhoneNumber,
            !preChatConfiguration.mandatoryOptions.contains(.email)
-           || !preChatConfiguration.mandatoryOptions.contains(.phoneNumber)
-        {
+           || !preChatConfiguration.mandatoryOptions.contains(.phoneNumber) {
             preChatConfiguration.allowEmailOrPhoneNumber = false
         }
         formView = KMPreChatUserFormView(
@@ -293,8 +292,7 @@ open class KMPreChatFormViewController: UIViewController {
             switch mandatoryOption {
             case .email:
                 if let emailText = emailTextField.text,
-                   !emailText.isEmpty, !emailText.isValidEmail
-                {
+                   !emailText.isEmpty, !emailText.isValidEmail {
                     validationError = TextFieldValidationError.invalidEmailAddress
                     break outerLoop
                 }
@@ -317,8 +315,7 @@ open class KMPreChatFormViewController: UIViewController {
                 }
 
                 if let phoneNumberText = phoneNumberTextField.text,
-                   !phoneNumberText.isEmpty, !isValidNumber(phoneNumberText)
-                {
+                   !phoneNumberText.isEmpty, !isValidNumber(phoneNumberText) {
                     validationError = TextFieldValidationError.invalidPhoneNumber
                     break outerLoop
                 }
@@ -328,17 +325,14 @@ open class KMPreChatFormViewController: UIViewController {
         if preChatConfiguration.allowEmailOrPhoneNumber,
            let emailText = emailTextField.text,
            let phoneNumberText = phoneNumberTextField.text,
-           emailText.isEmpty, phoneNumberText.isEmpty
-        {
+           emailText.isEmpty, phoneNumberText.isEmpty {
             return Result.failure(TextFieldValidationError.emailAndPhoneNumberEmpty)
         } else {
             if let emailText = emailTextField.text,
-               emailText.isEmpty, preChatConfiguration.mandatoryOptions.contains(.email)
-            {
+               emailText.isEmpty, preChatConfiguration.mandatoryOptions.contains(.email) {
                 validationError = TextFieldValidationError.emptyEmailAddress
             } else if let phoneNumberText = phoneNumberTextField.text,
-                      phoneNumberText.isEmpty, preChatConfiguration.mandatoryOptions.contains(.phoneNumber)
-            {
+                      phoneNumberText.isEmpty, preChatConfiguration.mandatoryOptions.contains(.phoneNumber) {
                 validationError = TextFieldValidationError.emptyPhoneNumber
             }
         }

@@ -109,7 +109,7 @@ class ConversationClosedView: UIView {
         addViewsForAutolayout(views: [
             previousRatingView,
             conversationResolvedLabel,
-            restartConversationStackView,
+            restartConversationStackView
         ])
 
         previousRatingView.layout {
@@ -146,7 +146,7 @@ class ConversationClosedView: UIView {
             restartConversationStackView.bottomAnchor.constraint(
                 equalTo: bottomAnchor,
                 constant: Size.RestartConversationView.bottom
-            ),
+            )
         ])
     }
 }

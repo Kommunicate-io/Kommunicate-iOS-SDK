@@ -179,7 +179,7 @@ open class CustomPreChatFormViewController: UIViewController {
             for (index, element) in Kommunicate.leadArray.enumerated() {
                 if mandatoryOption == CustomPreChatFormViewController.email {
                     if let text = (formView.formStackView.arrangedSubviews[index].subviews[0] as? UILabel)?.text, text == mandatoryOption {
-                        if let text2 = (formView.formStackView.arrangedSubviews[index].subviews[1] as? UITextField)?.text,!text2.isValidEmail {
+                        if let text2 = (formView.formStackView.arrangedSubviews[index].subviews[1] as? UITextField)?.text, !text2.isValidEmail {
                             if text2.isEmpty {
                                 validationError = TextFieldValidationError.emptyEmailAddress
                                 break outerLoop

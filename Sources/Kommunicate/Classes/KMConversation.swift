@@ -23,7 +23,7 @@ import KommunicateCore_iOS_SDK
     public var teamId: String?
     public var defaultConversationAssignee: String?
     public var appName: String? = Bundle.main.displayName
-    public var prefilledMessage: String? = nil
+    public var prefilledMessage: String?
 
     public init(userId: String) {
         self.userId = userId

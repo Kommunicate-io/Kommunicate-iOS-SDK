@@ -43,8 +43,8 @@ public class KMConversationService: KMConservationServiceable, Localizable {
     /// Conversation API response
     public struct Response {
         public var success: Bool = false
-        public var clientChannelKey: String? = nil
-        public var error: Error? = nil
+        public var clientChannelKey: String?
+        public var error: Error?
     }
 
     enum ServiceError: Error {
@@ -221,8 +221,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
             switch result {
             case let .success(appSettings):
                 if let chatWidget = appSettings.chatWidget,
-                   let isSingleThreaded = chatWidget.isSingleThreaded
-                {
+                   let isSingleThreaded = chatWidget.isSingleThreaded {
                     isSingleThreadedConversation = isSingleThreaded
                 }
             case let .failure(error):
@@ -398,7 +397,6 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         if let defaultConversationAssignee = conversation.defaultConversationAssignee, !defaultConversationAssignee.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             metadata.setValue(conversation.defaultConversationAssignee, forKey: ChannelMetadataKeys.conversationAssignee)
         }
-            
 
         if let conversationTitle = conversation.conversationTitle {
             metadata.setValue(conversationTitle, forKey: ChannelMetadataKeys.kmConversationTitle)
@@ -422,10 +420,10 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         }
 
         let languageCode = NSLocale.preferredLanguages.first?.prefix(2)
-        if(languageCode?.description != ALUserDefaultsHandler.getDeviceDefaultLanguage()){
+        if languageCode?.description != ALUserDefaultsHandler.getDeviceDefaultLanguage() {
             ALUserDefaultsHandler.setDeviceDefaultLanguage(languageCode?.description)
         }
-        updateMetadataChatContext(info: [ChannelMetadataKeys.kmUserLocale : languageCode as Any], metadata: metadata)
+        updateMetadataChatContext(info: [ChannelMetadataKeys.kmUserLocale: languageCode as Any], metadata: metadata)
         
         guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
               !messageMetadata.isEmpty
@@ -436,11 +434,11 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         return metadata
     }
     
-    private func updateMetadataChatContext(info: [String: Any], metadata : NSMutableDictionary) {
+    private func updateMetadataChatContext(info: [String: Any], metadata: NSMutableDictionary) {
         var context: [String: Any] = [:]
 
         do {
-            let contextDict = chatContextFromMetadata(messageMetadata: metadata as? [AnyHashable : Any])
+            let contextDict = chatContextFromMetadata(messageMetadata: metadata as? [AnyHashable: Any])
             context = contextDict ?? [:]
             context.merge(info, uniquingKeysWith: { $1 })
 
@@ -453,7 +451,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         }
     }
     
-    private func chatContextFromMetadata(messageMetadata : [AnyHashable: Any]?) -> [String: Any]? {
+    private func chatContextFromMetadata(messageMetadata: [AnyHashable: Any]?) -> [String: Any]? {
         guard
             let messageMetadata = messageMetadata,
             let chatContext = messageMetadata["KM_CHAT_CONTEXT"] as? String,
@@ -524,8 +522,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
     }
 
     private func createNewChannelAndConversation(conversation: KMConversation,
-                                                 completion: @escaping (Response) -> Void)
-    {
+                                                 completion: @escaping (Response) -> Void) {
         let groupName = conversation.conversationTitle ?? localizedString(
             forKey: LocalizationKey.supportChannelName,
             fileName: Kommunicate.defaultConfiguration.localizedStringFileName
@@ -567,7 +564,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
                       !zendeskAccountKey.isEmpty,
                       let clientChannelKey = channel.clientChannelKey,
                       let metadata = channel.metadata,
-                      let conversationMetaDict = ["source":"zopim"] as NSDictionary? as! [String:Any]?,
+                      let conversationMetaDict = ["source": "zopim"] as NSDictionary? as! [String: Any]?,
                       let jsonObject = try? JSONSerialization.data(withJSONObject: conversationMetaDict, options: []),
                       let jsonString = String(data: jsonObject, encoding: .utf8) else {
                     var response = Response()
@@ -649,7 +646,6 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         }
     }
     
-    
     public func updateConversationMetadata(
         groupId: String,
         metadata: NSMutableDictionary,
@@ -684,4 +680,3 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         }
     }
 }
-
