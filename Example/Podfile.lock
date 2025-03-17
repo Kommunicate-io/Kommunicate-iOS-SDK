@@ -41,6 +41,8 @@ PODS:
 DEPENDENCIES:
   - iOSSnapshotTestCase (~> 8.0.0)
   - Kommunicate (from `../`)
+  - KommunicateChatUI-iOS-SDK (from `https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git`, branch `sanity_1.4.2`)
+  - KommunicateCore-iOS-SDK (from `https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git`, branch `sanity_1.2.6`)
   - Nimble
   - Nimble-Snapshots
   - Quick
@@ -56,8 +58,6 @@ SPEC REPOS:
     - iOSDropDown
     - iOSSnapshotTestCase
     - Kingfisher
-    - KommunicateChatUI-iOS-SDK
-    - KommunicateCore-iOS-SDK
     - Nimble
     - Nimble-Snapshots
     - Quick
@@ -67,6 +67,20 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Kommunicate:
     :path: "../"
+  KommunicateChatUI-iOS-SDK:
+    :branch: sanity_1.4.2
+    :git: https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git
+  KommunicateCore-iOS-SDK:
+    :branch: sanity_1.2.6
+    :git: https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git
+
+CHECKOUT OPTIONS:
+  KommunicateChatUI-iOS-SDK:
+    :commit: e14c86e570f75ce9d02204b594319fb66104a1b3
+    :git: https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git
+  KommunicateCore-iOS-SDK:
+    :commit: aa5dfd10d899a3cf6a16ed3b5e042214eedaf0d9
+    :git: https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git
 
 SPEC CHECKSUMS:
   CwlCatchException: 7acc161b299a6de7f0a46a6ed741eae2c8b4d75a
@@ -78,7 +92,7 @@ SPEC CHECKSUMS:
   iOSSnapshotTestCase: a670511f9ee3829c2b9c23e6e68f315fd7b6790f
   Kingfisher: 99edc495d3b7607e6425f0d6f6847b2abd6d716d
   Kommunicate: 617e8fb06808dcfe67eb9f4fa9572f3ba9fed320
-  KommunicateChatUI-iOS-SDK: 037fd5deb69e54d1595ed35ea19bd98cba98d691
+  KommunicateChatUI-iOS-SDK: 19b316e766c57c091c0f08a9057fa19cf8b4f570
   KommunicateCore-iOS-SDK: 5dc0d852f3e49c37b33a808d73556cf683b2f6c0
   Nimble: 317d713c30c3336dd8571da1889f7ec3afc626e8
   Nimble-Snapshots: 240ea76ee8e52dfc1387b8d0d9bf1db3420cabbd
@@ -86,6 +100,6 @@ SPEC CHECKSUMS:
   SwiftLint: 6c8820d22c8f74baadd5684e00bb7356c34610a1
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: 66d2e2045cc91de55d1206f11783b1e0e5544df4
+PODFILE CHECKSUM: 049a2ca96fb40cde61a93fb980dc828d79335300
 
 COCOAPODS: 1.16.2
