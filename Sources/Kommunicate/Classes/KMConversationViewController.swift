@@ -109,7 +109,6 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         showAwayMessage(!isAwayMessageViewHidden)
     }
 
-
     private var isClosedConversation: Bool {
         guard let channelId = viewModel.channelKey,
               !ALChannelService.isChannelDeleted(channelId),
@@ -136,8 +135,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
 
     public required init(configuration: ALKConfiguration,
                          conversationViewConfiguration: KMConversationViewConfiguration,
-                         individualLaunch: Bool = true)
-    {
+                         individualLaunch: Bool = true) {
         kmConversationViewConfiguration = conversationViewConfiguration
         super.init(configuration: configuration, individualLaunch: individualLaunch)
         addNotificationCenterObserver()
@@ -191,11 +189,10 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         }
     }
     
-    
     open override func addMessagesToList(_ messageList: [Any]) {
        guard var messages = messageList as? [ALMessage] else { return }
         
-        if (KMConversationScreenConfiguration.showTypingIndicatorWhileFetchingResponse) {
+        if KMConversationScreenConfiguration.showTypingIndicatorWhileFetchingResponse {
             updateTyingStatus(status: false, userId: "")
         }
         
@@ -216,9 +213,9 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         if viewModel.channelKey != nil, viewModel.channelKey == messageArray[count].groupId {
            delayInterval = KMAppUserDefaultHandler.shared.botMessageDelayInterval/1000
            UserDefaults.standard.set((delayInterval), forKey: "botDelayInterval")
-           let alContact = contactService.loadContact(byKey: "userId", value:  messageArray[count].to)
+           let alContact = contactService.loadContact(byKey: "userId", value: messageArray[count].to)
             // Check for bot message & delay interval
-           if delayInterval > 0 && alContact?.roleType == NSNumber.init(value: AL_BOT.rawValue){
+           if delayInterval > 0 && alContact?.roleType == NSNumber(value: AL_BOT.rawValue) {
                showDelayAndTypingIndicatorForMessage()
            } else {
                // Add messages to viewmodel without any delay
@@ -239,13 +236,13 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
            return
          }
          
-         guard !self.timer.isValid else{
+         guard !self.timer.isValid else {
             print("timer is running already")
             return
          }
          
          currentMessage = messageArray[count]
-         guard !viewModel.containsMessage(currentMessage) else{
+         guard !viewModel.containsMessage(currentMessage) else {
              print("viewModel Already Contains Message")
              count += 1
              showDelayAndTypingIndicatorForMessage()
@@ -254,12 +251,12 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
          
          showNewTypingLabel(status: true)
          
-         self.timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(delayInterval), repeats: false) {[self] timer in
+         self.timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(delayInterval), repeats: false) {[self] _ in
          self.viewModel.removeTypingIndicatorMessage()
          self.viewModel.addMessagesToList([currentMessage])
          self.timer.invalidate()
          if count < messageArray.count {
-           count = count + 1
+           count += 1
            showDelayAndTypingIndicatorForMessage()
          }
        }
@@ -355,7 +352,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
                         self.awayMessageView.switchToEmailUI(emailUIEnabled: false)
                         self.isAwayMessageViewHidden = false
                         self.awayMessageView.setWaitingQueueMessage(count: index + 1)
-                    case .failure(_):
+                    case .failure:
                         self.isAwayMessageViewHidden = true
                         return
                     }
@@ -363,7 +360,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             })
         } else {
             guard let channelKey = viewModel.channelKey, let applicationKey =  ALUserDefaultsHandler.getApplicationKey() else { return }
-            conversationService.awayMessageFor(applicationKey: applicationKey,groupId: channelKey, completion: {
+            conversationService.awayMessageFor(applicationKey: applicationKey, groupId: channelKey, completion: {
                 result in
                 DispatchQueue.main.async {
                     switch result {
@@ -439,7 +436,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             } else {
                 self.customNavigationView.updateWaitingQueueUI(showWaitingQueueOnly: false)
             }
-            guard let assigneeUserId = self.assigneeUserId,let changeStatusAssigneeID = KMUpdateAssigneeStatus.shared.assigneeID, ( assigneeUserId == changeStatusAssigneeID || changeStatusAssigneeID.isEmpty) else {
+            guard let assigneeUserId = self.assigneeUserId, let changeStatusAssigneeID = KMUpdateAssigneeStatus.shared.assigneeID, assigneeUserId == changeStatusAssigneeID || changeStatusAssigneeID.isEmpty else {
                 self.isAwayMessageViewHidden = !contact.isInAwayMode
                 return
             }
@@ -476,7 +473,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
      - Parameters:
      - hide: boolean to show/hide the views
      */
-    func hideAssigneeStatus(_ hide:Bool){
+    func hideAssigneeStatus(_ hide: Bool) {
         self.customNavigationView.onlineStatusIcon.isHidden = hide
         self.customNavigationView.onlineStatusText.isHidden = hide
         self.customNavigationView.statusIconBackgroundColor.isHidden = hide
@@ -515,7 +512,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
      - Parameters:
      - userId: userId whose status changed
      */
-    open override func updateAssigneeOnlineStatus(userId: String){
+    open override func updateAssigneeOnlineStatus(userId: String) {
         super.updateAssigneeOnlineStatus(userId: userId)
         let (ConversationAssignee, _) = conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId)
         guard userId == ConversationAssignee?.userId else {
@@ -533,7 +530,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         // If the user was typing when the status changed
         view.endEditing(true)
         guard isClosedConversationViewHidden == isClosedConversation else { return }
-        ALKCustomEventHandler.shared.publish(triggeredEvent: .resolveConversation, data: ["conversationId":viewModel.channelKey?.stringValue ?? ""])
+        ALKCustomEventHandler.shared.publish(triggeredEvent: .resolveConversation, data: ["conversationId": viewModel.channelKey?.stringValue ?? ""])
         checkFeedbackAndShowRatingView()
     }
 
@@ -611,7 +608,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             self?.awayMessageView.isHidden = false
             
             if let channelId = weakSelf.viewModel.channelKey {
-                KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.restartConversationClick, data: ["conversationId":channelId])
+                KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.restartConversationClick, data: ["conversationId": channelId])
             }
             guard let zendeskAccountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
                   !zendeskAccountKey.isEmpty else { return }
@@ -652,18 +649,18 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         NSLayoutConstraint.activate([
             conversationClosedView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             conversationClosedView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            conversationClosedView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            conversationClosedView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
     
-    private func updateViewModelAndRefreshViewController(_ viewModel:ALKConversationViewModel, conversationId: NSNumber ) {
+    private func updateViewModelAndRefreshViewController(_ viewModel: ALKConversationViewModel, conversationId: NSNumber ) {
         // Update the viewmodel
         self.viewModel = viewModel
         self.unsubscribingChannel()
         self.viewModel.contactId = nil
         self.viewModel.prefilledMessage = nil
         self.viewModel.channelKey = conversationId
-        //NSNumber(value: Int(conversationId) ?? 0)
+        // NSNumber(value: Int(conversationId) ?? 0)
         self.viewModel.conversationProxy = nil
         self.viewModel.delegate = self
         self.loadingFinished(error: nil)
@@ -719,15 +716,13 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
 
     override open func sendQuickReply(_ text: String,
                                       metadata: [String: Any]?,
-                                      languageCode language: String?)
-    {
+                                      languageCode language: String?) {
         do {
             var replyMetadata = metadata ?? [String: Any]() // reply meta data
 
             if let updatedLanguage = language {
                 try configuration.updateUserLanguage(tag: updatedLanguage)
             }
-            
             
             guard !replyMetadata.isEmpty else {
                 viewModel.send(message: text, metadata: configuration.messageMetadata as? [String: Any])
@@ -736,16 +731,15 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             
             guard let messageMetadata = configuration.messageMetadata as? [String: Any],
                   !messageMetadata.isEmpty else {
-                viewModel.send(message:text, metadata: replyMetadata)
-                return
-            }
-            
-            guard var replyChatContextData = replyMetadata[ChannelMetadataKeys.chatContext] as? [String:Any] else {
-                replyMetadata.merge(messageMetadata) { $1 }
                 viewModel.send(message: text, metadata: replyMetadata)
                 return
             }
             
+            guard var replyChatContextData = replyMetadata[ChannelMetadataKeys.chatContext] as? [String: Any] else {
+                replyMetadata.merge(messageMetadata) { $1 }
+                viewModel.send(message: text, metadata: replyMetadata)
+                return
+            }
            
             guard let jsonData = messageMetadata[ChannelMetadataKeys.chatContext] as? String,
                !jsonData.isEmpty,
@@ -758,7 +752,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             }
           
             replyChatContextData.merge(messageChatContextData) {$1}
-            let chatContextDataTobeSent = [ChannelMetadataKeys.chatContext:replyChatContextData]
+            let chatContextDataTobeSent = [ChannelMetadataKeys.chatContext: replyChatContextData]
             replyMetadata.merge(chatContextDataTobeSent, uniquingKeysWith: {$1})
             
             viewModel.send(message: text, metadata: replyMetadata)
@@ -813,7 +807,7 @@ extension KMConversationViewController {
                     self?.showRatingView()
                     return
                 }
-                guard !Kommunicate.defaultConfiguration.oneTimeRating && !isConversationRecentlyRated else{
+                guard !Kommunicate.defaultConfiguration.oneTimeRating && !isConversationRecentlyRated else {
                     return
                 }
                 self?.showRatingView()
@@ -832,7 +826,7 @@ extension KMConversationViewController {
             }
             ratingVC.feedbackSubmitted = { [weak self] feedback in
                 print("feedback submitted with rating: \(feedback.rating)")
-                KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.submitRatingClick, data:  ["rating": feedback.rating,"comment":feedback.comment ?? "","conversationId": self?.viewModel.channelKey ?? "Conversation Id Not Found"])
+                KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.submitRatingClick, data: ["rating": feedback.rating, "comment": feedback.comment ?? "", "conversationId": self?.viewModel.channelKey ?? "Conversation Id Not Found"])
                 self?.hideRatingView()
                 self?.submitFiveStarFeedback(feedback: feedback)
             }
@@ -848,7 +842,7 @@ extension KMConversationViewController {
             }
             ratingVC.feedbackSubmitted = { [weak self] feedback in
                 print("feedback submitted with rating: \(feedback.rating)")
-                KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.submitRatingClick, data:  ["rating": feedback.rating.rawValue,"comment":feedback.comment ?? "","conversationId": self?.viewModel.channelKey ?? "Conversation Id Not Found"])
+                KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.submitRatingClick, data: ["rating": feedback.rating.rawValue, "comment": feedback.comment ?? "", "conversationId": self?.viewModel.channelKey ?? "Conversation Id Not Found"])
                 self?.hideRatingView()
                 self?.submitFeedback(feedback: feedback)
             }

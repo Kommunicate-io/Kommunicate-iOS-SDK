@@ -28,8 +28,7 @@ open class KMConversationDetail: KMConversationDetailType, Encodable {
                 user: String,
                 agent: String,
                 applicationKey: String,
-                createdBy: String)
-    {
+                createdBy: String) {
         self.groupId = groupId
         self.user = user
         self.agent = agent

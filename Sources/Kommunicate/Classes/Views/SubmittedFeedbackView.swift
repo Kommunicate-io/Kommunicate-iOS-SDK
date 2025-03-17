@@ -141,7 +141,7 @@ extension SubmittedFeedbackView {
                 ),
                 emojiView.heightAnchor.constraint(
                     equalToConstant: Size.RatingView.EmojiView.height
-                ),
+                )
             ])
             leftLineView.layout {
                 $0.leading == leadingAnchor
@@ -159,7 +159,7 @@ extension SubmittedFeedbackView {
         func drawAGradientLine(inView containerView: UIView, leftAligned: Bool) {
             let gradColors = [
                 UIColor(red: 216 / 255, green: 216 / 255, blue: 216 / 255, alpha: 1).cgColor,
-                UIColor(red: 0, green: 0, blue: 0, alpha: 0.72).cgColor,
+                UIColor(red: 0, green: 0, blue: 0, alpha: 0.72).cgColor
             ]
             let gradientLayer = CAGradientLayer()
             gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)

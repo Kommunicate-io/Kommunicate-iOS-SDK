@@ -22,7 +22,7 @@ extension String {
     var isValidPhoneNumber: Bool {
         do {
             let detector = try NSDataDetector(types: NSTextCheckingResult.CheckingType.phoneNumber.rawValue)
-            let matches = detector.matches(in: self, options: [], range: NSMakeRange(0, count))
+            let matches = detector.matches(in: self, options: [], range: NSRange(location: 0, length: count))
             if let result = matches.first {
                 return result.resultType == .phoneNumber && result.range.location == 0 && result.range.length == count
             } else {

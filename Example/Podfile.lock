@@ -35,6 +35,7 @@ PODS:
     - iOSSnapshotTestCase (~> 8.0)
     - Nimble (~> 13.0)
   - Quick (7.6.2)
+  - SwiftLint (0.58.1)
   - SwipeCellKit (2.7.1)
 
 DEPENDENCIES:
@@ -43,6 +44,7 @@ DEPENDENCIES:
   - Nimble
   - Nimble-Snapshots
   - Quick
+  - SwiftLint
 
 SPEC REPOS:
   trunk:
@@ -59,6 +61,7 @@ SPEC REPOS:
     - Nimble
     - Nimble-Snapshots
     - Quick
+    - SwiftLint
     - SwipeCellKit
 
 EXTERNAL SOURCES:
@@ -80,8 +83,9 @@ SPEC CHECKSUMS:
   Nimble: 317d713c30c3336dd8571da1889f7ec3afc626e8
   Nimble-Snapshots: 240ea76ee8e52dfc1387b8d0d9bf1db3420cabbd
   Quick: b8bec97cd4b9f21da0472d45580f763b801fc353
+  SwiftLint: 6c8820d22c8f74baadd5684e00bb7356c34610a1
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: 4ddda93eb79b9d4023f3e82419f6ee0372c6cd8e
+PODFILE CHECKSUM: 66d2e2045cc91de55d1206f11783b1e0e5544df4
 
 COCOAPODS: 1.16.2

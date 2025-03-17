@@ -50,9 +50,9 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         }
         
         // Start New Conversation Button at the botton
-        enum startNewConversationButton {
+        enum StartNewConversationButton {
             static let width = 260.0
-            static let height : CGFloat = 48.0
+            static let height: CGFloat = 48.0
             static let cornorRadius: CGFloat = height/2
             static let bottom: CGFloat = -50.0
             static let leading: CGFloat = -32
@@ -222,7 +222,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         image = image?.withRenderingMode(.alwaysTemplate)
         startNewButton.setImage(image, for: .normal)
 
-        backgroundView.addViewsForAutolayout(views: [startNewButton, noConversationLabel,startNewConversationBottomButton,conversationListTableViewController.view])
+        backgroundView.addViewsForAutolayout(views: [startNewButton, noConversationLabel, startNewConversationBottomButton, conversationListTableViewController.view])
         view.addViewsForAutolayout(views: [backgroundView])
 
         activityIndicator.color = UIColor.gray
@@ -231,7 +231,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         
-        if (configuration.hideEmptyStateStartNewButtonInConversationList || kmConversationViewConfiguration.startNewButtonIcon == nil) {
+        if configuration.hideEmptyStateStartNewButtonInConversationList || kmConversationViewConfiguration.startNewButtonIcon == nil {
             noConversationLabel.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
             noConversationLabel.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor).isActive = true
         } else {
@@ -244,12 +244,12 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
             noConversationLabel.topAnchor.constraint(equalTo: startNewButton.bottomAnchor, constant: 10.0).isActive = true
         }
        
-        if !(configuration.hideBottomStartNewConversationButton || isSingleThreadedEnabled)  {
+        if !(configuration.hideBottomStartNewConversationButton || isSingleThreadedEnabled) {
             startNewConversationBottomButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
-            startNewConversationBottomButton.widthAnchor.constraint(equalToConstant: Padding.startNewConversationButton.width).isActive = true
-            startNewConversationBottomButton.heightAnchor.constraint(equalToConstant: Padding.startNewConversationButton.height).isActive = true
-            startNewConversationBottomButton.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: Padding.startNewConversationButton.bottom).isActive = true
-            startNewConversationBottomButton.layer.cornerRadius = Padding.startNewConversationButton.cornorRadius
+            startNewConversationBottomButton.widthAnchor.constraint(equalToConstant: Padding.StartNewConversationButton.width).isActive = true
+            startNewConversationBottomButton.heightAnchor.constraint(equalToConstant: Padding.StartNewConversationButton.height).isActive = true
+            startNewConversationBottomButton.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: Padding.StartNewConversationButton.bottom).isActive = true
+            startNewConversationBottomButton.layer.cornerRadius = Padding.StartNewConversationButton.cornorRadius
             backgroundView.bringSubviewToFront(startNewConversationBottomButton)
         }
     
@@ -281,7 +281,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
 
     @objc func keyboardDidHide(notification: NSNotification) {
         guard let _ = notification.object else { return }
-        if navigationController?.visibleViewController as? KMConversationListViewController != nil, configuration.isMessageSearchEnabled, searchBar.searchBar.text == "" {
+        if navigationController?.visibleViewController is KMConversationListViewController, configuration.isMessageSearchEnabled, searchBar.searchBar.text == "" {
             showNavigationItems()
         }
     }
@@ -352,7 +352,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         tableView.reloadData()
     }
     
-    @objc func conversationDeleted(notification : NSNotification) {
+    @objc func conversationDeleted(notification: NSNotification) {
         guard let conversation = notification.object as? ALMessage else { return }
         deleteConversation(conversation: conversation)
     }
@@ -470,8 +470,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         if let viewController = conversationViewController,
            ALPushAssist().topViewController is KMConversationViewController,
            viewController.viewModel != nil,
-           viewController.viewModel.channelKey == message.groupId
-        {
+           viewController.viewModel.channelKey == message.groupId {
             viewController.viewModel.addMessagesToList([message])
         }
         viewModel.prepareController(dbService: dbService)
@@ -729,8 +728,7 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
         if let vm = viewController?.viewModel, vm.contactId != nil || vm.channelKey != nil,
            let visibleController = navigationController?.visibleViewController,
            visibleController.isKind(of: KMConversationViewController.self),
-           isNewMessageForActiveThread(alMessage: alMessage, vm: vm)
-        {
+           isNewMessageForActiveThread(alMessage: alMessage, vm: vm) {
             viewModel.syncCall(viewController: viewController, message: message, isChatOpen: true)
 
         } else if !isMessageSentByLoggedInUser(alMessage: alMessage) {
@@ -748,8 +746,7 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
             }
         }
         if let visibleController = navigationController?.visibleViewController,
-           visibleController.isKind(of: KMConversationListViewController.self)
-        {
+           visibleController.isKind(of: KMConversationListViewController.self) {
             sync(message: alMessage)
         }
     }

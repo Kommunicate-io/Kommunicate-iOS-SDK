@@ -10,7 +10,7 @@ import KommunicateChatUI_iOS_SDK
 import UIKit
 
 /// A view to show away message. It has message label and dotted line view.
-class AwayMessageView: UIView , Localizable {
+class AwayMessageView: UIView, Localizable {
     enum LocalizedText {
         private static let filename = Kommunicate.defaultConfiguration.localizedStringFileName
         static let CollectEmailMessageOnAwayMode = localizedString(forKey: "CollectEmailMessageOnAwayMode", fileName: filename)

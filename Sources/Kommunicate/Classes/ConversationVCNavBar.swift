@@ -1,4 +1,3 @@
-
 //
 //  CustomNavigationView.swift
 //  Kommunicate
@@ -88,13 +87,13 @@ class ConversationVCNavBar: UIView, Localizable {
         imageView.heightAnchor.constraint(lessThanOrEqualToConstant: 15).isActive = true
         imageView.clipsToBounds = true
         return imageView
-    } ()
+    }()
     var customRating: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "HelveticaNeue", size: 13) ?? UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor.white
         return label
-    } ()
+    }()
     
     var waitingQueueText: UILabel = {
         let label = UILabel()
@@ -203,7 +202,7 @@ class ConversationVCNavBar: UIView, Localizable {
             showCustomSubtitle = true
         }
         
-        if(showCustomSubtitle) {
+        if showCustomSubtitle {
             customSubtitleText.text = subtitleText
             profileView.addArrangedSubview(self.customSubtitleView)
         } else {
@@ -230,7 +229,7 @@ class ConversationVCNavBar: UIView, Localizable {
     }
 
     private func setupConstraints() {
-        addViewsForAutolayout(views: [backButton, waitingQueueText,profileImage, statusIconBackgroundColor, onlineStatusIcon, profileView])
+        addViewsForAutolayout(views: [backButton, waitingQueueText, profileImage, statusIconBackgroundColor, onlineStatusIcon, profileView])
 
         // Setup constraints
         backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -10).isActive = true

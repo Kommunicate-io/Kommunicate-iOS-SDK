@@ -43,8 +43,7 @@ class ConversationDetail {
 
     func updatedAssigneeDetails(groupId: NSNumber?,
                                 userId: String?,
-                                completion: @escaping (ALContact?, ALChannel?) -> Void)
-    {
+                                completion: @escaping (ALContact?, ALChannel?) -> Void) {
         var (assignee, alChannel) = conversationAssignee(groupId: groupId, userId: userId)
         guard let contact = assignee else {
             completion(nil, alChannel)

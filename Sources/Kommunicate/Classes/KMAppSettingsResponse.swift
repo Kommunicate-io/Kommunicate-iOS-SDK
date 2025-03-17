@@ -43,16 +43,16 @@ struct ChatWidgetResponse: Decodable {
     let hidePostCTA: Bool?
     let preChatGreetingMsg: String?
     let zendeskChatSdkKey: String?
-    let defaultUploadOverride : DefaultUploadOverride?
-    let pseudonymsEnabled : Bool?
-    let csatRatingBase : Int?
-    let disableChatWidget : Bool?
+    let defaultUploadOverride: DefaultUploadOverride?
+    let pseudonymsEnabled: Bool?
+    let csatRatingBase: Int?
+    let disableChatWidget: Bool?
     let botTypingIndicatorInterval: Int?
 }
 
 struct DefaultUploadOverride: Decodable {
     let url: String?
-    let headers: [String:String]?
+    let headers: [String: String]?
 }
 
 extension KMAppSettingsResponse {

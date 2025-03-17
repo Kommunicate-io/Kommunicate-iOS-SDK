@@ -46,7 +46,6 @@ class KMStarRattingViewController: UIViewController {
     
     var ratingSelected = 0
     let starRatingView = KMFiveStarView()
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -226,7 +225,7 @@ class KMBottomSheetController: UIPresentationController {
             dimmingView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             dimmingView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             dimmingView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            dimmingView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            dimmingView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
 
         guard let coordinator = presentedViewController.transitionCoordinator else {
@@ -282,7 +281,6 @@ class KMBottomSheetController: UIPresentationController {
         presentedView?.frame = frameOfPresentedViewInContainerView
     }
 }
-
 
 private extension KMStarRattingViewController {
     enum Size {

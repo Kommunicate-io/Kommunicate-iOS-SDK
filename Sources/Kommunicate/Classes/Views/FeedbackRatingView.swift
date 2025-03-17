@@ -46,7 +46,7 @@ class FeedbackRatingView: UIView {
     private lazy var ratingButtons = [
         sadEmojiButton,
         confusedEmojiButton,
-        happyEmojiButton,
+        happyEmojiButton
     ]
 
     private var selectedRatingTag = 0 {
@@ -84,7 +84,7 @@ class FeedbackRatingView: UIView {
         NSLayoutConstraint.activate([
             emojiStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             emojiStackView.topAnchor.constraint(equalTo: topAnchor),
-            emojiStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            emojiStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 }
@@ -173,7 +173,7 @@ class EmojiRatingButton: UIView {
             verticalStack.leadingAnchor.constraint(equalTo: leadingAnchor),
             verticalStack.trailingAnchor.constraint(equalTo: trailingAnchor),
             vsWidthConstraint,
-            emojiWidthConstraint,
+            emojiWidthConstraint
         ])
     }
 

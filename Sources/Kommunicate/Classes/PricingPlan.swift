@@ -32,7 +32,7 @@ struct PricingPlan {
         let isFreePlan = userDefaultsHandler.getUserPricingPackage() == startupPlan
         let isStartPlan = (userDefaultsHandler.getUserPricingPackage() == startMonthlyPlan || userDefaultsHandler.getUserPricingPackage() == startYearlyPlan)
         let isNotAgent = userDefaultsHandler.getUserRoleType() != Int16(AL_APPLICATION_WEB_ADMIN.rawValue)
-        guard isReleaseBuild, isNotAgent, (isFreePlan || isStartPlan) else { return false }
+        guard isReleaseBuild, isNotAgent, isFreePlan || isStartPlan else { return false }
         return true
     }
 }

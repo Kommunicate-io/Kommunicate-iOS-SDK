@@ -340,7 +340,7 @@ open class Kommunicate: NSObject, Localizable {
         return kmUser
     }
     
-    private class func registerNewUser(_ kmUser: KMUser, isVisitor : Bool, completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
+    private class func registerNewUser(_ kmUser: KMUser, isVisitor: Bool, completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
         
         let kmAppSetting = KMAppSettingService()
         kmAppSetting.appSetting(forceRefresh: true) { result in
@@ -393,22 +393,22 @@ open class Kommunicate: NSObject, Localizable {
         }
     }
     
-    private class func modifyVisitorMetadata(kmUser : KMUser) -> NSMutableDictionary {
+    private class func modifyVisitorMetadata(kmUser: KMUser) -> NSMutableDictionary {
         var metadata = kmUser.metadata
         if metadata == nil {
             metadata = NSMutableDictionary()
         }
-        var toAdd : [String : Any] = [ChannelMetadataKeys.pseudoName : "true"]
+        var toAdd: [String: Any] = [ChannelMetadataKeys.pseudoName: "true"]
         toAdd.updateValue("true", forKey: "hidden")
         updateVisitorMetadata(toAdd: toAdd, metadata: metadata!, updateContext: ChannelMetadataKeys.kmPseudoUser)
         return metadata!
     }
     
-    private class func updateVisitorMetadata(toAdd: [String: Any], metadata : NSMutableDictionary, updateContext : String) {
+    private class func updateVisitorMetadata(toAdd: [String: Any], metadata: NSMutableDictionary, updateContext: String) {
         var context: [String: Any] = [:]
 
         do {
-            let contextDict = alreadyPresentMetadata(metadata: metadata as? [AnyHashable : Any], context: updateContext)
+            let contextDict = alreadyPresentMetadata(metadata: metadata as? [AnyHashable: Any], context: updateContext)
             context = contextDict ?? [:]
             context.merge(toAdd, uniquingKeysWith: { $1 })
 
@@ -421,7 +421,7 @@ open class Kommunicate: NSObject, Localizable {
         }
     }
     
-    private class func alreadyPresentMetadata(metadata : [AnyHashable: Any]? , context : String) -> [String: Any]? {
+    private class func alreadyPresentMetadata(metadata: [AnyHashable: Any]?, context: String) -> [String: Any]? {
         guard
             let metadata = metadata,
             let context = metadata[context] as? String,
@@ -473,7 +473,6 @@ open class Kommunicate: NSObject, Localizable {
             }
         }
     }
-    
     
     /// Creates a new conversation with the details passed.
     /// - Parameter conversation: An instance of `KMConversation` object.
@@ -656,7 +655,7 @@ open class Kommunicate: NSObject, Localizable {
       */
      @objc open class func embedConversationList(from viewController: UIViewController, on rootView: UIView) {
          updateSettingsForEmbeddedMode(viewController: viewController)
-         openChatIn(rootView: rootView, groupId: 0, from: viewController, showListOnBack: true,completionHandler: {_ in
+         openChatIn(rootView: rootView, groupId: 0, from: viewController, showListOnBack: true, completionHandler: {_ in
          })
      }
     
@@ -666,7 +665,7 @@ open class Kommunicate: NSObject, Localizable {
      - viewController: ViewController from where ConversationVC  presented
      */
     @objc public static func closeConversationVC(from viewController: UIViewController) {
-        guard let navController = viewController.navigationController,let topVC = navController.visibleViewController, topVC.isKind(of: KMConversationViewController.self) || topVC.isKind(of: KMConversationListViewController.self) else { return }
+        guard let navController = viewController.navigationController, let topVC = navController.visibleViewController, topVC.isKind(of: KMConversationViewController.self) || topVC.isKind(of: KMConversationListViewController.self) else { return }
         let poppedVC = navController.popViewController(animated: true)
         if poppedVC == nil {
             topVC.dismiss(animated: true)
@@ -760,13 +759,11 @@ open class Kommunicate: NSObject, Localizable {
                 return
             }
             
-            openChatIn(rootView: rootView, groupId: key, from: viewController, prefilledMessage: prefilledMessage,showListOnBack: showListOnBack){ result in
+            openChatIn(rootView: rootView, groupId: key, from: viewController, prefilledMessage: prefilledMessage, showListOnBack: showListOnBack) { result in
                 completionHandler(result)
             }
         }
     }
-    
-    
 
     /**
      Creates and launches the conversation. In case multiple conversations
@@ -810,7 +807,7 @@ open class Kommunicate: NSObject, Localizable {
      - Parameters:
      - viewController: ViewController from which the group chat will be launched.
      */
-    open class func openZendeskChat(from: UIViewController,completion: @escaping (_ error: KommunicateError?) -> Void) {
+    open class func openZendeskChat(from: UIViewController, completion: @escaping (_ error: KommunicateError?) -> Void) {
         #if canImport(ChatProvidersSDK)
         let zendeskHandler = KMZendeskChatHandler.shared
         guard let accountKey = ALApplozicSettings.getZendeskSdkAccountKey(), !accountKey.isEmpty else {
@@ -832,7 +829,7 @@ open class Kommunicate: NSObject, Localizable {
                    case .success(let conversationId):
                       ALApplozicSettings.setLastZendeskConversationId(NSNumber(value: Int(conversationId) ?? 0))
                       
-                      print("New Conversation is created for Zendesk Configuration. Conversation id: ",conversationId)
+                      print("New Conversation is created for Zendesk Configuration. Conversation id: ", conversationId)
                       showConversationWith(
                           groupId: conversationId,
                           from: from,
@@ -860,7 +857,7 @@ open class Kommunicate: NSObject, Localizable {
         // If bot is handling the chat then we shouldn't send any messages to Zendesk.
         if let assignee = channel.assigneeUserId, !assignee.isEmpty,
            let contact = ALContactService().loadContact(byKey: "userId", value: assignee) {
-            if contact.roleType == NSNumber.init(value: AL_APPLICATION_WEB_ADMIN.rawValue) {
+            if contact.roleType == NSNumber(value: AL_APPLICATION_WEB_ADMIN.rawValue) {
                 zendeskHandler.handedOffToAgent(groupId: existingZendeskConversationId.stringValue, happendNow: false)
             }
         }
@@ -882,7 +879,7 @@ open class Kommunicate: NSObject, Localizable {
      - viewController: ViewController where the group chat will be launched.
      - rootView: view container where the group chat will be loaded.
      */
-    open class func createAndEmbedConversation(from viewController: UIViewController,rootView:UIView,completion: @escaping (_ error: KommunicateError?) -> Void) {
+    open class func createAndEmbedConversation(from viewController: UIViewController, rootView: UIView, completion: @escaping (_ error: KommunicateError?) -> Void) {
         guard isLoggedIn else {
             completion(KommunicateError.notLoggedIn)
             return
@@ -898,14 +895,13 @@ open class Kommunicate: NSObject, Localizable {
                 embedConversationList(from: viewController, on: rootView)
                 completion(nil)
             } else {
-                createAConversationAndLaunch(from: viewController, on: rootView,completion: {
+                createAConversationAndLaunch(from: viewController, on: rootView, completion: {
                     conversationError in
                     completion(conversationError)
                 })
             }
         })
     }
-
 
     /**
      Updates the conversation parameters.
@@ -926,20 +922,20 @@ open class Kommunicate: NSObject, Localizable {
         let service = KMConversationService()
         if let assignee = conversation.conversationAssignee {
             service.isGroupPresent(clientId: clientConversationId, completion: { present, channel in
-                guard present else{
+                guard present else {
                     return completion(.failure(.conversationNotPresent))
                 }
                 let groupID = Int(truncating: channel?.key ?? 0)
                 
-                guard groupID != 0 else{
+                guard groupID != 0 else {
                     return completion(.failure(.conversationUpdateFailed))
                 }
 
-                service.assignConversation(groupId: groupID, to: assignee){ result in
+                service.assignConversation(groupId: groupID, to: assignee) { result in
                     switch result {
                     case .success:
                         completion(.success(clientConversationId))
-                    case .failure(_):
+                    case .failure:
                         completion(.failure(.conversationUpdateFailed))
                     }
                 }
@@ -948,10 +944,10 @@ open class Kommunicate: NSObject, Localizable {
             return
         }
 
-        let defaultMetaData = NSMutableDictionary (
+        let defaultMetaData = NSMutableDictionary(
             dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
     
-        if let conversationMetaDict = conversation.conversationMetadata as NSDictionary? as! [String:Any]? {
+        if let conversationMetaDict = conversation.conversationMetadata as NSDictionary? as! [String: Any]? {
             let jsonObject = try? JSONSerialization.data(withJSONObject: conversationMetaDict, options: [])
             if let jsonString = String(data: jsonObject!, encoding: .utf8) {
                 defaultMetaData.setValue(jsonString, forKey: ChannelMetadataKeys.conversationMetaData)
@@ -1308,7 +1304,7 @@ open class Kommunicate: NSObject, Localizable {
     }
     
     class func openChatIn(
-        rootView:UIView,
+        rootView: UIView,
         groupId: NSNumber,
         from viewController: UIViewController,
         prefilledMessage: String? = nil,
@@ -1344,7 +1340,7 @@ open class Kommunicate: NSObject, Localizable {
     class func updateSettingsForEmbeddedMode(viewController: UIViewController) {
         let embeddedVC = viewController.description
         // Update VC List
-        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description(),embeddedVC])
+        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description(), embeddedVC])
         embeddedViewController = embeddedVC
     }
 
@@ -1381,7 +1377,7 @@ open class Kommunicate: NSObject, Localizable {
             case let .success(conversationId):
                 DispatchQueue.main.async {
                     if let rootView = rootView {
-                        showConversationIn(rootView: rootView,groupId: conversationId, from: viewController, completionHandler: { success in
+                        showConversationIn(rootView: rootView, groupId: conversationId, from: viewController, completionHandler: { success in
                             guard success else {
                                 completion(KommunicateError.conversationNotPresent)
                                 return
@@ -1390,7 +1386,7 @@ open class Kommunicate: NSObject, Localizable {
                             completion(nil)
                         })
                     } else {
-                        showConversationWith(groupId: conversationId, from: viewController,completionHandler: { success in
+                        showConversationWith(groupId: conversationId, from: viewController, completionHandler: { success in
                             guard success else {
                                 completion(KommunicateError.conversationNotPresent)
                                 return
@@ -1409,8 +1405,8 @@ open class Kommunicate: NSObject, Localizable {
 
     func defaultChatViewSettings() {
         if serverConfig == .euConfiguration {
-            ALUserDefaultsHandler.setBASEURL(API.Backend.chat_eu.rawValue)
-            ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi_eu.rawValue)
+            ALUserDefaultsHandler.setBASEURL(API.Backend.chatEu.rawValue)
+            ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApiEu.rawValue)
         } else {
             ALUserDefaultsHandler.setBASEURL(API.Backend.chat.rawValue)
             ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi.rawValue)
@@ -1419,8 +1415,8 @@ open class Kommunicate: NSObject, Localizable {
         ALApplozicSettings.setFilterContactsStatus(true)
         ALUserDefaultsHandler.setDebugLogsRequire(true)
         ALApplozicSettings.setSwiftFramework(true)
-        let hiddenMessageMetaDataFlagArray = ["KM_STATUS" , "KM_ASSIGN_TO", "KM_ASSIGN_TEAM"]
-        ALApplozicSettings.hideMessages(withMetadataKeys:hiddenMessageMetaDataFlagArray)
+        let hiddenMessageMetaDataFlagArray = ["KM_STATUS", "KM_ASSIGN_TO", "KM_ASSIGN_TEAM"]
+        ALApplozicSettings.hideMessages(withMetadataKeys: hiddenMessageMetaDataFlagArray)
         ALApplozicSettings.enableS3StorageService(true)
     }
 
@@ -1510,8 +1506,8 @@ open class Kommunicate: NSObject, Localizable {
     open class func setServerConfiguration(_ environment: KMServerConfiguration) {
         Kommunicate.shared.serverConfig = environment
         if environment == .euConfiguration {
-            ALUserDefaultsHandler.setBASEURL(API.Backend.chat_eu.rawValue)
-            ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi_eu.rawValue)
+            ALUserDefaultsHandler.setBASEURL(API.Backend.chatEu.rawValue)
+            ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApiEu.rawValue)
         } else {
             ALUserDefaultsHandler.setBASEURL(API.Backend.chat.rawValue)
             ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi.rawValue)
@@ -1539,15 +1535,13 @@ open class Kommunicate: NSObject, Localizable {
         }
         conversation.teamId = teamId
         
-        updateConversation(conversation: conversation){
+        updateConversation(conversation: conversation) {
             response in
-               switch response{
+               switch response {
                case .success(let clientConversationId):
                    completion(.success(clientConversationId))
-                   break
-               case .failure(let error):
+                   case .failure(let error):
                    completion(.failure(error))
-                   break
                }
         }
     }
@@ -1568,7 +1562,6 @@ open class Kommunicate: NSObject, Localizable {
     open class func createSettings(settings: String) -> Bool {
         return KMConfigurationSetter.createCustomSetting(settings: settings)
     }
-    
     
     /**
      Creates a new conversation with the details passed.

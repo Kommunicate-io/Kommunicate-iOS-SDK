@@ -123,8 +123,7 @@ public class KMPushNotificationHelper {
         viewController.unsubscribingChannel()
         if !isChatThreadIsOpen(notification,
                                userId: viewController.viewModel.contactId,
-                               groupId: viewController.viewModel.channelKey)
-        {
+                               groupId: viewController.viewModel.channelKey) {
             viewController.viewModel.prefilledMessage = nil
         }
         viewController.viewModel.contactId = nil
@@ -172,8 +171,7 @@ public class KMPushNotificationHelper {
             refreshConversation(vc, with: notification)
         default:
             if let searchVC = topVC as? UISearchController,
-               let vc = searchVC.presentingViewController as? KMConversationListViewController
-            {
+               let vc = searchVC.presentingViewController as? KMConversationListViewController {
                 openConversationFromListVC(vc, notification: notification)
                 return
             }
@@ -207,8 +205,7 @@ public class KMPushNotificationHelper {
     }
 
     private func dismissOurVCIfVisible(_ vc: UIViewController,
-                                       completion: @escaping (Bool) -> Void)
-    {
+                                       completion: @escaping (Bool) -> Void) {
         if !isKommunicateVCAtTop() {
             completion(false)
             return

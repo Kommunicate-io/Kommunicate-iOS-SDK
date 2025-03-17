@@ -12,6 +12,7 @@ target 'Kommunicate_Example' do
     pod 'KommunicateCore-iOS-SDK', :git => 'https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git', :branch => ENV['KM_CORE_BRANCH']
   else
     pod 'Kommunicate', :path => '../'
+    pod 'SwiftLint'
   end
 
 target 'Kommunicate_Tests' do

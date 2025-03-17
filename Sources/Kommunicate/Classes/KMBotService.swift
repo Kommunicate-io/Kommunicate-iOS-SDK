@@ -26,8 +26,7 @@ public struct KMBotService {
     ///   - completion: A result of type `BotDetail` or `KMBotError`
     public func botDetail(applicationKey: String = KMUserDefaultHandler.getApplicationKey(),
                           botId: String,
-                          completion: @escaping (Result<BotDetail, KMBotError>) -> Void)
-    {
+                          completion: @escaping (Result<BotDetail, KMBotError>) -> Void) {
         guard let url = URLBuilder.botDetail(for: applicationKey, botId: botId).url else {
             completion(.failure(.api(.urlBuilding)))
             return
