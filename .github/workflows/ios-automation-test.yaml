@@ -1,16 +1,72 @@
 name: iOS Automation Test Workflow
 
 on:
-  pull_request: # Trigger this workflow on pull request events
+  pull_request:
     types:
       - opened
+      - synchronize  # Triggers when a new commit is pushed to the PR
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
+  # Build and Lint Job
+  build-and-lint:
+    name: Build and Lint
+    # Only run this job when the base branch is master
+    if: github.event.pull_request.base.ref == 'master'
+    runs-on: macos-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.1.0'
+
+      - name: Run Linter Check
+        run: |
+          pod lib lint --allow-warnings
+
+      - name: Debug Environment Variables (Optional)
+        run: echo "Environment variables set successfully."
+
+      - name: Post Lint Test Results to PR
+        if: github.event_name == 'pull_request' && success()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const comment = `✅ **iOS Lint Test Result**\nCongratulations! Linter Check Passed Successfully 🎉`;
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment,
+            });
+
+      - name: Post Lint Failure Result to PR
+        if: github.event_name == 'pull_request' && failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const comment = `❌ **iOS Lint Test Result**\nOops! Linter Check Failed. Please fix the issues.`;
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment,
+            });
+
+  # Build and Test Job
   build-and-test:
     name: Build and Test
     runs-on: macos-latest
-    timeout-minutes: 45 # Prevents the workflow from hanging indefinitely
-
+    timeout-minutes: 45
+    
     steps:
       # Step 1: Checkout the code
       - name: Checkout Repository

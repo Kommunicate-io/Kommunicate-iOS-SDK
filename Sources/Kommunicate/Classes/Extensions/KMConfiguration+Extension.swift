@@ -27,7 +27,7 @@ public extension ALKConfiguration {
             UserDefaults.standard.set(newValue, forKey: ConversationDefaultSettings.defaultAssignee)
         }
         get {
-            return UserDefaults.standard.string(forKey:ConversationDefaultSettings.defaultAssignee)
+            return UserDefaults.standard.string(forKey: ConversationDefaultSettings.defaultAssignee)
         }
     }
     
@@ -72,7 +72,7 @@ public extension ALKConfiguration {
     }
     
     // To clear the default conversation settings like defaultAssignee,defaultBotIds..etc
-    func clearDefaultConversationSettings(){
+    func clearDefaultConversationSettings() {
         let userDefaults = UserDefaults.standard
         userDefaults.removeObject(forKey: ConversationDefaultSettings.defaultBotIds)
         userDefaults.removeObject(forKey: ConversationDefaultSettings.defaultAgentIds)

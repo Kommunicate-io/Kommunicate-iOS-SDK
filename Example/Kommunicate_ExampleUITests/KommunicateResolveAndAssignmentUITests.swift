@@ -40,7 +40,6 @@ class KommunicateResolveAndAssignmentUITests: XCTestCase {
     
     func testRestartConversation () {
         let app = beforeTest_Launch_NewConversation()
-        sleep(3)
         waitFor(object: app) { $0.exists }
         app.typeText(GroupData.typeText) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
@@ -71,6 +70,10 @@ class KommunicateResolveAndAssignmentUITests: XCTestCase {
         waitFor(object: resolveConversationButtonResponse) { $0.exists }
         
         sleep(5)
+        
+        app.buttons[InAppButton.ConversationScreen.cancelRatingButton].tap()
+        sleep(2)
+        
         app.buttons[InAppButton.ConversationScreen.restartConversation].tap()
         
         let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch

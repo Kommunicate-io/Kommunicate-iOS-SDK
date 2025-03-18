@@ -74,6 +74,7 @@ class RatingViewController: UIViewController {
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.backgroundColor = .clear
         textView.textColor = .kmDynamicColor(light: .black, dark: .white)
+        textView.accessibilityIdentifier = "KMRatingCommentsTextView"
         return textView
     }()
 
@@ -140,7 +141,7 @@ class RatingViewController: UIViewController {
         view.addViewsForAutolayout(views: [
             closeButton,
             titleLabel,
-            feedbackStackView,
+            feedbackStackView
         ])
 
         let lowPriority = UILayoutPriority(rawValue: 999)
@@ -168,7 +169,7 @@ class RatingViewController: UIViewController {
             submitButtonHeightConstraint,
             submitButton.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: -(Size.SubmitButton.height)),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: Size.TitleLabel.top),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: Size.TitleLabel.top)
         ])
     }
 
@@ -302,7 +303,7 @@ class BottomSheetController: UIPresentationController {
             dimmingView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             dimmingView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             dimmingView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            dimmingView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            dimmingView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
 
         guard let coordinator = presentedViewController.transitionCoordinator else {

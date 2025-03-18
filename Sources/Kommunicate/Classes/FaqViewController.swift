@@ -6,7 +6,7 @@
 //
 
 import KommunicateChatUI_iOS_SDK
-import WebKit
+@preconcurrency import WebKit
 
 public class FaqViewController: UIViewController, Localizable {
     var webView: WKWebView = .init()

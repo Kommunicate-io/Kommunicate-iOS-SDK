@@ -53,15 +53,13 @@ extension LayoutProperty {
     }
 
     func greaterThanOrEqual(to otherAnchor: Anchor,
-                            offsetBy constant: CGFloat = 0)
-    {
+                            offsetBy constant: CGFloat = 0) {
         anchor.constraint(greaterThanOrEqualTo: otherAnchor,
                           constant: constant).isActive = true
     }
 
     func lessThanOrEqual(to otherAnchor: Anchor,
-                         offsetBy constant: CGFloat = 0)
-    {
+                         offsetBy constant: CGFloat = 0) {
         anchor.constraint(lessThanOrEqualTo: otherAnchor,
                           constant: constant).isActive = true
     }
@@ -87,8 +85,7 @@ func - <A: LayoutAnchor>(lhs: A, rhs: CGFloat) -> (A, CGFloat) {
 }
 
 func == <A: LayoutAnchor>(lhs: LayoutProperty<A>,
-                          rhs: (A, CGFloat))
-{
+                          rhs: (A, CGFloat)) {
     lhs.equal(to: rhs.0, offsetBy: rhs.1)
 }
 
@@ -97,8 +94,7 @@ func == <A: LayoutAnchor>(lhs: LayoutProperty<A>, rhs: A) {
 }
 
 func >= <A: LayoutAnchor>(lhs: LayoutProperty<A>,
-                          rhs: (A, CGFloat))
-{
+                          rhs: (A, CGFloat)) {
     lhs.greaterThanOrEqual(to: rhs.0, offsetBy: rhs.1)
 }
 
@@ -107,8 +103,7 @@ func >= <A: LayoutAnchor>(lhs: LayoutProperty<A>, rhs: A) {
 }
 
 func <= <A: LayoutAnchor>(lhs: LayoutProperty<A>,
-                          rhs: (A, CGFloat))
-{
+                          rhs: (A, CGFloat)) {
     lhs.lessThanOrEqual(to: rhs.0, offsetBy: rhs.1)
 }
 

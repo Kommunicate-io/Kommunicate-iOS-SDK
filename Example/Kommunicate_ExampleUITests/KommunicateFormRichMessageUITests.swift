@@ -42,7 +42,11 @@ class KommunicateFormRichMessageUITests: XCTestCase {
     func testFormTemplate1() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
-        sleep(4)
+        let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
+        waitFor(object: inputView) { $0.exists }
+        inputView.tap()
+        inputView.tap()
+        inputView.tap()
         app.typeText(GroupData.typeText1) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         let formFirstResponse = app.tables[AppScreen.innerChatScreenTableView]
@@ -70,7 +74,11 @@ class KommunicateFormRichMessageUITests: XCTestCase {
     func testFormTemplate2() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
-        sleep(4)
+        let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
+        waitFor(object: inputView) { $0.exists }
+        inputView.tap()
+        inputView.tap()
+        inputView.tap()
         app.typeText(GroupData.typeText2) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         let formFirstResponse = app.tables[AppScreen.innerChatScreenTableView]
@@ -97,6 +105,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         addressField.tap()
         addressField.typeText(FormData.address)
         app.swipeUp()
+        app.tap()
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
         let submitResponse = innerchatscreentableviewTable.textViews[RichMessageResponseText.formTemplateResponse2]
@@ -106,9 +115,12 @@ class KommunicateFormRichMessageUITests: XCTestCase {
     func testFormTemplate3() {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
-        sleep(4)
+        let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
+        waitFor(object: inputView) { $0.exists }
+        inputView.tap()
+        inputView.tap()
+        inputView.tap()
         app.typeText(GroupData.typeText3) // typing message
-        sleep(2)
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         let formFirstResponse = app.tables[AppScreen.innerChatScreenTableView]
             .textViews[RichMessageResponseText.formFirstResponse]
@@ -128,6 +140,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         app.buttons[InAppButton.ConversationScreen.doneButton].tap()
         sleep(1)
         app.swipeUp()
+        app.tap()
         let innerchatscreentableviewTable = app.tables[AppScreen.innerChatScreenTableView]
         innerchatscreentableviewTable.staticTexts[RichMessageButtons.male].tap()
         app.tables[AppScreen.innerChatScreenTableView].staticTexts[RichMessageButtons.submit].tap()
@@ -164,7 +177,7 @@ class KommunicateFormRichMessageUITests: XCTestCase {
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]
         waitFor(object: launchConversationButton) { $0.exists }
         launchConversationButton.tap()
-        sleep(3)
+        sleep(5)
         // Check if the specific screen is on top
         let isScreenOnTop = app.navigationBars[AppScreen.myChatScreen].exists
 

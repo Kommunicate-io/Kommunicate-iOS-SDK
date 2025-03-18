@@ -74,14 +74,14 @@ extension KMConversationService {
         }
         let userInfo: [String: Any] = [
             FeedbackParamKey.userName: userName,
-            FeedbackParamKey.userId: userId,
+            FeedbackParamKey.userId: userId
         ]
         var params: [String: Any] = [
             FeedbackParamKey.groupId: groupId,
             FeedbackParamKey.rating: feedback.rating.rawValue,
             FeedbackParamKey.applicationId: applicationId,
             FeedbackParamKey.assigneeId: assigneeId,
-            FeedbackParamKey.userInfo: userInfo,
+            FeedbackParamKey.userInfo: userInfo
         ]
         if let comment = feedback.comment, !comment.isEmpty {
             params[FeedbackParamKey.comment] = [comment]
@@ -124,14 +124,14 @@ extension KMConversationService {
         }
         let userInfo: [String: Any] = [
             FeedbackParamKey.userName: userName,
-            FeedbackParamKey.userId: userId,
+            FeedbackParamKey.userId: userId
         ]
         var params: [String: Any] = [
             FeedbackParamKey.groupId: groupId,
             FeedbackParamKey.rating: feedback.rating,
             FeedbackParamKey.applicationId: applicationId,
             FeedbackParamKey.assigneeId: assigneeId,
-            FeedbackParamKey.userInfo: userInfo,
+            FeedbackParamKey.userInfo: userInfo
         ]
         if let comment = feedback.comment, !comment.isEmpty {
             params[FeedbackParamKey.comment] = [comment]

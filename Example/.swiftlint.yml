@@ -1,0 +1,56 @@
+
+reporter: "xcode" # reporter type (xcode, json, csv, checkstyle, junit, html, emoji)
+
+included:
+    - ../sources
+    - ../../KommunicateChatUI-iOS-SDK/sources
+    - ../../KommunicateCore-iOS-SDK/sources
+
+excluded: # paths to ignore during linting. Takes precedence over `included`.
+    - .
+    - Carthage
+    - Pods
+    - SwiftLint/Common/3rdPartyLib
+
+# Disable specific rules that may be unnecessary or too strict
+disabled_rules:
+  - trailing_whitespace  # Allows trailing whitespace (not recommended but sometimes needed)
+  - empty_count          # Disables warning for using `.count == 0` instead of `.isEmpty`
+
+# Enable additional rules for stricter linting
+opt_in_rules:
+  - empty_parameters              # Ensures function parameters are not left empty
+  - explicit_init                 # Requires explicit initializers to avoid ambiguity
+  - vertical_parameter_alignment  # Aligns function parameters for better readability
+
+# Enforce maximum line length to keep code readable
+line_length: 120  # Maximum allowed characters per line
+
+cyclomatic_complexity:
+  warning: 50 # Increase the limit from 10 to 50
+  error: 60
+
+# Function and type length restrictions to encourage modular code
+function_body_length: 40  # Limits function body length to 40 lines
+type_body_length: 200     # Limits classes/structs to 200 lines
+file_length: 400          # Restricts each file to a maximum of 400 lines
+
+# Naming conventions for better readability
+identifier_name:
+  min_length: 3  # Ensures variables have meaningful names (e.g., `id` is too short)
+  max_length: 40 # Prevents excessively long variable names
+  allowed_symbols: ["_"]  # Allows underscores in variable names
+  validates_start_with_lowercase: false  # Allows uppercase identifiers
+
+# Prevent forced unwrapping and casting to improve safety
+force_unwrapping: warning  # Warns against using `!`, which can cause crashes
+force_cast: warning        # Discourages forced type casting using `as!`
+
+# Optimize code by avoiding redundant initializations
+redundant_optional_initialization: warning  # Detects unnecessary `= nil` assignments
+redundant_setter_value: warning             # Avoids redundant property setter assignments
+redundant_string_enum_value: warning        # Removes unnecessary explicit raw
+
+# Allow Todo Comments (if enabled above)
+todo:
+  severity: warning

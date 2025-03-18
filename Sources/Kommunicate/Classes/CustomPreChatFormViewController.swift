@@ -179,7 +179,7 @@ open class CustomPreChatFormViewController: UIViewController {
             for (index, element) in Kommunicate.leadArray.enumerated() {
                 if mandatoryOption == CustomPreChatFormViewController.email {
                     if let text = (formView.formStackView.arrangedSubviews[index].subviews[0] as? UILabel)?.text, text == mandatoryOption {
-                        if let text2 = (formView.formStackView.arrangedSubviews[index].subviews[1] as? UITextField)?.text,!text2.isValidEmail {
+                        if let text2 = (formView.formStackView.arrangedSubviews[index].subviews[1] as? UITextField)?.text, !text2.isValidEmail {
                             if text2.isEmpty {
                                 validationError = TextFieldValidationError.emptyEmailAddress
                                 break outerLoop
@@ -298,8 +298,13 @@ open class CustomPreChatFormViewController: UIViewController {
     }
 
     private func addTransparent(_ rect: CGRect) {
-        let window = UIApplication.sharedUIApplication()?.keyWindow
-        transparentView.frame = window?.frame ?? view.frame
+        guard let window = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .flatMap({ $0.windows })
+            .first(where: { $0.isKeyWindow })
+        else { return }
+        
+        transparentView.frame = window.frame
         view.addSubview(transparentView)
 
         tableView.frame = CGRect(x: rect.origin.x, y: rect.origin.y + rect.height, width: rect.width, height: 0)

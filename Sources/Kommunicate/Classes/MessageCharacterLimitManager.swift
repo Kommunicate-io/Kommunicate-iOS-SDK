@@ -32,8 +32,7 @@ class MessageCharacterLimitManager: NSObject {
 
     init(chatBar: ALKChatBar,
          charLimitView: MessageCharacterLimitView,
-         limit: Int)
-    {
+         limit: Int) {
         self.chatBar = chatBar
         self.charLimitView = charLimitView
         self.limit = limit

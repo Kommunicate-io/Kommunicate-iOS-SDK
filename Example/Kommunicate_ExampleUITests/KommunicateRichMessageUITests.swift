@@ -330,7 +330,7 @@ class KommunicateRichMessageUITests: XCTestCase {
         let launchConversationButton = app.buttons[InAppButton.EditGroup.launch]
         waitFor(object: launchConversationButton) { $0.exists }
         launchConversationButton.tap()
-        sleep(3)
+        sleep(5)
         // Check if the specific screen is on top
         let isScreenOnTop = app.navigationBars[AppScreen.myChatScreen].exists
 
