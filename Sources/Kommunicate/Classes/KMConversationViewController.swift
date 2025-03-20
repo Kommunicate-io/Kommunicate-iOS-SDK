@@ -290,7 +290,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         teamID: Int
     ) {
         if currentTime >= 2300 {
-            let remainingTime = minutesBetween(start: currentTime, end: 2359) + 10
+            let remainingTime = minutesBetween(start: currentTime, end: 2359) + 2
             DispatchQueue.main.asyncAfter(deadline: .now() + (TimeInterval(remainingTime) * 60)) { [weak self] in
                 guard let kmBusinessHoursDataArray = self?.kmBusinessHoursDataArray else { return }
                 self?.processBusinessHours(kmBusinessHoursDataArray, for: teamID)
