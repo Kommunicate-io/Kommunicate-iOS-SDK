@@ -60,8 +60,15 @@ class KMAppSettingService {
             }
         })
     }
+    
+    func updateAppsettings(appSettingsResponse: AppSetting?) {
+        guard let appSettings = appSettingsResponse else {
+            return
+        }
+        KMAppUserDefaultHandler.shared.currentActivatedPlan = appSettings.currentActivatedPlan ?? "trial"
+    }
 
-    func updateAppsettings(chatWidgetResponse: ChatWidgetResponse?) {
+    func updateChatWidgetAppsettings(chatWidgetResponse: ChatWidgetResponse?) {
         guard let chatWidget = chatWidgetResponse else {
                    return
                }

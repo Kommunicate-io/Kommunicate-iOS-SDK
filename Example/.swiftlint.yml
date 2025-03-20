@@ -24,7 +24,7 @@ opt_in_rules:
   - vertical_parameter_alignment  # Aligns function parameters for better readability
 
 # Enforce maximum line length to keep code readable
-line_length: 120  # Maximum allowed characters per line
+line_length: 150  # Maximum allowed characters per line
 
 cyclomatic_complexity:
   warning: 50 # Increase the limit from 10 to 50

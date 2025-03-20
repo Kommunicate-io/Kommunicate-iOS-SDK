@@ -46,6 +46,16 @@ class KMAppUserDefaultHandler: NSObject {
             return userDefaultSuite.integer(forKey: Key.BotTypingIndicatorInterval)
         }
     }
+    
+    var currentActivatedPlan: String {
+        set {
+            userDefaultSuite.set(newValue, forKey: Key.CurrentActivatedPlan)
+        }
+        get {
+            return userDefaultSuite.string(forKey: Key.CurrentActivatedPlan) ?? "trial"
+        }
+    }
+    
     private let userDefaultSuite: UserDefaults
 
     init(userDefaultSuite: UserDefaults) {
@@ -71,5 +81,6 @@ private extension KMAppUserDefaultHandler {
         static let BotMessageDelayInterval = "BOT_MESSAGE_DELAY_INTERVAL"
         static let CSATRatingBase = "CSAT_RATTING_BASE"
         static let BotTypingIndicatorInterval = "BOT_TYPING_INDICATOR_INTERVAL"
+        static let CurrentActivatedPlan = "KM_CURRENT_ACTIVATED_PLAN"
     }
 }

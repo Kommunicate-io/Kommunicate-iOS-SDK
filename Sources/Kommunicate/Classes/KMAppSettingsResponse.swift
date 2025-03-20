@@ -28,9 +28,10 @@ public struct AppSetting: Decodable {
     let collectFeedback: Bool?
     let collectLead: Bool?
     let leadCollection: [LeadCollectionField]?
+    let currentActivatedPlan: String?
 
     enum CodingKeys: String, CodingKey {
-        case agentName, userName, chatWidget, collectFeedback, collectLead, leadCollection
+        case agentName, userName, chatWidget, collectFeedback, collectLead, leadCollection, currentActivatedPlan
     }
 }
 

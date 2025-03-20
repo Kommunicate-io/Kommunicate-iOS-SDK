@@ -121,6 +121,36 @@ public class KMConversationService: KMConservationServiceable, Localizable {
             })
         }
     }
+    
+    func businessHoursMessageFor(
+        applicationKey: String,
+        completion: @escaping (Result<[KMBusinessHoursViewModel], Error>) -> Void
+    ) {
+        guard let url = URLBuilder.businessHourURLFor().url else {
+            completion(.failure(APIError.urlBuilding))
+            return
+        }
+        
+        DataLoader.requestWithApplicationKey(url: url, applicationKey: applicationKey) { result in
+            switch result {
+            case let .success(data):
+                do {
+                    guard let businessHoursJson = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+                        print("Error converting data to JSON")
+                        completion(.failure(APIError.jsonConversion))
+                        return
+                    }
+                    completion(self.makeBusinessHoursFrom(json: businessHoursJson))
+                } catch {
+                    print("Error converting data to JSON: \(error)")
+                    completion(.failure(error))
+                }
+                
+            case let .failure(error):
+                completion(.failure(error))
+            }
+        }
+    }
 
     /**
       Fetches away message for the given group id.
@@ -294,6 +324,20 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         }
     }
 
+    private func makeBusinessHoursFrom(json: [String: Any]) -> Result<[KMBusinessHoursViewModel], Error> {
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: json, options: [])
+            
+            // Decode into KMBusinessHoursResponseViewModel
+            let decodedResponse = try JSONDecoder().decode(KMBusinessHoursResponseViewModel.self, from: jsonData)
+            
+            return .success(decodedResponse.response)  // ✅ Return the response array directly
+        } catch {
+            print("Error decoding JSON: \(error)")
+            return .failure(APIError.messageNotPresent)
+        }
+    }
+    
     func makeAwayMessageFrom(json: [String: Any]) -> Result<[String: Any], Error> {
         guard
             let data = json["data"] as? [String: Any],
@@ -679,4 +723,24 @@ public class KMConversationService: KMConservationServiceable, Localizable {
             completion(Response(success: true, clientChannelKey: groupID, error: nil))
         }
     }
+}
+
+struct KMBusinessHoursViewModel: Codable {
+    let teamId: Int
+    let teamName: String
+    let type: Int
+    let teamMembers: [String]
+    let teamMembersMap: [String: String]
+    let agentCount: Int
+    let botCount: Int
+    let businessHourMap: [String: String]
+    let timezone: String
+    let workingDays: String
+    let message: String
+}
+
+struct KMBusinessHoursResponseViewModel: Codable {
+    let status: String
+    let generatedAt: Int
+    let response: [KMBusinessHoursViewModel]  // This contains the actual business hours data
 }
