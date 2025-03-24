@@ -347,7 +347,8 @@ open class Kommunicate: NSObject, Localizable {
             switch result {
             case let .success(appSetting):
                 DispatchQueue.main.async {
-                    kmAppSetting.updateAppsettings(chatWidgetResponse: appSetting.chatWidget)
+                    kmAppSetting.updateAppsettings(appSettingsResponse: appSetting)
+                    kmAppSetting.updateChatWidgetAppsettings(chatWidgetResponse: appSetting.chatWidget)
                     KMAppUserDefaultHandler.shared.isCSATEnabled
                         = appSetting.collectFeedback ?? false
                     if !KMAppUserDefaultHandler.shared.isCSATEnabled {
@@ -462,6 +463,7 @@ open class Kommunicate: NSObject, Localizable {
             result in
             switch result {
             case let .success(appSettings):
+                appSettingsService.updateAppsettings(appSettingsResponse: appSettings)
                 if let chatWidget = appSettings.chatWidget,
                    let isSingleThreaded = chatWidget.isSingleThreaded,
                    isSingleThreaded != ALApplozicSettings.getIsSingleThreadedEnabled() {
@@ -1066,6 +1068,7 @@ open class Kommunicate: NSObject, Localizable {
         kmAppSetting.appSetting { result in
             switch result {
             case let .success(appSetting):
+                kmAppSetting.updateAppsettings(appSettingsResponse: appSetting)
                 guard let isPreChatEnable = appSetting.collectLead else { return }
                 if isPreChatEnable {
                     UserDefaults.standard.set(appSetting.chatWidget?.preChatGreetingMsg!, forKey: "leadCollectionTitle")
