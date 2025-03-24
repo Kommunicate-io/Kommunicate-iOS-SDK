@@ -717,6 +717,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     override open func sendQuickReply(_ text: String,
                                       metadata: [String: Any]?,
                                       languageCode language: String?) {
+        guard isConversationResolvedAndReplyEnabled() else { return }
         do {
             var replyMetadata = metadata ?? [String: Any]() // reply meta data
 
