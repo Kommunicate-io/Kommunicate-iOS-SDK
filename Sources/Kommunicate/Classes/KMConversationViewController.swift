@@ -290,8 +290,8 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         teamID: Int
     ) {
         if currentTime >= 2300 {
-            let remainingTime = minutesBetween(start: currentTime, end: 2359) + 2
-            DispatchQueue.main.asyncAfter(deadline: .now() + (TimeInterval(remainingTime) * 60)) { [weak self] in
+            let remainingTime = minutesBetween(start: currentTime, end: 2359) + 1
+            DispatchQueue.main.asyncAfter(deadline: .now() + (TimeInterval(remainingTime) * 60) + 1) { [weak self] in
                 guard let kmBusinessHoursDataArray = self?.kmBusinessHoursDataArray else { return }
                 self?.processBusinessHours(kmBusinessHoursDataArray, for: teamID)
             }
@@ -336,7 +336,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         if isWithinBusinessHours(currentTime, startTime: startTime, endTime: endTime) {
             handleWithinBusinessHours(currentTime: currentTime, endTime: endTime, teamId: teamId)
         } else {
-            handleOutsideBusinessHours(currentTime: currentTime, startTime: startTime, message: message)
+            handleOutsideBusinessHours(currentTime: currentTime, startTime: startTime, teamID: teamId, message: message)
         }
     }
 
@@ -349,8 +349,12 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     private func handleWithinBusinessHours(
         currentTime: Int,
         endTime: Int,
-        teamId: Int
+        teamId: Int,
+        businessHourDisabled: Bool = false
     ) {
+        if !businessHourDisabled {
+            recallBusinessHoursMessage(startTime: currentTime, endTime: endTime, teamID: teamId)
+        }
         prepareBusinessHoursInfoView(message: "", isVisible: false)
         print("Business hours are active for teamId \(teamId)")
     }
@@ -358,10 +362,20 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     private func handleOutsideBusinessHours(
         currentTime: Int,
         startTime: Int,
+        teamID: Int,
         message: String
     ) {
+        recallBusinessHoursMessage(startTime: currentTime, endTime: startTime, teamID: teamID)
         prepareBusinessHoursInfoView(message: message, isVisible: true)
-        print("Out of business hours")
+        print("Out of business hours for teamId \(teamID)")
+    }
+    
+    private func recallBusinessHoursMessage(startTime: Int, endTime: Int, teamID: Int) {
+        let remainingTime = minutesBetween(start: startTime, end: endTime)
+        DispatchQueue.main.asyncAfter(deadline: .now() + (TimeInterval(remainingTime) * 60) + 1) { [weak self] in
+            guard let kmBusinessHoursDataArray = self?.kmBusinessHoursDataArray else { return }
+            self?.processBusinessHours(kmBusinessHoursDataArray, for: teamID)
+        }
     }
     
     // This method is used to delay the bot message as well as to show typing indicator
