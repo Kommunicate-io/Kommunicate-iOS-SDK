@@ -63,7 +63,7 @@ class PaymentTests: XCTestCase {
     }
 }
 
-class UserDefaultsHandlerMock: ALUserDefaultsHandler {
+class UserDefaultsHandlerMock: KMCoreUserDefaultsHandler {
     static var pricingPackage: Int16 = 101
     static var userRole = Int16(AL_APPLICATION_WEB_ADMIN.rawValue)
 

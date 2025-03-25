@@ -36,7 +36,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     public var dbService = ALMessageDBService()
     public var viewModel = ALKConversationListViewModel()
     
-    var isSingleThreadedEnabled = ALApplozicSettings.getIsSingleThreadedEnabled()
+    var isSingleThreadedEnabled = KMCoreSettings.getIsSingleThreadedEnabled()
 
     enum Padding {
         enum NoConversationLabel {
@@ -192,7 +192,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         super.viewDidLoad()
         setupMqtt()
         subscribeToConversation()
-        isSingleThreadedEnabled = ALApplozicSettings.getIsSingleThreadedEnabled()
+        isSingleThreadedEnabled = KMCoreSettings.getIsSingleThreadedEnabled()
         dbService.delegate = self
         viewModel.delegate = self
         setupSearchController()
