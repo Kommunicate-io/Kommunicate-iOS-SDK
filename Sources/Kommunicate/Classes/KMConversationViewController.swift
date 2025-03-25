@@ -233,7 +233,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     
     func isBusinessHoursUIScreenVisible() {
         guard PricingPlan.shared.isBusinessPlanOrTrialPlan(),
-              let applicationKey = ALUserDefaultsHandler.getApplicationKey(),
+              let applicationKey = KMCoreUserDefaultsHandler.getApplicationKey(),
               let teamID = viewModel.assignedTeamId,
               let teamId = Int(teamID) else { return }
 
@@ -508,7 +508,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
                 }
             })
         } else {
-            guard let channelKey = viewModel.channelKey, let applicationKey =  ALUserDefaultsHandler.getApplicationKey() else { return }
+            guard let channelKey = viewModel.channelKey, let applicationKey =  KMCoreUserDefaultsHandler.getApplicationKey() else { return }
             conversationService.awayMessageFor(applicationKey: applicationKey, groupId: channelKey, completion: {
                 result in
                 DispatchQueue.main.async {
@@ -764,7 +764,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             if let channelId = weakSelf.viewModel.channelKey {
                 KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.restartConversationClick, data: ["conversationId": channelId])
             }
-            guard let zendeskAccountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
+            guard let zendeskAccountKey = KMCoreSettings.getZendeskSdkAccountKey(),
                   !zendeskAccountKey.isEmpty else { return }
             #if canImport(ChatProvidersSDK)
                 // if zendesk is integrated, create a new conversation instead of restarting the conversation
@@ -781,7 +781,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
               switch result {
                case .success(let conversationId):
                 #if canImport(ChatProvidersSDK)
-                  ALApplozicSettings.setLastZendeskConversationId(NSNumber(value: Int(conversationId) ?? 0))
+                  KMCoreSettings.setLastZendeskConversationId(NSNumber(value: Int(conversationId) ?? 0))
                 #endif
                   let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: NSNumber(value: Int(conversationId) ?? 0), localizedStringFileName: Kommunicate.defaultConfiguration.localizedStringFileName, prefilledMessage: nil)
                  // Update the View Model & refresh the View Controller
