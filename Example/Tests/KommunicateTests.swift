@@ -33,12 +33,12 @@ class KommunicateTests: XCTestCase {
         }
     }
 
-    class ApplozicClientMock: ApplozicClient {
+    class KommunicateClientMock: KommunicateClient {
         static var messageCount = 1
 
         override func getLatestMessages(_: Bool, withCompletionHandler completion: ((NSMutableArray?, Error?) -> Void)!) {
             let messageList: NSMutableArray = []
-            for _ in 0 ..< ApplozicClientMock.messageCount {
+            for _ in 0 ..< KommunicateClientMock.messageCount {
                 let message = ALMessage()
                 messageList.add(message)
             }
@@ -89,7 +89,7 @@ class KommunicateTests: XCTestCase {
 
              // Test when multiple threads are present, method to show conversation list
              // gets called.
-             ApplozicClientMock.messageCount = 2
+             KommunicateClientMock.messageCount = 2
              KommunicateMock.createAndShowConversation(from: dummyViewController, completion: {
                  _ in
                  XCTAssertTrue(KommunicateMock.showConversationsCalled)
@@ -107,7 +107,7 @@ class KommunicateTests: XCTestCase {
     }
     
     func testCreateConversationWithCustomData() {
-        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        KommunicateMock.applozicClientType = KommunicateClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
         
         for bundle in Bundle.allBundles {
@@ -155,7 +155,7 @@ class KommunicateTests: XCTestCase {
     }
     
     func testCreateAndLaunchConversationWithCustomData() {
-        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        KommunicateMock.applozicClientType = KommunicateClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
         
         for bundle in Bundle.allBundles {
@@ -211,7 +211,7 @@ class KommunicateTests: XCTestCase {
     }
     
     func testUpdateConversationAssignee() {
-        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        KommunicateMock.applozicClientType = KommunicateClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
         let assigneeId = "alex-nwqih"
 
@@ -261,7 +261,7 @@ class KommunicateTests: XCTestCase {
     }
     
     func testUpdateTeamID() {
-        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        KommunicateMock.applozicClientType = KommunicateClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
         let teamID = "107732724"
 
@@ -311,7 +311,7 @@ class KommunicateTests: XCTestCase {
     }
     
     func testUpdateConversationMetadata() {
-        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        KommunicateMock.applozicClientType = KommunicateClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
         let metaData = ["name": "Alice", "city": "London", "hobby": "Painting"]
 
@@ -361,7 +361,7 @@ class KommunicateTests: XCTestCase {
     }
     
     func testSendMessageFunction() {
-        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        KommunicateMock.applozicClientType = KommunicateClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
         
         let kmConversation = KMConversationBuilder()
@@ -417,7 +417,7 @@ class KommunicateTests: XCTestCase {
     }
     
     func testOpenPerticularConversation() {
-        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        KommunicateMock.applozicClientType = KommunicateClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
         
         // Dummy View Controller For Testing
@@ -456,7 +456,7 @@ class KommunicateTests: XCTestCase {
     }
     
     func testUpdateConversationFunction() {
-        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        KommunicateMock.applozicClientType = KommunicateClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
         
         let kmConversation = KMConversationBuilder()
@@ -531,7 +531,7 @@ class KommunicateTests: XCTestCase {
     }
     
     func testIsSingleThreaded() {
-        KommunicateMock.applozicClientType = ApplozicClientMock.self
+        KommunicateMock.applozicClientType = KommunicateClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
         let kmConversation = KMConversationBuilder()
             .useLastConversation(true)

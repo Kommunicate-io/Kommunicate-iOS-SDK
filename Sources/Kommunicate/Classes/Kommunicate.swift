@@ -223,7 +223,7 @@ open class Kommunicate: NSObject, Localizable {
         return isJailbroken
     }
 
-    static var applozicClientType: ApplozicClient.Type = ApplozicClient.self
+    static var applozicClientType: KommunicateClient.Type = KommunicateClient.self
 
     override public init() {
         super.init()
