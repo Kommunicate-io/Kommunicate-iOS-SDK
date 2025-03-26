@@ -56,7 +56,7 @@ class ConversationDetail {
                 completion(contact, alChannel)
                 return
             }
-            for case let userDetail as ALUserDetail in userDetails {
+            for case let userDetail as KMCoreUserDetail in userDetails {
                 strongSelf.contactDbService.update(userDetail)
             }
             (assignee, alChannel) = strongSelf.conversationAssignee(groupId: groupId, userId: userId)
