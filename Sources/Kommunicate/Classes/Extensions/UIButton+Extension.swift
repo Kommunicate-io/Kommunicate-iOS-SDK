@@ -1,6 +1,6 @@
 //
 //  UIButton+Extension.swift
-//  Applozic
+//  Kommunicate
 //
 //  Created by Mukesh on 03/12/19.
 //
