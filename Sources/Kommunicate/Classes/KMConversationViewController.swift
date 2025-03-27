@@ -301,7 +301,6 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         prepareBusinessHoursInfoView(message: businessHourData.message, isVisible: true)
     }
 
-
     private func handleBusinessHours(
         _ businessHourData: KMBusinessHoursViewModel,
         updatedDay: Int,
