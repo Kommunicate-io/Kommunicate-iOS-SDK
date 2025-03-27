@@ -290,14 +290,17 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         teamID: Int
     ) {
         if currentTime >= 2300 {
-            let remainingTime = minutesBetween(start: currentTime, end: 2359) + 1
-            DispatchQueue.main.asyncAfter(deadline: .now() + (TimeInterval(remainingTime) * 60) + 1) { [weak self] in
+            let remainingTime = minutesBetween(start: currentTime, end: 0) // Time until next day 00:00
+            let delay = TimeInterval(remainingTime * 60) // Convert to seconds
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
                 guard let kmBusinessHoursDataArray = self?.kmBusinessHoursDataArray else { return }
                 self?.processBusinessHours(kmBusinessHoursDataArray, for: teamID)
             }
         }
         prepareBusinessHoursInfoView(message: businessHourData.message, isVisible: true)
     }
+
 
     private func handleBusinessHours(
         _ businessHourData: KMBusinessHoursViewModel,
@@ -372,7 +375,8 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     
     private func recallBusinessHoursMessage(startTime: Int, endTime: Int, teamID: Int) {
         let remainingTime = minutesBetween(start: startTime, end: endTime)
-        DispatchQueue.main.asyncAfter(deadline: .now() + (TimeInterval(remainingTime) * 60) + 1) { [weak self] in
+        let delay = max(TimeInterval(remainingTime + 1) * 60, 1)  // Ensures at least a 1s delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
             guard let kmBusinessHoursDataArray = self?.kmBusinessHoursDataArray else { return }
             self?.processBusinessHours(kmBusinessHoursDataArray, for: teamID)
         }
