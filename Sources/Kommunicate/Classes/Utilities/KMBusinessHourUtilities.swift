@@ -75,6 +75,10 @@ extension KMConversationViewController {
         let totalStartMinutes = (startHours * 60) + startMinutes
         let totalEndMinutes = (endHours * 60) + endMinutes
 
+        if totalEndMinutes < totalStartMinutes {
+            return (1440 - totalStartMinutes) + totalEndMinutes  // Handles crossing midnight
+        }
+
         return totalEndMinutes - totalStartMinutes
     }
 }
