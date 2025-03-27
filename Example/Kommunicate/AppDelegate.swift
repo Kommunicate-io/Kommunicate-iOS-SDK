@@ -40,7 +40,7 @@
             let kmApplocalNotificationHandler = KMAppLocalNotification.appLocalNotificationHandler()
             kmApplocalNotificationHandler?.dataConnectionNotificationHandler()
             
-            if KMUserDefaultHandler.isLoggedIn() {
+            if Kommunicate.isLoggedIn {
                 // Get login screen from storyboard and present it
                 if let viewController = UIStoryboard(name: "Main", bundle: nil)
                     .instantiateViewController(withIdentifier: "NavViewController") as? UINavigationController
