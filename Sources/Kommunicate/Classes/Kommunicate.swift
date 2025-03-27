@@ -52,6 +52,8 @@ open class Kommunicate: NSObject, Localizable {
 
     /// Returns true if user is already logged in.
     @objc open class var isLoggedIn: Bool {
+        // Ensure migration runs only once when the class is used for the first time
+        _ = Self.runOnce
         return KMUserDefaultHandler.isLoggedIn()
     }
 
@@ -227,7 +229,14 @@ open class Kommunicate: NSObject, Localizable {
 
     override public init() {
         super.init()
+        
+        // Ensure migration runs only once when the class is used for the first time
+        _ = Self.runOnce
     }
+    
+    private static let runOnce: Void = {
+        Kommunicate.migrateUserDefaultsData()
+    }()
 
     // MARK: - Public methods
 
@@ -244,6 +253,8 @@ open class Kommunicate: NSObject, Localizable {
             assertionFailure("Kommunicate App ID: Empty value passed")
             return
         }
+        // Ensure migration runs only once when the class is used for the first time
+        _ = Self.runOnce
         KMCoreUserDefaultsHandler.setKMSSLPinningEnabled(isKMSSLPinningEnabled)
         guard KMUserDefaultHandler.isAppIdEmpty ||
             KMUserDefaultHandler.matchesCurrentAppId(applicationId)
@@ -340,6 +351,47 @@ open class Kommunicate: NSObject, Localizable {
         return kmUser
     }
     
+    private static func migrateUserDefaultsData() {
+        let oldSuiteName = ALUtilityClass.getOldAppGroupsName()
+        let newSuiteName = ALUtilityClass.getAppGroupsName()
+
+        let oldUserDefaults = UserDefaults(suiteName: oldSuiteName)
+        let newUserDefaults = UserDefaults(suiteName: newSuiteName)
+
+        // If only new suite exists and old suite doesn't, no need to migrate
+        if oldUserDefaults == nil, newUserDefaults != nil {
+            return
+        }
+        
+        // If old suite exists but new one doesn't, proceed with migration
+        guard let oldUserDefaults = oldUserDefaults else {
+            return
+        }
+        
+        guard let prefixToReplace = ALUtilityClass.getOldKeyPrefix(),
+              let newPrefix = ALUtilityClass.getKeyPrefix() else {
+            return
+        }
+
+        for (key, value) in oldUserDefaults.dictionaryRepresentation() {
+            if key.hasPrefix(prefixToReplace) {
+                let newKey = key.replacingOccurrences(of: prefixToReplace, with: newPrefix)
+                
+                // Migrate only if the new key is NOT already present in new UserDefaults
+                if newUserDefaults?.object(forKey: newKey) == nil {
+                    newUserDefaults?.set(value, forKey: newKey)
+                }
+            } else {
+                if newUserDefaults?.object(forKey: key) == nil {
+                    newUserDefaults?.set(value, forKey: key)
+                }
+            }
+            oldUserDefaults.removeObject(forKey: key) // Optional: Remove from old storage
+        }
+        
+        newUserDefaults?.synchronize() // Ensure changes are saved
+    }
+
     private class func registerNewUser(_ kmUser: KMUser, isVisitor: Bool, completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
         
         let kmAppSetting = KMAppSettingService()
