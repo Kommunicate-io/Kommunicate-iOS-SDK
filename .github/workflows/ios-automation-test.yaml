@@ -17,16 +17,16 @@ jobs:
     # Only run this job when the base branch is master
     if: github.event.pull_request.base.ref == 'master'
     runs-on: macos-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '16.1.0'
+          xcode-version: '16.2'
 
       - name: Run Linter Check
         run: |
@@ -37,7 +37,7 @@ jobs:
 
       - name: Post Lint Test Results to PR
         if: github.event_name == 'pull_request' && success()
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const comment = `✅ **iOS Lint Test Result**\nCongratulations! Linter Check Passed Successfully 🎉`;
@@ -65,17 +65,17 @@ jobs:
   build-and-test:
     name: Build and Test
     runs-on: macos-latest
-    timeout-minutes: 45
+    timeout-minutes: 90
     
     steps:
       # Step 1: Checkout the code
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Step 2: Fetch PR Branch Information
       - name: Fetch PR Comments
         id: fetch-branches
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const prBody = context.payload.pull_request?.body;
@@ -101,7 +101,7 @@ jobs:
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '16.1.0'
+          xcode-version: '16.2'
 
       # Step 4: Set Environment Variables
       - name: Set Environment Variables
@@ -209,7 +209,7 @@ jobs:
       # Step 9: Post Test Results as a PR Comment
       - name: Post Test Results to PR
         if: github.event_name == 'pull_request'
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
