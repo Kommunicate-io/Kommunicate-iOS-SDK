@@ -36,7 +36,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     public var dbService = ALMessageDBService()
     public var viewModel = ALKConversationListViewModel()
     
-    var isSingleThreadedEnabled = ALApplozicSettings.getIsSingleThreadedEnabled()
+    var isSingleThreadedEnabled = KMCoreSettings.getIsSingleThreadedEnabled()
 
     enum Padding {
         enum NoConversationLabel {
@@ -192,7 +192,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         super.viewDidLoad()
         setupMqtt()
         subscribeToConversation()
-        isSingleThreadedEnabled = ALApplozicSettings.getIsSingleThreadedEnabled()
+        isSingleThreadedEnabled = KMCoreSettings.getIsSingleThreadedEnabled()
         dbService.delegate = self
         viewModel.delegate = self
         setupSearchController()
@@ -781,7 +781,7 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
 
     open func reloadData(forUserBlockNotification userId: String!, andBlockFlag _: Bool) {
         print("reload data")
-        let userDetail = ALUserDetail()
+        let userDetail = KMCoreUserDetail()
         userDetail.userId = userId
         viewModel.updateStatusFor(userDetail: userDetail)
         guard let viewController = navigationController?.visibleViewController as? KMConversationViewController else {
@@ -790,7 +790,7 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
         viewController.checkUserBlock()
     }
 
-    open func updateLastSeen(atStatus alUserDetail: ALUserDetail!) {
+    open func updateLastSeen(atStatus alUserDetail: KMCoreUserDetail!) {
         print("Last seen updated")
         viewModel.updateStatusFor(userDetail: alUserDetail)
         guard let viewController = navigationController?.visibleViewController as? KMConversationViewController else {

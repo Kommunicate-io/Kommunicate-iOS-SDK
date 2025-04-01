@@ -464,8 +464,8 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         }
 
         let languageCode = NSLocale.preferredLanguages.first?.prefix(2)
-        if languageCode?.description != ALUserDefaultsHandler.getDeviceDefaultLanguage() {
-            ALUserDefaultsHandler.setDeviceDefaultLanguage(languageCode?.description)
+        if languageCode?.description != KMCoreUserDefaultsHandler.getDeviceDefaultLanguage() {
+            KMCoreUserDefaultsHandler.setDeviceDefaultLanguage(languageCode?.description)
         }
         updateMetadataChatContext(info: [ChannelMetadataKeys.kmUserLocale: languageCode as Any], metadata: metadata)
         
@@ -604,7 +604,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
                     return
                 }
                 
-                guard let zendeskAccountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
+                guard let zendeskAccountKey = KMCoreSettings.getZendeskSdkAccountKey(),
                       !zendeskAccountKey.isEmpty,
                       let clientChannelKey = channel.clientChannelKey,
                       let metadata = channel.metadata,

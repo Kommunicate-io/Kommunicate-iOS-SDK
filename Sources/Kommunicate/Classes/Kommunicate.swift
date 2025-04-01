@@ -23,8 +23,8 @@ var TYPE_FACEBOOK: Int16 = 2
 var APNS_TYPE_DEVELOPMENT: Int16 = 0
 var APNS_TYPE_DISTRIBUTION: Int16 = 1
 
-public typealias KMUser = ALUser
-public typealias KMUserDefaultHandler = ALUserDefaultsHandler
+public typealias KMUser = KMCoreUser
+public typealias KMUserDefaultHandler = KMCoreUserDefaultsHandler
 public typealias KMPushNotificationService = ALPushNotificationService
 public typealias KMAppLocalNotification = ALAppLocalNotifications
 public typealias KMDbHandler = ALDBHandler
@@ -52,6 +52,8 @@ open class Kommunicate: NSObject, Localizable {
 
     /// Returns true if user is already logged in.
     @objc open class var isLoggedIn: Bool {
+        // Ensure migration runs only once when the class is used for the first time
+        _ = Self.runOnce
         return KMUserDefaultHandler.isLoggedIn()
     }
 
@@ -223,11 +225,18 @@ open class Kommunicate: NSObject, Localizable {
         return isJailbroken
     }
 
-    static var applozicClientType: ApplozicClient.Type = ApplozicClient.self
+    static var applozicClientType: KommunicateClient.Type = KommunicateClient.self
 
     override public init() {
         super.init()
+        
+        // Ensure migration runs only once when the class is used for the first time
+        _ = Self.runOnce
     }
+    
+    private static let runOnce: Void = {
+        Kommunicate.migrateUserDefaultsData()
+    }()
 
     // MARK: - Public methods
 
@@ -244,7 +253,9 @@ open class Kommunicate: NSObject, Localizable {
             assertionFailure("Kommunicate App ID: Empty value passed")
             return
         }
-        ALUserDefaultsHandler.setKMSSLPinningEnabled(isKMSSLPinningEnabled)
+        // Ensure migration runs only once when the class is used for the first time
+        _ = Self.runOnce
+        KMCoreUserDefaultsHandler.setKMSSLPinningEnabled(isKMSSLPinningEnabled)
         guard KMUserDefaultHandler.isAppIdEmpty ||
             KMUserDefaultHandler.matchesCurrentAppId(applicationId)
         else {
@@ -252,7 +263,7 @@ open class Kommunicate: NSObject, Localizable {
             return
         }
         self.applicationId = applicationId
-        ALUserDefaultsHandler.setApplicationKey(applicationId)
+        KMCoreUserDefaultsHandler.setApplicationKey(applicationId)
         Kommunicate.shared.defaultChatViewSettings()
         Kommunicate.shared.setupDefaultStyle()
     }
@@ -340,6 +351,47 @@ open class Kommunicate: NSObject, Localizable {
         return kmUser
     }
     
+    private static func migrateUserDefaultsData() {
+        let oldSuiteName = ALUtilityClass.getOldAppGroupsName()
+        let newSuiteName = ALUtilityClass.getAppGroupsName()
+
+        let oldUserDefaults = UserDefaults(suiteName: oldSuiteName)
+        let newUserDefaults = UserDefaults(suiteName: newSuiteName)
+
+        // If only new suite exists and old suite doesn't, no need to migrate
+        if oldUserDefaults == nil, newUserDefaults != nil {
+            return
+        }
+        
+        // If old suite exists but new one doesn't, proceed with migration
+        guard let oldUserDefaults = oldUserDefaults else {
+            return
+        }
+        
+        guard let prefixToReplace = ALUtilityClass.getOldKeyPrefix(),
+              let newPrefix = ALUtilityClass.getKeyPrefix() else {
+            return
+        }
+
+        for (key, value) in oldUserDefaults.dictionaryRepresentation() {
+            if key.hasPrefix(prefixToReplace) {
+                let newKey = key.replacingOccurrences(of: prefixToReplace, with: newPrefix)
+                
+                // Migrate only if the new key is NOT already present in new UserDefaults
+                if newUserDefaults?.object(forKey: newKey) == nil {
+                    newUserDefaults?.set(value, forKey: newKey)
+                }
+            } else {
+                if newUserDefaults?.object(forKey: key) == nil {
+                    newUserDefaults?.set(value, forKey: key)
+                }
+            }
+            oldUserDefaults.removeObject(forKey: key) // Optional: Remove from old storage
+        }
+        
+        newUserDefaults?.synchronize() // Ensure changes are saved
+    }
+
     private class func registerNewUser(_ kmUser: KMUser, isVisitor: Bool, completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
         
         let kmAppSetting = KMAppSettingService()
@@ -355,10 +407,10 @@ open class Kommunicate: NSObject, Localizable {
                         Kommunicate.defaultConfiguration.rateConversationMenuOption = false
                     }
                     if let zendeskaccountKey = appSetting.chatWidget?.zendeskChatSdkKey {
-                        ALApplozicSettings.setZendeskSdkAccountKey(zendeskaccountKey)
+                        KMCoreSettings.setZendeskSdkAccountKey(zendeskaccountKey)
                     }
-                    if let chatWidget = appSetting.chatWidget, let isSingleThreaded = chatWidget.isSingleThreaded, isSingleThreaded != ALApplozicSettings.getIsSingleThreadedEnabled() {
-                        ALApplozicSettings.setIsSingleThreadedEnabled(isSingleThreaded)
+                    if let chatWidget = appSetting.chatWidget, let isSingleThreaded = chatWidget.isSingleThreaded, isSingleThreaded != KMCoreSettings.getIsSingleThreadedEnabled() {
+                        KMCoreSettings.setIsSingleThreadedEnabled(isSingleThreaded)
                     }
                     
                     if isVisitor,
@@ -466,8 +518,8 @@ open class Kommunicate: NSObject, Localizable {
                 appSettingsService.updateAppsettings(appSettingsResponse: appSettings)
                 if let chatWidget = appSettings.chatWidget,
                    let isSingleThreaded = chatWidget.isSingleThreaded,
-                   isSingleThreaded != ALApplozicSettings.getIsSingleThreadedEnabled() {
-                    ALApplozicSettings.setIsSingleThreadedEnabled(isSingleThreaded)
+                   isSingleThreaded != KMCoreSettings.getIsSingleThreadedEnabled() {
+                    KMCoreSettings.setIsSingleThreadedEnabled(isSingleThreaded)
                 }
             case let .failure(error):
                 print("Failed to fetch Appsettings due to \(error.localizedDescription)")
@@ -505,7 +557,7 @@ open class Kommunicate: NSObject, Localizable {
             refreshAppsettings()
             // If single threaded is not enabled for this conversation,
             // then check in global app settings.
-            let isSingleThreaded = ALApplozicSettings.getIsSingleThreadedEnabled()
+            let isSingleThreaded = KMCoreSettings.getIsSingleThreadedEnabled()
             if isSingleThreaded {
                 conversation.useLastConversation = isSingleThreaded
             }
@@ -581,7 +633,7 @@ open class Kommunicate: NSObject, Localizable {
         refreshAppsettings()
 
         // Determine if single-threaded conversation is enabled
-        let isSingleThreaded = ALApplozicSettings.getIsSingleThreadedEnabled()
+        let isSingleThreaded = KMCoreSettings.getIsSingleThreadedEnabled()
         if isSingleThreaded {
             conversation.useLastConversation = isSingleThreaded
         }
@@ -711,15 +763,15 @@ open class Kommunicate: NSObject, Localizable {
                     let customBotName = customBot["name"],
                     let customBotId = customBot["id"],
                     !customBotName.isEmpty, !customBotId.isEmpty {
-                        ALApplozicSettings.setCustomBotName(customBotName)
-                        ALApplozicSettings.setCustomizedBotId(customBotId)
+                        KMCoreSettings.setCustomBotName(customBotName)
+                        KMCoreSettings.setCustomizedBotId(customBotId)
                 } else {
-                    ALApplozicSettings.clearCustomBotConfiguration()
+                    KMCoreSettings.clearCustomBotConfiguration()
                 }
                 
             } catch {
                 print("Failed to fetch custom bot name")
-                ALApplozicSettings.clearCustomBotConfiguration()
+                KMCoreSettings.clearCustomBotConfiguration()
             }
           
             self.openChatWith(
@@ -812,12 +864,12 @@ open class Kommunicate: NSObject, Localizable {
     open class func openZendeskChat(from: UIViewController, completion: @escaping (_ error: KommunicateError?) -> Void) {
         #if canImport(ChatProvidersSDK)
         let zendeskHandler = KMZendeskChatHandler.shared
-        guard let accountKey = ALApplozicSettings.getZendeskSdkAccountKey(), !accountKey.isEmpty else {
+        guard let accountKey = KMCoreSettings.getZendeskSdkAccountKey(), !accountKey.isEmpty else {
             completion(.zendeskKeyNotPresent)
             return
         }
 
-        guard let existingZendeskConversationId = ALApplozicSettings.getLastZendeskConversationId(),
+        guard let existingZendeskConversationId = KMCoreSettings.getLastZendeskConversationId(),
               existingZendeskConversationId != 0 else {
                 zendeskHandler.resetConfiguration()
                 zendeskHandler.initiateZendesk(key: accountKey)
@@ -829,7 +881,7 @@ open class Kommunicate: NSObject, Localizable {
                 createConversation(conversation: kmConversation) { result in
                   switch result {
                    case .success(let conversationId):
-                      ALApplozicSettings.setLastZendeskConversationId(NSNumber(value: Int(conversationId) ?? 0))
+                      KMCoreSettings.setLastZendeskConversationId(NSNumber(value: Int(conversationId) ?? 0))
                       
                       print("New Conversation is created for Zendesk Configuration. Conversation id: ", conversationId)
                       showConversationWith(
@@ -1004,7 +1056,7 @@ open class Kommunicate: NSObject, Localizable {
     }
 
     open class func openFaq(from vc: UIViewController, with configuration: ALKConfiguration) {
-        guard let url = URLBuilder.faqURL(for: ALUserDefaultsHandler.getApplicationKey(), hideChat: configuration.hideChatInHelpcenter).url else {
+        guard let url = URLBuilder.faqURL(for: KMCoreUserDefaultsHandler.getApplicationKey(), hideChat: configuration.hideChatInHelpcenter).url else {
             return
         }
         let faqVC = FaqViewController(url: url, configuration: configuration)
@@ -1343,7 +1395,7 @@ open class Kommunicate: NSObject, Localizable {
     class func updateSettingsForEmbeddedMode(viewController: UIViewController) {
         let embeddedVC = viewController.description
         // Update VC List
-        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description(), embeddedVC])
+        KMCoreSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description(), embeddedVC])
         embeddedViewController = embeddedVC
     }
 
@@ -1359,7 +1411,7 @@ open class Kommunicate: NSObject, Localizable {
         }
         print("DEVICE_TOKEN_STRING :: \(deviceTokenString)")
 
-        if ALUserDefaultsHandler.getApnDeviceToken() != deviceTokenString {
+        if KMCoreUserDefaultsHandler.getApnDeviceToken() != deviceTokenString {
             let alRegisterUserClientService = ALRegisterUserClientService()
             alRegisterUserClientService.updateApnDeviceToken(withCompletion: deviceTokenString, withCompletion: { response, _ in
                 print("REGISTRATION_RESPONSE :: \(String(describing: response))")
@@ -1408,19 +1460,19 @@ open class Kommunicate: NSObject, Localizable {
 
     func defaultChatViewSettings() {
         if serverConfig == .euConfiguration {
-            ALUserDefaultsHandler.setBASEURL(API.Backend.chatEu.rawValue)
-            ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApiEu.rawValue)
+            KMCoreUserDefaultsHandler.setBASEURL(API.Backend.chatEu.rawValue)
+            KMCoreUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApiEu.rawValue)
         } else {
-            ALUserDefaultsHandler.setBASEURL(API.Backend.chat.rawValue)
-            ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi.rawValue)
+            KMCoreUserDefaultsHandler.setBASEURL(API.Backend.chat.rawValue)
+            KMCoreUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi.rawValue)
         }
-        ALApplozicSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description()])
-        ALApplozicSettings.setFilterContactsStatus(true)
-        ALUserDefaultsHandler.setDebugLogsRequire(true)
-        ALApplozicSettings.setSwiftFramework(true)
+        KMCoreSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description()])
+        KMCoreSettings.setFilterContactsStatus(true)
+        KMCoreUserDefaultsHandler.setDebugLogsRequire(true)
+        KMCoreSettings.setSwiftFramework(true)
         let hiddenMessageMetaDataFlagArray = ["KM_STATUS", "KM_ASSIGN_TO", "KM_ASSIGN_TEAM"]
-        ALApplozicSettings.hideMessages(withMetadataKeys: hiddenMessageMetaDataFlagArray)
-        ALApplozicSettings.enableS3StorageService(true)
+        KMCoreSettings.hideMessages(withMetadataKeys: hiddenMessageMetaDataFlagArray)
+        KMCoreSettings.enableS3StorageService(true)
     }
 
     func setupDefaultStyle() {
@@ -1509,11 +1561,11 @@ open class Kommunicate: NSObject, Localizable {
     open class func setServerConfiguration(_ environment: KMServerConfiguration) {
         Kommunicate.shared.serverConfig = environment
         if environment == .euConfiguration {
-            ALUserDefaultsHandler.setBASEURL(API.Backend.chatEu.rawValue)
-            ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApiEu.rawValue)
+            KMCoreUserDefaultsHandler.setBASEURL(API.Backend.chatEu.rawValue)
+            KMCoreUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApiEu.rawValue)
         } else {
-            ALUserDefaultsHandler.setBASEURL(API.Backend.chat.rawValue)
-            ALUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi.rawValue)
+            KMCoreUserDefaultsHandler.setBASEURL(API.Backend.chat.rawValue)
+            KMCoreUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi.rawValue)
         }
     }
     
@@ -1553,11 +1605,11 @@ open class Kommunicate: NSObject, Localizable {
     @available(*, deprecated, message: "Use logoutUser(completion:)")
     @objc open class func logoutUser() {
         let registerUserClientService = ALRegisterUserClientService()
-        if let _ = ALUserDefaultsHandler.getDeviceKeyString() {
+        if let _ = KMCoreUserDefaultsHandler.getDeviceKeyString() {
             registerUserClientService.logout(completionHandler: {
                 _, _ in
                 Kommunicate.shared.clearUserDefaults()
-                NSLog("Applozic logout")
+                NSLog("Kommunicate logout")
             })
         }
     }

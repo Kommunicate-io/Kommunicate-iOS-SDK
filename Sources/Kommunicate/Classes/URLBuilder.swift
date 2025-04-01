@@ -13,7 +13,7 @@ final class URLBuilder {
     private var pathComponents = [String]()
 
     static var kommunicateApi: URLBuilder {
-        guard let kmAPI = URL(string: ALUserDefaultsHandler.getChatBaseURL()),
+        guard let kmAPI = URL(string: KMCoreUserDefaultsHandler.getChatBaseURL()),
               let host = kmAPI.host else {
             return URLBuilder(host: "api.kommunicate.io")
         }
@@ -21,7 +21,7 @@ final class URLBuilder {
     }
 
     static var chatApi: URLBuilder {
-        guard let baseURL = URL(string: ALUserDefaultsHandler.getBASEURL()),
+        guard let baseURL = URL(string: KMCoreUserDefaultsHandler.getBASEURL()),
               let host = baseURL.host
         else {
             return URLBuilder(host: "")
@@ -30,7 +30,7 @@ final class URLBuilder {
     }
 
     static var helpcenterApi: URLBuilder {
-        guard let baseUrl = ALUserDefaultsHandler.getBASEURL() else {
+        guard let baseUrl = KMCoreUserDefaultsHandler.getBASEURL() else {
             return URLBuilder(host: "helpcenter.kommunicate.io")
         }
         if baseUrl.contains("-ca") {

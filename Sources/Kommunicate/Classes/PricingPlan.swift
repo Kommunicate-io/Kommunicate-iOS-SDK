@@ -13,7 +13,7 @@ struct PricingPlan {
 
     // Dependencies
     let utility: ALUtilityClass.Type
-    let userDefaultsHandler: ALUserDefaultsHandler.Type
+    let userDefaultsHandler: KMCoreUserDefaultsHandler.Type
 
     // Constants
     let startupPlan = 101
@@ -33,7 +33,7 @@ struct PricingPlan {
     
     init(
         utility: ALUtilityClass.Type = ALUtilityClass.self,
-        userDefaultsHandler: ALUserDefaultsHandler.Type = ALUserDefaultsHandler.self
+        userDefaultsHandler: KMCoreUserDefaultsHandler.Type = KMCoreUserDefaultsHandler.self
     ) {
         self.utility = utility
         self.userDefaultsHandler = userDefaultsHandler

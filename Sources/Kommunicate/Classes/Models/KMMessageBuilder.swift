@@ -50,7 +50,7 @@ extension KMMessage {
         let date = Date().timeIntervalSince1970 * 1000
         alMessage.createdAtTime = NSNumber(value: date)
         alMessage.sendToDevice = false
-        alMessage.deviceKey = ALUserDefaultsHandler.getDeviceKeyString()
+        alMessage.deviceKey = KMCoreUserDefaultsHandler.getDeviceKeyString()
         alMessage.shared = false
         alMessage.fileMeta = nil
         alMessage.storeOnDevice = false
