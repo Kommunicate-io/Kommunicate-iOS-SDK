@@ -1609,6 +1609,7 @@ open class Kommunicate: NSObject, Localizable {
             registerUserClientService.logout(completionHandler: {
                 _, _ in
                 Kommunicate.shared.clearUserDefaults()
+                ALKFormDataCache.shared.clearCache()
                 NSLog("Kommunicate logout")
             })
         }
