@@ -2,6 +2,9 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [7.2.9] 2025-04-03
+- Fixed Recording button not working properly.
+
 ## [7.2.8] 2025-03-18
 - Internal Code Refactor.
 - Typing indicator For bot message delay.
