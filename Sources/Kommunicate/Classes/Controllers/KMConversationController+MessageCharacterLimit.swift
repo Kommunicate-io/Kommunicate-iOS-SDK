@@ -35,7 +35,7 @@ extension KMConversationViewController: MessageCharacterLimitDelegate {
             manager.messageToShow = characterLimitMessage(textCount: textCount, limit: limit, isMessageforBot: isBotMessage)
             manager.showLimitView(true, disableButton: textCount > limit.hard)
         } else {
-            messageCharLimitManager.showLimitView(false)
+            manager.showLimitView(false)
         }
     }
 }
