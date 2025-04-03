@@ -25,6 +25,7 @@ struct BotDetailResponse: Decodable, BotDetailResponseProtocol {
 
 public struct BotDetail: Decodable {
     let aiPlatform: String?
+    let dialogflowCXBot: Bool?
 }
 
 extension BotDetailResponse {
@@ -35,6 +36,8 @@ extension BotDetailResponse {
         case RASA = "rasa"
         case SMARTREPLY = "smartreply"
         case CUSTOM = "custom"
+        case DIALOGFLOWCX = "dialogflowcx"
+        case DIALOGFLOWES = "dialogflowes"
     }
 
     init(data: Data) throws {

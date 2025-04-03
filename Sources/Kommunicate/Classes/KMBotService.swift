@@ -50,6 +50,13 @@ public struct KMBotService {
                     print("Bot detail fetched successfully for botId:\(botId) And Bot platform:", botDetail.aiPlatform as Any)
                     /// Add the botType and botId in user defaults
                     DispatchQueue.main.async {
+                        if botType == BotDetailResponse.BotType.DIALOGFLOW.rawValue {
+                            if let isCXBot = botDetail.dialogflowCXBot, isCXBot {
+                                KMAppUserDefaultHandler.shared.setDilogFlowBotType(BotDetailResponse.BotType.DIALOGFLOWCX.rawValue, botId: botId)
+                            } else {
+                                KMAppUserDefaultHandler.shared.setDilogFlowBotType(BotDetailResponse.BotType.DIALOGFLOWES.rawValue, botId: botId)
+                            }
+                        }
                         KMAppUserDefaultHandler.shared.setBotType(botType, botId: botId)
                         completion(.success(botDetail))
                     }
@@ -122,5 +129,19 @@ public struct KMBotService {
                 }
             }
         }
+    }
+
+    func isCXDialogFlowBot(type: String, groupId: NSNumber) -> Bool? {
+        guard let assigneeId = assigneeUserIdFor(groupId: groupId),
+              let channelUserX = channelDBService.loadChannelUserX(byUserId: groupId, andUserId: assigneeId),
+              channelUserX.role == 2
+        else {
+            return nil
+        }
+        
+        if KMAppUserDefaultHandler.shared.getDialogFlowBotType(botId: assigneeId) == type {
+            return true
+        }
+        return false
     }
 }

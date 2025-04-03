@@ -69,6 +69,16 @@ class KMAppUserDefaultHandler: NSObject {
     func getBotType(botId: String) -> String? {
         return userDefaultSuite.value(forKey: botId) as? String
     }
+    
+    func setDilogFlowBotType(_ botType: String, botId: String) {
+        let key = "dialogflow_\(botId)"
+        userDefaultSuite.setValue(botType, forKey: key)
+    }
+    
+    func getDialogFlowBotType(botId: String) -> String? {
+        let key = "dialogflow_\(botId)"
+        return userDefaultSuite.value(forKey: key) as? String
+    }
 
     func clear() {
         userDefaultSuite.removePersistentDomain(forName: KMAppUserDefaultHandler.defaultSuiteName)
