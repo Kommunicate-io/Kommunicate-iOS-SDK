@@ -52,9 +52,9 @@ public struct KMBotService {
                     DispatchQueue.main.async {
                         if botType == BotDetailResponse.BotType.DIALOGFLOW.rawValue {
                             if let isCXBot = botDetail.dialogflowCXBot, isCXBot {
-                                KMAppUserDefaultHandler.shared.setDilogFlowBotType(BotDetailResponse.BotType.DIALOGFLOWCX.rawValue, botId: botId)
+                                KMAppUserDefaultHandler.shared.setDialogFlowBotType(BotDetailResponse.BotType.DIALOGFLOWCX.rawValue, botId: botId)
                             } else {
-                                KMAppUserDefaultHandler.shared.setDilogFlowBotType(BotDetailResponse.BotType.DIALOGFLOWES.rawValue, botId: botId)
+                                KMAppUserDefaultHandler.shared.setDialogFlowBotType(BotDetailResponse.BotType.DIALOGFLOWES.rawValue, botId: botId)
                             }
                         }
                         KMAppUserDefaultHandler.shared.setBotType(botType, botId: botId)
@@ -139,9 +139,6 @@ public struct KMBotService {
             return nil
         }
         
-        if KMAppUserDefaultHandler.shared.getDialogFlowBotType(botId: assigneeId) == type {
-            return true
-        }
-        return false
+        return KMAppUserDefaultHandler.shared.getDialogFlowBotType(botId: assigneeId) == type
     }
 }
