@@ -81,6 +81,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             }
         }
     }
+    var isConversationAssignedToDialogflowCXBot = false
 
     let awayMessageheight = 80.0
 
@@ -1123,7 +1124,12 @@ extension KMConversationViewController {
 
     func conversationAssignedToDialogflowBot() {
         guard let channelKey = viewModel.channelKey else { return }
-        kmBotService.conversationAssignedToBotForBotType(type: BotDetailResponse.BotType.DIALOGFLOW.rawValue, groupId: channelKey) { [weak self] isDialogflowBot in
+        kmBotService.conversationAssignedToBotForBotType(type: BotDetailResponse.BotType.DIALOGFLOW.rawValue, groupId: channelKey) {
+            [weak self] isDialogflowBot in
+            if isDialogflowBot,
+               let isCXBot = self?.kmBotService.isCXDialogFlowBot(type: BotDetailResponse.BotType.DIALOGFLOWCX.rawValue, groupId: channelKey) {
+                self?.isConversationAssignedToDialogflowCXBot = isCXBot
+            }
 
             self?.isConversationAssignedToDialogflowBot = isDialogflowBot
             guard let weakSelf = self,

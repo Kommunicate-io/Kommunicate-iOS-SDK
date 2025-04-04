@@ -19,7 +19,8 @@ public enum CharacterLimit: Localizable {
     }
 
     public static var charlimit = Limit(soft: 1800, hard: 2000)
-    public static var botCharLimit = Limit(soft: 55, hard: 256)
+    public static var botCharLimit = Limit(soft: 200, hard: 256)
+    public static var cxBotCharLimit = Limit(soft: 450, hard: 500)
 
     enum LocalizedText {
         private static let filename = Kommunicate.defaultConfiguration.localizedStringFileName
