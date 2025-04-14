@@ -12,6 +12,8 @@ target 'Kommunicate_Example' do
     pod 'KommunicateCore-iOS-SDK', :git => 'https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git', :branch => ENV['KM_CORE_BRANCH']
   else
     pod 'Kommunicate', :path => '../'
+    pod 'KommunicateChatUI-iOS-SDK', :git => 'https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git', :branch => 'sanity_1.5.0'
+    pod 'KommunicateCore-iOS-SDK', :git => 'https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git', :branch => 'sanity_1.3.0'
     pod 'SwiftLint'
   end
 
