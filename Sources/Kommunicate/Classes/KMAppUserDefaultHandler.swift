@@ -46,6 +46,16 @@ class KMAppUserDefaultHandler: NSObject {
             return userDefaultSuite.integer(forKey: Key.BotTypingIndicatorInterval)
         }
     }
+    
+    var currentActivatedPlan: String {
+        set {
+            userDefaultSuite.set(newValue, forKey: Key.CurrentActivatedPlan)
+        }
+        get {
+            return userDefaultSuite.string(forKey: Key.CurrentActivatedPlan) ?? "trial"
+        }
+    }
+    
     private let userDefaultSuite: UserDefaults
 
     init(userDefaultSuite: UserDefaults) {
@@ -59,6 +69,18 @@ class KMAppUserDefaultHandler: NSObject {
     func getBotType(botId: String) -> String? {
         return userDefaultSuite.value(forKey: botId) as? String
     }
+    
+    func setDialogFlowBotType(_ botType: String, botId: String) {
+        guard !botType.isEmpty, !botId.isEmpty else { return }
+        let key = "dialogflow_\(botId)"
+        userDefaultSuite.setValue(botType, forKey: key)
+    }
+
+    func getDialogFlowBotType(botId: String) -> String? {
+        guard !botId.isEmpty else { return nil }
+        let key = "dialogflow_\(botId)"
+        return userDefaultSuite.value(forKey: key) as? String
+    }
 
     func clear() {
         userDefaultSuite.removePersistentDomain(forName: KMAppUserDefaultHandler.defaultSuiteName)
@@ -71,5 +93,6 @@ private extension KMAppUserDefaultHandler {
         static let BotMessageDelayInterval = "BOT_MESSAGE_DELAY_INTERVAL"
         static let CSATRatingBase = "CSAT_RATTING_BASE"
         static let BotTypingIndicatorInterval = "BOT_TYPING_INDICATOR_INTERVAL"
+        static let CurrentActivatedPlan = "KM_CURRENT_ACTIVATED_PLAN"
     }
 }

@@ -17,6 +17,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     private weak var ratingVC: RatingViewController?
     private weak var fiveStarRatingVC: KMStarRattingViewController?
     private let registerUserClientService = ALRegisterUserClientService()
+    private var kmBusinessHoursDataArray: [KMBusinessHoursViewModel]?
     let kmBotService = KMBotService()
     private var assigneeUserId: String?
     var messageArray = [ALMessage]()
@@ -80,6 +81,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             }
         }
     }
+    var isConversationAssignedToDialogflowCXBot = false
 
     let awayMessageheight = 80.0
 
@@ -152,6 +154,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         customNavigationView.setupAppearance()
 
         checkPlanAndShowSuspensionScreen()
+        isBusinessHoursUIScreenVisible()
         addViewConstraints()
         messageCharLimitManager.delegate = self
         botCharLimitManager.delegate = self
@@ -227,6 +230,156 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
            count = messageArray.count
            self.viewModel.addMessagesToList(messageList)
        }
+    }
+    
+    func isBusinessHoursUIScreenVisible() {
+        guard PricingPlan.shared.isBusinessPlanOrTrialPlan(),
+              let applicationKey = KMCoreUserDefaultsHandler.getApplicationKey(),
+              let teamID = viewModel.assignedTeamId,
+              let teamId = Int(teamID) else { return }
+
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            self?.fetchBusinessHours(for: applicationKey, teamId: teamId)
+        }
+    }
+
+    private func fetchBusinessHours(
+        for applicationKey: String,
+        teamId: Int
+    ) {
+        conversationService.businessHoursMessageFor(applicationKey: applicationKey) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let businessHourDataArray):
+                kmBusinessHoursDataArray = businessHourDataArray
+                self.processBusinessHours(businessHourDataArray, for: teamId)
+            case .failure(let error):
+                print("Error fetching business hours: \(error)")
+            }
+        }
+    }
+
+    private func processBusinessHours(
+        _ businessHourDataArray: [KMBusinessHoursViewModel],
+        for teamId: Int
+    ) {
+        guard let businessHourData = businessHourDataArray.first(where: { $0.teamId == teamId }) else {
+            print("No business hours found for teamId \(teamId)")
+            return
+        }
+        
+        let updatedCurrentTime = convertToTimezone(for: businessHourData.timezone)
+        let updatedDay = getDayOfWeek(for: businessHourData.timezone)
+        let workingDaysArray = getWorkingDays(from: businessHourData.workingDays)
+        
+        if workingDaysArray.contains(updatedDay) {
+            DispatchQueue.main.async { [weak self] in
+                self?.handleBusinessHours(businessHourData, updatedDay: updatedDay, currentTime: updatedCurrentTime, teamId: teamId)
+            }
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                self?.handleNonWorkingDayConditions(businessHourData, workingDaysArray, currentTime: updatedCurrentTime, teamID: teamId)
+            }
+        }
+    }
+    
+    private func handleNonWorkingDayConditions(
+        _ businessHourData: KMBusinessHoursViewModel,
+        _ workingDaysArray: [Int],
+        currentTime: Int,
+        teamID: Int
+    ) {
+        if currentTime >= 2300 {
+            let remainingTime = minutesBetween(start: currentTime, end: 0) // Time until next day 00:00
+            let delay = TimeInterval(remainingTime * 60) // Convert to seconds
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+                guard let kmBusinessHoursDataArray = self?.kmBusinessHoursDataArray else { return }
+                self?.processBusinessHours(kmBusinessHoursDataArray, for: teamID)
+            }
+        }
+        prepareBusinessHoursInfoView(message: businessHourData.message, isVisible: true)
+    }
+
+    private func handleBusinessHours(
+        _ businessHourData: KMBusinessHoursViewModel,
+        updatedDay: Int,
+        currentTime: Int,
+        teamId: Int
+    ) {
+        if let hoursRange = businessHourData.businessHourMap[String(updatedDay)] {
+            let timeSlots = hoursRange.split(separator: "-").compactMap { Int($0) }
+            
+            if timeSlots.count == 2 {
+                processTimeSlots(timeSlots, currentTime: currentTime, teamId: teamId, message: businessHourData.message)
+            }
+        } else {
+            prepareBusinessHoursInfoView(message: businessHourData.message, isVisible: true)
+            print("No business hours found for teamId \(teamId) on day \(updatedDay)")
+        }
+    }
+
+    private func processTimeSlots(
+        _ timeSlots: [Int],
+        currentTime: Int,
+        teamId: Int,
+        message: String
+    ) {
+        guard timeSlots.count >= 2 else { return }
+        
+        let startTime = timeSlots[0]
+        let endTime = timeSlots[1]
+        
+        if startTime == endTime {
+            handleWithinBusinessHours(currentTime: currentTime, endTime: endTime, teamId: teamId)
+            return
+        }
+        
+        if isWithinBusinessHours(currentTime, startTime: startTime, endTime: endTime) {
+            handleWithinBusinessHours(currentTime: currentTime, endTime: endTime, teamId: teamId)
+        } else {
+            handleOutsideBusinessHours(currentTime: currentTime, startTime: startTime, teamID: teamId, message: message)
+        }
+    }
+
+    private func isWithinBusinessHours(_ currentTime: Int, startTime: Int, endTime: Int) -> Bool {
+        return startTime < endTime
+            ? (startTime...endTime).contains(currentTime)
+            : !(endTime...startTime).contains(currentTime)
+    }
+
+    private func handleWithinBusinessHours(
+        currentTime: Int,
+        endTime: Int,
+        teamId: Int,
+        businessHourDisabled: Bool = false
+    ) {
+        if !businessHourDisabled {
+            recallBusinessHoursMessage(startTime: currentTime, endTime: endTime, teamID: teamId)
+        }
+        prepareBusinessHoursInfoView(message: "", isVisible: false)
+        print("Business hours are active for teamId \(teamId)")
+    }
+
+    private func handleOutsideBusinessHours(
+        currentTime: Int,
+        startTime: Int,
+        teamID: Int,
+        message: String
+    ) {
+        recallBusinessHoursMessage(startTime: currentTime, endTime: startTime, teamID: teamID)
+        prepareBusinessHoursInfoView(message: message, isVisible: true)
+        print("Out of business hours for teamId \(teamID)")
+    }
+    
+    private func recallBusinessHoursMessage(startTime: Int, endTime: Int, teamID: Int) {
+        let remainingTime = minutesBetween(start: startTime, end: endTime)
+        let delay = max(TimeInterval(remainingTime + 1) * 60, 1)  // Ensures at least a 1s delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            guard let kmBusinessHoursDataArray = self?.kmBusinessHoursDataArray else { return }
+            self?.processBusinessHours(kmBusinessHoursDataArray, for: teamID)
+        }
     }
     
     // This method is used to delay the bot message as well as to show typing indicator
@@ -359,7 +512,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
                 }
             })
         } else {
-            guard let channelKey = viewModel.channelKey, let applicationKey =  ALUserDefaultsHandler.getApplicationKey() else { return }
+            guard let channelKey = viewModel.channelKey, let applicationKey =  KMCoreUserDefaultsHandler.getApplicationKey() else { return }
             conversationService.awayMessageFor(applicationKey: applicationKey, groupId: channelKey, completion: {
                 result in
                 DispatchQueue.main.async {
@@ -430,6 +583,11 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             self.assigneeUserId = contact?.userId
             self.hideInputBarIfAssignedToBot()
             guard let contact = contact else {return}
+            if let kmBusinessHoursDataArray = self.kmBusinessHoursDataArray,
+               let teamID = self.viewModel.assignedTeamId,
+               let teamId = Int(teamID) {
+                self.processBusinessHours(kmBusinessHoursDataArray, for: teamId)
+            }
             if let conversationStatus = alChannel.metadata[AL_CHANNEL_CONVERSATION_STATUS], conversationStatus as! String == KMConversationStatus.waiting.rawValue {
                 self.customNavigationView.updateWaitingQueueUI(showWaitingQueueOnly: true)
                 return
@@ -610,7 +768,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
             if let channelId = weakSelf.viewModel.channelKey {
                 KMCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.restartConversationClick, data: ["conversationId": channelId])
             }
-            guard let zendeskAccountKey = ALApplozicSettings.getZendeskSdkAccountKey(),
+            guard let zendeskAccountKey = KMCoreSettings.getZendeskSdkAccountKey(),
                   !zendeskAccountKey.isEmpty else { return }
             #if canImport(ChatProvidersSDK)
                 // if zendesk is integrated, create a new conversation instead of restarting the conversation
@@ -627,7 +785,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
               switch result {
                case .success(let conversationId):
                 #if canImport(ChatProvidersSDK)
-                  ALApplozicSettings.setLastZendeskConversationId(NSNumber(value: Int(conversationId) ?? 0))
+                  KMCoreSettings.setLastZendeskConversationId(NSNumber(value: Int(conversationId) ?? 0))
                 #endif
                   let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: NSNumber(value: Int(conversationId) ?? 0), localizedStringFileName: Kommunicate.defaultConfiguration.localizedStringFileName, prefilledMessage: nil)
                  // Update the View Model & refresh the View Controller
@@ -717,6 +875,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     override open func sendQuickReply(_ text: String,
                                       metadata: [String: Any]?,
                                       languageCode language: String?) {
+        guard isConversationResolvedAndReplyEnabled() else { return }
         do {
             var replyMetadata = metadata ?? [String: Any]() // reply meta data
 
@@ -965,7 +1124,12 @@ extension KMConversationViewController {
 
     func conversationAssignedToDialogflowBot() {
         guard let channelKey = viewModel.channelKey else { return }
-        kmBotService.conversationAssignedToBotForBotType(type: BotDetailResponse.BotType.DIALOGFLOW.rawValue, groupId: channelKey) { [weak self] isDialogflowBot in
+        kmBotService.conversationAssignedToBotForBotType(type: BotDetailResponse.BotType.DIALOGFLOW.rawValue, groupId: channelKey) {
+            [weak self] isDialogflowBot in
+            if isDialogflowBot,
+               let isCXBot = self?.kmBotService.isCXDialogFlowBot(type: BotDetailResponse.BotType.DIALOGFLOWCX.rawValue, groupId: channelKey) {
+                self?.isConversationAssignedToDialogflowCXBot = isCXBot
+            }
 
             self?.isConversationAssignedToDialogflowBot = isDialogflowBot
             guard let weakSelf = self,

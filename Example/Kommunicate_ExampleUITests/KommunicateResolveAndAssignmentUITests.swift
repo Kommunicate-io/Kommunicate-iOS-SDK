@@ -41,6 +41,11 @@ class KommunicateResolveAndAssignmentUITests: XCTestCase {
     func testRestartConversation () {
         let app = beforeTest_Launch_NewConversation()
         waitFor(object: app) { $0.exists }
+        let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
+        waitFor(object: inputView) { $0.exists }
+        inputView.tap()
+        inputView.tap()
+        inputView.tap()
         app.typeText(GroupData.typeText) // typing message
         app.buttons[InAppButton.ConversationScreen.send].tap() // sending message in group
         sleep(3) /// To wait for response
@@ -75,8 +80,7 @@ class KommunicateResolveAndAssignmentUITests: XCTestCase {
         sleep(2)
         
         app.buttons[InAppButton.ConversationScreen.restartConversation].tap()
-        
-        let inputView = app.otherElements[AppScreen.chatBar].children(matching: .textView).matching(identifier: AppTextFeild.chatTextView).firstMatch
+
         waitFor(object: inputView) { $0.exists }
         inputView.tap()
         inputView.tap()

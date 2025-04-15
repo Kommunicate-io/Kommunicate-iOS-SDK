@@ -41,6 +41,36 @@ class DataLoader {
         }
         task.resume()
     }
+    
+    static func requestWithApplicationKey(url: URL, applicationKey: String, completion: @escaping (Result<Data, LoadingError>) -> Void) {
+        var urlRequest = URLRequest(url: url)
+
+        urlRequest.httpMethod = "GET"
+        urlRequest.timeoutInterval = 600
+        urlRequest.setValue("Application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.setValue(KMUserDefaultHandler.getAuthToken(), forHTTPHeaderField: "X-Authorization")
+        urlRequest.setValue(applicationKey, forHTTPHeaderField: "Application-Key")
+
+        // set up the session
+        let config = URLSessionConfiguration.default
+        let session: URLSession = {
+            if Kommunicate.isKMSSLPinningEnabled {
+                return URLSession(configuration: config, delegate: KMURLSessionPinningDelegate(), delegateQueue: nil)
+            } else {
+                return URLSession(configuration: config)
+            }
+        }()
+
+        // make the request
+        let task = session.dataTask(with: urlRequest) {
+            data, _, error in
+            let result = data.map(Result.success) ??
+                .failure(LoadingError.network(error))
+
+            completion(result)
+        }
+        task.resume()
+    }
 
     static func postRequest(
         url: URL,
