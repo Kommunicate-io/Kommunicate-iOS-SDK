@@ -72,6 +72,7 @@ class FeedbackRatingView: UIView {
 
     private func setupView() {
         onRatingTap = { [weak self] tag in
+            ALKCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.rateConversationEmotionsClicked, data: ["rating": tag])
             self?.selectedRatingTag = tag
         }
         ratingButtons.forEach { $0.ratingTapped = onRatingTap }
