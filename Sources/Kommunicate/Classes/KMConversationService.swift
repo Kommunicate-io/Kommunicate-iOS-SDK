@@ -469,6 +469,13 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         }
         updateMetadataChatContext(info: [ChannelMetadataKeys.kmUserLocale: languageCode as Any], metadata: metadata)
         
+        /// For Dialogflow bot, pass language code with region using key `kmUserLanguageCode`
+        if let languageCodeWithRegion = [Locale.current.languageCode, Locale.current.regionCode]
+            .compactMap({ $0 })
+            .joined(separator: "_") as String?, !languageCodeWithRegion.isEmpty {
+            updateMetadataChatContext(info: [ChannelMetadataKeys.languageTag: languageCodeWithRegion as Any], metadata: metadata)
+        }
+
         guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
               !messageMetadata.isEmpty
         else {
