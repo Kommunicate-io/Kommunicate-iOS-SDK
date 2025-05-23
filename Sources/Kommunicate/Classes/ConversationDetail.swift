@@ -9,12 +9,12 @@ import Foundation
 import KommunicateCore_iOS_SDK
 
 class ConversationDetail {
-    let channelService = ALChannelService()
+    let channelService = KMCoreChannelService()
     let userService = ALUserService()
     let contactDbService = ALContactDBService()
-    let channelDbService = ALChannelDBService()
+    let channelDbService = KMCoreChannelDBService()
 
-    func conversationAssignee(groupId: NSNumber?, userId: String?) -> (ALContact?, ALChannel?) {
+    func conversationAssignee(groupId: NSNumber?, userId: String?) -> (ALContact?, KMCoreChannel?) {
         // Check if group conversation.
         guard let channelKey = groupId else {
             guard let userId = userId else {
@@ -43,7 +43,7 @@ class ConversationDetail {
 
     func updatedAssigneeDetails(groupId: NSNumber?,
                                 userId: String?,
-                                completion: @escaping (ALContact?, ALChannel?) -> Void) {
+                                completion: @escaping (ALContact?, KMCoreChannel?) -> Void) {
         var (assignee, alChannel) = conversationAssignee(groupId: groupId, userId: userId)
         guard let contact = assignee else {
             completion(nil, alChannel)
@@ -105,7 +105,7 @@ class ConversationDetail {
     }
 }
 
-extension ALChannel {
+extension KMCoreChannel {
     static let ClosedStatus = 2
 
     var isClosedConversation: Bool {
@@ -113,6 +113,6 @@ extension ALChannel {
             return false
         }
         return type == Int16(SUPPORT_GROUP.rawValue) &&
-            Int(conversationStatus) ?? 0 == ALChannel.ClosedStatus
+            Int(conversationStatus) ?? 0 == KMCoreChannel.ClosedStatus
     }
 }

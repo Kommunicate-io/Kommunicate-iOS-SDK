@@ -21,7 +21,7 @@ public class KMPushNotificationHelper {
             /// For group check mute only.
             self.groupId = groupId
             if let groupId = groupId {
-                let group = ALChannelService().getChannelByKey(groupId)
+                let group = KMCoreChannelService().getChannelByKey(groupId)
                 isMute = group?.isNotificationMuted() ?? false
             }
         }

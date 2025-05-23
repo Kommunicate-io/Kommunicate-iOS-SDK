@@ -28,7 +28,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     public var conversationListTableViewController: ALKConversationListTableViewController
     private let registerUserClientService = ALRegisterUserClientService()
 
-    let channelService = ALChannelService()
+    let channelService = KMCoreChannelService()
     var searchController: UISearchController!
     var searchBar: KMCustomSearchBar!
     lazy var resultVC = ALKSearchResultViewController(configuration: configuration)
@@ -367,7 +367,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         })
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-            let channelDbService = ALChannelDBService()
+            let channelDbService = KMCoreChannelDBService()
             channelDbService.deleteChannel(conversation.groupId)
             self.viewModel.remove(message: conversation)
             self.tableView.reloadData()
