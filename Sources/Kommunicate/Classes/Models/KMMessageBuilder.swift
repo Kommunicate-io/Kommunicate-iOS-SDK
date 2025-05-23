@@ -41,8 +41,8 @@ public class KMMessageBuilder: NSObject {
 }
 
 extension KMMessage {
-    func toALMessage() -> ALMessage {
-        let alMessage = ALMessage()
+    func toKMCoreMessage() -> KMCoreMessage {
+        let alMessage = KMCoreMessage()
         alMessage.to = nil
         alMessage.contactIds = nil
         alMessage.message = text

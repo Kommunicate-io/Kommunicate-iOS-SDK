@@ -1091,9 +1091,9 @@ open class Kommunicate: NSObject, Localizable {
                 completion(noConversationError)
                 return
             }
-            let alMessage = message.toALMessage()
+            let alMessage = message.toKMCoreMessage()
             alMessage.groupId = key
-            ALMessageService.sharedInstance().sendMessages(alMessage) { _, error in
+            KMCoreMessageService.sharedInstance().sendMessages(alMessage) { _, error in
                 guard error == nil else {
                     completion(error)
                     return

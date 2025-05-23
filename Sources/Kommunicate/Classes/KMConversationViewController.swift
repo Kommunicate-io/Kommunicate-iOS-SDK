@@ -20,10 +20,10 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     private var kmBusinessHoursDataArray: [KMBusinessHoursViewModel]?
     let kmBotService = KMBotService()
     private var assigneeUserId: String?
-    var messageArray = [ALMessage]()
+    var messageArray = [KMCoreMessage]()
     var timer = Timer()
     var count = 0
-    var currentMessage = ALMessage()
+    var currentMessage = KMCoreMessage()
     var delayInterval = 0
     private var isWaitingQueueFetching: Bool = false
 
@@ -193,7 +193,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     }
     
     open override func addMessagesToList(_ messageList: [Any]) {
-       guard var messages = messageList as? [ALMessage] else { return }
+       guard var messages = messageList as? [KMCoreMessage] else { return }
         
         if KMConversationScreenConfiguration.showTypingIndicatorWhileFetchingResponse {
             updateTyingStatus(status: false, userId: "")
@@ -385,7 +385,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     // This method is used to delay the bot message as well as to show typing indicator
     func showDelayAndTypingIndicatorForMessage() {
         if count >= messageArray.count {
-           currentMessage = ALMessage()
+           currentMessage = KMCoreMessage()
            return
          }
          
@@ -740,7 +740,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         subscribeChannelToMqtt()
         viewModel.prepareController()
         self.updatePlaceholder()
-        ALMessageService.syncMessages()
+        KMCoreMessageService.syncMessages()
         syncAutoSuggestionMessage(message: viewModel?.lastMessage)
     }
     

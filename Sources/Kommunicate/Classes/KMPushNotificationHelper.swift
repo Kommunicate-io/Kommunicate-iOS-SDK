@@ -55,7 +55,7 @@ public class KMPushNotificationHelper {
     ///
     /// - Parameter message: message of notification
     /// - Returns: `NotificationData` containing information about groupId
-    public func notificationData(message: ALMessage) -> NotificationData {
+    public func notificationData(message: KMCoreMessage) -> NotificationData {
         return NotificationData(groupId: message.channelKey)
     }
 
