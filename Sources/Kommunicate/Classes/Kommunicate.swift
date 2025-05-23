@@ -27,7 +27,7 @@ public typealias KMUser = KMCoreUser
 public typealias KMUserDefaultHandler = KMCoreUserDefaultsHandler
 public typealias KMPushNotificationService = ALPushNotificationService
 public typealias KMAppLocalNotification = ALAppLocalNotifications
-public typealias KMDbHandler = ALDBHandler
+public typealias KMDbHandler = KMCoreDBHandler
 public typealias KMRegisterUserClientService = ALRegisterUserClientService
 public typealias KMConfiguration = ALKConfiguration
 public typealias KMMessageStyle = ALKMessageStyle
@@ -745,7 +745,7 @@ open class Kommunicate: NSObject, Localizable {
         showListOnBack: Bool = false,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        let alChannelService = ALChannelService()
+        let alChannelService = KMCoreChannelService()
         alChannelService.getChannelInformation(nil, orClientChannelKey: clientGroupId) { channel in
             guard let channel = channel, let key = channel.key else {
                 completionHandler(false)
@@ -806,7 +806,7 @@ open class Kommunicate: NSObject, Localizable {
         showListOnBack: Bool = false,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        let alChannelService = ALChannelService()
+        let alChannelService = KMCoreChannelService()
         alChannelService.getChannelInformation(nil, orClientChannelKey: clientGroupId) { channel in
             guard let channel = channel, let key = channel.key else {
                 completionHandler(false)
@@ -904,7 +904,7 @@ open class Kommunicate: NSObject, Localizable {
         // Update group id so that messages can be fetched & stored locally
         zendeskHandler.setGroupId(existingZendeskConversationId.stringValue)
 
-        guard let channel = ALChannelService().getChannelByKey(existingZendeskConversationId)  else {
+        guard let channel = KMCoreChannelService().getChannelByKey(existingZendeskConversationId)  else {
             completion(.conversationNotPresent)
             return
         }
@@ -999,7 +999,7 @@ open class Kommunicate: NSObject, Localizable {
         }
 
         let defaultMetaData = NSMutableDictionary(
-            dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
+            dictionary: KMCoreChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
     
         if let conversationMetaDict = conversation.conversationMetadata as NSDictionary? as! [String: Any]? {
             let jsonObject = try? JSONSerialization.data(withJSONObject: conversationMetaDict, options: [])
@@ -1084,16 +1084,16 @@ open class Kommunicate: NSObject, Localizable {
             completion(emptyConversationId)
             return
         }
-        let alChannelService = ALChannelService()
+        let alChannelService = KMCoreChannelService()
         alChannelService.getChannelInformation(nil, orClientChannelKey: message.conversationId) { channel in
             guard let channel = channel, let key = channel.key else {
                 let noConversationError = NSError(domain: "No conversation found", code: 0, userInfo: nil)
                 completion(noConversationError)
                 return
             }
-            let alMessage = message.toALMessage()
+            let alMessage = message.toKMCoreMessage()
             alMessage.groupId = key
-            ALMessageService.sharedInstance().sendMessages(alMessage) { _, error in
+            KMCoreMessageService.sharedInstance().sendMessages(alMessage) { _, error in
                 guard error == nil else {
                     completion(error)
                     return

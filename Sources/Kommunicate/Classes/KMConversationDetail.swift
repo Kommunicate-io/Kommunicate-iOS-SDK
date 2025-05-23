@@ -50,7 +50,7 @@ public protocol KMGroupUserType {
     var role: KMGroupUser.RoleType { get }
 }
 
-public class KMGroupUser: ALGroupUser, KMGroupUserType, Encodable {
+public class KMGroupUser: KMCoreGroupUser, KMGroupUserType, Encodable {
     public enum RoleType: Int {
         case agent = 1
         case bot = 2

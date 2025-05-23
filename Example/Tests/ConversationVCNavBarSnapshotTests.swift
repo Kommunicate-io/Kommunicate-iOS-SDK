@@ -22,8 +22,8 @@ class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
         return alContact
     }()
 
-    let mockChannel: ALChannel = {
-        let channel = ALChannel()
+    let mockChannel: KMCoreChannel = {
+        let channel = KMCoreChannel()
         channel.key = 1_244_444
         channel.name = "Demo Display Name"
         channel.type = Int16(SUPPORT_GROUP.rawValue)

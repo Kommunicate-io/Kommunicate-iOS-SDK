@@ -21,7 +21,7 @@ public class KMPushNotificationHelper {
             /// For group check mute only.
             self.groupId = groupId
             if let groupId = groupId {
-                let group = ALChannelService().getChannelByKey(groupId)
+                let group = KMCoreChannelService().getChannelByKey(groupId)
                 isMute = group?.isNotificationMuted() ?? false
             }
         }
@@ -55,7 +55,7 @@ public class KMPushNotificationHelper {
     ///
     /// - Parameter message: message of notification
     /// - Returns: `NotificationData` containing information about groupId
-    public func notificationData(message: ALMessage) -> NotificationData {
+    public func notificationData(message: KMCoreMessage) -> NotificationData {
         return NotificationData(groupId: message.channelKey)
     }
 

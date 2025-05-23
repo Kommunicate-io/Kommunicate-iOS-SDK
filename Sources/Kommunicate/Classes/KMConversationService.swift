@@ -55,7 +55,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
 
     let groupMetadata: NSMutableDictionary = {
         let metadata = NSMutableDictionary(
-            dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
+            dictionary: KMCoreChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
 
         // Required for features like setting user language in server.
         guard let messageMetadata = Kommunicate.defaultConfiguration.messageMetadata,
@@ -67,7 +67,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         return metadata
     }()
 
-    let channelService = ALChannelService()
+    let channelService = KMCoreChannelService()
 
     // MARK: - Initialization
 
@@ -423,7 +423,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
 
     func getMetaDataWith(_ conversation: KMConversation) -> NSMutableDictionary {
         let metadata = NSMutableDictionary(
-            dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
+            dictionary: KMCoreChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
 
         if !conversation.conversationMetadata.isEmpty {
             metadata.addEntries(from: conversation.conversationMetadata)
@@ -542,8 +542,8 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         return agentIds.map { createAgentGroupUserFrom(agentId: $0) }
     }
 
-    internal func isGroupPresent(clientId: String, completion: @escaping (_ isPresent: Bool, _ channel: ALChannel?) -> Void) {
-        let client = ALChannelService()
+    internal func isGroupPresent(clientId: String, completion: @escaping (_ isPresent: Bool, _ channel: KMCoreChannel?) -> Void) {
+        let client = KMCoreChannelService()
         client.getChannelInformation(byResponse: nil, orClientChannelKey: clientId, withCompletion: {
             _, channel, _ in
             guard let channel = channel else {
@@ -588,7 +588,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         if let agentUsers = agentGroupUsersFor(agentIds: conversation.agentIds) {
             members.append(contentsOf: agentUsers)
         }
-        let alChannelService = ALChannelService()
+        let alChannelService = KMCoreChannelService()
         let groupUsers = members.map { $0.toDict() }
 
         alChannelService.createChannel(
@@ -688,7 +688,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         metadata: NSMutableDictionary,
         completion: @escaping ((Response) -> Void)
     ) {
-        ALChannelService().updateChannelMetaData(groupId, orClientChannelKey: channelKey, metadata: metadata) { error in
+        KMCoreChannelService().updateChannelMetaData(groupId, orClientChannelKey: channelKey, metadata: metadata) { error in
             guard error == nil else {
                 completion(Response(success: false, clientChannelKey: nil, error: error))
                 return
@@ -702,7 +702,7 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         metadata: NSMutableDictionary,
         completion: @escaping ((Response) -> Void)
     ) {
-        ALChannelService().updateChannelMetaData(nil, orClientChannelKey: groupId, metadata: metadata) { error in
+        KMCoreChannelService().updateChannelMetaData(nil, orClientChannelKey: groupId, metadata: metadata) { error in
             guard error == nil else {
                 completion(Response(success: false, clientChannelKey: nil, error: error))
                 return
@@ -717,12 +717,12 @@ public class KMConversationService: KMConservationServiceable, Localizable {
         completion: @escaping ((Response) -> Void)
     ) {
         let metadata = NSMutableDictionary(
-            dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
+            dictionary: KMCoreChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
         if !teamID.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             metadata.setValue(teamID, forKey: ChannelMetadataKeys.teamId)
         }
 
-        ALChannelService().updateChannelMetaData(NSNumber(pointer: groupID), orClientChannelKey: groupID, metadata: metadata) { error in
+        KMCoreChannelService().updateChannelMetaData(NSNumber(pointer: groupID), orClientChannelKey: groupID, metadata: metadata) { error in
             guard error == nil else {
                 completion(Response(success: false, clientChannelKey: nil, error: error))
                 return

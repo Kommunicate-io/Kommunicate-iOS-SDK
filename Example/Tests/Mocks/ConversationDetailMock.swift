@@ -13,7 +13,7 @@ import KommunicateCore_iOS_SDK
 class ConversationDetailMock: ConversationDetail {
     var groupId: NSNumber!
 
-    override func updatedAssigneeDetails(groupId: NSNumber?, userId _: String?, completion: @escaping (ALContact?, ALChannel?) -> Void) {
+    override func updatedAssigneeDetails(groupId: NSNumber?, userId _: String?, completion: @escaping (ALContact?, KMCoreChannel?) -> Void) {
         self.groupId = groupId
         completion(nil, nil)
     }

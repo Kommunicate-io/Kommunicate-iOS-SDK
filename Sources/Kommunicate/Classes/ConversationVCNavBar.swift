@@ -150,7 +150,7 @@ class ConversationVCNavBar: UIView, Localizable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func updateView(assignee: ALContact?, channel: ALChannel) {
+    func updateView(assignee: ALContact?, channel: KMCoreChannel) {
         setupProfile(assignee, channel)
     }
 
@@ -276,7 +276,7 @@ class ConversationVCNavBar: UIView, Localizable {
         backButton.setImage(image.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
     }
 
-    private func setupProfile(_ contact: ALContact?, _ channel: ALChannel) {
+    private func setupProfile(_ contact: ALContact?, _ channel: KMCoreChannel) {
         var url: URL?
 
         if let imageUrl = contact?.contactImageUrl {
@@ -303,7 +303,7 @@ class ConversationVCNavBar: UIView, Localizable {
         profileName.text = name
     }
 
-    private func placeHolderImage(channel: ALChannel) -> UIImage? {
+    private func placeHolderImage(channel: KMCoreChannel) -> UIImage? {
         var placeHolder: UIImage?
 
         if channel.type == Int16(SUPPORT_GROUP.rawValue) {
