@@ -28,12 +28,12 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     public var conversationListTableViewController: ALKConversationListTableViewController
     private let registerUserClientService = ALRegisterUserClientService()
 
-    let channelService = ALChannelService()
+    let channelService = KMCoreChannelService()
     var searchController: UISearchController!
     var searchBar: KMCustomSearchBar!
     lazy var resultVC = ALKSearchResultViewController(configuration: configuration)
 
-    public var dbService = ALMessageDBService()
+    public var dbService = KMCoreMessageDBService()
     public var viewModel = ALKConversationListViewModel()
     
     var isSingleThreadedEnabled = KMCoreSettings.getIsSingleThreadedEnabled()
@@ -273,7 +273,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     }
 
     @objc func addMessages(notification: NSNotification) {
-        guard let msgArray = notification.object as? [ALMessage] else { return }
+        guard let msgArray = notification.object as? [KMCoreMessage] else { return }
         print("new notification received: ", msgArray.first?.message ?? "")
         guard let list = notification.object as? [Any], !list.isEmpty else { return }
         viewModel.addMessages(messages: list)
@@ -305,7 +305,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
             contactId = object
         }
 
-        let message = ALMessage()
+        let message = KMCoreMessage()
         message.contactIds = contactId
         message.groupId = groupId
         let info = notification.userInfo
@@ -353,12 +353,12 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     }
     
     @objc func conversationDeleted(notification: NSNotification) {
-        guard let conversation = notification.object as? ALMessage else { return }
+        guard let conversation = notification.object as? KMCoreMessage else { return }
         deleteConversation(conversation: conversation)
     }
     
-    private func deleteConversation(conversation: ALMessage) {
-        ALMessageService().deleteMessageThread(nil, orChannelKey: conversation.groupId, withCompletion: {
+    private func deleteConversation(conversation: KMCoreMessage) {
+        KMCoreMessageService().deleteMessageThread(nil, orChannelKey: conversation.groupId, withCompletion: {
             _, error in
             guard error == nil else {
                 print("Failed to delete the conversation: \(error.debugDescription)")
@@ -367,7 +367,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         })
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-            let channelDbService = ALChannelDBService()
+            let channelDbService = KMCoreChannelDBService()
             channelDbService.deleteChannel(conversation.groupId)
             self.viewModel.remove(message: conversation)
             self.tableView.reloadData()
@@ -466,7 +466,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         createConversationAndLaunch()
     }
 
-    func sync(message: ALMessage) {
+    func sync(message: KMCoreMessage) {
         if let viewController = conversationViewController,
            ALPushAssist().topViewController is KMConversationViewController,
            viewController.viewModel != nil,
@@ -638,7 +638,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     }
 }
 
-extension KMConversationListViewController: ALMessagesDelegate {
+extension KMConversationListViewController: KMCoreMessagesDelegate {
     public func getMessagesArray(_ messagesArray: NSMutableArray!) {
         guard let messages = messagesArray as? [Any], !messages.isEmpty else {
             viewModel.delegate?.listUpdated()
@@ -705,7 +705,7 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
         }
     }
 
-    public func isNewMessageForActiveThread(alMessage: ALMessage, vm: ALKConversationViewModel) -> Bool {
+    public func isNewMessageForActiveThread(alMessage: KMCoreMessage, vm: ALKConversationViewModel) -> Bool {
         let isGroupMessage = alMessage.groupId != nil && alMessage.groupId == vm.channelKey
         let isOneToOneMessage = alMessage.groupId == nil && vm.channelKey == nil && alMessage.contactId == vm.contactId
         if isGroupMessage || isOneToOneMessage {
@@ -714,14 +714,14 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
         return false
     }
 
-    func isMessageSentByLoggedInUser(alMessage: ALMessage) -> Bool {
+    func isMessageSentByLoggedInUser(alMessage: KMCoreMessage) -> Bool {
         if alMessage.isSentMessage() {
             return true
         }
         return false
     }
 
-    open func syncCall(_ alMessage: ALMessage!, andMessageList _: NSMutableArray!) {
+    open func syncCall(_ alMessage: KMCoreMessage!, andMessageList _: NSMutableArray!) {
         print("sync call: ", alMessage.message ?? "empty")
         guard let message = alMessage else { return }
         let viewController = navigationController?.visibleViewController as? KMConversationViewController
@@ -825,7 +825,7 @@ extension KMConversationListViewController: ALKConversationListTableViewDelegate
         viewModel.userBlockNotification(userId: userId, isBlocked: isBlocked)
     }
 
-    public func muteNotification(conversation: ALMessage, isMuted: Bool) {
+    public func muteNotification(conversation: KMCoreMessage, isMuted: Bool) {
         viewModel.muteNotification(conversation: conversation, isMuted: isMuted)
     }
 
