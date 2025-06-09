@@ -20,6 +20,7 @@ struct PricingPlan {
     let startMonthlyPlan = 112
     let startYearlyPlan = 113
     let trialPlan = 111
+    let churnedPlan = 100
     
     // Business Plans
     let businessPlans = ["trial",
@@ -47,7 +48,7 @@ struct PricingPlan {
         
         let isFreeOrStartOrTrialPlan: Bool = {
             let startPlans = [startMonthlyPlan, startYearlyPlan]
-            return userPlan == startupPlan || startPlans.contains(Int(userPlan)) || userPlan == trialPlan
+            return userPlan == startupPlan || startPlans.contains(Int(userPlan)) || userPlan == trialPlan || userPlan == churnedPlan
         }()
         
         let isNotAdmin = userRole != Int16(AL_APPLICATION_WEB_ADMIN.rawValue)
