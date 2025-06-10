@@ -486,7 +486,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     }
 
     override public func showAccountSuspensionView() {
-        let accountVC = ALKAccountSuspensionController()
+        let accountVC = ALKAccountSuspensionController(configuration: configuration)
         present(accountVC, animated: true, completion: nil)
         accountVC.isModalInPresentation = true
         accountVC.closePressed = { [weak self] in
@@ -621,7 +621,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     }
 
     private func checkPlanAndShowSuspensionScreen() {
-        let accountVC = ALKAccountSuspensionController()
+        let accountVC = ALKAccountSuspensionController(configuration: configuration)
         accountVC.isModalInPresentation = true
         guard PricingPlan.shared.showSuspensionScreen() else { return }
         present(accountVC, animated: true, completion: nil)
