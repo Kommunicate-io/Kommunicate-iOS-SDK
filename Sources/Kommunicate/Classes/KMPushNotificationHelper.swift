@@ -12,7 +12,7 @@ import KommunicateCore_iOS_SDK
 public class KMPushNotificationHelper {
     /// Stores information about the notification that arrives
     var conversationViewConfig: KMConversationViewConfiguration!
-    var configuration: ALKConfiguration!
+    var configuration: KMChatConfiguration!
 
     public struct NotificationData {
         public let groupId: NSNumber?
@@ -27,7 +27,7 @@ public class KMPushNotificationHelper {
         }
     }
 
-    public init(_ configuration: ALKConfiguration, _ conversationViewConfig: KMConversationViewConfiguration) {
+    public init(_ configuration: KMChatConfiguration, _ conversationViewConfig: KMConversationViewConfiguration) {
         self.configuration = configuration
         self.conversationViewConfig = conversationViewConfig
     }
@@ -71,7 +71,7 @@ public class KMPushNotificationHelper {
             let viewModel = topVC.viewModel
         else {
             guard let topVC = ALPushAssist().topViewController,
-                  let navVC = topVC.presentingViewController as? ALKBaseNavigationViewController,
+                  let navVC = topVC.presentingViewController as? KMChatBaseNavigationViewController,
                   let conversationViewController = navVC.topViewController as? KMConversationViewController,
                   let viewModel = conversationViewController.viewModel
             else {
@@ -105,7 +105,7 @@ public class KMPushNotificationHelper {
     /// - NOTE: Use this to launch chat when some other screen is opened.
     /// - Parameters:
     ///   - notification: notification that is tapped.
-    ///   - configuration: `ALKConfiguration` object.
+    ///   - configuration: `KMChatConfiguration` object.
     /// - Returns: An instance of `KMConversationListViewController`
     public func getConversationVCToLaunch(notification: NotificationData) -> KMConversationListViewController {
         let viewController = KMConversationListViewController(configuration: configuration, kmConversationViewConfiguration: Kommunicate.kmConversationViewConfiguration)

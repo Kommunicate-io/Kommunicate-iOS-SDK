@@ -24,13 +24,13 @@ class MessageCharacterLimitManager: NSObject {
     var messageToShow: String = ""
     var isCharLimitCheckEnabled = true
 
-    private let chatBar: ALKChatBar
+    private let chatBar: KMChatChatBar
     private let charLimitView: MessageCharacterLimitView
     private let limit: Int
 
     // MARK: - Internal Initialization
 
-    init(chatBar: ALKChatBar,
+    init(chatBar: KMChatChatBar,
          charLimitView: MessageCharacterLimitView,
          limit: Int) {
         self.chatBar = chatBar

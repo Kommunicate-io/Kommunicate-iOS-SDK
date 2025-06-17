@@ -11,7 +11,7 @@ import KommunicateCore_iOS_SDK
 import UIKit
 
 class KMAppSettingService {
-    let appSettingsUserDefaults = ALKAppSettingsUserDefaults()
+    let appSettingsUserDefaults = KMChatAppSettingsUserDefaults()
     let appSettingCacheMemoryKey = "KM_APP_SETTING_CACHE_MEMORY"
     let cacheTimeInterval: TimeInterval = 5 * 60 // 5 minutes in seconds
     
@@ -83,7 +83,7 @@ class KMAppSettingService {
        }
         
         let decodedPrimaryColor = primaryColor.replacingOccurrences(of: "#", with: "")
-        let appSettings = ALKAppSettings(primaryColor: decodedPrimaryColor)
+        let appSettings = KMChatAppSettings(primaryColor: decodedPrimaryColor)
 
        /// Primary color for sent message background
        appSettings.sentMessageBackgroundColor = decodedPrimaryColor
@@ -109,12 +109,12 @@ class KMAppSettingService {
         appSettingsUserDefaults.clear()
 
         /// Clearing the app navigationBar color
-        let navigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [ALKBaseNavigationViewController.self])
+        let navigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [KMChatBaseNavigationViewController.self])
         navigationBarProxy.barTintColor = nil
     }
 
     private func setupDefaultSettings(primaryColor: String = UIColor.background(.primary).toHexString()) {
-        let appSettings = ALKAppSettings(primaryColor: primaryColor)
+        let appSettings = KMChatAppSettings(primaryColor: primaryColor)
         appSettings.sentMessageBackgroundColor = primaryColor
         appSettings.attachmentIconsTintColor = primaryColor
         appSettings.buttonPrimaryColor = primaryColor

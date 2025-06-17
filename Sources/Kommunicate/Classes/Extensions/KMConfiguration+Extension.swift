@@ -8,7 +8,7 @@
 import Foundation
 import KommunicateChatUI_iOS_SDK
 
-public extension ALKConfiguration {
+public extension KMChatConfiguration {
     /// If true, faq button in conversation view will be hidden.
     var hideFaqButtonInConversationView: Bool {
         set {

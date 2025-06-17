@@ -29,11 +29,11 @@ public typealias KMPushNotificationService = ALPushNotificationService
 public typealias KMAppLocalNotification = ALAppLocalNotifications
 public typealias KMDbHandler = KMCoreDBHandler
 public typealias KMRegisterUserClientService = ALRegisterUserClientService
-public typealias KMConfiguration = ALKConfiguration
-public typealias KMMessageStyle = ALKMessageStyle
-public typealias KMBaseNavigationViewController = ALKBaseNavigationViewController
-public typealias KMChatBarConfiguration = ALKChatBarConfiguration
-public typealias KMCustomEventHandler = ALKCustomEventHandler
+public typealias KMConfiguration = KMChatConfiguration
+public typealias KMMessageStyle = KMChatMessageStyle
+public typealias KMBaseNavigationViewController = KMChatBaseNavigationViewController
+public typealias KMChatBarConfiguration = KMChatChatBarConfiguration
+public typealias KMCustomEventHandler = KMChatCustomEventHandler
 
 let faqIdentifier = 11_223_346
 
@@ -81,12 +81,12 @@ open class Kommunicate: NSObject, Localizable {
 
         config.isTapOnNavigationBarEnabled = false
         config.isProfileTapActionEnabled = false
-        var navigationItemsForConversationList = [ALKNavigationItem]()
-        var faqItem = ALKNavigationItem(identifier: faqIdentifier, text: NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
+        var navigationItemsForConversationList = [KMChatNavigationItem]()
+        var faqItem = KMChatNavigationItem(identifier: faqIdentifier, text: NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
         faqItem.faqTextColor = .kmDynamicColor(light: kmConversationViewConfiguration.faqTextColor, dark: kmConversationViewConfiguration.faqTextDarkColor)
         faqItem.faqBackgroundColor = .kmDynamicColor(light: kmConversationViewConfiguration.faqBackgroundColor, dark: kmConversationViewConfiguration.faqDarkBackgroundColor)
         navigationItemsForConversationList.append(faqItem)
-        var navigationItemsForConversationView = [ALKNavigationItem]()
+        var navigationItemsForConversationView = [KMChatNavigationItem]()
         navigationItemsForConversationView.append(faqItem)
         config.navigationItemsForConversationList = navigationItemsForConversationList
         config.navigationItemsForConversationView = navigationItemsForConversationView
@@ -681,7 +681,7 @@ open class Kommunicate: NSObject, Localizable {
 
     /// This method is used to return an instance of conversation list view controller.
     ///
-    /// - Returns: Instance of `ALKConversationListViewController`
+    /// - Returns: Instance of `KMChatConversationListViewController`
     @objc open class func conversationListViewController() -> KMConversationListViewController {
         let conversationVC = KMConversationListViewController(configuration: Kommunicate.defaultConfiguration, kmConversationViewConfiguration: Kommunicate.kmConversationViewConfiguration)
         configureListVC(conversationVC)
@@ -1055,7 +1055,7 @@ open class Kommunicate: NSObject, Localizable {
         }
     }
 
-    open class func openFaq(from vc: UIViewController, with configuration: ALKConfiguration) {
+    open class func openFaq(from vc: UIViewController, with configuration: KMChatConfiguration) {
         guard let url = URLBuilder.faqURL(for: KMCoreUserDefaultsHandler.getApplicationKey(), hideChat: configuration.hideChatInHelpcenter).url else {
             return
         }
@@ -1321,13 +1321,13 @@ open class Kommunicate: NSObject, Localizable {
     class func configureListVC(_ vc: KMConversationListViewController) {
         vc.conversationListTableViewController.dataSource.cellConfigurator = {
             messageModel, tableCell in
-            let cell = tableCell as! ALKChatCell
+            let cell = tableCell as! KMChatChatCell
             let message = ChatMessage(message: messageModel)
             cell.update(viewModel: message, identity: nil)
             cell.delegate = vc.conversationListTableViewController.self
         }
         let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration, individualLaunch: false)
-        conversationViewController.viewModel = ALKConversationViewModel(contactId: nil, channelKey: nil, localizedStringFileName: defaultConfiguration.localizedStringFileName)
+        conversationViewController.viewModel = KMChatConversationViewModel(contactId: nil, channelKey: nil, localizedStringFileName: defaultConfiguration.localizedStringFileName)
         vc.conversationViewController = conversationViewController
     }
 
@@ -1347,7 +1347,7 @@ open class Kommunicate: NSObject, Localizable {
                 completionHandler(true)
             }
         } else {
-            let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName, prefilledMessage: prefilledMessage)
+            let convViewModel = KMChatConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName, prefilledMessage: prefilledMessage)
             let conversationVC = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration)
             conversationVC.viewModel = convViewModel
             let navVC = KMBaseNavigationViewController(rootViewController: conversationVC)
@@ -1379,7 +1379,7 @@ open class Kommunicate: NSObject, Localizable {
              navVC.didMove(toParent: viewController)
              completionHandler(true)
          } else {
-             let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName, prefilledMessage: prefilledMessage)
+             let convViewModel = KMChatConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName, prefilledMessage: prefilledMessage)
              let conversationVC = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration)
              conversationVC.viewModel = convViewModel
              let navVC = KMBaseNavigationViewController(rootViewController: conversationVC)
@@ -1395,7 +1395,7 @@ open class Kommunicate: NSObject, Localizable {
     class func updateSettingsForEmbeddedMode(viewController: UIViewController) {
         let embeddedVC = viewController.description
         // Update VC List
-        KMCoreSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description(), embeddedVC])
+        KMCoreSettings.setListOfViewControllers([KMChatConversationListViewController.description(), KMConversationViewController.description(), embeddedVC])
         embeddedViewController = embeddedVC
     }
 
@@ -1466,7 +1466,7 @@ open class Kommunicate: NSObject, Localizable {
             KMCoreUserDefaultsHandler.setBASEURL(API.Backend.chat.rawValue)
             KMCoreUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi.rawValue)
         }
-        KMCoreSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description()])
+        KMCoreSettings.setListOfViewControllers([KMChatConversationListViewController.description(), KMConversationViewController.description()])
         KMCoreSettings.setFilterContactsStatus(true)
         KMCoreUserDefaultsHandler.setDebugLogsRequire(true)
         KMCoreSettings.setSwiftFramework(true)
@@ -1476,7 +1476,7 @@ open class Kommunicate: NSObject, Localizable {
     }
 
     func setupDefaultStyle() {
-        let navigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [ALKBaseNavigationViewController.self])
+        let navigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [KMChatBaseNavigationViewController.self])
         navigationBarProxy.tintColor = navigationBarProxy.tintColor ?? UIColor.white
         navigationBarProxy.titleTextAttributes =
             navigationBarProxy.titleTextAttributes ?? [NSAttributedString.Key.foregroundColor: UIColor.white]
@@ -1503,9 +1503,9 @@ open class Kommunicate: NSObject, Localizable {
      Subscribe to chat events. Omit the events parameter to subscribe to all available events.
      - Parameters:
      - events: list of events to subscribe.
-     - callback: ALKCustomEventCallback to send subscribed event's data
+     - callback: KMChatCustomEventCallback to send subscribed event's data
      */
-    public static func subscribeCustomEvents(events: [KMCustomEvent] = KMCustomEvent.allEvents, callback: ALKCustomEventCallback) {
+    public static func subscribeCustomEvents(events: [KMCustomEvent] = KMCustomEvent.allEvents, callback: KMChatCustomEventCallback) {
         let eventList: [KMCustomEvent]
         
         if events == KMCustomEvent.allEvents {
@@ -1609,7 +1609,7 @@ open class Kommunicate: NSObject, Localizable {
             registerUserClientService.logout(completionHandler: {
                 _, _ in
                 Kommunicate.shared.clearUserDefaults()
-                ALKFormDataCache.shared.clearCache()
+                KMChatFormDataCache.shared.clearCache()
                 NSLog("Kommunicate logout")
             })
         }
