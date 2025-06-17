@@ -309,7 +309,7 @@ class ConversationVCNavBar: UIView, Localizable {
         if channel.type == Int16(SUPPORT_GROUP.rawValue) {
             placeHolder = UIImage(named: "placeholder", in: Bundle.kommunicate, compatibleWith: nil)
         } else {
-            placeHolder = UIImage(named: "groupPlaceholder", in: Bundle(for: ALKConversationListViewController.self), compatibleWith: nil)
+            placeHolder = UIImage(named: "groupPlaceholder", in: Bundle(for: KMChatConversationListViewController.self), compatibleWith: nil)
         }
         return placeHolder
     }

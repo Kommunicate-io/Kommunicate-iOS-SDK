@@ -9,9 +9,9 @@ import Foundation
 import KommunicateChatUI_iOS_SDK
 import UIKit
 
-class ChatMessage: ALKChatViewModelProtocol, Localizable {
+class ChatMessage: KMChatChatViewModelProtocol, Localizable {
     var messageMetadata: NSMutableDictionary?
-    var messageType: ALKMessageType
+    var messageType: KMChatMessageType
     var avatar: URL?
     var avatarImage: UIImage?
     var avatarGroupImageUrl: String?
@@ -31,7 +31,7 @@ class ChatMessage: ALKChatViewModelProtocol, Localizable {
     var assignedTags: [KMAssignedTags]?
     var isWaitingQueueConversation: Bool
     
-    init(message: ALKChatViewModelProtocol) {
+    init(message: KMChatChatViewModelProtocol) {
         avatar = message.avatar
         avatarImage = message.avatarImage
         avatarGroupImageUrl = message.avatarGroupImageUrl
