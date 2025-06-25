@@ -536,12 +536,14 @@ open class Kommunicate: NSObject, Localizable {
     /// - Parameter kmUser : A `KMUser` object which contains user details. If `kmUser` is not passed then it will create new Visitor Login everytime.
     /// - Parameter viewController: `ViewController` from which the group chat will be launched.
     /// - Parameter conversation: An instance of `KMConversation` object.
+    /// - Parameter shouldMaintainSession: Determines whether to maintain the session when `kmUser` is not provided and a random (visitor) user is used for login.
     /// - Parameter completion: If successful the success callback will have a conversationId else it will be `KommunicateError` on failure.
     open class func launchConversationWithUser(
         appID: String?,
         kmUser: KMUser?,
         from viewController: UIViewController,
         conversation: KMConversation = KMConversationBuilder().build(),
+        shouldMaintainSession: Bool = true,
         completion: @escaping (Result<String, KommunicateError>) -> Void
     ) {
         let user = kmUser ?? createVisitorUser()
@@ -596,7 +598,10 @@ open class Kommunicate: NSObject, Localizable {
         }
 
         /// Here the main code execute :
-        if isLoggedIn, KMUserDefaultHandler.getUserId() == user.userId {
+        let isSameUser = KMUserDefaultHandler.getUserId() == user.userId
+        let shouldProceedWithoutLogin = isLoggedIn && (isSameUser || (shouldMaintainSession && isVisitorUser))
+
+        if shouldProceedWithoutLogin {
             proceedAfterLogin()
         } else {
             loginAndProceed()
