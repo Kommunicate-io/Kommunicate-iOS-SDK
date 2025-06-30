@@ -548,6 +548,7 @@ open class Kommunicate: NSObject, Localizable {
     ) {
         let user = kmUser ?? createVisitorUser()
         let isVisitorUser = (kmUser == nil)
+        var isAppIDChanged = false
         
         // Derive and validate Application ID
         guard let rawAppId = appID ?? user.applicationId,
@@ -561,6 +562,7 @@ open class Kommunicate: NSObject, Localizable {
         // Setup Application ID if missing or mismatched
         if KMUserDefaultHandler.isAppIdEmpty || !KMUserDefaultHandler.matchesCurrentAppId(applicationID) {
             KMUserDefaultHandler.setApplicationKey(applicationID)
+            isAppIDChanged = true
         }
         setup(applicationId: applicationID)
 
@@ -599,7 +601,9 @@ open class Kommunicate: NSObject, Localizable {
 
         /// Here the main code execute :
         let isSameUser = KMUserDefaultHandler.getUserId() == user.userId
-        let shouldProceedWithoutLogin = isLoggedIn && (isSameUser || (shouldMaintainSession && isVisitorUser))
+        let shouldProceedWithoutLogin = isLoggedIn &&
+            (isAppIDChanged == false) &&
+            (isSameUser || (shouldMaintainSession && isVisitorUser))
 
         if shouldProceedWithoutLogin {
             proceedAfterLogin()
