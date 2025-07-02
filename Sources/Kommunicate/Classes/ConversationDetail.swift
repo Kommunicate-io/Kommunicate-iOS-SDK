@@ -1,5 +1,5 @@
 //
-//  ALKConversationViewModel+Extension.swift
+//  KMChatConversationViewModel+Extension.swift
 //  Kommunicate
 //
 //  Created by Shivam Pokhriyal on 25/11/18.

@@ -9,7 +9,7 @@ import Foundation
 import KommunicateChatUI_iOS_SDK
 import KommunicateCore_iOS_SDK
 
-public class KMConversationListViewController: ALKBaseViewController, Localizable {
+public class KMConversationListViewController: KMChatBaseViewController, Localizable {
     enum LocalizedText {
         private static let filename = Kommunicate.defaultConfiguration.localizedStringFileName
         static let title = localizedString(forKey: "ConversationListVCTitle", fileName: filename)
@@ -24,17 +24,17 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     let faqIdentifier = 11_223_346
 
     public var conversationViewController: KMConversationViewController?
-    public var conversationViewModelType = ALKConversationViewModel.self
-    public var conversationListTableViewController: ALKConversationListTableViewController
+    public var conversationViewModelType = KMChatConversationViewModel.self
+    public var conversationListTableViewController: KMChatConversationListTableViewController
     private let registerUserClientService = ALRegisterUserClientService()
 
     let channelService = KMCoreChannelService()
     var searchController: UISearchController!
     var searchBar: KMCustomSearchBar!
-    lazy var resultVC = ALKSearchResultViewController(configuration: configuration)
+    lazy var resultVC = KMChatSearchResultViewController(configuration: configuration)
 
     public var dbService = KMCoreMessageDBService()
-    public var viewModel = ALKConversationListViewModel()
+    public var viewModel = KMChatConversationListViewModel()
     
     var isSingleThreadedEnabled = KMCoreSettings.getIsSingleThreadedEnabled()
 
@@ -75,8 +75,8 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     lazy var startNewConversationBottomButton: UIButton = {
         let button = UIButton(type: .custom)
         button.addTarget(self, action: #selector(compose), for: .touchUpInside)
-        let lightColor = kmConversationViewConfiguration.startNewConversationButtonBackgroundColor ?? ALKAppSettingsUserDefaults().getAppBarTintColor()
-        let darkColor = kmConversationViewConfiguration.startNewConversationButtonDarkBackgroundColor ?? ALKAppSettingsUserDefaults().getAppBarTintColor()
+        let lightColor = kmConversationViewConfiguration.startNewConversationButtonBackgroundColor ?? KMChatAppSettingsUserDefaults().getAppBarTintColor()
+        let darkColor = kmConversationViewConfiguration.startNewConversationButtonDarkBackgroundColor ?? KMChatAppSettingsUserDefaults().getAppBarTintColor()
         let backgroundColor = UIColor.kmDynamicColor(light: lightColor, dark: darkColor)
         button.backgroundColor = backgroundColor
         button.setTitle(LocalizedText.startNewConversationTitle, for: .normal)
@@ -122,8 +122,8 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     fileprivate let activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
     fileprivate var localizedStringFileName: String!
 
-    public required init(configuration: ALKConfiguration, kmConversationViewConfiguration: KMConversationViewConfiguration) {
-        conversationListTableViewController = ALKConversationListTableViewController(
+    public required init(configuration: KMChatConfiguration, kmConversationViewConfiguration: KMConversationViewConfiguration) {
+        conversationListTableViewController = KMChatConversationListTableViewController(
             viewModel: viewModel,
             dbService: dbService,
             configuration: configuration,
@@ -143,7 +143,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         fatalError("init(coder:) has not been implemented")
     }
 
-    required init(configuration _: ALKConfiguration) {
+    required init(configuration _: KMChatConfiguration) {
         fatalError("init(configuration:) has not been implemented")
     }
 
@@ -163,7 +163,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         
         NotificationCenter.default.addObserver(self, selector: #selector(conversationDeleted(notification: )), name: Notification.Name.conversationDeletion, object: nil)
 
-        converastionListNavBarItemToken = NotificationCenter.default.observe(name: NSNotification.Name(ALKNavigationItem.NSNotificationForConversationListNavigationTap), object: nil, queue: nil) { notification in
+        converastionListNavBarItemToken = NotificationCenter.default.observe(name: NSNotification.Name(KMChatNavigationItem.NSNotificationForConversationListNavigationTap), object: nil, queue: nil) { notification in
 
             let pushAssist = ALPushAssist()
             guard let notificationInfo = notification.userInfo,
@@ -459,7 +459,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         guard let identifier = sender.tag else {
             return
         }
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: ALKNavigationItem.NSNotificationForConversationListNavigationTap), object: self, userInfo: ["identifier": identifier])
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: KMChatNavigationItem.NSNotificationForConversationListNavigationTap), object: self, userInfo: ["identifier": identifier])
     }
 
     @objc func compose() {
@@ -486,7 +486,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     }
 
     override public func showAccountSuspensionView() {
-        let accountVC = ALKAccountSuspensionController(configuration: configuration)
+        let accountVC = KMChatAccountSuspensionController(configuration: configuration)
         present(accountVC, animated: true, completion: nil)
         accountVC.isModalInPresentation = true
         accountVC.closePressed = { [weak self] in
@@ -501,7 +501,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
         return navigationController?.topViewController as? KMConversationViewController
     }
 
-    fileprivate func push(conversationVC: KMConversationViewController, with viewModel: ALKConversationViewModel) {
+    fileprivate func push(conversationVC: KMConversationViewController, with viewModel: KMChatConversationViewModel) {
         if let topVC = navigationController?.topViewController as? KMConversationViewController {
             // Update the details and refresh
             topVC.unsubscribingChannel()
@@ -621,7 +621,7 @@ public class KMConversationListViewController: ALKBaseViewController, Localizabl
     }
 
     private func checkPlanAndShowSuspensionScreen() {
-        let accountVC = ALKAccountSuspensionController(configuration: configuration)
+        let accountVC = KMChatAccountSuspensionController(configuration: configuration)
         accountVC.isModalInPresentation = true
         guard PricingPlan.shared.showSuspensionScreen() else { return }
         present(accountVC, animated: true, completion: nil)
@@ -654,7 +654,7 @@ extension KMConversationListViewController: KMCoreMessagesDelegate {
     }
 }
 
-extension KMConversationListViewController: ALKConversationListViewModelDelegate {
+extension KMConversationListViewController: KMChatConversationListViewModelDelegate {
     public func startedLoading() {
         DispatchQueue.main.async {
             self.activityIndicator.startAnimating()
@@ -705,7 +705,7 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
         }
     }
 
-    public func isNewMessageForActiveThread(alMessage: KMCoreMessage, vm: ALKConversationViewModel) -> Bool {
+    public func isNewMessageForActiveThread(alMessage: KMCoreMessage, vm: KMChatConversationViewModel) -> Bool {
         let isGroupMessage = alMessage.groupId != nil && alMessage.groupId == vm.channelKey
         let isOneToOneMessage = alMessage.groupId == nil && vm.channelKey == nil && alMessage.contactId == vm.contactId
         if isGroupMessage || isOneToOneMessage {
@@ -800,14 +800,14 @@ extension KMConversationListViewController: ALMQTTConversationDelegate {
     }
 
     open func mqttConnectionClosed() {
-        print("ALKConversationListVC mqtt connection closed.")
+        print("KMChatConversationListVC mqtt connection closed.")
         alMqttConversationService.retryConnection()
     }
 
 }
 
-extension KMConversationListViewController: ALKConversationListTableViewDelegate {
-    public func tapped(_ chat: ALKChatViewModelProtocol, at _: Int) {
+extension KMConversationListViewController: KMChatConversationListTableViewDelegate {
+    public func tapped(_ chat: KMChatChatViewModelProtocol, at _: Int) {
         let convViewModel = conversationViewModelType.init(contactId: chat.contactId, channelKey: chat.channelKey, localizedStringFileName: configuration.localizedStringFileName)
         let viewController = conversationViewController ?? KMConversationViewController(configuration: configuration, conversationViewConfiguration: kmConversationViewConfiguration, individualLaunch: false)
         viewController.viewModel = convViewModel

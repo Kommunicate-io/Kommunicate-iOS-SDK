@@ -69,7 +69,7 @@ class KMFiveStarView: UIView {
     @objc private func starTapped(_ sender: UIButton) {
         rating = sender.tag + 1
         ratingDidChange?(rating)
-        ALKCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.rateConversationEmotionsClicked, data: ["rating": rating])
+        KMChatCustomEventHandler.shared.publish(triggeredEvent: KMCustomEvent.rateConversationEmotionsClicked, data: ["rating": rating])
     }
         
     private func updateStars() {
