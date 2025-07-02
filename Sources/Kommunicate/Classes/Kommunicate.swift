@@ -137,6 +137,9 @@ open class Kommunicate: NSObject, Localizable {
         case clientConversationIdNotPresent
         case conversationOpenFailed
         case zendeskKeyNotPresent
+        case logoutUserFailed
+        case loginUserFailed
+        case appIDIsMissing
     }
 
     // MARK: - Private properties
@@ -525,6 +528,87 @@ open class Kommunicate: NSObject, Localizable {
                 print("Failed to fetch Appsettings due to \(error.localizedDescription)")
                 return
             }
+        }
+    }
+    
+    /// This is a Universal function handle login -> conversation building -> conversation launching
+    /// - Parameter appID: `AppID` is compulsory when the `KMUser` is not passed or If `kmUser` `applicationId` is not present.
+    /// - Parameter kmUser : A `KMUser` object which contains user details. If `kmUser` is not passed then it will create new Visitor Login everytime.
+    /// - Parameter viewController: `ViewController` from which the group chat will be launched.
+    /// - Parameter conversation: An instance of `KMConversation` object.
+    /// - Parameter shouldMaintainSession: Determines whether to maintain the session when `kmUser` is not provided and a random (visitor) user is used for login.
+    /// - Parameter completion: If successful the success callback will have a conversationId else it will be `KommunicateError` on failure.
+    open class func launchConversationWithUser(
+        appID: String?,
+        kmUser: KMUser?,
+        from viewController: UIViewController,
+        conversation: KMConversation = KMConversationBuilder().build(),
+        shouldMaintainSession: Bool = true,
+        completion: @escaping (Result<String, KommunicateError>) -> Void
+    ) {
+        let user = kmUser ?? createVisitorUser()
+        let isVisitorUser = (kmUser == nil)
+        var isAppIDChanged = false
+        
+        // Derive and validate Application ID
+        guard let rawAppId = appID ?? user.applicationId,
+              !rawAppId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            completion(.failure(.appIDIsMissing))
+            return
+        }
+
+        let applicationID = rawAppId.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        // Setup Application ID if missing or mismatched
+        if KMUserDefaultHandler.isAppIdEmpty || !KMUserDefaultHandler.matchesCurrentAppId(applicationID) {
+            KMUserDefaultHandler.setApplicationKey(applicationID)
+            isAppIDChanged = true
+        }
+        setup(applicationId: applicationID)
+
+        /// This code will handle the create conversation functionality.
+        func proceedAfterLogin() {
+            createConversation(conversation: conversation) { result in
+                switch result {
+                case .success(let conversationId):
+                    showConversationWith(groupId: conversationId, from: viewController) { success in
+                        success
+                            ? completion(.success(conversationId))
+                            : completion(.failure(.conversationOpenFailed))
+                    }
+                case .failure:
+                    completion(.failure(.conversationCreateFailed))
+                }
+            }
+        }
+
+        /// This code will handle the Login Flow.
+        func loginAndProceed() {
+            if isVisitorUser {
+                Kommunicate.registerUserAsVisitor { _, error in
+                    error != nil
+                        ? completion(.failure(.loginUserFailed))
+                        : proceedAfterLogin()
+                }
+            } else {
+                Kommunicate.registerUser(user) { _, error in
+                    error != nil
+                        ? completion(.failure(.loginUserFailed))
+                        : proceedAfterLogin()
+                }
+            }
+        }
+
+        /// Here the main code execute :
+        let isSameUser = KMUserDefaultHandler.getUserId() == user.userId
+        let shouldProceedWithoutLogin = isLoggedIn &&
+            (isAppIDChanged == false) &&
+            (isSameUser || (shouldMaintainSession && isVisitorUser))
+
+        if shouldProceedWithoutLogin {
+            proceedAfterLogin()
+        } else {
+            loginAndProceed()
         }
     }
     
