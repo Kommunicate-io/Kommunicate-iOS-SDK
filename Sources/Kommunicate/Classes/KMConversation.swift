@@ -30,6 +30,29 @@ import KommunicateCore_iOS_SDK
     }
 }
 
+/// Extension to provide a utility method for cloning a `KMConversation`
+/// instance with a new user ID while copying all relevant properties.
+extension KMConversation {
+    func copy(withUserId userId: String) -> KMConversation {
+        let newConversation = KMConversation(userId: userId)
+        newConversation.clientConversationId = self.clientConversationId
+        newConversation.conversationAssignee = self.conversationAssignee
+        newConversation.conversationTitle = self.conversationTitle
+        newConversation.teamId = self.teamId
+        newConversation.useLastConversation = self.useLastConversation
+        newConversation.agentIds = self.agentIds
+        newConversation.botIds = self.botIds
+        newConversation.conversationMetadata = self.conversationMetadata
+        newConversation.defaultConversationAssignee = self.defaultConversationAssignee
+        newConversation.prefilledMessage = self.prefilledMessage
+        newConversation.skipRouting = self.skipRouting
+        newConversation.useOriginalTitle = self.useOriginalTitle
+        newConversation.appName = self.appName
+        return newConversation
+    }
+}
+
+
 /// KMConversationBuilder is used for building KMConversation object
 @objc public class KMConversationBuilder: NSObject {
     private var conversation = KMConversation(userId: KMUserDefaultHandler.getUserId() ?? Kommunicate.randomId())

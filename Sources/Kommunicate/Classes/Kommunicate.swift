@@ -549,6 +549,7 @@ open class Kommunicate: NSObject, Localizable {
         let user = kmUser ?? createVisitorUser()
         let isVisitorUser = (kmUser == nil)
         var isAppIDChanged = false
+        var isLogoutHappend = false
         
         // Derive and validate Application ID
         guard let rawAppId = appID ?? user.applicationId,
@@ -565,16 +566,25 @@ open class Kommunicate: NSObject, Localizable {
             isAppIDChanged = true
         }
         setup(applicationId: applicationID)
+        
+        /// Updates the user ID in the current `conversation` by cloning it into a new required because of logout happend.
+        func updateUserInConversation() -> KMConversation {
+            return conversation.copy(withUserId: user.userId)
+        }
 
         /// This code will handle the create conversation functionality.
         func proceedAfterLogin() {
-            createConversation(conversation: conversation) { result in
+            let currentConversation: KMConversation = isLogoutHappend ? updateUserInConversation() : conversation
+
+            createConversation(conversation: currentConversation) { result in
                 switch result {
                 case .success(let conversationId):
                     showConversationWith(groupId: conversationId, from: viewController) { success in
-                        success
-                            ? completion(.success(conversationId))
-                            : completion(.failure(.conversationOpenFailed))
+                        if success {
+                            completion(.success(conversationId))
+                        } else {
+                            completion(.failure(.conversationOpenFailed))
+                        }
                     }
                 case .failure:
                     completion(.failure(.conversationCreateFailed))
@@ -584,17 +594,49 @@ open class Kommunicate: NSObject, Localizable {
 
         /// This code will handle the Login Flow.
         func loginAndProceed() {
+            // First, check if a user is currently logged in and if it's a different user.
+            // If a user is logged in and not the same, we need to explicitly log them out first.
+            let currentlyLoggedInUserId = KMUserDefaultHandler.getUserId()
+            let isUserAlreadyLoggedIn = Kommunicate.isLoggedIn
+
+            if isUserAlreadyLoggedIn && currentlyLoggedInUserId != user.userId {
+                Kommunicate.logoutUser { result in
+                    switch result {
+                    case .success:
+                        // Logout successful, proceed with the new login.
+                        KMUserDefaultHandler.setApplicationKey(applicationID)
+                        performNewLogin()
+                    case .failure:
+                        // A failure to log out might be an issue, but we can attempt to log in anyway.
+                        // This is a design choice. For now, we'll try to proceed.
+                        print("Kommunicate: Failed to log out previous user. Attempting to log in new user.")
+                        performNewLogin()
+                    }
+                }
+            } else {
+                // No user is logged in, or it's the same user, or it's a visitor.
+                // Just perform the login directly.
+                performNewLogin()
+            }
+        }
+        
+        // Helper function to handle the actual login logic
+        func performNewLogin() {
             if isVisitorUser {
                 Kommunicate.registerUserAsVisitor { _, error in
-                    error != nil
-                        ? completion(.failure(.loginUserFailed))
-                        : proceedAfterLogin()
+                    if error != nil {
+                        completion(.failure(.loginUserFailed))
+                    } else {
+                        proceedAfterLogin()
+                    }
                 }
             } else {
                 Kommunicate.registerUser(user) { _, error in
-                    error != nil
-                        ? completion(.failure(.loginUserFailed))
-                        : proceedAfterLogin()
+                    if error != nil {
+                        completion(.failure(.loginUserFailed))
+                    } else {
+                        proceedAfterLogin()
+                    }
                 }
             }
         }
@@ -608,6 +650,7 @@ open class Kommunicate: NSObject, Localizable {
         if shouldProceedWithoutLogin {
             proceedAfterLogin()
         } else {
+            isLogoutHappend = true
             loginAndProceed()
         }
     }
