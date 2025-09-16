@@ -39,7 +39,7 @@ class KommunicateTests: XCTestCase {
         override func getLatestMessages(_: Bool, withCompletionHandler completion: ((NSMutableArray?, Error?) -> Void)!) {
             let messageList: NSMutableArray = []
             for _ in 0 ..< KommunicateClientMock.messageCount {
-                let message = ALMessage()
+                let message = KMCoreMessage()
                 messageList.add(message)
             }
             completion(messageList, nil)

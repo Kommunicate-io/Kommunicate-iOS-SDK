@@ -26,6 +26,12 @@ PreChatViewEmailAndPhoneNumberEmptyError = "Please fill email or the phone numbe
 PreChatViewEmailInvalidError = "Please enter correct email address";
 /* Invalid Phone number error message */
 PreChatViewPhoneNumberInvalidError = "Please enter correct phone number";
+/* Invalid Email error message for custom regex */
+PreChatViewEmailRegexFailedError = "Please enter valid email address";
+/* Invalid Name error message for custom regex */
+PreChatViewNameRegexFailedError = "Please enter valid name";
+/* Invalid Password error message for custom regex */
+PreChatViewPasswordRegexFailedError = "Please enter valid password";
 /* Empty Name error message */
 PreChatViewNameEmptyError = "Please enter your name";
 /* Empty Email error message */

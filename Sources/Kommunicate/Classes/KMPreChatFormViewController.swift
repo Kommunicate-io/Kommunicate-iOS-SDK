@@ -35,6 +35,21 @@ open class KMPreChatFormViewController: UIViewController {
         /// user has submitted. By default, it's nil.
         /// When it's nil, we use `NSDataDetector` to validate the phone number.
         public var phoneNumberRegexPattern: String?
+        
+        /// The regular expression pattern that will be used to validate the name
+        /// user has entered. By default, it's nil.
+        /// When it's nil, basic non-empty string validation can be applied.
+        public var nameRegexPattern: String?
+
+        /// The regular expression pattern that will be used to validate the email
+        /// user has submitted. By default, it's nil.
+        /// When it's nil, default email format validation will be used.
+        public var emailRegexPattern: String?
+
+        /// The regular expression pattern that will be used to validate the password
+        /// user has submitted. By default, it's nil.
+        /// When it's nil, fallback password validation may be applied.
+        public var passwordRegexPattern: String?
 
         public init() {}
     }
@@ -61,6 +76,9 @@ open class KMPreChatFormViewController: UIViewController {
     enum TextFieldValidationError: Error, Localizable {
         case emailAndPhoneNumberEmpty
         case invalidEmailAddress
+        case invalidCustomEmailRegex
+        case invalidCustomNameRegex
+        case invalidCustomPasswordRegex
         case invalidPhoneNumber
         case emptyName
         case emptyEmailAddress
@@ -85,6 +103,12 @@ open class KMPreChatFormViewController: UIViewController {
                 return localizedString(forKey: "PreChatViewPhoneNumberEmptyError", fileName: fileName)
             case .emptyPassword:
                 return localizedString(forKey: "PreChatViewPasswordEmptyError", fileName: fileName)
+            case .invalidCustomEmailRegex:
+                return localizedString(forKey: "PreChatViewEmailRegexFailedError", fileName: fileName)
+            case .invalidCustomNameRegex:
+                return localizedString(forKey: "PreChatViewNameRegexFailedError", fileName: fileName)
+            case .invalidCustomPasswordRegex:
+                return localizedString(forKey: "PreChatViewPasswordRegexFailedError", fileName: fileName)
             }
         }
     }
@@ -291,32 +315,57 @@ open class KMPreChatFormViewController: UIViewController {
         outerLoop: for mandatoryOption in preChatConfiguration.mandatoryOptions {
             switch mandatoryOption {
             case .email:
-                if let emailText = emailTextField.text,
-                   !emailText.isEmpty, !emailText.isValidEmail {
-                    validationError = TextFieldValidationError.invalidEmailAddress
+                guard let emailText = emailTextField.text, !emailText.isEmpty else {
+                    validationError = .invalidEmailAddress
                     break outerLoop
                 }
+
+                if !emailText.isValidEmail {
+                    validationError = .invalidEmailAddress
+                    break outerLoop
+                }
+
+                if let pattern = preChatConfiguration.emailRegexPattern,
+                   !emailText.matchesWithPattern(pattern) {
+                    validationError = .invalidCustomEmailRegex
+                    break outerLoop
+                }
+
             case .name:
-                if let nameText = nameTextField.text, nameText.isEmpty {
-                    validationError = TextFieldValidationError.emptyName
+                guard let nameText = nameTextField.text, !nameText.isEmpty else {
+                    validationError = .emptyName
+                    break outerLoop
+                }
+
+                if let pattern = preChatConfiguration.nameRegexPattern,
+                   !nameText.matchesWithPattern(pattern) {
+                    validationError = .invalidCustomNameRegex
                     break outerLoop
                 }
 
             case .password:
-                if let passwordText = passwordTextField.text, passwordText.isEmpty {
-                    validationError = TextFieldValidationError.emptyPassword
+                guard let passwordText = passwordTextField.text, !passwordText.isEmpty else {
+                    validationError = .emptyPassword
+                    break outerLoop
+                }
+
+                if let pattern = preChatConfiguration.passwordRegexPattern,
+                   !passwordText.matchesWithPattern(pattern) {
+                    validationError = .invalidCustomPasswordRegex
                     break outerLoop
                 }
 
             case .phoneNumber:
-                let isValidNumber: ((String) -> Bool) = { number in
-                    self.preChatConfiguration.phoneNumberRegexPattern != nil ?
-                        number.matchesWithPattern(self.preChatConfiguration.phoneNumberRegexPattern ?? "") : number.isValidPhoneNumber
+                guard let phoneText = phoneNumberTextField.text, !phoneText.isEmpty else {
+                    continue // optional empty allowed
                 }
 
-                if let phoneNumberText = phoneNumberTextField.text,
-                   !phoneNumberText.isEmpty, !isValidNumber(phoneNumberText) {
-                    validationError = TextFieldValidationError.invalidPhoneNumber
+                let isValid = preChatConfiguration.phoneNumberRegexPattern.map {
+                    phoneText.matchesWithPattern($0)
+                } ?? phoneText.isValidPhoneNumber
+
+                if !isValid {
+                    validationError = .invalidPhoneNumber
                     break outerLoop
                 }
             }

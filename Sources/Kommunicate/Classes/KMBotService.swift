@@ -10,13 +10,13 @@ import KommunicateCore_iOS_SDK
 
 /// `KMBotService` will have all the API releated to bots
 public struct KMBotService {
-    var channelService: ALChannelService
-    var channelDBService: ALChannelDBService
+    var channelService: KMCoreChannelService
+    var channelDBService: KMCoreChannelDBService
     static let conversationAssignee = "CONVERSATION_ASSIGNEE"
 
     public init() {
-        channelService = ALChannelService()
-        channelDBService = ALChannelDBService()
+        channelService = KMCoreChannelService()
+        channelDBService = KMCoreChannelDBService()
     }
 
     /// This method is used for fetching `BotDetail`

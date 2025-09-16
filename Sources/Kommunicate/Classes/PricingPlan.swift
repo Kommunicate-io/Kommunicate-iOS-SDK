@@ -19,6 +19,8 @@ struct PricingPlan {
     let startupPlan = 101
     let startMonthlyPlan = 112
     let startYearlyPlan = 113
+    let trialPlan = 111
+    let churnedPlan = 100
     
     // Business Plans
     let businessPlans = ["trial",
@@ -41,11 +43,17 @@ struct PricingPlan {
 
     func showSuspensionScreen() -> Bool {
         let isReleaseBuild = !utility.isThisDebugBuild()
-        let isFreePlan = userDefaultsHandler.getUserPricingPackage() == startupPlan
-        let isStartPlan = (userDefaultsHandler.getUserPricingPackage() == startMonthlyPlan || userDefaultsHandler.getUserPricingPackage() == startYearlyPlan)
-        let isNotAgent = userDefaultsHandler.getUserRoleType() != Int16(AL_APPLICATION_WEB_ADMIN.rawValue)
-        guard isReleaseBuild, isNotAgent, isFreePlan || isStartPlan else { return false }
-        return true
+        let userPlan = userDefaultsHandler.getUserPricingPackage()
+        let userRole = userDefaultsHandler.getUserRoleType()
+        
+        let isFreeOrStartOrTrialPlan: Bool = {
+            let startPlans = [startMonthlyPlan, startYearlyPlan]
+            return userPlan == startupPlan || startPlans.contains(Int(userPlan)) || userPlan == trialPlan || userPlan == churnedPlan
+        }()
+        
+        let isNotAdmin = userRole != Int16(AL_APPLICATION_WEB_ADMIN.rawValue)
+        
+        return isReleaseBuild && isNotAdmin && isFreeOrStartOrTrialPlan
     }
     
     func isBusinessPlanOrTrialPlan() -> Bool {

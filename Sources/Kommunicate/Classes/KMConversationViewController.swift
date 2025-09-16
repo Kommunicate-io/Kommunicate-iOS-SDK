@@ -11,7 +11,7 @@ import UIKit
 
 /// Before pushing this view Controller. Use this
 /// navigationItem.backBarButtonItem = UIBarButtonItem(customView: UIView())
-open class KMConversationViewController: ALKConversationViewController, KMUpdateAssigneeStatusDelegate, Localizable {
+open class KMConversationViewController: KMChatConversationViewController, KMUpdateAssigneeStatusDelegate, Localizable {
     private let faqIdentifier = 11_223_346
     private let kmConversationViewConfiguration: KMConversationViewConfiguration
     private weak var ratingVC: RatingViewController?
@@ -20,10 +20,10 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     private var kmBusinessHoursDataArray: [KMBusinessHoursViewModel]?
     let kmBotService = KMBotService()
     private var assigneeUserId: String?
-    var messageArray = [ALMessage]()
+    var messageArray = [KMCoreMessage]()
     var timer = Timer()
     var count = 0
-    var currentMessage = ALMessage()
+    var currentMessage = KMCoreMessage()
     var delayInterval = 0
     private var isWaitingQueueFetching: Bool = false
 
@@ -113,7 +113,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
 
     private var isClosedConversation: Bool {
         guard let channelId = viewModel.channelKey,
-              !ALChannelService.isChannelDeleted(channelId),
+              !KMCoreChannelService.isChannelDeleted(channelId),
               conversationDetail.isClosedConversation(channelId: channelId.intValue)
         else {
             return false
@@ -135,7 +135,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         setupNavigation()
     }
 
-    public required init(configuration: ALKConfiguration,
+    public required init(configuration: KMChatConfiguration,
                          conversationViewConfiguration: KMConversationViewConfiguration,
                          individualLaunch: Bool = true) {
         kmConversationViewConfiguration = conversationViewConfiguration
@@ -193,7 +193,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     }
     
     open override func addMessagesToList(_ messageList: [Any]) {
-       guard var messages = messageList as? [ALMessage] else { return }
+       guard var messages = messageList as? [KMCoreMessage] else { return }
         
         if KMConversationScreenConfiguration.showTypingIndicatorWhileFetchingResponse {
             updateTyingStatus(status: false, userId: "")
@@ -385,7 +385,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     // This method is used to delay the bot message as well as to show typing indicator
     func showDelayAndTypingIndicatorForMessage() {
         if count >= messageArray.count {
-           currentMessage = ALMessage()
+           currentMessage = KMCoreMessage()
            return
          }
          
@@ -417,7 +417,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     
     func addNotificationCenterObserver() {
         converastionNavBarItemToken = NotificationCenter.default.observe(
-            name: Notification.Name(rawValue: ALKNavigationItem.NSNotificationForConversationViewNavigationTap),
+            name: Notification.Name(rawValue: KMChatNavigationItem.NSNotificationForConversationViewNavigationTap),
             object: nil,
             queue: nil,
             using: { [weak self] notification in
@@ -688,7 +688,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         // If the user was typing when the status changed
         view.endEditing(true)
         guard isClosedConversationViewHidden == isClosedConversation else { return }
-        ALKCustomEventHandler.shared.publish(triggeredEvent: .resolveConversation, data: ["conversationId": viewModel.channelKey?.stringValue ?? ""])
+        KMChatCustomEventHandler.shared.publish(triggeredEvent: .resolveConversation, data: ["conversationId": viewModel.channelKey?.stringValue ?? ""])
         checkFeedbackAndShowRatingView()
     }
 
@@ -709,7 +709,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         if let alChannel = channel {
           setupTopBar(alChannel: alChannel, contact: contact)
         } else {
-          let alChannelService = ALChannelService()
+          let alChannelService = KMCoreChannelService()
           alChannelService.getChannelInformation(viewModel.channelKey, orClientChannelKey: nil) { channel in
             guard let alChannel = channel else {
               print("Channel is nil in conversationAssignee")
@@ -719,7 +719,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
           }
         }
       }
-      private func setupTopBar(alChannel: ALChannel, contact: ALContact?) {
+      private func setupTopBar(alChannel: KMCoreChannel, contact: ALContact?) {
         customNavigationView.updateView(assignee: contact, channel: alChannel)
         assigneeUserId = contact?.userId
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
@@ -740,7 +740,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         subscribeChannelToMqtt()
         viewModel.prepareController()
         self.updatePlaceholder()
-        ALMessageService.syncMessages()
+        KMCoreMessageService.syncMessages()
         syncAutoSuggestionMessage(message: viewModel?.lastMessage)
     }
     
@@ -787,7 +787,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
                 #if canImport(ChatProvidersSDK)
                   KMCoreSettings.setLastZendeskConversationId(NSNumber(value: Int(conversationId) ?? 0))
                 #endif
-                  let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: NSNumber(value: Int(conversationId) ?? 0), localizedStringFileName: Kommunicate.defaultConfiguration.localizedStringFileName, prefilledMessage: nil)
+                  let convViewModel = KMChatConversationViewModel(contactId: nil, channelKey: NSNumber(value: Int(conversationId) ?? 0), localizedStringFileName: Kommunicate.defaultConfiguration.localizedStringFileName, prefilledMessage: nil)
                  // Update the View Model & refresh the View Controller
                   weakSelf.updateViewModelAndRefreshViewController(convViewModel, conversationId: NSNumber(value: Int(conversationId) ?? 0))
                case .failure(let kmConversationError):
@@ -811,7 +811,7 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
         ])
     }
     
-    private func updateViewModelAndRefreshViewController(_ viewModel: ALKConversationViewModel, conversationId: NSNumber ) {
+    private func updateViewModelAndRefreshViewController(_ viewModel: KMChatConversationViewModel, conversationId: NSNumber ) {
         // Update the viewmodel
         self.viewModel = viewModel
         self.unsubscribingChannel()
@@ -827,8 +827,8 @@ open class KMConversationViewController: ALKConversationViewController, KMUpdate
     }
 
     private func checkPlanAndShowSuspensionScreen() {
-        let accountVC = ALKAccountSuspensionController()
-        accountVC.isModalInPresentation = true 
+        let accountVC = KMChatAccountSuspensionController(configuration: configuration)
+        accountVC.isModalInPresentation = true
         guard PricingPlan.shared.showSuspensionScreen() else { return }
         present(accountVC, animated: true, completion: nil)
         accountVC.closePressed = { [weak self] in

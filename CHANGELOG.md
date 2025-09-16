@@ -2,6 +2,16 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [7.3.1] 2025-09-16
+- PreChat Lead Regex support added.
+- New Login and Create Conversation Function Exposed.
+- Form UI Customisation Added.
+- Video Preview Inhancement.
+- Subscription requirement Message Box Updated.
+- Bug Fixes.
+- Caption Support in Video. 
+- Status Change Api Migration.
+
 ## [7.3.0] 2025-04-15
 - Added Business Hours feature.
 - Disabled conversation restart when the restart button is hidden.

@@ -27,13 +27,13 @@ public typealias KMUser = KMCoreUser
 public typealias KMUserDefaultHandler = KMCoreUserDefaultsHandler
 public typealias KMPushNotificationService = ALPushNotificationService
 public typealias KMAppLocalNotification = ALAppLocalNotifications
-public typealias KMDbHandler = ALDBHandler
+public typealias KMDbHandler = KMCoreDBHandler
 public typealias KMRegisterUserClientService = ALRegisterUserClientService
-public typealias KMConfiguration = ALKConfiguration
-public typealias KMMessageStyle = ALKMessageStyle
-public typealias KMBaseNavigationViewController = ALKBaseNavigationViewController
-public typealias KMChatBarConfiguration = ALKChatBarConfiguration
-public typealias KMCustomEventHandler = ALKCustomEventHandler
+public typealias KMConfiguration = KMChatConfiguration
+public typealias KMMessageStyle = KMChatMessageStyle
+public typealias KMBaseNavigationViewController = KMChatBaseNavigationViewController
+public typealias KMChatBarConfiguration = KMChatChatBarConfiguration
+public typealias KMCustomEventHandler = KMChatCustomEventHandler
 
 let faqIdentifier = 11_223_346
 
@@ -81,12 +81,12 @@ open class Kommunicate: NSObject, Localizable {
 
         config.isTapOnNavigationBarEnabled = false
         config.isProfileTapActionEnabled = false
-        var navigationItemsForConversationList = [ALKNavigationItem]()
-        var faqItem = ALKNavigationItem(identifier: faqIdentifier, text: NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
+        var navigationItemsForConversationList = [KMChatNavigationItem]()
+        var faqItem = KMChatNavigationItem(identifier: faqIdentifier, text: NSLocalizedString("FaqTitle", value: "FAQ", comment: ""))
         faqItem.faqTextColor = .kmDynamicColor(light: kmConversationViewConfiguration.faqTextColor, dark: kmConversationViewConfiguration.faqTextDarkColor)
         faqItem.faqBackgroundColor = .kmDynamicColor(light: kmConversationViewConfiguration.faqBackgroundColor, dark: kmConversationViewConfiguration.faqDarkBackgroundColor)
         navigationItemsForConversationList.append(faqItem)
-        var navigationItemsForConversationView = [ALKNavigationItem]()
+        var navigationItemsForConversationView = [KMChatNavigationItem]()
         navigationItemsForConversationView.append(faqItem)
         config.navigationItemsForConversationList = navigationItemsForConversationList
         config.navigationItemsForConversationView = navigationItemsForConversationView
@@ -137,6 +137,9 @@ open class Kommunicate: NSObject, Localizable {
         case clientConversationIdNotPresent
         case conversationOpenFailed
         case zendeskKeyNotPresent
+        case logoutUserFailed
+        case loginUserFailed
+        case appIDIsMissing
     }
 
     // MARK: - Private properties
@@ -528,6 +531,130 @@ open class Kommunicate: NSObject, Localizable {
         }
     }
     
+    /// This is a Universal function handle login -> conversation building -> conversation launching
+    /// - Parameter appID: `AppID` is compulsory when the `KMUser` is not passed or If `kmUser` `applicationId` is not present.
+    /// - Parameter kmUser : A `KMUser` object which contains user details. If `kmUser` is not passed then it will create new Visitor Login everytime.
+    /// - Parameter viewController: `ViewController` from which the group chat will be launched.
+    /// - Parameter conversation: An instance of `KMConversation` object.
+    /// - Parameter shouldMaintainSession: Determines whether to maintain the session when `kmUser` is not provided and a random (visitor) user is used for login.
+    /// - Parameter completion: If successful the success callback will have a conversationId else it will be `KommunicateError` on failure.
+    open class func launchConversationWithUser(
+        appID: String?,
+        kmUser: KMUser?,
+        from viewController: UIViewController,
+        conversation: KMConversation = KMConversationBuilder().build(),
+        shouldMaintainSession: Bool = true,
+        completion: @escaping (Result<String, KommunicateError>) -> Void
+    ) {
+        let user = kmUser ?? createVisitorUser()
+        let isVisitorUser = (kmUser == nil)
+        var isAppIDChanged = false
+        var isLogoutHappend = false
+        
+        // Derive and validate Application ID
+        guard let rawAppId = appID ?? user.applicationId,
+              !rawAppId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            completion(.failure(.appIDIsMissing))
+            return
+        }
+
+        let applicationID = rawAppId.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        // Setup Application ID if missing or mismatched
+        if KMUserDefaultHandler.isAppIdEmpty || !KMUserDefaultHandler.matchesCurrentAppId(applicationID) {
+            KMUserDefaultHandler.setApplicationKey(applicationID)
+            isAppIDChanged = true
+        }
+        setup(applicationId: applicationID)
+        
+        /// Updates the user ID in the current `conversation` by cloning it into a new required because of logout happend.
+        func updateUserInConversation() -> KMConversation {
+            return conversation.copy(withUserId: user.userId)
+        }
+
+        /// This code will handle the create conversation functionality.
+        func proceedAfterLogin() {
+            let currentConversation: KMConversation = isLogoutHappend ? updateUserInConversation() : conversation
+
+            createConversation(conversation: currentConversation) { result in
+                switch result {
+                case .success(let conversationId):
+                    showConversationWith(groupId: conversationId, from: viewController) { success in
+                        if success {
+                            completion(.success(conversationId))
+                        } else {
+                            completion(.failure(.conversationOpenFailed))
+                        }
+                    }
+                case .failure:
+                    completion(.failure(.conversationCreateFailed))
+                }
+            }
+        }
+
+        /// This code will handle the Login Flow.
+        func loginAndProceed() {
+            // First, check if a user is currently logged in and if it's a different user.
+            // If a user is logged in and not the same, we need to explicitly log them out first.
+            let currentlyLoggedInUserId = KMUserDefaultHandler.getUserId()
+            let isUserAlreadyLoggedIn = Kommunicate.isLoggedIn
+
+            if isUserAlreadyLoggedIn && currentlyLoggedInUserId != user.userId {
+                Kommunicate.logoutUser { result in
+                    switch result {
+                    case .success:
+                        // Logout successful, proceed with the new login.
+                        KMUserDefaultHandler.setApplicationKey(applicationID)
+                        performNewLogin()
+                    case .failure:
+                        // A failure to log out might be an issue, but we can attempt to log in anyway.
+                        // This is a design choice. For now, we'll try to proceed.
+                        print("Kommunicate: Failed to log out previous user. Attempting to log in new user.")
+                        performNewLogin()
+                    }
+                }
+            } else {
+                // No user is logged in, or it's the same user, or it's a visitor.
+                // Just perform the login directly.
+                performNewLogin()
+            }
+        }
+        
+        // Helper function to handle the actual login logic
+        func performNewLogin() {
+            if isVisitorUser {
+                Kommunicate.registerUserAsVisitor { _, error in
+                    if error != nil {
+                        completion(.failure(.loginUserFailed))
+                    } else {
+                        proceedAfterLogin()
+                    }
+                }
+            } else {
+                Kommunicate.registerUser(user) { _, error in
+                    if error != nil {
+                        completion(.failure(.loginUserFailed))
+                    } else {
+                        proceedAfterLogin()
+                    }
+                }
+            }
+        }
+
+        /// Here the main code execute :
+        let isSameUser = KMUserDefaultHandler.getUserId() == user.userId
+        let shouldProceedWithoutLogin = isLoggedIn &&
+            (isAppIDChanged == false) &&
+            (isSameUser || (shouldMaintainSession && isVisitorUser))
+
+        if shouldProceedWithoutLogin {
+            proceedAfterLogin()
+        } else {
+            isLogoutHappend = true
+            loginAndProceed()
+        }
+    }
+    
     /// Creates a new conversation with the details passed.
     /// - Parameter conversation: An instance of `KMConversation` object.
     /// - Parameter completion: If successful the success callback will have a conversationId else it will be KMConversationError on failure.
@@ -681,7 +808,7 @@ open class Kommunicate: NSObject, Localizable {
 
     /// This method is used to return an instance of conversation list view controller.
     ///
-    /// - Returns: Instance of `ALKConversationListViewController`
+    /// - Returns: Instance of `KMChatConversationListViewController`
     @objc open class func conversationListViewController() -> KMConversationListViewController {
         let conversationVC = KMConversationListViewController(configuration: Kommunicate.defaultConfiguration, kmConversationViewConfiguration: Kommunicate.kmConversationViewConfiguration)
         configureListVC(conversationVC)
@@ -745,7 +872,7 @@ open class Kommunicate: NSObject, Localizable {
         showListOnBack: Bool = false,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        let alChannelService = ALChannelService()
+        let alChannelService = KMCoreChannelService()
         alChannelService.getChannelInformation(nil, orClientChannelKey: clientGroupId) { channel in
             guard let channel = channel, let key = channel.key else {
                 completionHandler(false)
@@ -806,7 +933,7 @@ open class Kommunicate: NSObject, Localizable {
         showListOnBack: Bool = false,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        let alChannelService = ALChannelService()
+        let alChannelService = KMCoreChannelService()
         alChannelService.getChannelInformation(nil, orClientChannelKey: clientGroupId) { channel in
             guard let channel = channel, let key = channel.key else {
                 completionHandler(false)
@@ -904,7 +1031,7 @@ open class Kommunicate: NSObject, Localizable {
         // Update group id so that messages can be fetched & stored locally
         zendeskHandler.setGroupId(existingZendeskConversationId.stringValue)
 
-        guard let channel = ALChannelService().getChannelByKey(existingZendeskConversationId)  else {
+        guard let channel = KMCoreChannelService().getChannelByKey(existingZendeskConversationId)  else {
             completion(.conversationNotPresent)
             return
         }
@@ -999,7 +1126,7 @@ open class Kommunicate: NSObject, Localizable {
         }
 
         let defaultMetaData = NSMutableDictionary(
-            dictionary: ALChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
+            dictionary: KMCoreChannelService().metadataToHideActionMessagesAndTurnOffNotifications())
     
         if let conversationMetaDict = conversation.conversationMetadata as NSDictionary? as! [String: Any]? {
             let jsonObject = try? JSONSerialization.data(withJSONObject: conversationMetaDict, options: [])
@@ -1055,7 +1182,7 @@ open class Kommunicate: NSObject, Localizable {
         }
     }
 
-    open class func openFaq(from vc: UIViewController, with configuration: ALKConfiguration) {
+    open class func openFaq(from vc: UIViewController, with configuration: KMChatConfiguration) {
         guard let url = URLBuilder.faqURL(for: KMCoreUserDefaultsHandler.getApplicationKey(), hideChat: configuration.hideChatInHelpcenter).url else {
             return
         }
@@ -1084,16 +1211,16 @@ open class Kommunicate: NSObject, Localizable {
             completion(emptyConversationId)
             return
         }
-        let alChannelService = ALChannelService()
+        let alChannelService = KMCoreChannelService()
         alChannelService.getChannelInformation(nil, orClientChannelKey: message.conversationId) { channel in
             guard let channel = channel, let key = channel.key else {
                 let noConversationError = NSError(domain: "No conversation found", code: 0, userInfo: nil)
                 completion(noConversationError)
                 return
             }
-            let alMessage = message.toALMessage()
+            let alMessage = message.toKMCoreMessage()
             alMessage.groupId = key
-            ALMessageService.sharedInstance().sendMessages(alMessage) { _, error in
+            KMCoreMessageService.sharedInstance().sendMessages(alMessage) { _, error in
                 guard error == nil else {
                     completion(error)
                     return
@@ -1321,13 +1448,13 @@ open class Kommunicate: NSObject, Localizable {
     class func configureListVC(_ vc: KMConversationListViewController) {
         vc.conversationListTableViewController.dataSource.cellConfigurator = {
             messageModel, tableCell in
-            let cell = tableCell as! ALKChatCell
+            let cell = tableCell as! KMChatChatCell
             let message = ChatMessage(message: messageModel)
             cell.update(viewModel: message, identity: nil)
             cell.delegate = vc.conversationListTableViewController.self
         }
         let conversationViewController = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration, individualLaunch: false)
-        conversationViewController.viewModel = ALKConversationViewModel(contactId: nil, channelKey: nil, localizedStringFileName: defaultConfiguration.localizedStringFileName)
+        conversationViewController.viewModel = KMChatConversationViewModel(contactId: nil, channelKey: nil, localizedStringFileName: defaultConfiguration.localizedStringFileName)
         vc.conversationViewController = conversationViewController
     }
 
@@ -1347,7 +1474,7 @@ open class Kommunicate: NSObject, Localizable {
                 completionHandler(true)
             }
         } else {
-            let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName, prefilledMessage: prefilledMessage)
+            let convViewModel = KMChatConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName, prefilledMessage: prefilledMessage)
             let conversationVC = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration)
             conversationVC.viewModel = convViewModel
             let navVC = KMBaseNavigationViewController(rootViewController: conversationVC)
@@ -1379,7 +1506,7 @@ open class Kommunicate: NSObject, Localizable {
              navVC.didMove(toParent: viewController)
              completionHandler(true)
          } else {
-             let convViewModel = ALKConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName, prefilledMessage: prefilledMessage)
+             let convViewModel = KMChatConversationViewModel(contactId: nil, channelKey: groupId, localizedStringFileName: defaultConfiguration.localizedStringFileName, prefilledMessage: prefilledMessage)
              let conversationVC = KMConversationViewController(configuration: Kommunicate.defaultConfiguration, conversationViewConfiguration: kmConversationViewConfiguration)
              conversationVC.viewModel = convViewModel
              let navVC = KMBaseNavigationViewController(rootViewController: conversationVC)
@@ -1395,7 +1522,7 @@ open class Kommunicate: NSObject, Localizable {
     class func updateSettingsForEmbeddedMode(viewController: UIViewController) {
         let embeddedVC = viewController.description
         // Update VC List
-        KMCoreSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description(), embeddedVC])
+        KMCoreSettings.setListOfViewControllers([KMChatConversationListViewController.description(), KMConversationViewController.description(), embeddedVC])
         embeddedViewController = embeddedVC
     }
 
@@ -1466,7 +1593,7 @@ open class Kommunicate: NSObject, Localizable {
             KMCoreUserDefaultsHandler.setBASEURL(API.Backend.chat.rawValue)
             KMCoreUserDefaultsHandler.setChatBaseURL(API.Backend.kommunicateApi.rawValue)
         }
-        KMCoreSettings.setListOfViewControllers([ALKConversationListViewController.description(), KMConversationViewController.description()])
+        KMCoreSettings.setListOfViewControllers([KMChatConversationListViewController.description(), KMConversationViewController.description()])
         KMCoreSettings.setFilterContactsStatus(true)
         KMCoreUserDefaultsHandler.setDebugLogsRequire(true)
         KMCoreSettings.setSwiftFramework(true)
@@ -1476,7 +1603,7 @@ open class Kommunicate: NSObject, Localizable {
     }
 
     func setupDefaultStyle() {
-        let navigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [ALKBaseNavigationViewController.self])
+        let navigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [KMChatBaseNavigationViewController.self])
         navigationBarProxy.tintColor = navigationBarProxy.tintColor ?? UIColor.white
         navigationBarProxy.titleTextAttributes =
             navigationBarProxy.titleTextAttributes ?? [NSAttributedString.Key.foregroundColor: UIColor.white]
@@ -1503,9 +1630,9 @@ open class Kommunicate: NSObject, Localizable {
      Subscribe to chat events. Omit the events parameter to subscribe to all available events.
      - Parameters:
      - events: list of events to subscribe.
-     - callback: ALKCustomEventCallback to send subscribed event's data
+     - callback: KMChatCustomEventCallback to send subscribed event's data
      */
-    public static func subscribeCustomEvents(events: [KMCustomEvent] = KMCustomEvent.allEvents, callback: ALKCustomEventCallback) {
+    public static func subscribeCustomEvents(events: [KMCustomEvent] = KMCustomEvent.allEvents, callback: KMChatCustomEventCallback) {
         let eventList: [KMCustomEvent]
         
         if events == KMCustomEvent.allEvents {
@@ -1609,7 +1736,7 @@ open class Kommunicate: NSObject, Localizable {
             registerUserClientService.logout(completionHandler: {
                 _, _ in
                 Kommunicate.shared.clearUserDefaults()
-                ALKFormDataCache.shared.clearCache()
+                KMChatFormDataCache.shared.clearCache()
                 NSLog("Kommunicate logout")
             })
         }

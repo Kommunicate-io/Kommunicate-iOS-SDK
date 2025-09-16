@@ -11,9 +11,9 @@ import KommunicateChatUI_iOS_SDK
 public class FaqViewController: UIViewController, Localizable {
     var webView: WKWebView = .init()
     let url: URL
-    let configuration: ALKConfiguration
+    let configuration: KMChatConfiguration
 
-    public init(url: URL, configuration: ALKConfiguration) {
+    public init(url: URL, configuration: KMChatConfiguration) {
         self.url = url
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
