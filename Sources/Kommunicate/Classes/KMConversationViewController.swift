@@ -704,7 +704,6 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
         // Remove current title from center of navigation bar
         navigationItem.titleView = UIView()
         navigationItem.leftBarButtonItems = nil
-        configureNavigationBarButtonsForIOS26()
         // Create custom navigation view.
         let (contact, channel) = conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId)
         if let alChannel = channel {
@@ -725,6 +724,7 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
         assigneeUserId = contact?.userId
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
         updateAssigneeDetails()
+        configureNavigationBarButtonsForIOS26()
       }
 
     override public func refreshViewController() {
