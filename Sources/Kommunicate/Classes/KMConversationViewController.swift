@@ -704,14 +704,7 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
         // Remove current title from center of navigation bar
         navigationItem.titleView = UIView()
         navigationItem.leftBarButtonItems = nil
-        if #available(iOS 26.0, *) {
-            navigationItem.rightBarButtonItems?.forEach {
-                $0.hidesSharedBackground = true
-            }
-            navigationItem.leftBarButtonItems?.forEach {
-                $0.hidesSharedBackground = true
-            }
-        }
+        configureNavigationBarButtonsForIOS26()
         // Create custom navigation view.
         let (contact, channel) = conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId)
         if let alChannel = channel {

@@ -393,14 +393,7 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
             backTextButton.tintColor = configuration.conversationListScreenBackButtonColor
             navigationItem.leftBarButtonItem = backTextButton
         }
-        if #available(iOS 26.0, *) {
-            navigationItem.rightBarButtonItems?.forEach {
-                $0.hidesSharedBackground = true
-            }
-            navigationItem.leftBarButtonItems?.forEach {
-                $0.hidesSharedBackground = true
-            }
-        }
+        configureNavigationBarButtonsForIOS26()
     }
 
     func setupNavigationRightButtons() {
@@ -431,14 +424,7 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
             let rightButtons = rightBarButtonItems.prefix(3)
             navigationItem.rightBarButtonItems = Array(rightButtons)
         }
-        if #available(iOS 26.0, *) {
-            navigationItem.rightBarButtonItems?.forEach {
-                $0.hidesSharedBackground = true
-            }
-            navigationItem.leftBarButtonItems?.forEach {
-                $0.hidesSharedBackground = true
-            }
-        }
+        configureNavigationBarButtonsForIOS26()
     }
 
     func setupSearchController() {
@@ -453,14 +439,7 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         navigationItem.leftBarButtonItems = nil
         navigationItem.titleView = searchBar
         
-        if #available(iOS 26.0, *) {
-            navigationItem.rightBarButtonItems?.forEach {
-                $0.hidesSharedBackground = true
-            }
-            navigationItem.leftBarButtonItems?.forEach {
-                $0.hidesSharedBackground = true
-            }
-        }
+        configureNavigationBarButtonsForIOS26()
         UIView.animate(
             withDuration: 0.5,
             animations: { self.searchBar.show(true) },
