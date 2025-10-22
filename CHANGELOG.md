@@ -2,6 +2,10 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [7.3.2] 2025-10-22
+- Fixed the glass effect bug with iOS 26 versions.
+- Fixed dark icon issue with iOS 26 versions.
+
 ## [7.3.1] 2025-09-16
 - PreChat Lead Regex support added.
 - New Login and Create Conversation Function Exposed.
