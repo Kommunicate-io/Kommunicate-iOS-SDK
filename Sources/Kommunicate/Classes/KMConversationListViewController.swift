@@ -113,6 +113,7 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
             target: self, action: #selector(compose)
         )
         barButton.accessibilityIdentifier = "startNewIcon"
+        barButton.tintColor = configuration.navCreateConversationIconColor
         return barButton
     }()
 
@@ -384,10 +385,15 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         guard !configuration.hideBackButtonInConversationList else { return }
         
         if configuration.enableBackArrowOnConversationListScreen {
-            navigationItem.leftBarButtonItem = getBackArrowButton(target: self, action: #selector(customBackAction))
+            let backArrowButton = getBackArrowButton(target: self, action: #selector(customBackAction))
+            backArrowButton.tintColor = configuration.conversationListScreenBackButtonColor
+            navigationItem.leftBarButtonItem = backArrowButton
         } else {
-            navigationItem.leftBarButtonItem = getBackTextButton(title: LocalizedText.leftBarBackButtonText, target: self, action: #selector(customBackAction))
+            let backTextButton = getBackTextButton(title: LocalizedText.leftBarBackButtonText, target: self, action: #selector(customBackAction))
+            backTextButton.tintColor = configuration.conversationListScreenBackButtonColor
+            navigationItem.leftBarButtonItem = backTextButton
         }
+        configureNavigationBarButtonsForIOS26()
     }
 
     func setupNavigationRightButtons() {
@@ -418,6 +424,7 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
             let rightButtons = rightBarButtonItems.prefix(3)
             navigationItem.rightBarButtonItems = Array(rightButtons)
         }
+        configureNavigationBarButtonsForIOS26()
     }
 
     func setupSearchController() {
@@ -431,7 +438,8 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         navigationItem.rightBarButtonItems = nil
         navigationItem.leftBarButtonItems = nil
         navigationItem.titleView = searchBar
-
+        
+        configureNavigationBarButtonsForIOS26()
         UIView.animate(
             withDuration: 0.5,
             animations: { self.searchBar.show(true) },

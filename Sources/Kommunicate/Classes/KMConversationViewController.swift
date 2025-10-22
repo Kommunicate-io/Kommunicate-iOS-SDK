@@ -724,6 +724,7 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
         assigneeUserId = contact?.userId
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customNavigationView)
         updateAssigneeDetails()
+        configureNavigationBarButtonsForIOS26()
       }
 
     override public func refreshViewController() {
