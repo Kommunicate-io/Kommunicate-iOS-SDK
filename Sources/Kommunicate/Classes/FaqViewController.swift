@@ -79,8 +79,18 @@ public class FaqViewController: UIViewController, Localizable {
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationItem.leftBarButtonItem = getBackArrowButton(target: self, action: #selector(backTapped))
+        var backButton = getBackArrowButton(target: self, action: #selector(backTapped))
         navigationItem.title = localizedString(forKey: "FaqTitle", fileName: configuration.localizedStringFileName)
+        backButton.tintColor = configuration.bottomSheetNavIconColor
+        navigationItem.leftBarButtonItem = backButton
+        if #available(iOS 26.0, *) {
+            navigationItem.rightBarButtonItems?.forEach {
+                $0.hidesSharedBackground = true
+            }
+            navigationItem.leftBarButtonItems?.forEach {
+                $0.hidesSharedBackground = true
+            }
+        }
     }
 
     @objc func backTapped() {
