@@ -99,6 +99,7 @@ class KMAppSettingService {
        appSettings.hidePostCTAEnabled = chatWidget.hidePostCTA ?? false
        appSettings.defaultUploadOverrideUrl = chatWidget.defaultUploadOverride?.url ?? ""
        appSettings.defaultUploadOverrideHeaders = chatWidget.defaultUploadOverride?.headers ?? [:]
+       appSettings.sasT = chatWidget.sasT?.removingPercentEncoding ?? chatWidget.sasT
        appSettings.csatRatingBase = chatWidget.csatRatingBase ?? 3
        appSettings.botTypingIndicatorInterval = chatWidget.botTypingIndicatorInterval ?? 0
        appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
