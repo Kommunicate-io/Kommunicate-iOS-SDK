@@ -77,13 +77,10 @@ class KMAppSettingService {
        KMAppUserDefaultHandler.shared.botTypingIndicatorInterval = chatWidget.botTypingIndicatorInterval ?? 0
        KMAppUserDefaultHandler.shared.csatRatingBase = chatWidget.csatRatingBase ?? 3
        
-       guard let primaryColor = chatWidget.primaryColor else {
-           setupDefaultSettings()
-           return
-       }
-        
-        let decodedPrimaryColor = primaryColor.replacingOccurrences(of: "#", with: "")
-        let appSettings = KMChatAppSettings(primaryColor: decodedPrimaryColor)
+       let defaultPrimaryColor = UIColor.background(.primary).toHexString()
+       let primaryColor = chatWidget.primaryColor ?? defaultPrimaryColor
+       let decodedPrimaryColor = primaryColor.replacingOccurrences(of: "#", with: "")
+       let appSettings = KMChatAppSettings(primaryColor: decodedPrimaryColor)
 
        /// Primary color for sent message background
        appSettings.sentMessageBackgroundColor = decodedPrimaryColor
@@ -99,6 +96,7 @@ class KMAppSettingService {
        appSettings.hidePostCTAEnabled = chatWidget.hidePostCTA ?? false
        appSettings.defaultUploadOverrideUrl = chatWidget.defaultUploadOverride?.url ?? ""
        appSettings.defaultUploadOverrideHeaders = chatWidget.defaultUploadOverride?.headers ?? [:]
+       appSettings.sasT = decodedSasToken(from: chatWidget.sasT)
        appSettings.csatRatingBase = chatWidget.csatRatingBase ?? 3
        appSettings.botTypingIndicatorInterval = chatWidget.botTypingIndicatorInterval ?? 0
        appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
@@ -119,5 +117,19 @@ class KMAppSettingService {
         appSettings.attachmentIconsTintColor = primaryColor
         appSettings.buttonPrimaryColor = primaryColor
         appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
+    }
+
+    private func decodedSasToken(from token: String?) -> String? {
+        guard let token, !token.isEmpty else {
+            return nil
+        }
+
+        if let decodedData = Data(base64Encoded: token, options: .ignoreUnknownCharacters),
+           let decodedToken = String(data: decodedData, encoding: .utf8),
+           !decodedToken.isEmpty {
+            return decodedToken
+        }
+
+        return token
     }
 }
