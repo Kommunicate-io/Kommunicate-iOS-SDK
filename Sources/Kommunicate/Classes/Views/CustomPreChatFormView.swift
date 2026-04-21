@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CustomPreChatFormView: UIView, UITextFieldDelegate {
+class CustomPreChatFormView: UIView, UITextFieldDelegate, Localizable {
     var localizationFileName: String!
 
     @IBOutlet var contentView: UIView!
@@ -47,7 +47,7 @@ class CustomPreChatFormView: UIView, UITextFieldDelegate {
         if let title = UserDefaults.standard.string(forKey: "leadCollectionTitle") {
             titleLabel.text = title
         } else {
-            titleLabel.text = "Pre-Chat Lead Collection"
+            titleLabel.text = localizedString(forKey: "PreChatLeadCollectionTitle", fileName: localizationFileName)
         }
 
         for (index, element) in Kommunicate.leadArray.enumerated() {
