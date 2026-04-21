@@ -2,6 +2,12 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [7.3.4] 2026-04-21
+- Fixed Xcode 26.4 Compilation Error
+- Setting Changes required for rich Message
+- Markdown Support
+- Support For Missing Localizations 
+
 ## [7.3.3] 2025-12-16
 - Fixed SPM Build Issue.
 

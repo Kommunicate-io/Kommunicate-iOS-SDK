@@ -192,3 +192,10 @@ File = "File";
 /* Collect Email On Away Mode */
 CollectEmailMessageOnAwayMode = "How may we reach you?";
 InvalidEmailMessageOnAwayMode = "It seems you have entered an invalid email";
+ConversationRatingMenuTitle = "Rate this conversation Customized";
+ConversationRatingTitle = "Rate this conversation Customized";
+ConversationRatingCommentsPlaceholder = "Add a comment...";
+ConversationRatingSubmitButtonTitle = "Submit your rating";
+FiveStarConversationRatingTitle = "How satisfied are you with this conversation?";
+FiveStarConversationRatingCommentsPlaceholder = "Enter your feedback...";
+FiveStarConversationRatingSubmitButtonTitle = "Submit";
