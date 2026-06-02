@@ -12,13 +12,23 @@ import XCTest
 
 class MessageMetadataTests: XCTestCase {
     var config: KMConfiguration!
+    var defaultConfiguration: KMConfiguration!
 
     var messageMetadata: [AnyHashable: Any]? {
         return config.messageMetadata
     }
 
     override func setUp() {
+        super.setUp()
+        defaultConfiguration = Kommunicate.defaultConfiguration
         config = KMConfiguration()
+    }
+
+    override func tearDown() {
+        Kommunicate.defaultConfiguration = defaultConfiguration
+        defaultConfiguration = nil
+        config = nil
+        super.tearDown()
     }
 
     func testChatContextUpdate() throws {
@@ -57,6 +67,22 @@ class MessageMetadataTests: XCTestCase {
 
         let chatInfo = try XCTUnwrap(context["chatInfo"] as? String)
         XCTAssertEqual(chatInfo, "chat info value")
+    }
+
+    func testMessageBuilderMetadataIncludesDefaultConfigurationMetadata() throws {
+        try config.updateChatContext(with: ["chatInfo": "chat info value"])
+        Kommunicate.defaultConfiguration = config
+
+        let message = KMMessageBuilder()
+            .withText("hello")
+            .withMetadata(["customKey": "custom value"])
+            .build()
+
+        let metadata = try XCTUnwrap(message.toKMCoreMessage().metadata as? [AnyHashable: Any])
+        let context = try XCTUnwrap(chatContextFromMetadata(metadata))
+
+        XCTAssertEqual(context["chatInfo"] as? String, "chat info value")
+        XCTAssertEqual(metadata["customKey"] as? String, "custom value")
     }
 
     private func chatContextFromMetadata(_ metadata: [AnyHashable: Any]) throws -> [String: Any]? {
