@@ -59,9 +59,18 @@ extension KMMessage {
         alMessage.source = Int16(AL_SOURCE_IOS)
         alMessage.conversationId = nil
         alMessage.groupId = nil
-        if let metadata = metadata {
+        let metadata = mergedMetadataWithDefaultConfiguration()
+        if !metadata.isEmpty {
             alMessage.metadata = NSMutableDictionary(dictionary: metadata)
         }
         return alMessage
+    }
+
+    private func mergedMetadataWithDefaultConfiguration() -> [AnyHashable: Any] {
+        var metadata = Kommunicate.defaultConfiguration.messageMetadata ?? [:]
+        self.metadata?.forEach { key, value in
+            metadata[key] = value
+        }
+        return metadata
     }
 }
