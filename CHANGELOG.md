@@ -2,6 +2,9 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [7.3.6] 2026-06-02
+- Fixed programmatic message sends to include configured message metadata along with per-message metadata.
+
 ## [7.3.5] 2026-05-22
 - Fixed UI Issues For List Templates
 
