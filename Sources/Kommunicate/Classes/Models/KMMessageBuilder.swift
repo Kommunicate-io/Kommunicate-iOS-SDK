@@ -59,6 +59,9 @@ extension KMMessage {
         alMessage.source = Int16(AL_SOURCE_IOS)
         alMessage.conversationId = nil
         alMessage.groupId = nil
+        if let metadata = metadata {
+            alMessage.metadata = NSMutableDictionary(dictionary: metadata)
+        }
         return alMessage
     }
 }
