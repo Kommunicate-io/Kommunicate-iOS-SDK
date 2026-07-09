@@ -14,7 +14,7 @@ For cases that require human intervention, Kommunicate offers built-in agent han
 
 Beyond mobile applications, Kommunicate serves as a unified customer communication platform by bringing together conversations from websites, email, voice, WhatsApp, Telegram, Instagram, Viber, LINE, and other channels. This centralized approach helps support teams improve productivity, reduce response times, and deliver consistent customer experiences across every touchpoint.
 
-![Kommunicate iOS chat overview](images/overview-chat.png)
+![Kommunicate iOS chat overview](images/overview-chat.gif)
 
 ## Build an AI Agent with Kommunicate and Integrate It into Your iOS App
 
