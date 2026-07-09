@@ -1,241 +1,246 @@
-![header-ios](https://user-images.githubusercontent.com/24476344/43458226-0f1219b4-94e7-11e8-9b00-ca89b2da8952.png)
+# Kommunicate iOS SDK for Chat
 
-[![Version](https://img.shields.io/cocoapods/v/Kommunicate.svg?style=flat)](http://cocoapods.org/pods/Kommunicate)
-[![License](https://img.shields.io/cocoapods/l/Kommunicate.svg?style=flat)](http://cocoapods.org/pods/Kommunicate)
-[![Platform](https://img.shields.io/cocoapods/p/Kommunicate.svg?style=flat)](http://cocoapods.org/pods/Kommunicate)
-
-
-## [Kommunicate](https://www.kommunicate.io/?utm_source=github&utm_medium=readme&utm_campaign=ios) iOS Chat SDK for Customer Support
-
-An Open Source iOS Live Chat SDK for Customer Support
+An Open Source iOS SDK for enabling AI Agent, AI chatbot, and Live Chat into your iOS App
 
 ## Overview
 
-Kommunicate provides open source live chat SDK in iOS. The Kommunicate SDK is flexible, lightweight and easily integrable. It lets you easily add real-time live chat and in-app messaging in your mobile applications and websites for customer support. The SDK is equipped with advance messaging options such as sending attachments, sharing location and rich messaging. 
+Kommunicate's iOS SDK helps developers add conversational support experiences to iPhone and iPad applications. With a simple integration process and native iOS compatibility, teams can quickly launch AI-powered customer support, live chat, and in-app messaging without building messaging infrastructure from scratch.
 
+The SDK supports a wide range of communication features, including multimedia attachments, rich interactive messages, location sharing, push notifications, and real-time conversations. These capabilities enable businesses to provide seamless support directly within their iOS applications.
 
-Kommunicate SDK lets you integrate custom chatbots in your mobile apps for automating tasks. It comes with multiple features to make it a full-fledged customer support SDK. 
+Developers can also connect AI agents to automate customer interactions, handle frequently asked questions, and provide instant assistance around the clock. The SDK works with the latest AI models from OpenAI, Anthropic, Google Gemini, and Google CX Agent Studio, making it easy to deploy intelligent customer support experiences.
 
+For cases that require human intervention, Kommunicate offers built-in agent handoff functionality. Conversations can be automatically escalated from AI agents to support representatives, ensuring customers receive personalized assistance whenever needed. Support teams can manage and respond to chats through the Kommunicate dashboard while maintaining complete conversation history.
 
-<img align="center" src="Botchat.gif" height="520" />
+Beyond mobile applications, Kommunicate serves as a unified customer communication platform by bringing together conversations from websites, email, voice, WhatsApp, Telegram, Instagram, Viber, LINE, and other channels. This centralized approach helps support teams improve productivity, reduce response times, and deliver consistent customer experiences across every touchpoint.
 
+![Kommunicate iOS chat overview](images/overview-chat.gif)
 
-## Get Started
+## Build an AI Agent with Kommunicate and Integrate It into Your iOS App
 
-To get started with Kommunicate iOS SDK, head over to the Kommunicate website and [Signup](https://dashboard.kommunicate.io/signup?utm_source=github&utm_medium=readme&utm_campaign=ios) to get your Application ID.
+### Kompose AI Agent Builder
 
+Kompose is Kommunicate's no-code AI agent builder that enables businesses to create and deploy customer support AI agents across chat, email, and voice channels. You can build an AI agent without writing code by simply uploading your knowledge sources, such as documents, help center articles, and website content, and providing instructions for how the agent should respond.
 
-## Build a BOT on Kommunicate and integrate it in your iOS app
+**Key Features**
 
-### Kompose
+- No-code AI agent builder
+- Support for OpenAI, Anthropic, Google Gemini, and Google CX Agent Studio
+- Knowledge base training using websites, PDFs, and help center content
+- Voice AI capabilities
+- Lead capture forms
+- Rich messaging and media sharing
+- Human agent handoff
+- Analytics and AI performance monitoring
 
-[Kompose](https://dashboard.kommunicate.io/bots/bot-builder) is a Kommunicate’s bot builder that help you in building your own bot, a techie, non-techie, or a person who doesn’t have any idea about chatbots can also build the bot. Anyone can create a chatbot with the Kompose without any assistance.
+Kommunicate also includes a built-in human-in-the-loop support system. When an AI agent cannot resolve a customer query, conversations can be automatically escalated to a live support representative. All interactions are managed from a centralized dashboard, allowing teams to monitor conversations, review AI performance, and improve customer support workflows.
 
-<img align="center" src="Final.gif" height="520" />
+Requirements
 
-
-
-### Following is the UI to create the BOT
-
-<img align="center" src="botCreation.png" height="520" />
-
-
-
-
-## Dialogflow Chatbot Integration
-
-Dialogflow is a Google-owned NLP platform to facilitate human-computer interactions such as chatbots, voice bots, etc. 
-
-Kommunicate's Dialogflow integration provides a more versatile, customizable and better chatting experience. Kommunicate iOS Live Chat SDK supports all of Dialogflow's features such as Google Assistant, Rich Messaging, etc. On top of that, it is equipped with advanced features such as bot-human handoff, conversation managing dashboard, reporting, and others. 
-
-You can connect your Dialogflow chatbot with Kommunicate in the following 4 simple steps. [Here](https://www.kommunicate.io/blog/building-ios-chatbot-with-dialogflow-api-ai/) is a step by step blog to add Kommunicate SDK in your iOS app. 
-
-### Step 1: Get your API credentials from Dialogflow
-- Login to Dialogflow console and select your agent from the dropdown in the left panel.
-- Click on the settings button. It will open a setting page for the agent.
-- Inside the general tab search for GOOGLE PROJECTS and click on your service account.
-- After getting redirected to your SERVICE ACCOUNT, create a key in JSON format for your project from the actions section and it will get automatically downloaded.
-
-### Step 2: Create a free Kommunicate account
-Create a free account on [Kommunicate](https://dashboard.kommunicate.io/signup) and navigate to the [Bots section](https://dashboard.kommunicate.io/bots/bot-integrations).
-
-### Step 3: Integrate your Dialogflow chatbot with Kommunicate
-- In the Bot integrations section, choose Dialogflow. A popup window will open.
-- Upload your Key file here and proceed.
-- Give a name and image to your chatbot. It will be visible to the users chatting with your chatbot.
-- Enable/Disable chatbot to human handoff. If enabled, it will automatically assign conversations to humans in case the chatbot is not able to answer.
-
-### Step 4: Install the Kommunicate iOS SDK to your app
-You can add the Kommunicate SDK in your iOS app easily. More information on how to integrate with your iOS app [here](https://docs.kommunicate.io/docs/ios-installation). 
-
-> Note: Here's a [sample chatbot](https://docs.kommunicate.io/docs/bot-samples) for you to get started with Dialogflow. 
-
-## Amazon Lex Integration
-
-Amazon Lex is an AWS service for building conversational interfaces using voice and text, enabling human-computer interactions such as chatbots, voice bots, etc.
-
-Kommunicate's Amazon Lex integration offers a more versatile, customizable, and enhanced chatting experience. The Kommunicate iOS Live Chat SDK supports Amazon Lex's features, allowing seamless voice and text interactions directly within your Android app. Additionally, it comes equipped with advanced features such as bot-human handoff, a conversation management dashboard, reporting, and more.
-
-You can integrate Amazon Lex Bot with Kommunicate by following the below steps. [Here](https://www.youtube.com/watch?v=cuaAiutVkow) is a video for the same.
-
-### Step 1: Get your credentials from Amazon Lex
-
-**A. Access Key ID & Secret access key:** An access key ID and secret access key are required to sign requests you make using the AWS SDKs. To get your access key [sign into your AWS console](https://aws.amazon.com/console/) as a Root or IAM user.
-
-  1. Open the [Identity and Access Management (IAM)](https://us-east-1.console.aws.amazon.com/iam/) panel in the same AWS account where the Lex bot is present.
-
-  2. Go to Access management -> Users. Create a user by clicking the Add Users button. Add a user name, e.g., "Lex-bot".
-
-  3. Set permissions: Choose "Attach Policies Directly".
-
-  4. Select the following two permissions: AmazonLexReadOnly & AmazonLexRunBotsOnly.
-
-  5. Keep the "Tags" empty and proceed to Next.
-
-  6. On the next page confirm the attached permissions to the user and click on “Create User”.
-
-  7. Now that your user is created, select the user, and on the next page click on Security Credentials.
-
-  8. Scroll down and click on Create Access Key.
-
-  9. Select Third-Party Service and proceed next to generate the access keys.
-
-A. **Bot name in Lex platform:** Lex requires a name for your bot when you create it. Once you create the bot, you can also get it from the bot list in Lex home page.
-
-B. **Bot Alias:** You create a bot alias when you publish the bot. It helps you to work with multiple versions of your bot. Update the bot alias in Kommunicate if you want Kommunicate to connect with a specific version of the bot.
-
-C. **Region**: AWS region where Lex service is running. You can find your region in the top-right corner following the user name in the AWS console.
-
-
-### Step 2: Create a free Kommunicate account
-
-Create a free account on [Kommunicate](https://dashboard.kommunicate.io/signup) and navigate to the [Bots section](https://dashboard.kommunicate.io/bots/bot-integrations).
-
-### Step 3: Integrate your Amazon Lex Bot with Kommunicate
-
-Once you have the above information follow the below steps to integrate the bot with Kommunicate:
-
-  1. Log in to Kommunicate and go to [bot section](https://dashboard.kommunicate.io/bots/bot-integrations).
-
-  2. Click the Integrate Bot in the Amazon Lex card.
-
-  3. Fill in the required detail and click next.
-
-  4. Give your bot a name. This name will be visible to your users who interact with the bot.
-
-  5. Enable/Disable the autoHandoff setting if you want your bot to assign the conversation to a human agent in your team when the conversation is hung up by the bot.
-
-  6. Click on Let this bot handle all new conversations. All new Conversations started after the integration will be assigned to this bot and your bot will start answering them.
-
-### Step 4: Install the chat widget on your website
-
-You can install the Kommunicate chat widget on your website by adding a code snippet to your website. More information on how to integrate with your website [here](https://docs.kommunicate.io/docs/web-installation.html).
-
-## OpenAI Integration
-
-OpenAI is an AI research organization that focuses on developing and promoting friendly artificial intelligence, enabling seamless human-computer interactions through advanced models like GPT.
-
-Kommunicate's OpenAI integration offers a more versatile, customizable, and enhanced chatting experience. The Kommunicate iOS Live Chat SDK supports all of OpenAI's features, such as natural language understanding and dynamic response generation. Additionally, it is equipped with advanced features such as bot-human handoff, a conversation management dashboard, reporting, and more.
-
-You can integrate OpenAI Bot with Kommunicate by following the below steps. [Here](https://www.youtube.com/watch?v=dZM9OOK66KU) is a video for the same
-
-### How to integrate Kommunicate bot with ChatGPT
-
-**Step 1:**  Login to your Kommunicate account. If you don’t have an account, [Signup for free today!](https://dashboard.kommunicate.io/signup)
-
-
-**Step 2:** Once you are in, click on the **Bot Integration** icon on the left panel of the screen. 
-
-**Step 3:**  Now you can create a new bot or edit your active chatbot by clicking the **Go to bot builder button**.
-
-**Step 4:** Click on Settings in the top-right corner of the page.
-
-**Step 5:** Turn the toggle on for **Get answers from web**. That’s all!
-
-Please disable the toggle for **Small Talk** when you turn on ChatGPT.
-
-That’s how much it takes to integrate ChatGPT into your Kommunicate bot.
-
-## Gemini Bot
-
-Gemini, developed by Google DeepMind, is an advanced AI platform designed for powerful, natural language-driven interactions like chatbots and voice assistants.
-
-Kommunicate’s Gemini integration enhances the chat experience with versatile and customizable features. The Kommunicate iOS Live Chat SDK leverages Gemini’s capabilities, including intelligent response generation and robust language understanding. Additionally, it offers advanced functionality like bot-human handoff, conversation management, real-time reporting, and more.
-
-
-**Step 1:**  Login to your Kommunicate account. If you don’t have an account, [Signup for free today!](https://dashboard.kommunicate.io/signup)
-
-**Step 2:** Once you are in, click on the **Bot Integration** icon on the left panel of the screen.
-
-**Step 3:**  Click the **Integrate Bot** in the Gemini card.
-
-**Step 4:** Once you reach the Integration Page, there will be an option of **Integration via Kommunicate**.
-
-**Step 5:** After selecting the desired Gemini model from the dropdown menu, click on **Save and Proceed**.
-
-**Step 6:** Give your bot a name. This name will be visible to your users who interact with the bot.
-
-**Step 7:** Enable/Disable the autoHandoff setting if you want your bot to assign the conversation to a human agent in your team when the conversation is hung up by the bot.
-
-**Step 8:** Click on "Let this bot handle all new conversations". All new Conversations started after the integration will be assigned to this bot and your bot will start answering them.
-
-That’s how much it takes to integrate Gemini into your Kommunicate bot.
-
-## Other Features
-
-**Live chat widget:**  Make it easier for your visitors and users to reach you with an instant website and in-app support through chat. The widget is highly customizable. 
-
-**Chatbots:** Automate and speed up your customer service by integrating AI-powered chatbots. Build your chatbots and deploy them using Kommunicate and seamlessly add them to the live chat.
-
-**Conversations:** Manage all your customer queries coming from the live chat plugin. Easily manage and assign agents to cater to user conversations.
-
-**Dashboard:** A powerful dashboard to see, analyze and act upon your customer conversation data. It helps you analyze the performance of support agents as well.
-
-**Helpcenter:** Create your knowledge base and deploy on a dedicated page to cater to generic and recurring customer queries. Your customers will also be able to directly access FAQs in chat.
-
-**Mailbox:** A simple and powerful team inbox for ticketing, managing, receiving and replying to all your customer support emails. 
-
-**Integrations:** Easily move data between Kommunicate and your other favorite apps. Integrate your favorite CRM, knowledge base software and other apps.
-
-**Conversation Routing:** Select routing rules for incoming conversations for both your agents and bots. Choose between automatic assignments or to notify all.
-
-**Smart Rich Messaging:** Leverage rich messages using buttons, cards, carousels, forms or lists to provide an exquisite support chat experience to your customers.
-
-**Quick Replies:** Quickly respond to generic user queries using Quick Replies. Easily create and manage templated messages from your dashboard.
-
-------------------------
-
-## Example
-
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
-## Requirements
-
-* iOS 13.0+
-* Xcode 12.0+
-* Swift 4.2+
+- iApps using Kommunicate can target iOS 13 or later
+- Xcode 12 or later required
 
 ## Installation
 
-Kommunicate is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+Option 1: CocoaPods
+
+Kommunicate is available through [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html). To install it, add the following line to your Podfile:
 
 ```ruby
-pod 'Kommunicate'
+pod 'Kommunicate' , '~> 7.3.4' // Latest Version
 ```
 
-Then run `pod install`.
+This is how the podfile will look:
 
-In any file you'd like to use Kommunicate in, don't forget to
-import the framework with `import Kommunicate`.
+![CocoaPods Podfile setup](images/cocoapods-podfile.png)
 
-## Docs
+Then run the following command:
 
-Please check the [documentation](https://docs.kommunicate.io/docs/ios-installation) for more details on installation, configuration, and customization.
+```bash
+pod install
+```
 
-## License
+In any file you'd like to use Kommunicate in, don't forget to import the framework as shown below:
 
-Kommunicate is available under the BSD-3-Clause license. See the [LICENSE](LICENSE) file for more info.
+```swift
+import Kommunicate
+```
 
-[img0]:https://raw.githubusercontent.com/Applozic/ApplozicSwift/master/Screenshots/screenshot0.png
-[img1]:https://raw.githubusercontent.com/Applozic/ApplozicSwift/master/Screenshots/screenshot1.png
+Note: You can test Kommunicate using CocoaPods by referring to the Kommunicate Sample App repository. During testing, you can use both the local repository and the CocoaPods repository by removing the local path of Kommunicate from the Podfile.
+
+Note: If you are using Kommunicate in an Objective-C app, then check this sample app in Objective-C. Create a wrapper file in Swift and call the functions in the wrapper from Objective-C files in your Project.
+
+Option 2: Swift Package Manager (SPM)
+
+Follow these steps to add Kommunicate package:
+
+- In your project, go to File > Swift Packages > Add Package Dependency
+- Enter the Kommunicate iOS SDK repo in the URL field.
+- Click on Next and wait till the package is added to your project.
+
+![Swift Package Manager package dependency](images/spm-package-dependency.png)
+
+For more details, please refer to this [doc link](https://developer.apple.com/documentation/swift_packages/adding_package_dependencies_to_your_app).
+
+Note: To test Kommunicate with Swift Package Manager (SPM), please check this Kommunicate SPM Sample App repository.
+
+## Permissions
+
+Add permissions for Camera, Photo Library, Microphone and Location usage.
+
+Note: We won't be asking the users for these permissions unless they use the respective feature. Due to Apple's requirement, we have to add these permissions if we are using any of their APIs related to Camera, Microphone etc.
+
+In your app's Info.plist file as `Source code` and paste these permissions anywhere inside the `<dict>` tag.
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>Allow Camera</string>
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>Allow location sharing!!</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>Allow MicroPhone</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Allow Photos</string>
+<key>NSPhotoLibraryAddUsageDescription</key>
+<string>Allow write access</string>
+```
+
+For more information on authentication, push notification, customization, etc, check out our official documentation [here](https://docs.kommunicate.io/docs/ios-installation).
+
+## AI Integration Availability
+
+Kommunicate provides integration with the latest AI models from OpenAI, Anthropic, and Google Gemini.
+
+## OpenAI-powered AI Agent Integration for iOS App
+
+Kommunicate's OpenAI integration enables businesses to deploy AI-powered customer support agents using OpenAI's latest models. These agents can answer customer queries, automate repetitive support tasks, and seamlessly transfer conversations to human agents when required.
+
+### Integrations Options
+
+You can connect OpenAI to Kommunicate in two ways:
+
+Managed Integration via Kommunicate
+
+- No OpenAI account setup required
+- Select an OpenAI model directly within Kommunicate
+- Simplified billing and configuration
+
+Bring Your Own OpenAI API Key
+
+- Connect your existing OpenAI account
+- Full control over model selection and API usage
+- Use your own OpenAI billing account
+
+**Deployment Steps**
+
+**Step 1: Create an AI Agent**
+
+Navigate to Agent Integrations and create a new AI agent using Kompose AI Agent Builder.
+
+![OpenAI create AI agent](images/openai-create-agent.png)
+
+**Step 2: Configure OpenAI**
+
+Choose either:
+
+- Integration via Kommunicate and select an OpenAI model, or
+- Integration via API Key and enter your OpenAI API credentials.
+
+Configure model settings such as response length and creativity, then save your configuration.
+
+![OpenAI configuration settings](images/openai-configure.png)
+
+**Step 3: Train Your AI Agent**
+
+Upload documents, connect your help center, or add website URLs to build your AI agent's knowledge base.
+
+![OpenAI train AI agent](images/openai-train-agent.png)
+
+## Google CX Agent Studio Integration for iOS App
+
+Kommunicate integrates with Google CX Agent Studio, allowing organizations to deploy Dialogflow and CX Agent Studio agents through Kommunicate's omnichannel support platform.
+
+**Why Use This Integration?**
+
+- Leverage existing Google CX Agent Studio agents
+- Add live chat and human handoff capabilities
+- Access centralized conversation management
+- Deploy across web and mobile channels
+
+### Steps to Deploy Google CX Agent Studio AI Agent with Kommunicate
+
+Step 1: Connect Google CX Agent Studio
+
+![Google CX Agent Studio connection](images/google-cx-connect.png)
+
+**Step 2: Add Google Credentials**
+
+Enter the required Google Cloud and CX Agent Studio credentials, including project details and authentication information.
+
+Once validated, Kommunicate will establish the connection with your Google agent.
+
+## Google Gemini-powered AI Agent Integration for iOS App
+
+Kommunicate's Google Gemini integration enables businesses and developers to build, deploy, and manage AI-powered customer support agents across websites and digital channels. Use the latest AI models from Google Gemini.
+
+### Ways to Connect Google Gemini with Kommunicate
+
+You can create an Google Gemini-powered AI agent in Kommunicate using either of the following methods:
+
+Integration via Kommunicate
+
+Use Kommunicate's managed Google Gemini integration and select your preferred Gemini model directly from the platform.
+
+Integration via Google Gemini API Key
+
+Connect your own Google Gemini account by providing a Gemini API key and configuring the AI agent within Kommunicate.
+
+**Setup Instructions**
+
+Step 1: Create an AI Agent: After signing up for Kommunicate, navigate to Agent Integrations and create a new AI agent using Kompose AI Agent Builder or select Gemini integration.
+
+![Gemini create AI agent](images/gemini-create-agent.png)
+
+Step 2: Choose Your Google Gemini Integration Method
+
+Select how you would like to connect Google Gemini to your AI agent:
+
+- Integration via Kommunicate - Choose a Google Gemini model directly from Kommunicate and start building your AI agent.
+- Integration via API Key - Connect your Google Gemini account by entering your OpenAI API key and configuring the agent with your preferred model and settings.
+
+Once configured, save the settings and begin training your AI agent with your website content, documents, or help center articles.
+
+![Gemini configuration settings](images/gemini-configure.png)
+
+## Anthropic-powered AI Agent Integration for iOS App
+
+Kommunicate's Anthropic integration enables businesses and developers to build, deploy, and manage AI-powered customer support agents across websites and digital channels. Use the latest AI models from Anthropic and resolve customer support queries accurately and instantly.
+
+### Ways to Connect Anthropic with Kommunicate
+
+You can create an Anthropic-powered AI agent in Kommunicate using either of the following methods:
+
+Integration via Kommunicate
+
+Use Kommunicate's managed Anthropic integration and select your preferred Anthropic model directly from the platform.
+
+Integration via Google Gemini API Key
+
+Connect your own Anthropic account by providing an Anthropic API key and configuring the AI agent within Kommunicate.
+
+**Setup Instructions**
+
+Step 1: Create an AI Agent: After signing up for Kommunicate, navigate to Agent Integrations and create a new AI agent using Kompose AI Agent Builder or select Anthropic integration.
+
+![Anthropic create AI agent](images/anthropic-create-agent.png)
+
+Step 2: Choose Your Anthropic Integration Method
+
+Select how you would like to connect Anthropic to your AI agent:
+
+- Integration via Kommunicate - Choose an Anthropic model directly from Kommunicate and start building your AI agent.
+- Integration via API Key - Connect your Antropic account by entering your OpenAI API key and configuring the agent with your preferred model and settings.
+
+Once configured, save the settings and begin training your AI agent with your website content, documents, or help center articles.
+
+![Anthropic configuration settings](images/anthropic-configure.png)
