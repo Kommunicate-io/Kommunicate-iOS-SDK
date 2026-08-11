@@ -1,4 +1,4 @@
-// !$*UTF8*$!
+ // !$*UTF8*$!
 {
 	archiveVersion = 1;
 	classes = {
@@ -794,7 +794,7 @@
 /* Begin XCLocalSwiftPackageReference section */
 		5FA947813028F7F80035327B /* XCLocalSwiftPackageReference "../../Kommunicate-iOS-SDK" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = "../../Kommunicate-iOS-SDK";
+			relativePath = "..";
 		};
 /* End XCLocalSwiftPackageReference section */
 
