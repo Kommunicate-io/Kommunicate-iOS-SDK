@@ -24,11 +24,15 @@ class KMAppSettingService {
      - App Launch Behavior: Upon app launch, real-time data is fetched as the cache is cleared during app closure or termination.
      */
     func appSetting(
-        applicationKey: String = KMUserDefaultHandler.getApplicationKey(),
+        applicationKey: String? = KMUserDefaultHandler.getApplicationKey(),
         forceRefresh: Bool = false,
         completion: @escaping (Result<AppSetting, KMAppSettingsError>) -> Void
     ) {
-        
+        guard let applicationKey = applicationKey?.trimmingCharacters(in: .whitespacesAndNewlines), !applicationKey.isEmpty else {
+            completion(.failure(.missingApplicationKey))
+            return
+        }
+
         if let cacheAppSettingData = Kommunicate.appSettingCache.getItem(forKey: appSettingCacheMemoryKey), !forceRefresh {
             completion(.success(cacheAppSettingData))
             return
