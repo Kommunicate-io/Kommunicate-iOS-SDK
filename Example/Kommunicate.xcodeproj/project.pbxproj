@@ -10,7 +10,6 @@
 		1AD224B3222E92DE00184112 /* ConversationDetailMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD224B2222E92DE00184112 /* ConversationDetailMock.swift */; };
 		1AFB913121A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB913021A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift */; };
 		5F0A96F630290DB200DB4E64 /* Kommunicate in Frameworks */ = {isa = PBXBuildFile; productRef = 5F0A96F530290DB200DB4E64 /* Kommunicate */; };
-		5F69DC763029E36700C9C521 /* RichMessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5F69DC753029E36700C9C521 /* RichMessageKit */; };
 		5FA947833028FB960035327B /* Kommunicate in Frameworks */ = {isa = PBXBuildFile; productRef = 5FA947823028FB960035327B /* Kommunicate */; };
 		5FA947863028FFFF0035327B /* Quick in Frameworks */ = {isa = PBXBuildFile; productRef = 5FA947853028FFFF0035327B /* Quick */; };
 		5FA94789302900330035327B /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = 5FA94788302900330035327B /* Nimble */; };
@@ -98,7 +97,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5FA947833028FB960035327B /* Kommunicate in Frameworks */,
-				5F69DC763029E36700C9C521 /* RichMessageKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -829,10 +827,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5FA947813028F7F80035327B /* XCLocalSwiftPackageReference ".." */;
 			productName = Kommunicate;
-		};
-		5F69DC753029E36700C9C521 /* RichMessageKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = RichMessageKit;
 		};
 		5FA947823028FB960035327B /* Kommunicate */ = {
 			isa = XCSwiftPackageProductDependency;

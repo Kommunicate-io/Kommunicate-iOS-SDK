@@ -18,7 +18,10 @@ let package = Package(
     targets: [
         .target(
             name: "Kommunicate",
-            dependencies: [.product(name: "KommunicateChatUI-iOS-SDK", package: "KommunicateChatUI-iOS-SDK")],
+            dependencies: [
+                .product(name: "KommunicateChatUI-iOS-SDK", package: "KommunicateChatUI-iOS-SDK"),
+                .product(name: "RichMessageKit", package: "KommunicateChatUI-iOS-SDK"),
+            ],
             path: "Sources",
             resources: [.process("Resources")]
         ),

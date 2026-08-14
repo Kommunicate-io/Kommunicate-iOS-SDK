@@ -672,8 +672,8 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
      */
     open override func updateAssigneeOnlineStatus(userId: String) {
         super.updateAssigneeOnlineStatus(userId: userId)
-        let (ConversationAssignee, _) = conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId)
-        guard userId == ConversationAssignee?.userId else {
+        let (conversationAssignee, _) = conversationDetail.conversationAssignee(groupId: viewModel.channelKey, userId: viewModel.contactId)
+        guard userId == conversationAssignee?.userId else {
             return
         }
         updateAssigneeDetails()
