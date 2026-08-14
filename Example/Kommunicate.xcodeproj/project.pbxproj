@@ -58,6 +58,7 @@
 		1AD224B2222E92DE00184112 /* ConversationDetailMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDetailMock.swift; sourceTree = "<group>"; };
 		1AD224B4222E935900184112 /* KMConversationViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KMConversationViewControllerTests.swift; sourceTree = "<group>"; };
 		1AFB913021A3E1CD00652BCE /* ConversationVCNavBarSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationVCNavBarSnapshotTests.swift; sourceTree = "<group>"; };
+		5F5B4FEA302F59CD00BC7297 /* Kommunicate_Example.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Kommunicate_Example.xctestplan; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* Kommunicate_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kommunicate_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -139,6 +140,7 @@
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
+				5F5B4FEA302F59CD00BC7297 /* Kommunicate_Example.xctestplan */,
 				8206968B2D7ACB8400D006DA /* .swiftlint.yml */,
 				8B68A6F72051551F00BF6C22 /* Kommunicate_Example.entitlements */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
