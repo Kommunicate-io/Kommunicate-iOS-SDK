@@ -46,14 +46,17 @@ class KommunicateTests: XCTestCase {
         }
     }
 
-    override func setUp() {
-        super.setUp()
-        let appID = testAppID()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        guard let appID = testAppID() else {
+            throw XCTSkip("Set KOMMUNICATE_APP_ID or TestAppId to run Kommunicate tests.")
+        }
+
         KommunicateMock.setup(applicationId: appID)
         Kommunicate.setup(applicationId: appID)
     }
 
-    private func testAppID() -> String {
+    private func testAppID() -> String? {
         for bundle in Bundle.allBundles {
             for key in ["KOMMUNICATE_APP_ID", "TestAppId"] {
                 if let value = bundle.object(forInfoDictionaryKey: key) as? String,
@@ -62,7 +65,7 @@ class KommunicateTests: XCTestCase {
                 }
             }
         }
-        return "<SET_YOUR_APP_ID>"
+        return nil
     }
 
     private func isValidAppID(_ value: String) -> Bool {
@@ -82,7 +85,6 @@ class KommunicateTests: XCTestCase {
 
     func testCreateAndlaunchConversation() {
         let dummyViewController = UIViewController()
-        KommunicateMock.setup(applicationId: testAppID())
 
          KommunicateMock.registerUserAsVisitor { response, error in
              if let error = error {
@@ -118,8 +120,6 @@ class KommunicateTests: XCTestCase {
     func testCreateConversationWithCustomData() {
         KommunicateMock.applozicClientType = KommunicateClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
-        
-        KommunicateMock.setup(applicationId: testAppID())
         
         let kmConversation = KMConversationBuilder()
             .useLastConversation(false)
@@ -161,8 +161,6 @@ class KommunicateTests: XCTestCase {
     func testCreateAndLaunchConversationWithCustomData() {
         KommunicateMock.applozicClientType = KommunicateClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
-        
-        KommunicateMock.setup(applicationId: testAppID())
         
         let kmConversation = KMConversationBuilder()
             .useLastConversation(false)
