@@ -33,7 +33,8 @@ class KMAppSettingService {
             return
         }
 
-        if let cacheAppSettingData = Kommunicate.appSettingCache.getItem(forKey: appSettingCacheMemoryKey), !forceRefresh {
+        let cacheKey = appSettingCacheKey(for: applicationKey)
+        if let cacheAppSettingData = Kommunicate.appSettingCache.getItem(forKey: cacheKey), !forceRefresh {
             completion(.success(cacheAppSettingData))
             return
         }
@@ -52,7 +53,7 @@ class KMAppSettingService {
                 }
                 do {
                     let appSetting = try appSettingResponse.appSettings()
-                    Kommunicate.appSettingCache.setItem(forKey: self.appSettingCacheMemoryKey, value: appSetting, expiry: self.cacheTimeInterval)
+                    Kommunicate.appSettingCache.setItem(forKey: cacheKey, value: appSetting, expiry: self.cacheTimeInterval)
                     completion(.success(appSetting))
                 } catch let error as KMAppSettingsError {
                     completion(.failure(error))
@@ -113,6 +114,10 @@ class KMAppSettingService {
         /// Clearing the app navigationBar color
         let navigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [KMChatBaseNavigationViewController.self])
         navigationBarProxy.barTintColor = nil
+    }
+
+    private func appSettingCacheKey(for applicationKey: String) -> String {
+        return "\(appSettingCacheMemoryKey)_\(applicationKey)"
     }
 
     private func setupDefaultSettings(primaryColor: String = UIColor.background(.primary).toHexString()) {
