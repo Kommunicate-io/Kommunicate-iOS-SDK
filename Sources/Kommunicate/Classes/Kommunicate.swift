@@ -396,9 +396,14 @@ open class Kommunicate: NSObject, Localizable {
     }
 
     private class func registerNewUser(_ kmUser: KMUser, isVisitor: Bool, completion: @escaping (_ response: ALRegistrationResponse?, _ error: NSError?) -> Void) {
-        
+        guard let applicationKey = KMUserDefaultHandler.getApplicationKey()?.trimmingCharacters(in: .whitespacesAndNewlines), !applicationKey.isEmpty else {
+            let errorPass = NSError(domain: "Kommunicate App ID is missing. Call Kommunicate.setup(applicationId:) before registration.", code: 0, userInfo: nil)
+            completion(nil, errorPass)
+            return
+        }
+
         let kmAppSetting = KMAppSettingService()
-        kmAppSetting.appSetting(forceRefresh: true) { result in
+        kmAppSetting.appSetting(applicationKey: applicationKey, forceRefresh: true) { result in
             switch result {
             case let .success(appSetting):
                 DispatchQueue.main.async {

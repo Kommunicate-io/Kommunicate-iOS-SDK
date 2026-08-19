@@ -46,15 +46,31 @@ class KommunicateTests: XCTestCase {
         }
     }
 
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        guard let appID = testAppID() else {
+            throw XCTSkip("Set KOMMUNICATE_APP_ID or TestAppId to run Kommunicate tests.")
+        }
+
+        KommunicateMock.setup(applicationId: appID)
+        Kommunicate.setup(applicationId: appID)
+    }
+
+    private func testAppID() -> String? {
         for bundle in Bundle.allBundles {
-            if let KMAppID = bundle.object(forInfoDictionaryKey:  "KOMMUNICATE_APP_ID") as? String {
-                KommunicateMock.setup(applicationId: KMAppID)
-                Kommunicate.setup(applicationId: KMAppID)
+            for key in ["KOMMUNICATE_APP_ID", "TestAppId"] {
+                if let value = bundle.object(forInfoDictionaryKey: key) as? String,
+                   isValidAppID(value) {
+                    return value
+                }
             }
         }
+        return nil
+    }
+
+    private func isValidAppID(_ value: String) -> Bool {
+        let trimmedValue = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        return !trimmedValue.isEmpty && !trimmedValue.hasPrefix("$(") && !trimmedValue.hasPrefix("<")
     }
 
     func testRandomId() {
@@ -69,11 +85,6 @@ class KommunicateTests: XCTestCase {
 
     func testCreateAndlaunchConversation() {
         let dummyViewController = UIViewController()
-        for bundle in Bundle.allBundles {
-             if let value = bundle.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
-                 KommunicateMock.setup(applicationId: value)
-             }
-         }
 
          KommunicateMock.registerUserAsVisitor { response, error in
              if let error = error {
@@ -109,13 +120,6 @@ class KommunicateTests: XCTestCase {
     func testCreateConversationWithCustomData() {
         KommunicateMock.applozicClientType = KommunicateClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
-        
-        for bundle in Bundle.allBundles {
-             if let value = bundle.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
-                 NSLog("kommunicate_app_id : AppID Found in file. \(value)")
-                 KommunicateMock.setup(applicationId: value)
-             }
-        }
         
         let kmConversation = KMConversationBuilder()
             .useLastConversation(false)
@@ -157,12 +161,6 @@ class KommunicateTests: XCTestCase {
     func testCreateAndLaunchConversationWithCustomData() {
         KommunicateMock.applozicClientType = KommunicateClientMock.self
         let expectation = self.expectation(description: "Completion handler called")
-        
-        for bundle in Bundle.allBundles {
-             if let value = bundle.object(forInfoDictionaryKey: "KOMMUNICATE_APP_ID") as? String {
-                 KommunicateMock.setup(applicationId: value)
-             }
-        }
         
         let kmConversation = KMConversationBuilder()
             .useLastConversation(false)

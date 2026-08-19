@@ -24,12 +24,17 @@ class KMAppSettingService {
      - App Launch Behavior: Upon app launch, real-time data is fetched as the cache is cleared during app closure or termination.
      */
     func appSetting(
-        applicationKey: String = KMUserDefaultHandler.getApplicationKey(),
+        applicationKey: String? = KMUserDefaultHandler.getApplicationKey(),
         forceRefresh: Bool = false,
         completion: @escaping (Result<AppSetting, KMAppSettingsError>) -> Void
     ) {
-        
-        if let cacheAppSettingData = Kommunicate.appSettingCache.getItem(forKey: appSettingCacheMemoryKey), !forceRefresh {
+        guard let applicationKey = applicationKey?.trimmingCharacters(in: .whitespacesAndNewlines), !applicationKey.isEmpty else {
+            completion(.failure(.missingApplicationKey))
+            return
+        }
+
+        let cacheKey = appSettingCacheKey(for: applicationKey)
+        if let cacheAppSettingData = Kommunicate.appSettingCache.getItem(forKey: cacheKey), !forceRefresh {
             completion(.success(cacheAppSettingData))
             return
         }
@@ -48,7 +53,7 @@ class KMAppSettingService {
                 }
                 do {
                     let appSetting = try appSettingResponse.appSettings()
-                    Kommunicate.appSettingCache.setItem(forKey: self.appSettingCacheMemoryKey, value: appSetting, expiry: self.cacheTimeInterval)
+                    Kommunicate.appSettingCache.setItem(forKey: cacheKey, value: appSetting, expiry: self.cacheTimeInterval)
                     completion(.success(appSetting))
                 } catch let error as KMAppSettingsError {
                     completion(.failure(error))
@@ -109,6 +114,10 @@ class KMAppSettingService {
         /// Clearing the app navigationBar color
         let navigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [KMChatBaseNavigationViewController.self])
         navigationBarProxy.barTintColor = nil
+    }
+
+    private func appSettingCacheKey(for applicationKey: String) -> String {
+        return "\(appSettingCacheMemoryKey)_\(applicationKey)"
     }
 
     private func setupDefaultSettings(primaryColor: String = UIColor.background(.primary).toHexString()) {

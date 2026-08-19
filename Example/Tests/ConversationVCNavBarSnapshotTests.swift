@@ -10,6 +10,7 @@ import KommunicateCore_iOS_SDK
 import Nimble
 import Nimble_Snapshots
 import Quick
+import UIKit
 @testable import Kommunicate
 
 class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
@@ -68,7 +69,12 @@ class ConversationVCNavBarSnapshotTests: QuickSpec, NavigationBarCallbacks {
     func setupAppearance() {
         let navigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [KMBaseNavigationViewController.self])
         navigationBarProxy.tintColor = UIColor.red
-        navigationBarProxy.barTintColor = UIColor(236, green: 239, blue: 241)
+        navigationBarProxy.barTintColor = UIColor(
+            red: 236.0 / 255.0,
+            green: 239.0 / 255.0,
+            blue: 241.0 / 255.0,
+            alpha: 1.0
+        )
         navigationBarProxy.titleTextAttributes = [
             .foregroundColor: UIColor.blue,
             .font: UIFont.boldSystemFont(ofSize: 16),

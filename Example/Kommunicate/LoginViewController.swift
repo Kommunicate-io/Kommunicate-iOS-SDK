@@ -28,7 +28,7 @@ class LoginViewController: UIViewController, KMPreChatFormViewControllerDelegate
             super.viewDidLoad()
             setAppIdFromArgs() // Only for UI tests
             loginAsVisitorButton.layer.borderWidth = 1
-            loginAsVisitorButton.layer.borderColor = UIColor(hexString: "1588B2")?.cgColor
+            loginAsVisitorButton.layer.borderColor = UIColor(hexString: "1588B2").cgColor
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
 
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)

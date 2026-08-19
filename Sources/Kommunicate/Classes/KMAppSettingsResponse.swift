@@ -76,5 +76,6 @@ extension KMAppSettingsResponse {
 enum KMAppSettingsError: LocalizedError {
     case invalidCodeValue
     case notFound
+    case missingApplicationKey
     case api(_ error: APIError)
 }

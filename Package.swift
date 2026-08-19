@@ -13,12 +13,25 @@ let package = Package(
         ),
     ],
     dependencies: [
-            .package(name: "KommunicateChatUI-iOS-SDK", url: "https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git", from: "1.5.5"),
+        .package(
+                name: "KommunicateChatUI-iOS-SDK",
+                url: "https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git",
+                from: "1.5.5"
+            ),
+            .package(
+                name: "KommunicateCore-iOS-SDK",
+                url: "https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git",
+                from: "1.3.2"
+            ),
     ],
     targets: [
         .target(
             name: "Kommunicate",
-            dependencies: [.product(name: "KommunicateChatUI-iOS-SDK", package: "KommunicateChatUI-iOS-SDK")],
+            dependencies: [
+                .product(name: "KommunicateChatUI-iOS-SDK", package: "KommunicateChatUI-iOS-SDK"),
+                .product(name: "RichMessageKit", package: "KommunicateChatUI-iOS-SDK"),
+                .product(name: "KommunicateCore_iOS_SDK", package: "KommunicateCore-iOS-SDK"),
+            ],
             path: "Sources",
             resources: [.process("Resources")]
         ),

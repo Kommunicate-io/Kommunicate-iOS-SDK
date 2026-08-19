@@ -6,6 +6,7 @@
 //  Copyright © 2019 CocoaPods. All rights reserved.
 //
 
+import Foundation
 import KommunicateChatUI_iOS_SDK
 import Nimble
 import Quick

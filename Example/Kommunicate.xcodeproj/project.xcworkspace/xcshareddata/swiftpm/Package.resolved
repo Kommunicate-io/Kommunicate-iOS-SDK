@@ -1,0 +1,141 @@
+{
+  "originHash" : "838ec339cc23a3d9845321c98b63c6315fcc26889b2d7f1a7373ba04eaad8059",
+  "pins" : [
+    {
+      "identity" : "chat_providers_sdk_ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/zendesk/chat_providers_sdk_ios",
+      "state" : {
+        "revision" : "cd8f46c012b33fed262fe70a0bae0da88c25cbdf",
+        "version" : "5.0.0"
+      }
+    },
+    {
+      "identity" : "cwlcatchexception",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mattgallagher/CwlCatchException.git",
+      "state" : {
+        "revision" : "07b2ba21d361c223e25e3c1e924288742923f08c",
+        "version" : "2.2.1"
+      }
+    },
+    {
+      "identity" : "cwlpreconditiontesting",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mattgallagher/CwlPreconditionTesting.git",
+      "state" : {
+        "revision" : "0139c665ebb45e6a9fbdb68aabfd7c39f3fe0071",
+        "version" : "2.2.2"
+      }
+    },
+    {
+      "identity" : "ios-snapshot-test-case",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/uber/ios-snapshot-test-case.git",
+      "state" : {
+        "revision" : "7b10770333a961be6e5a41c9ce04b8c6d3990126",
+        "version" : "8.0.0"
+      }
+    },
+    {
+      "identity" : "iosdropdown",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jriosdev/iOSDropDown.git",
+      "state" : {
+        "revision" : "945c4f1945ed37a31055e812a5ee11a3d06e88ab",
+        "version" : "0.4.0"
+      }
+    },
+    {
+      "identity" : "kingfisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Kingfisher.git",
+      "state" : {
+        "revision" : "277f1ab2c6664b19b4a412e32b094b201e2d5757",
+        "version" : "7.10.0"
+      }
+    },
+    {
+      "identity" : "kommunicatechatui-ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git",
+      "state" : {
+        "revision" : "3ab247a4948f88c105263d0dbeb9f45512749045",
+        "version" : "1.5.5"
+      }
+    },
+    {
+      "identity" : "kommunicatecore-ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Kommunicate-io/KommunicateCore-iOS-SDK.git",
+      "state" : {
+        "revision" : "19252846014a6f27349e2bc33d2b5ee434ad090c",
+        "version" : "1.3.2"
+      }
+    },
+    {
+      "identity" : "nimble",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Quick/Nimble",
+      "state" : {
+        "branch" : "main",
+        "revision" : "727f75d91a0f7501d08d938966d17e6728b76a2a"
+      }
+    },
+    {
+      "identity" : "nimble-snapshots",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ashfurrow/Nimble-Snapshots",
+      "state" : {
+        "revision" : "d4a2589c59c31a996aba1fb6f64c946ec04cb252",
+        "version" : "9.10.0"
+      }
+    },
+    {
+      "identity" : "quick",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Quick/Quick",
+      "state" : {
+        "branch" : "main",
+        "revision" : "2b4547b230e94d84320724fd6df65e418b058be2"
+      }
+    },
+    {
+      "identity" : "swift-algorithms",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-algorithms.git",
+      "state" : {
+        "revision" : "87e50f483c54e6efd60e885f7f5aa946cee68023",
+        "version" : "1.2.1"
+      }
+    },
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser.git",
+      "state" : {
+        "revision" : "6a52f3251125d74daf04fcbd5e6f08a75d074382",
+        "version" : "1.8.2"
+      }
+    },
+    {
+      "identity" : "swift-numerics",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-numerics.git",
+      "state" : {
+        "revision" : "0c0290ff6b24942dadb83a929ffaaa1481df04a2",
+        "version" : "1.1.1"
+      }
+    },
+    {
+      "identity" : "swipecellkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwipeCellKit/SwipeCellKit.git",
+      "state" : {
+        "revision" : "7219cad3098637176ace311510d11467dbfb9bb0",
+        "version" : "2.7.1"
+      }
+    }
+  ],
+  "version" : 3
+}
