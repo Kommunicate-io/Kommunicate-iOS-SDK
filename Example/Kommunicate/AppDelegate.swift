@@ -130,7 +130,7 @@
             // App appearance
             let navigationBarProxy = UINavigationBar.appearance()
             let backgroundColor = UIColor.white
-            let titleAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+            let titleAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
             appearance.backgroundColor = backgroundColor

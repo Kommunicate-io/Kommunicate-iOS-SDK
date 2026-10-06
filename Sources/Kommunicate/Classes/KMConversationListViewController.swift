@@ -276,6 +276,7 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         appSettingsService.appSetting { [weak self] result in
             guard case let .success(appSettings) = result else { return }
             appSettingsService.updateAppsettings(appSettingsResponse: appSettings)
+            appSettingsService.updateChatWidgetAppsettings(chatWidgetResponse: appSettings.chatWidget)
             DispatchQueue.main.async {
                 self?.updateConversationStartButtons()
             }
@@ -329,13 +330,11 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
             noConversationLabel.topAnchor.constraint(equalTo: startNewButton.bottomAnchor, constant: 10.0).isActive = true
         }
        
-        if !(configuration.hideBottomStartNewConversationButton || isSingleThreadedEnabled) {
-            conversationStartButtonContainer.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
-            conversationStartButtonContainer.widthAnchor.constraint(equalToConstant: Padding.StartNewConversationButton.width).isActive = true
-            conversationStartButtonContainer.heightAnchor.constraint(equalToConstant: Padding.StartNewConversationButton.height).isActive = true
-            conversationStartButtonContainer.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: Padding.StartNewConversationButton.bottom).isActive = true
-            backgroundView.bringSubviewToFront(conversationStartButtonContainer)
-        }
+        conversationStartButtonContainer.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
+        conversationStartButtonContainer.widthAnchor.constraint(equalToConstant: Padding.StartNewConversationButton.width).isActive = true
+        conversationStartButtonContainer.heightAnchor.constraint(equalToConstant: Padding.StartNewConversationButton.height).isActive = true
+        conversationStartButtonContainer.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: Padding.StartNewConversationButton.bottom).isActive = true
+        backgroundView.bringSubviewToFront(conversationStartButtonContainer)
     
         conversationListTableViewController.view.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
         conversationListTableViewController.view.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true

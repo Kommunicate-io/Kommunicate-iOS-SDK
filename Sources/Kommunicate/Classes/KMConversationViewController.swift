@@ -134,6 +134,9 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavigation()
+        guard let channelId = viewModel.channelKey else { return }
+        addAppStateObservers()
+        sendConversationOpenNotificationIfNeeded(channelId: channelId)
     }
 
     public required init(configuration: KMChatConfiguration,
@@ -159,9 +162,7 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
         addViewConstraints()
         messageCharLimitManager.delegate = self
         botCharLimitManager.delegate = self
-        guard let channelId = viewModel.channelKey else { return }
-        addAppStateObservers()
-        sendConversationOpenNotificationIfNeeded(channelId: channelId)
+        guard viewModel.channelKey != nil else { return }
         setupConversationClosedView()
     }
     
