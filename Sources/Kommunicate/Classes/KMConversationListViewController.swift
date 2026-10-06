@@ -19,6 +19,8 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         static let okButton = localizedString(forKey: "OkButton", fileName: filename)
         static let waitMessage = localizedString(forKey: "WaitMessage", fileName: filename)
         static let startNewConversationTitle = localizedString(forKey: "StartNewConversationButtonTitle", fileName: filename)
+        static let chatTitle = localizedString(forKey: "VoiceModeChatButtonTitle", fileName: filename)
+        static let voiceTitle = localizedString(forKey: "VoiceModeVoiceButtonTitle", fileName: filename)
     }
 
     let faqIdentifier = 11_223_346
@@ -75,10 +77,7 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
     lazy var startNewConversationBottomButton: UIButton = {
         let button = UIButton(type: .custom)
         button.addTarget(self, action: #selector(compose), for: .touchUpInside)
-        let lightColor = kmConversationViewConfiguration.startNewConversationButtonBackgroundColor ?? KMChatAppSettingsUserDefaults().getAppBarTintColor()
-        let darkColor = kmConversationViewConfiguration.startNewConversationButtonDarkBackgroundColor ?? KMChatAppSettingsUserDefaults().getAppBarTintColor()
-        let backgroundColor = UIColor.kmDynamicColor(light: lightColor, dark: darkColor)
-        button.backgroundColor = backgroundColor
+        button.backgroundColor = .clear
         button.setTitle(LocalizedText.startNewConversationTitle, for: .normal)
         let darkTitleColor = kmConversationViewConfiguration.startNewConversationButtonDarkTextColor ?? kmConversationViewConfiguration.startNewConversationButtonTextColor
         button.setTitleColor(UIColor.kmDynamicColor(light: kmConversationViewConfiguration.startNewConversationButtonTextColor, dark: darkTitleColor), for: .normal)
@@ -89,6 +88,59 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         return button
     }()
     
+    lazy var startVoiceConversationBottomButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.addTarget(self, action: #selector(composeVoice), for: .touchUpInside)
+        button.backgroundColor = .clear
+        let darkTitleColor = kmConversationViewConfiguration.startNewConversationButtonDarkTextColor ?? kmConversationViewConfiguration.startNewConversationButtonTextColor
+        button.setTitleColor(
+            UIColor.kmDynamicColor(light: kmConversationViewConfiguration.startNewConversationButtonTextColor, dark: darkTitleColor),
+            for: .normal
+        )
+        button.setTitle(LocalizedText.voiceTitle, for: .normal)
+        button.accessibilityIdentifier = "startVoiceConversationButton"
+        return button
+    }()
+
+    private let conversationStartButtonDivider: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.white.withAlphaComponent(0.42)
+        return view
+    }()
+
+    lazy var conversationStartButtonStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [startNewConversationBottomButton, startVoiceConversationBottomButton])
+        stack.axis = .horizontal
+        stack.spacing = 0
+        stack.distribution = .fillEqually
+        return stack
+    }()
+
+    lazy var conversationStartButtonContainer: UIView = {
+        let view = UIView()
+        let lightColor = kmConversationViewConfiguration.startNewConversationButtonBackgroundColor ?? KMChatAppSettingsUserDefaults().getAppBarTintColor()
+        let darkColor = kmConversationViewConfiguration.startNewConversationButtonDarkBackgroundColor ?? KMChatAppSettingsUserDefaults().getAppBarTintColor()
+        view.backgroundColor = UIColor.kmDynamicColor(light: lightColor, dark: darkColor)
+        view.layer.cornerRadius = Padding.StartNewConversationButton.cornorRadius
+        view.clipsToBounds = true
+
+        conversationStartButtonStack.translatesAutoresizingMaskIntoConstraints = false
+        conversationStartButtonDivider.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(conversationStartButtonStack)
+        view.addSubview(conversationStartButtonDivider)
+        NSLayoutConstraint.activate([
+            conversationStartButtonStack.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            conversationStartButtonStack.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            conversationStartButtonStack.topAnchor.constraint(equalTo: view.topAnchor),
+            conversationStartButtonStack.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            conversationStartButtonDivider.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            conversationStartButtonDivider.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
+            conversationStartButtonDivider.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
+            conversationStartButtonDivider.widthAnchor.constraint(equalToConstant: 1)
+        ])
+        return view
+    }()
+
     lazy var noConversationLabel: UILabel = {
         let label = UILabel()
         label.text = localizedString(forKey: "NoConversationsLabelText", fileName: configuration.localizedStringFileName)
@@ -187,6 +239,8 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         super.viewWillAppear(animated)
         edgesForExtendedLayout = []
         viewModel.prepareController(dbService: dbService)
+        updateConversationStartButtons()
+        refreshVoiceModeAvailability()
     }
 
     override open func viewDidLoad() {
@@ -217,13 +271,43 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         setupViewAndConstraints()
     }
 
+    private func refreshVoiceModeAvailability() {
+        let appSettingsService = KMAppSettingService()
+        appSettingsService.appSetting { [weak self] result in
+            guard case let .success(appSettings) = result else { return }
+            appSettingsService.updateAppsettings(appSettingsResponse: appSettings)
+            DispatchQueue.main.async {
+                self?.updateConversationStartButtons()
+            }
+        }
+    }
+
+    private func updateConversationStartButtons() {
+        let hidden = configuration.hideBottomStartNewConversationButton || isSingleThreadedEnabled
+        conversationStartButtonContainer.isHidden = hidden
+        guard !hidden else { return }
+
+        startNewConversationBottomButton.isHidden = false
+        let voiceAvailable = KMCoreUserDefaultsHandler.isVoiceChatEnabled()
+            && !KMCoreSettings.isAgentAppConfigurationEnabled()
+        startVoiceConversationBottomButton.isHidden = !voiceAvailable
+        conversationStartButtonDivider.isHidden = !voiceAvailable
+        startNewConversationBottomButton.setTitle(
+            voiceAvailable ? LocalizedText.chatTitle : LocalizedText.startNewConversationTitle,
+            for: .normal
+        )
+        startNewConversationBottomButton.accessibilityIdentifier = voiceAvailable
+            ? "startChatConversationButton"
+            : "startNewConversationButton"
+    }
+
     func setupViewAndConstraints() {
         view.isUserInteractionEnabled = false
         var image = kmConversationViewConfiguration.startNewButtonIcon?.scale(with: CGSize(width: Padding.StartNewButton.width, height: Padding.StartNewButton.height))
         image = image?.withRenderingMode(.alwaysTemplate)
         startNewButton.setImage(image, for: .normal)
 
-        backgroundView.addViewsForAutolayout(views: [startNewButton, noConversationLabel, startNewConversationBottomButton, conversationListTableViewController.view])
+        backgroundView.addViewsForAutolayout(views: [startNewButton, noConversationLabel, conversationStartButtonContainer, conversationListTableViewController.view])
         view.addViewsForAutolayout(views: [backgroundView])
 
         activityIndicator.color = UIColor.gray
@@ -246,12 +330,11 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         }
        
         if !(configuration.hideBottomStartNewConversationButton || isSingleThreadedEnabled) {
-            startNewConversationBottomButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
-            startNewConversationBottomButton.widthAnchor.constraint(equalToConstant: Padding.StartNewConversationButton.width).isActive = true
-            startNewConversationBottomButton.heightAnchor.constraint(equalToConstant: Padding.StartNewConversationButton.height).isActive = true
-            startNewConversationBottomButton.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: Padding.StartNewConversationButton.bottom).isActive = true
-            startNewConversationBottomButton.layer.cornerRadius = Padding.StartNewConversationButton.cornorRadius
-            backgroundView.bringSubviewToFront(startNewConversationBottomButton)
+            conversationStartButtonContainer.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
+            conversationStartButtonContainer.widthAnchor.constraint(equalToConstant: Padding.StartNewConversationButton.width).isActive = true
+            conversationStartButtonContainer.heightAnchor.constraint(equalToConstant: Padding.StartNewConversationButton.height).isActive = true
+            conversationStartButtonContainer.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: Padding.StartNewConversationButton.bottom).isActive = true
+            backgroundView.bringSubviewToFront(conversationStartButtonContainer)
         }
     
         conversationListTableViewController.view.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
@@ -447,7 +530,7 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         )
     }
 
-    func launchChat(groupId: NSNumber?) {
+    func launchChat(groupId: NSNumber?, startVoiceMode: Bool = false, voiceModeLaunchTime: TimeInterval = 0) {
         let conversationViewModel = viewModel.conversationViewModelOf(type: conversationViewModelType, contactId: nil, channelId: groupId, conversationId: nil, localizedStringFileName: localizedStringFileName)
 
         let viewController: KMConversationViewController!
@@ -460,6 +543,7 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
             viewController.viewModel.contactId = nil
         }
         viewController.individualLaunch = false
+        viewController.setStartVoiceModeOnOpen(startVoiceMode, launchTime: voiceModeLaunchTime)
         push(conversationVC: viewController, with: conversationViewModel)
     }
 
@@ -471,7 +555,11 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
     }
 
     @objc func compose() {
-        createConversationAndLaunch()
+        createConversationAndLaunch(startVoiceMode: false)
+    }
+
+    @objc private func composeVoice() {
+        createConversationAndLaunch(startVoiceMode: true)
     }
 
     func sync(message: KMCoreMessage) {
@@ -529,9 +617,7 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         view.isUserInteractionEnabled = true
         conversationListTableViewController.tableView.isHidden = show
         noConversationLabel.isHidden = !show
-        if configuration.hideBottomStartNewConversationButton || isSingleThreadedEnabled {
-            startNewConversationBottomButton.isHidden = true
-        }
+        updateConversationStartButtons()
         startNewButton.isHidden = configuration.hideEmptyStateStartNewButtonInConversationList
     }
 
@@ -552,7 +638,8 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         present(alert, animated: true, completion: nil)
     }
 
-    private func createConversationAndLaunch() {
+    private func createConversationAndLaunch(startVoiceMode: Bool) {
+        let voiceModeLaunchTime = startVoiceMode ? Date().timeIntervalSince1970 * 1000 : 0
         view.isUserInteractionEnabled = false
         let alertView = displayAlert(viewController: self)
         
@@ -592,7 +679,11 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
                             print("Failed to launch the conversation")
                             return
                         }
-                        self.launchChat(groupId: alChannel.key)
+                        self.launchChat(
+                            groupId: alChannel.key,
+                            startVoiceMode: startVoiceMode,
+                            voiceModeLaunchTime: voiceModeLaunchTime
+                        )
                     })
                 })
             case .failure:

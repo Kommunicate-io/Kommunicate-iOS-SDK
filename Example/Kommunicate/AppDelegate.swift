@@ -129,10 +129,20 @@
         func setUpNavigationBarAppearance() {
             // App appearance
             let navigationBarProxy = UINavigationBar.appearance()
+            let backgroundColor = UIColor.white
+            let titleAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = backgroundColor
+            appearance.titleTextAttributes = titleAttributes
+
             navigationBarProxy.isTranslucent = false
-            navigationBarProxy.barTintColor = UIColor(red: 0.93, green: 0.94, blue: 0.95, alpha: 1.0) // light nav blue
+            navigationBarProxy.barTintColor = backgroundColor
             navigationBarProxy.tintColor = .white
-            navigationBarProxy.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+            navigationBarProxy.titleTextAttributes = titleAttributes
+            navigationBarProxy.standardAppearance = appearance
+            navigationBarProxy.scrollEdgeAppearance = appearance
+            navigationBarProxy.compactAppearance = appearance
         }
     }
 #endif
