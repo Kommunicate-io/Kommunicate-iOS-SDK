@@ -133,6 +133,10 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavigation()
+
+        if isMovingToParent || navigationController?.isBeingPresented == true {
+            Kommunicate.refreshAppsettings(forceRefresh: true)
+        }
     }
 
     public required init(configuration: KMChatConfiguration,
