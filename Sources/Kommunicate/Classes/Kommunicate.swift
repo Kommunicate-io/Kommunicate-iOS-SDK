@@ -516,14 +516,15 @@ open class Kommunicate: NSObject, Localizable {
         })
     }
     
-    /// Fetches appsettings, configuration set on dashbaord
-    open class func refreshAppsettings() {
+    /// Fetches app settings configured on the dashboard.
+    open class func refreshAppsettings(forceRefresh: Bool = false) {
         let appSettingsService = KMAppSettingService()
-        appSettingsService.appSetting {
+        appSettingsService.appSetting(forceRefresh: forceRefresh) {
             result in
             switch result {
             case let .success(appSettings):
                 appSettingsService.updateAppsettings(appSettingsResponse: appSettings)
+                appSettingsService.updateChatWidgetAppsettings(chatWidgetResponse: appSettings.chatWidget)
                 if let chatWidget = appSettings.chatWidget,
                    let isSingleThreaded = chatWidget.isSingleThreaded,
                    isSingleThreaded != KMCoreSettings.getIsSingleThreadedEnabled() {

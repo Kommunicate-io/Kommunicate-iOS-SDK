@@ -50,6 +50,12 @@ struct ChatWidgetResponse: Decodable {
     let csatRatingBase: Int?
     let disableChatWidget: Bool?
     let botTypingIndicatorInterval: Int?
+    let voiceInput: Bool?
+    let speechToText: Bool?
+
+    var isSpeechToTextEnabled: Bool {
+        return voiceInput ?? speechToText ?? false
+    }
 }
 
 struct DefaultUploadOverride: Decodable {

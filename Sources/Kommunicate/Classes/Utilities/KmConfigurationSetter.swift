@@ -22,6 +22,7 @@ public class KMConfigurationSetter {
             applyNavigationBarSettings(from: settingDict)
             applyAttachmentSettings(from: settingDict)
             applyButtonSettings(from: settingDict)
+            applySpeechToTextSettings(from: settingDict)
             applyGeneralSettings(from: settingDict)
 
         } catch {
@@ -97,6 +98,21 @@ public class KMConfigurationSetter {
         }
     }
     
+    private class func applySpeechToTextSettings(from settings: [String: Any]) {
+        guard let speechToText = settings["speechToText"] as? [String: Any] else { return }
+
+        if let enabled = speechToText["enabled"] as? Bool {
+            Kommunicate.defaultConfiguration.enableSpeechToTextInConversation = enabled
+        }
+        if let sendMessageOnSpeechEnd = speechToText["sendMessageOnSpeechEnd"] as? Bool {
+            Kommunicate.defaultConfiguration.sendMessageOnSpeechEnd = sendMessageOnSpeechEnd
+        }
+        if let languageCode = speechToText["languageCode"] as? String,
+           !languageCode.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            Kommunicate.defaultConfiguration.speechToTextLanguageCode = languageCode
+        }
+    }
+
     private class func applyGeneralSettings(from settings: [String: Any]) {
         let booleanSettings: [String: (Bool) -> Void] = [
             "enableFaqOption": { Kommunicate.defaultConfiguration.hideFaqButtonInConversationList = !$0 },

@@ -104,7 +104,14 @@ class KMAppSettingService {
        appSettings.sasT = decodedSasToken(from: chatWidget.sasT)
        appSettings.csatRatingBase = chatWidget.csatRatingBase ?? 3
        appSettings.botTypingIndicatorInterval = chatWidget.botTypingIndicatorInterval ?? 0
+       appSettings.speechToTextEnabled = chatWidget.isSpeechToTextEnabled
        appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
+       DispatchQueue.main.async {
+           NotificationCenter.default.post(
+               name: Notification.Name("KMSpeechToTextSettingDidChange"),
+               object: nil
+           )
+       }
     }
 
     func clearAppSettingsData() {
