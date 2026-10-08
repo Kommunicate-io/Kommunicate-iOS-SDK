@@ -81,6 +81,7 @@ class KMAppSettingService {
        KMAppUserDefaultHandler.shared.botMessageDelayInterval = chatWidget.botMessageDelayInterval ?? 0
        KMAppUserDefaultHandler.shared.botTypingIndicatorInterval = chatWidget.botTypingIndicatorInterval ?? 0
        KMAppUserDefaultHandler.shared.csatRatingBase = chatWidget.csatRatingBase ?? 3
+       KMCoreUserDefaultsHandler.setVoiceChatEnabled(chatWidget.voiceChat ?? false)
        
        let defaultPrimaryColor = UIColor.background(.primary).toHexString()
        let primaryColor = chatWidget.primaryColor ?? defaultPrimaryColor
@@ -110,6 +111,7 @@ class KMAppSettingService {
     func clearAppSettingsData() {
         /// Clearing the app settings data
         appSettingsUserDefaults.clear()
+        KMCoreUserDefaultsHandler.setVoiceChatEnabled(false)
 
         /// Clearing the app navigationBar color
         let navigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [KMChatBaseNavigationViewController.self])
