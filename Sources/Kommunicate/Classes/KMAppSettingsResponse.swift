@@ -52,6 +52,7 @@ struct ChatWidgetResponse: Decodable {
     let csatRatingBase: Int?
     let disableChatWidget: Bool?
     let botTypingIndicatorInterval: Int?
+    let voiceChat: Bool?
 }
 
 extension ChatWidgetResponse {

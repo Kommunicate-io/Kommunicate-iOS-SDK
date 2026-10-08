@@ -52,7 +52,6 @@ extension KMConversation {
     }
 }
 
-
 /// KMConversationBuilder is used for building KMConversation object
 @objc public class KMConversationBuilder: NSObject {
     private var conversation = KMConversation(userId: KMUserDefaultHandler.getUserId() ?? Kommunicate.randomId())
