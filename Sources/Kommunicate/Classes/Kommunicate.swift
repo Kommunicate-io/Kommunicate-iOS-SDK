@@ -269,6 +269,9 @@ open class Kommunicate: NSObject, Localizable {
         KMCoreUserDefaultsHandler.setApplicationKey(applicationId)
         Kommunicate.shared.defaultChatViewSettings()
         Kommunicate.shared.setupDefaultStyle()
+        if isLoggedIn {
+            refreshAppsettings()
+        }
     }
 
     /**
@@ -517,9 +520,9 @@ open class Kommunicate: NSObject, Localizable {
     }
     
     /// Fetches app settings configured on the dashboard.
-    open class func refreshAppsettings(forceRefresh: Bool = false) {
+    open class func refreshAppsettings() {
         let appSettingsService = KMAppSettingService()
-        appSettingsService.appSetting(forceRefresh: forceRefresh) {
+        appSettingsService.appSetting {
             result in
             switch result {
             case let .success(appSettings):

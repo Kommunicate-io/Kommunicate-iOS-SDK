@@ -154,7 +154,6 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
 
     override open func viewDidLoad() {
         super.viewDidLoad()
-        Kommunicate.refreshAppsettings(forceRefresh: true)
         KMUpdateAssigneeStatus.shared.delegate = self
         customNavigationView.setupAppearance()
 
