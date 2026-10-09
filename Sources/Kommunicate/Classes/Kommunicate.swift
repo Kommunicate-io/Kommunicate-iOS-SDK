@@ -269,6 +269,9 @@ open class Kommunicate: NSObject, Localizable {
         KMCoreUserDefaultsHandler.setApplicationKey(applicationId)
         Kommunicate.shared.defaultChatViewSettings()
         Kommunicate.shared.setupDefaultStyle()
+        if isLoggedIn {
+            refreshAppsettings()
+        }
     }
 
     /**
@@ -516,7 +519,7 @@ open class Kommunicate: NSObject, Localizable {
         })
     }
     
-    /// Fetches appsettings, configuration set on dashbaord
+    /// Fetches app settings configured on the dashboard.
     open class func refreshAppsettings() {
         let appSettingsService = KMAppSettingService()
         appSettingsService.appSetting {
@@ -524,6 +527,7 @@ open class Kommunicate: NSObject, Localizable {
             switch result {
             case let .success(appSettings):
                 appSettingsService.updateAppsettings(appSettingsResponse: appSettings)
+                appSettingsService.updateChatWidgetAppsettings(chatWidgetResponse: appSettings.chatWidget)
                 if let chatWidget = appSettings.chatWidget,
                    let isSingleThreaded = chatWidget.isSingleThreaded,
                    isSingleThreaded != KMCoreSettings.getIsSingleThreadedEnabled() {

@@ -30,6 +30,8 @@
 	<string>Please allow Location Services to determine your location.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>$(PRODUCT_NAME) request audio use</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>$(PRODUCT_NAME) uses speech recognition to convert voice input into message text.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Allow write access</string>
 	<key>NSPhotoLibraryUsageDescription</key>
