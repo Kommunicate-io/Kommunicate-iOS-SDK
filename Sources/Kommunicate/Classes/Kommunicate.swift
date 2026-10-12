@@ -502,7 +502,20 @@ open class Kommunicate: NSObject, Localizable {
 
     /// Logs out the current logged in user and clears all the cache.
     open class func logoutUser(completion: @escaping (Result<String, KMError>) -> Void) {
-        let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
+        guard
+            let applicationId = KMUserDefaultHandler.getApplicationKey(), !applicationId.isEmpty,
+            let userId = KMUserDefaultHandler.getUserId(), !userId.isEmpty,
+            let deviceKey = KMCoreUserDefaultsHandler.getDeviceKeyString(), !deviceKey.isEmpty
+        else {
+            let error = NSError(
+                domain: "Application ID, user ID, and device key are required to log out.",
+                code: 0
+            )
+            completion(.failure(KMError.api(error)))
+            return
+        }
+
+        let applozicClient = applozicClientType.init(applicationKey: applicationId)
         applozicClient?.logoutUser(completion: { error, _ in
             Kommunicate.shared.clearUserDefaults()
         #if canImport(ChatProvidersSDK)
