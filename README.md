@@ -107,6 +107,8 @@ In your app's Info.plist file as `Source code` and paste these permissions anywh
 <string>Allow write access</string>
 ```
 
+> **Migration note:** Apps enabling Speech-to-Text through the dashboard `voiceInput` setting or local SDK configuration must add both `NSMicrophoneUsageDescription` and `NSSpeechRecognitionUsageDescription` to the host app's `Info.plist`. Existing apps that do not enable Speech-to-Text require no changes.
+
 For more information on authentication, push notification, customization, etc, check out our official documentation [here](https://docs.kommunicate.io/docs/ios-installation).
 
 ## AI Integration Availability
