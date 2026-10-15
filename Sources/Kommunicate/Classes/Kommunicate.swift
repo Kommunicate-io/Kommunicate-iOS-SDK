@@ -1749,15 +1749,21 @@ open class Kommunicate: NSObject, Localizable {
     /// Logs out the current logged in user and clears all the cache.
     @available(*, deprecated, message: "Use logoutUser(completion:)")
     @objc open class func logoutUser() {
-        let registerUserClientService = ALRegisterUserClientService()
-        if let _ = KMCoreUserDefaultsHandler.getDeviceKeyString() {
-            registerUserClientService.logout(completionHandler: {
-                _, _ in
-                Kommunicate.shared.clearUserDefaults()
-                KMChatFormDataCache.shared.clearCache()
-                NSLog("Kommunicate logout")
-            })
+        guard
+            let applicationId = KMUserDefaultHandler.getApplicationKey(), !applicationId.isEmpty,
+            let userId = KMUserDefaultHandler.getUserId(), !userId.isEmpty,
+            let deviceKey = KMCoreUserDefaultsHandler.getDeviceKeyString(), !deviceKey.isEmpty
+        else {
+            return
         }
+
+        let registerUserClientService = ALRegisterUserClientService()
+        registerUserClientService.logout(completionHandler: {
+            _, _ in
+            Kommunicate.shared.clearUserDefaults()
+            KMChatFormDataCache.shared.clearCache()
+            NSLog("Kommunicate logout")
+        })
     }
     
     open class func createSettings(settings: String) -> Bool {
