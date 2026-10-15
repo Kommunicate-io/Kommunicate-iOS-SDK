@@ -47,10 +47,18 @@ struct ChatWidgetResponse: Decodable {
     let defaultUploadOverride: DefaultUploadOverride?
     let sasT: String?
     let pseudonymsEnabled: Bool?
+    let voiceInput: Bool?
+    let speechToText: Bool?
     let csatRatingBase: Int?
     let disableChatWidget: Bool?
     let botTypingIndicatorInterval: Int?
     let voiceChat: Bool?
+}
+
+extension ChatWidgetResponse {
+    var isSpeechToTextEnabled: Bool {
+        return voiceInput ?? speechToText ?? false
+    }
 }
 
 struct DefaultUploadOverride: Decodable {

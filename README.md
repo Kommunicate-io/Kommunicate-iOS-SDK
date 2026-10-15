@@ -86,7 +86,7 @@ Note: To test Kommunicate with Swift Package Manager (SPM), please check this Ko
 
 ## Permissions
 
-Add permissions for Camera, Photo Library, Microphone and Location usage.
+Add permissions for Camera, Photo Library, Microphone, Speech Recognition and Location usage.
 
 Note: We won't be asking the users for these permissions unless they use the respective feature. Due to Apple's requirement, we have to add these permissions if we are using any of their APIs related to Camera, Microphone etc.
 
@@ -99,11 +99,15 @@ In your app's Info.plist file as `Source code` and paste these permissions anywh
 <string>Allow location sharing!!</string>
 <key>NSMicrophoneUsageDescription</key>
 <string>Allow MicroPhone</string>
+<key>NSSpeechRecognitionUsageDescription</key>
+<string>Allow speech recognition to convert voice input into message text.</string>
 <key>NSPhotoLibraryUsageDescription</key>
 <string>Allow Photos</string>
 <key>NSPhotoLibraryAddUsageDescription</key>
 <string>Allow write access</string>
 ```
+
+> **Migration note:** Apps enabling Speech-to-Text through the dashboard `voiceInput` setting or local SDK configuration must add both `NSMicrophoneUsageDescription` and `NSSpeechRecognitionUsageDescription` to the host app's `Info.plist`. Existing apps that do not enable Speech-to-Text require no changes.
 
 For more information on authentication, push notification, customization, etc, check out our official documentation [here](https://docs.kommunicate.io/docs/ios-installation).
 
