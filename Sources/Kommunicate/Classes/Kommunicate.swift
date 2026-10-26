@@ -1469,6 +1469,10 @@ open class Kommunicate: NSObject, Localizable {
             showConversationReplacingPreChat(completion: { error in
                 if error != nil {
                     print("Error while launching conversation")
+                    // Let the user retry from the form if it is still shown.
+                    DispatchQueue.main.async {
+                        setPreChatLoading(false)
+                    }
                 }
             })
         })
@@ -1519,17 +1523,21 @@ open class Kommunicate: NSObject, Localizable {
             createConversation(conversation: conversation) { result in
                 switch result {
                 case let .success(conversationId):
-                    replacePreChat { removeCover in
-                        showConversationWith(groupId: conversationId, from: presenter, completionHandler: { success in
-                            removeCover()
-                            completion(success ? nil : KommunicateError.conversationNotPresent)
-                        })
+                    // Replace the form only once the conversation can be opened, so a failure keeps the form for retry.
+                    KMCoreChannelService().getChannelInformation(nil, orClientChannelKey: conversationId) { channel in
+                        guard channel?.key != nil else {
+                            completion(KommunicateError.conversationNotPresent)
+                            return
+                        }
+                        replacePreChat { removeCover in
+                            showConversationWith(groupId: conversationId, from: presenter, completionHandler: { success in
+                                removeCover()
+                                completion(success ? nil : KommunicateError.conversationNotPresent)
+                            })
+                        }
                     }
                 case .failure:
-                    replacePreChat { removeCover in
-                        removeCover()
-                        completion(KommunicateError.conversationCreateFailed)
-                    }
+                    completion(KommunicateError.conversationCreateFailed)
                 }
             }
         })
