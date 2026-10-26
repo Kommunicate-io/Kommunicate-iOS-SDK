@@ -75,6 +75,8 @@ open class CustomPreChatFormViewController: UIViewController {
         self.configuration = configuration
         self.preChatConfiguration = preChatConfiguration
         super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .fullScreen
+        overrideUserInterfaceStyle = .light
         addObservers()
     }
 
@@ -104,12 +106,16 @@ open class CustomPreChatFormViewController: UIViewController {
             frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height),
             localizationFileName: configuration.localizedStringFileName
         )
-        view.backgroundColor = .red
+        formView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.backgroundColor = .white
         view.addSubview(formView)
 
         for (index, subview) in formView.formStackView.arrangedSubviews.enumerated() {
             guard let element = leadArray[index].element, element == CustomPreChatFormViewController.dropDownType else {
-                (subview.subviews[1] as? UITextField)?.delegate = self
+                let textField = subview.subviews[1] as? UITextField
+                textField?.delegate = self
+                textField?.addTarget(self, action: #selector(inputChanged), for: .editingChanged)
+                (textField?.leftView as? UIButton)?.addTarget(self, action: #selector(countryCodeButtonTapped), for: .touchUpInside)
                 continue
             }
 
@@ -133,6 +139,7 @@ open class CustomPreChatFormViewController: UIViewController {
         )
 
         formView.sendInstructionsButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
+        updateStartButtonState()
 
         let tapper = UITapGestureRecognizer(target: view, action: #selector(view.endEditing(_:)))
         tapper.cancelsTouchesInView = false
@@ -156,7 +163,12 @@ open class CustomPreChatFormViewController: UIViewController {
 
                 guard let element = item.element, element == CustomPreChatFormViewController.dropDownType else {
                     if (subview.subviews[0] as? UILabel)?.text == Kommunicate.leadArray[index].field {
-                        resultDict[item.field] = ((subview.subviews[1] as? UITextField)?.text)!
+                        let text = (subview.subviews[1] as? UITextField)?.text ?? ""
+                        if let country = formView.selectedCountries[index], !text.isEmpty {
+                            resultDict[item.field] = country.internationalNumber(text)
+                        } else {
+                            resultDict[item.field] = text
+                        }
                     }
                     continue
                 }
@@ -202,7 +214,10 @@ open class CustomPreChatFormViewController: UIViewController {
 
                 if mandatoryOption == CustomPreChatFormViewController.phone {
                     let isValidNumber: ((String) -> Bool) = { number in
-                        self.preChatConfiguration.phoneNumberRegexPattern != nil ?
+                        if let country = self.formView.selectedCountries[index] {
+                            return country.isValidNumber(number)
+                        }
+                        return self.preChatConfiguration.phoneNumberRegexPattern != nil ?
                             number.matchesWithPattern(self.preChatConfiguration.phoneNumberRegexPattern ?? "") : number.isValidPhoneNumber
                     }
                     if let text = (formView.formStackView.arrangedSubviews[index].subviews[0] as? UILabel)?.text, text == mandatoryOption {
@@ -231,7 +246,76 @@ open class CustomPreChatFormViewController: UIViewController {
                 }
             }
         }
+        if validationError == nil {
+            // Country code fields are validated against the selected country's number format even when optional.
+            for (index, country) in formView.selectedCountries {
+                if let number = (formView.formStackView.arrangedSubviews[index].subviews[1] as? UITextField)?.text,
+                   !number.isEmpty, !country.isValidNumber(number) {
+                    validationError = TextFieldValidationError.invalidPhoneNumber
+                    break
+                }
+            }
+        }
         return validationError != nil ? .failure(validationError!) : .success
+    }
+
+    @objc private func inputChanged() {
+        updateStartButtonState()
+    }
+
+    /// Same as Android: the button stays dimmed and disabled until required fields are filled
+    /// and entered values (e.g. phone numbers for the selected country) are valid.
+    private func updateStartButtonState() {
+        guard let button = formView?.sendInstructionsButton else { return }
+        var isFormComplete = false
+        if case .success = validate() {
+            isFormComplete = true
+        }
+        button.isEnabled = isFormComplete
+        button.alpha = isFormComplete ? 1 : 0.5
+    }
+
+    /// Blocks the form and shows a spinner in the submit button while the user is being registered.
+    func setLoading(_ isLoading: Bool) {
+        view.isUserInteractionEnabled = !isLoading
+        guard let button = formView?.sendInstructionsButton else { return }
+        button.titleLabel?.alpha = isLoading ? 0 : 1
+        if isLoading {
+            let activityIndicator = UIActivityIndicatorView(style: .medium)
+            activityIndicator.color = button.titleColor(for: .normal)
+            activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+            button.addSubview(activityIndicator)
+            NSLayoutConstraint.activate([
+                activityIndicator.centerXAnchor.constraint(equalTo: button.centerXAnchor),
+                activityIndicator.centerYAnchor.constraint(equalTo: button.centerYAnchor)
+            ])
+            activityIndicator.startAnimating()
+        } else {
+            button.subviews.compactMap { $0 as? UIActivityIndicatorView }.forEach { $0.removeFromSuperview() }
+        }
+    }
+
+    @objc func countryCodeButtonTapped(_ sender: UIButton) {
+        guard let textField = formView.formStackView.arrangedSubviews[sender.tag].subviews[1] as? UITextField else {
+            return
+        }
+        view.endEditing(true)
+        let pickerVC = KMCountryCodePickerViewController(
+            selectedCountry: formView.selectedCountries[sender.tag],
+            localizationFileName: configuration.localizedStringFileName
+        ) { [weak self] country in
+            self?.formView.updateCountryCode(country, for: textField)
+            self?.formView.hideErrorLabel()
+            self?.updateStartButtonState()
+        }
+        let navigationController = UINavigationController(rootViewController: pickerVC)
+        navigationController.overrideUserInterfaceStyle = .light
+        navigationController.view.backgroundColor = .white
+        if #available(iOS 15.0, *), let sheet = navigationController.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(navigationController, animated: true)
     }
 
     @objc func dismissKeyboard(_: UITapGestureRecognizer) {
@@ -276,25 +360,8 @@ open class CustomPreChatFormViewController: UIViewController {
         closeButtonTapped?()
     }
 
-    func updateTextFieldWhenbeginEditing(textField: UITextField) {
+    func updateTextFieldWhenbeginEditing(textField _: UITextField) {
         formView.hideErrorLabel()
-        for (index, _) in Kommunicate.leadArray.enumerated() {
-            if textField.tag == index {
-                if textField.text == "" {
-                    setEmptyPlaceholder(for: textField)
-                }
-            }
-        }
-    }
-
-    func updateTextFieldWhenFinishedEditing(textField: UITextField) {
-        for (index, _) in Kommunicate.leadArray.enumerated() {
-            if textField.tag == index {
-                if textField.text == "" {
-                    setPlaceholder(for: textField)
-                }
-            }
-        }
     }
 
     private func addTransparent(_ rect: CGRect) {
@@ -354,24 +421,10 @@ open class CustomPreChatFormViewController: UIViewController {
 
     func updateDropDownLabel(_ value: String) {
         selectedButton.setTitle(value, for: .normal)
-    }
-
-    private func setEmptyPlaceholder(for textField: UITextField) {
-        textField.attributedPlaceholder = nil
-        for stackView in formView.formStackView.arrangedSubviews {
-            if stackView.tag == textField.tag {
-                (stackView.subviews[0] as? UILabel)?.show()
-            }
-        }
-    }
-
-    private func setPlaceholder(for textField: UITextField) {
-        textField.attributedPlaceholder = formView.placeholderForTextField(text: Kommunicate.leadArray[textField.tag].placeholder)
-        for stackView in formView.formStackView.arrangedSubviews {
-            if stackView.tag == textField.tag {
-                (stackView.subviews[0] as? UILabel)?.hide()
-            }
-        }
+        let isPlaceholder = value == Kommunicate.leadArray[selectedButton.tag].placeholder
+        selectedButton.setTitleColor(isPlaceholder ? KMPreChatFormStyle.placeholderColor : KMPreChatFormStyle.textColor, for: .normal)
+        formView.hideErrorLabel()
+        updateStartButtonState()
     }
 }
 
@@ -380,16 +433,27 @@ extension CustomPreChatFormViewController: UITextFieldDelegate {
         updateTextFieldWhenbeginEditing(textField: textField)
     }
 
-    public func textFieldDidEndEditing(_ textField: UITextField) {
-        updateTextFieldWhenFinishedEditing(textField: textField)
+    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let country = formView.selectedCountries[textField.tag] else {
+            return true
+        }
+        guard string.allSatisfy({ $0.isASCII && $0.isNumber }) else {
+            return false
+        }
+        let currentText = textField.text ?? ""
+        guard let textRange = Range(range, in: currentText) else {
+            return false
+        }
+        return currentText.replacingCharacters(in: textRange, with: string).count <= country.maxInputLength
     }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        for (index, _) in Kommunicate.leadArray.enumerated() {
-            if textField.tag == index {
-                textField.resignFirstResponder()
-                (formView.formStackView.arrangedSubviews[index + 1].subviews[1] as? UITextField)?.becomeFirstResponder()
-            }
+        textField.resignFirstResponder()
+        // Move to the next text field, if any.
+        let fields = formView.formStackView.arrangedSubviews
+        let nextIndex = textField.tag + 1
+        if nextIndex < fields.count, fields[nextIndex].subviews.count > 1 {
+            (fields[nextIndex].subviews[1] as? UITextField)?.becomeFirstResponder()
         }
         return true
     }
