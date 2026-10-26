@@ -41,6 +41,11 @@ struct KMCountryCode {
         guard number.matchesWithPattern(numberValidationRegex) else {
             return false
         }
+        // A number starting with the trunk prefix must still have a valid length once the prefix is removed.
+        if !trunkPrefix.isEmpty, number.hasPrefix(trunkPrefix),
+           !(minNumberLength ... maxNumberLength).contains(number.count - trunkPrefix.count) {
+            return false
+        }
         // Checked after removing the trunk prefix so inputs like 09999999999 are also caught.
         return Set(removeTrunkPrefix(number)).count > 1
     }
