@@ -127,3 +127,9 @@ InvalidEmailMessageOnAwayMode = "It seems you have entered an invalid email";
 VoiceModeChatButtonTitle = "Chat";
 VoiceModeVoiceButtonTitle = "Voice";
 VoiceModePermission = "Microphone access is required to use voice mode.";
+
+/* Notification actions */
+NotificationReplyAction = "Reply";
+NotificationReplyPlaceholder = "Type a message";
+NotificationReplySend = "Send";
+NotificationMarkAsReadAction = "Mark as read";
