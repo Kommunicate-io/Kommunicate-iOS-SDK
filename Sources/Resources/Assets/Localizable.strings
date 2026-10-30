@@ -102,6 +102,7 @@ StartNewConversationButtonTitle = "Start New Conversation";
 
 /* Pre-Chat */
 PreChatLeadCollectionTitle = "Pre-Chat Lead Collection";
+PreChatSelectCountryTitle = "Select a country";
 /* Conversation List VC Title */
 ConversationListVCTitle = "My Chats";
 

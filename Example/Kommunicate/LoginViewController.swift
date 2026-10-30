@@ -27,6 +27,7 @@ class LoginViewController: UIViewController, KMPreChatFormViewControllerDelegate
         override func viewDidLoad() {
             super.viewDidLoad()
             setAppIdFromArgs() // Only for UI tests
+            configureLoginTextFields()
             loginAsVisitorButton.layer.borderWidth = 1
             loginAsVisitorButton.layer.borderColor = UIColor(hexString: "1588B2").cgColor
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -35,15 +36,59 @@ class LoginViewController: UIViewController, KMPreChatFormViewControllerDelegate
         }
 
         override func viewWillAppear(_: Bool) {
-            if KMUserDefaultHandler.isLoggedIn() {
-                // Get login screen from storyboard and present it
-                if let viewController = UIStoryboard(name: "Main", bundle: nil)
-                    .instantiateViewController(withIdentifier: "NavViewController") as? UINavigationController
-                {
-                    viewController.modalPresentationStyle = .fullScreen
-                    present(viewController, animated: true, completion: nil)
+            // After the pre-chat form is submitted, the SDK presents the conversation itself.
+            if presentedViewController is CustomPreChatFormViewController {
+                return
+            }
+            guard KMUserDefaultHandler.isLoggedIn() else { return }
+            guard let transitionCoordinator = transitionCoordinator else {
+                presentHome(animated: true)
+                return
+            }
+            // A screen presented over this one (e.g. the chat after pre-chat) is closing. Show the home screen
+            // underneath during the closing animation so the login screen is never visible, then present the real one.
+            let placeholder = makeHomeViewController()
+            if let placeholder = placeholder {
+                addChild(placeholder)
+                placeholder.view.frame = view.bounds
+                view.addSubview(placeholder.view)
+                placeholder.didMove(toParent: self)
+            }
+            let removePlaceholder = {
+                placeholder?.willMove(toParent: nil)
+                placeholder?.view.removeFromSuperview()
+                placeholder?.removeFromParent()
+            }
+            transitionCoordinator.animate(alongsideTransition: nil) { _ in
+                // Present on the next run loop, once the dismissal has fully finished; presenting earlier is ignored by UIKit.
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else {
+                        removePlaceholder()
+                        return
+                    }
+                    self.presentHome(animated: false, completion: removePlaceholder)
+                    // Never leave the placeholder behind if the home screen could not be presented.
+                    if self.presentedViewController == nil {
+                        removePlaceholder()
+                    }
                 }
             }
+        }
+
+        private func makeHomeViewController() -> UINavigationController? {
+            // Get home screen from storyboard
+            let viewController = UIStoryboard(name: "Main", bundle: nil)
+                .instantiateViewController(withIdentifier: "NavViewController") as? UINavigationController
+            viewController?.modalPresentationStyle = .fullScreen
+            return viewController
+        }
+
+        private func presentHome(animated: Bool, completion: (() -> Void)? = nil) {
+            guard presentedViewController == nil, let viewController = makeHomeViewController() else {
+                completion?()
+                return
+            }
+            present(viewController, animated: animated, completion: completion)
         }
 
         // to log out from prechat
@@ -224,6 +269,24 @@ class LoginViewController: UIViewController, KMPreChatFormViewControllerDelegate
             userName.resignFirstResponder()
             emailId.resignFirstResponder()
             password.resignFirstResponder()
+        }
+
+        private func configureLoginTextFields() {
+            let loginFieldTextColor = UIColor(hexString: "1588B2")
+            let placeholderColor = loginFieldTextColor.withAlphaComponent(0.65)
+
+            [userName, emailId, password].forEach { textField in
+                guard let textField = textField else { return }
+                textField.textColor = loginFieldTextColor
+                textField.tintColor = loginFieldTextColor
+
+                if let placeholder = textField.placeholder {
+                    textField.attributedPlaceholder = NSAttributedString(
+                        string: placeholder,
+                        attributes: [.foregroundColor: placeholderColor]
+                    )
+                }
+            }
         }
 
         private func setAppIdFromArgs() {
