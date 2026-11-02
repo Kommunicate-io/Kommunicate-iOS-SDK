@@ -119,10 +119,6 @@ class KMAppSettingService {
         /// Clearing the app settings data
         appSettingsUserDefaults.clear()
         KMCoreUserDefaultsHandler.setVoiceChatEnabled(false)
-
-        /// Clearing the app navigationBar color
-        let navigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [KMChatBaseNavigationViewController.self])
-        navigationBarProxy.barTintColor = nil
     }
 
     private func appSettingCacheKey(for applicationKey: String) -> String {
