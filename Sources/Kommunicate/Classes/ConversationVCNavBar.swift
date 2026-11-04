@@ -209,7 +209,9 @@ class ConversationVCNavBar: UIView, Localizable {
             profileView.addArrangedSubview(self.onlineStatusText)
         }
         
-        statusIconBackgroundColor.backgroundColor = navigationBarProxy.barTintColor
+        statusIconBackgroundColor.backgroundColor = navigationBarProxy.backgroundImage(for: .default) == nil
+            ? KMChatAppSettingsUserDefaults().getAppBarTintColor()
+            : navigationBarProxy.barTintColor
     }
     
     @objc func updateWaitingQueueUI(showWaitingQueueOnly: Bool) {
