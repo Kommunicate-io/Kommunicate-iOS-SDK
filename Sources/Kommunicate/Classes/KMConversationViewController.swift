@@ -88,7 +88,7 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
     private var converastionNavBarItemToken: NotificationToken?
     private var channelMetadataUpdateToken: NotificationToken?
     private var isAssignedAgentOrBotOnline: Bool = false
-    private var isConversationOpenForCurrentAppState = false
+    private var notifiedOpenChannelId: NSNumber?
 
     var isAwayMessageViewHidden = true {
         didSet {
@@ -562,8 +562,12 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
     }
 
     private func sendConversationOpenNotificationIfNeeded(channelId: NSNumber) {
-        guard !isConversationOpenForCurrentAppState else { return }
-        isConversationOpenForCurrentAppState = true
+        if let openChannelId = notifiedOpenChannelId {
+            guard openChannelId != channelId else { return }
+            // Channel switched while visible: close the previous one before opening the new one.
+            sendConversationCloseNotification(channelId: String(describing: openChannelId))
+        }
+        notifiedOpenChannelId = channelId
         sendConversationOpenNotification(channelId: String(describing: channelId))
     }
 
@@ -579,8 +583,8 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
     }
 
     private func sendConversationCloseNotificationIfNeeded() {
-        guard isConversationOpenForCurrentAppState, let channelId = viewModel.channelKey else { return }
-        isConversationOpenForCurrentAppState = false
+        guard let channelId = notifiedOpenChannelId else { return }
+        notifiedOpenChannelId = nil
         sendConversationCloseNotification(channelId: String(describing: channelId))
     }
 
