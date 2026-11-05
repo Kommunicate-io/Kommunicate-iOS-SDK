@@ -138,7 +138,7 @@
 
             navigationBarProxy.isTranslucent = false
             navigationBarProxy.barTintColor = backgroundColor
-            navigationBarProxy.tintColor = .white
+            navigationBarProxy.tintColor = .black
             navigationBarProxy.titleTextAttributes = titleAttributes
             navigationBarProxy.standardAppearance = appearance
             navigationBarProxy.scrollEdgeAppearance = appearance

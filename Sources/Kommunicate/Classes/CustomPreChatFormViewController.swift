@@ -437,14 +437,21 @@ extension CustomPreChatFormViewController: UITextFieldDelegate {
         guard let country = formView.selectedCountries[textField.tag] else {
             return true
         }
-        guard string.allSatisfy({ $0.isASCII && $0.isNumber }) else {
+        guard string.allSatisfy({ ($0.isASCII && $0.isNumber) || $0 == " " || $0 == "-" }) else {
             return false
         }
         let currentText = textField.text ?? ""
         guard let textRange = Range(range, in: currentText) else {
             return false
         }
-        return currentText.replacingCharacters(in: textRange, with: string).count <= country.maxInputLength
+        let digits = String(string.filter { $0.isASCII && $0.isNumber })
+        let newText = currentText.replacingCharacters(in: textRange, with: digits)
+        guard newText.count <= country.maxInputLength else { return false }
+        if digits == string { return true }
+        // Separators were stripped from pasted text, so apply the edit manually.
+        textField.text = newText
+        textField.sendActions(for: .editingChanged)
+        return false
     }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
