@@ -269,6 +269,9 @@ open class Kommunicate: NSObject, Localizable {
         KMCoreUserDefaultsHandler.setApplicationKey(applicationId)
         Kommunicate.shared.defaultChatViewSettings()
         Kommunicate.shared.setupDefaultStyle()
+        if isLoggedIn {
+            refreshAppsettings()
+        }
     }
 
     /**
@@ -502,7 +505,20 @@ open class Kommunicate: NSObject, Localizable {
 
     /// Logs out the current logged in user and clears all the cache.
     open class func logoutUser(completion: @escaping (Result<String, KMError>) -> Void) {
-        let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
+        guard
+            let applicationId = KMUserDefaultHandler.getApplicationKey(), !applicationId.isEmpty,
+            let userId = KMUserDefaultHandler.getUserId(), !userId.isEmpty,
+            let deviceKey = KMCoreUserDefaultsHandler.getDeviceKeyString(), !deviceKey.isEmpty
+        else {
+            let error = NSError(
+                domain: "Application ID, user ID, and device key are required to log out.",
+                code: 0
+            )
+            completion(.failure(KMError.api(error)))
+            return
+        }
+
+        let applozicClient = applozicClientType.init(applicationKey: applicationId)
         applozicClient?.logoutUser(completion: { error, _ in
             Kommunicate.shared.clearUserDefaults()
         #if canImport(ChatProvidersSDK)
@@ -516,7 +532,7 @@ open class Kommunicate: NSObject, Localizable {
         })
     }
     
-    /// Fetches appsettings, configuration set on dashbaord
+    /// Fetches app settings configured on the dashboard.
     open class func refreshAppsettings() {
         let appSettingsService = KMAppSettingService()
         appSettingsService.appSetting {
@@ -524,6 +540,7 @@ open class Kommunicate: NSObject, Localizable {
             switch result {
             case let .success(appSettings):
                 appSettingsService.updateAppsettings(appSettingsResponse: appSettings)
+                appSettingsService.updateChatWidgetAppsettings(chatWidgetResponse: appSettings.chatWidget)
                 if let chatWidget = appSettings.chatWidget,
                    let isSingleThreaded = chatWidget.isSingleThreaded,
                    isSingleThreaded != KMCoreSettings.getIsSingleThreadedEnabled() {
@@ -1406,7 +1423,17 @@ open class Kommunicate: NSObject, Localizable {
 
     open class func userSubmittedResponse(name: String, email: String, phoneNumber: String, password _: String) {
         guard let appID = KMUserDefaultHandler.getApplicationKey() else { return }
-        Kommunicate.presentingViewController.dismiss(animated: false, completion: nil)
+        // Keep the pre-chat form on screen (non-interactive) until the conversation is ready,
+        // so the presenting screen isn't shown while registration and conversation APIs are running.
+        let preChatViewController = Kommunicate.presentingViewController.presentedViewController
+        let setPreChatLoading: (Bool) -> Void = { isLoading in
+            if let customPreChatVC = preChatViewController as? CustomPreChatFormViewController {
+                customPreChatVC.setLoading(isLoading)
+            } else {
+                preChatViewController?.view.isUserInteractionEnabled = !isLoading
+            }
+        }
+        setPreChatLoading(true)
         let kmUser = KMUser()
         kmUser.applicationId = appID
 
@@ -1432,15 +1459,87 @@ open class Kommunicate: NSObject, Localizable {
             response, error in
             guard error == nil else {
                 print("[REGISTRATION] Kommunicate user registration error: %@", error.debugDescription)
+                // Let the user retry from the form.
+                DispatchQueue.main.async {
+                    setPreChatLoading(false)
+                }
                 return
             }
             print("User registration was successful: %@ \(String(describing: response?.isRegisteredSuccessfully()))")
-            Kommunicate.createAndShowConversation(from: Kommunicate.presentingViewController, completion: {
-                error in
+            showConversationReplacingPreChat(completion: { error in
                 if error != nil {
                     print("Error while launching conversation")
+                    // Let the user retry from the form if it is still shown.
+                    DispatchQueue.main.async {
+                        setPreChatLoading(false)
+                    }
                 }
             })
+        })
+    }
+
+    /// Same launch behavior as `createAndShowConversation(from:completion:)`, but the conversation data is fetched
+    /// while the pre-chat form is still visible. The form is dismissed right before the chat is presented.
+    private class func showConversationReplacingPreChat(completion: @escaping (_ error: KommunicateError?) -> Void) {
+        let presenter = Kommunicate.presentingViewController
+        // Dismisses the pre-chat form and leaves a snapshot of it over the presenting screen until `removeCover` is called.
+        // Opening the chat still fetches channel details and animates in, so without the cover the presenting screen would show in between.
+        let replacePreChat: (@escaping (_ removeCover: @escaping () -> Void) -> Void) -> Void = { present in
+            DispatchQueue.main.async {
+                guard let preChatViewController = presenter.presentedViewController else {
+                    present {}
+                    return
+                }
+                let cover = preChatViewController.view.snapshotView(afterScreenUpdates: false)
+                if let cover = cover, let hostView = preChatViewController.presentingViewController?.view {
+                    cover.frame = hostView.bounds
+                    cover.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                    hostView.addSubview(cover)
+                }
+                presenter.dismiss(animated: false) {
+                    present {
+                        DispatchQueue.main.async { cover?.removeFromSuperview() }
+                    }
+                }
+            }
+        }
+
+        let applozicClient = applozicClientType.init(applicationKey: KMUserDefaultHandler.getApplicationKey())
+        applozicClient?.getLatestMessages(false, withCompletionHandler: { messageList, error in
+            // If more than 1 thread is present then the list will be shown
+            if let messages = messageList, messages.count > 1, error == nil {
+                replacePreChat { removeCover in
+                    // Same as showConversations(from:), with a completion to remove the cover once the list is on screen.
+                    let navVC = KMBaseNavigationViewController(rootViewController: conversationListViewController())
+                    navVC.modalPresentationStyle = .fullScreen
+                    presenter.present(navVC, animated: true, completion: removeCover)
+                    completion(nil)
+                }
+                return
+            }
+            let conversation = KMConversationBuilder()
+                .useLastConversation(true)
+                .build()
+            createConversation(conversation: conversation) { result in
+                switch result {
+                case let .success(conversationId):
+                    // Replace the form only once the conversation can be opened, so a failure keeps the form for retry.
+                    KMCoreChannelService().getChannelInformation(nil, orClientChannelKey: conversationId) { channel in
+                        guard channel?.key != nil else {
+                            completion(KommunicateError.conversationNotPresent)
+                            return
+                        }
+                        replacePreChat { removeCover in
+                            showConversationWith(groupId: conversationId, from: presenter, completionHandler: { success in
+                                removeCover()
+                                completion(success ? nil : KommunicateError.conversationNotPresent)
+                            })
+                        }
+                    }
+                case .failure:
+                    completion(KommunicateError.conversationCreateFailed)
+                }
+            }
         })
     }
 
@@ -1736,15 +1835,21 @@ open class Kommunicate: NSObject, Localizable {
     /// Logs out the current logged in user and clears all the cache.
     @available(*, deprecated, message: "Use logoutUser(completion:)")
     @objc open class func logoutUser() {
-        let registerUserClientService = ALRegisterUserClientService()
-        if let _ = KMCoreUserDefaultsHandler.getDeviceKeyString() {
-            registerUserClientService.logout(completionHandler: {
-                _, _ in
-                Kommunicate.shared.clearUserDefaults()
-                KMChatFormDataCache.shared.clearCache()
-                NSLog("Kommunicate logout")
-            })
+        guard
+            let applicationId = KMUserDefaultHandler.getApplicationKey(), !applicationId.isEmpty,
+            let userId = KMUserDefaultHandler.getUserId(), !userId.isEmpty,
+            let deviceKey = KMCoreUserDefaultsHandler.getDeviceKeyString(), !deviceKey.isEmpty
+        else {
+            return
         }
+
+        let registerUserClientService = ALRegisterUserClientService()
+        registerUserClientService.logout(completionHandler: {
+            _, _ in
+            Kommunicate.shared.clearUserDefaults()
+            KMChatFormDataCache.shared.clearCache()
+            NSLog("Kommunicate logout")
+        })
     }
     
     open class func createSettings(settings: String) -> Bool {

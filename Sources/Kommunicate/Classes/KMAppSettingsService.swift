@@ -81,6 +81,7 @@ class KMAppSettingService {
        KMAppUserDefaultHandler.shared.botMessageDelayInterval = chatWidget.botMessageDelayInterval ?? 0
        KMAppUserDefaultHandler.shared.botTypingIndicatorInterval = chatWidget.botTypingIndicatorInterval ?? 0
        KMAppUserDefaultHandler.shared.csatRatingBase = chatWidget.csatRatingBase ?? 3
+       KMCoreUserDefaultsHandler.setVoiceChatEnabled(chatWidget.voiceChat ?? false)
        
        let defaultPrimaryColor = UIColor.background(.primary).toHexString()
        let primaryColor = chatWidget.primaryColor ?? defaultPrimaryColor
@@ -104,16 +105,20 @@ class KMAppSettingService {
        appSettings.sasT = decodedSasToken(from: chatWidget.sasT)
        appSettings.csatRatingBase = chatWidget.csatRatingBase ?? 3
        appSettings.botTypingIndicatorInterval = chatWidget.botTypingIndicatorInterval ?? 0
+       appSettings.speechToTextEnabled = chatWidget.isSpeechToTextEnabled
        appSettingsUserDefaults.updateOrSetAppSettings(appSettings: appSettings)
+       DispatchQueue.main.async {
+           NotificationCenter.default.post(
+               name: Notification.Name("KMSpeechToTextSettingDidChange"),
+               object: nil
+           )
+       }
     }
 
     func clearAppSettingsData() {
         /// Clearing the app settings data
         appSettingsUserDefaults.clear()
-
-        /// Clearing the app navigationBar color
-        let navigationBarProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [KMChatBaseNavigationViewController.self])
-        navigationBarProxy.barTintColor = nil
+        KMCoreUserDefaultsHandler.setVoiceChatEnabled(false)
     }
 
     private func appSettingCacheKey(for applicationKey: String) -> String {

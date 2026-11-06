@@ -102,6 +102,7 @@ StartNewConversationButtonTitle = "Start New Conversation";
 
 /* Pre-Chat */
 PreChatLeadCollectionTitle = "Pre-Chat Lead Collection";
+PreChatSelectCountryTitle = "Select a country";
 /* Conversation List VC Title */
 ConversationListVCTitle = "My Chats";
 
@@ -122,3 +123,8 @@ FiveStarConversationCommentTitle = "Add feedback (optional)";
 CollectEmailMessageOnAwayMode = "How may we reach you?";
 /* Invalid Email On Away Mode Message */
 InvalidEmailMessageOnAwayMode = "It seems you have entered an invalid email";
+
+/* Voice Mode */
+VoiceModeChatButtonTitle = "Chat";
+VoiceModeVoiceButtonTitle = "Voice";
+VoiceModePermission = "Microphone access is required to use voice mode.";

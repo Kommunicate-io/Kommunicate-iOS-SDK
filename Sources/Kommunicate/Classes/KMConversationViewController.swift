@@ -88,6 +88,7 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
     private var converastionNavBarItemToken: NotificationToken?
     private var channelMetadataUpdateToken: NotificationToken?
     private var isAssignedAgentOrBotOnline: Bool = false
+    private var notifiedOpenChannelId: NSNumber?
 
     var isAwayMessageViewHidden = true {
         didSet {
@@ -133,6 +134,9 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavigation()
+        guard let channelId = viewModel.channelKey else { return }
+        addAppStateObservers()
+        sendConversationOpenNotificationIfNeeded(channelId: channelId)
     }
 
     public required init(configuration: KMChatConfiguration,
@@ -158,8 +162,7 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
         addViewConstraints()
         messageCharLimitManager.delegate = self
         botCharLimitManager.delegate = self
-        guard let channelId = viewModel.channelKey else { return }
-        sendConversationOpenNotification(channelId: String(describing: channelId))
+        guard viewModel.channelKey != nil else { return }
         setupConversationClosedView()
     }
     
@@ -176,6 +179,8 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
         isConversationAssignedToDialogflowBot = false
         isChatBarHidden = false
         awayMessageView.isHidden = false
+        removeAppStateObservers()
+        sendConversationCloseNotificationIfNeeded()
     }
 
     override open func newMessagesAdded() {
@@ -556,6 +561,16 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
         NotificationCenter.default.post(notification)
     }
 
+    private func sendConversationOpenNotificationIfNeeded(channelId: NSNumber) {
+        if let openChannelId = notifiedOpenChannelId {
+            guard openChannelId != channelId else { return }
+            // Channel switched while visible: close the previous one before opening the new one.
+            sendConversationCloseNotification(channelId: String(describing: openChannelId))
+        }
+        notifiedOpenChannelId = channelId
+        sendConversationOpenNotification(channelId: String(describing: channelId))
+    }
+
     func sendConversationCloseNotification(channelId: String) {
         let info: [String: Any] = ["ConversationId": channelId]
         let backbuttonNotificationName = kmConversationViewConfiguration.backButtonNotificationName
@@ -565,6 +580,49 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
             userInfo: info
         )
         NotificationCenter.default.post(notification)
+    }
+
+    private func sendConversationCloseNotificationIfNeeded() {
+        guard let channelId = notifiedOpenChannelId else { return }
+        notifiedOpenChannelId = nil
+        sendConversationCloseNotification(channelId: String(describing: channelId))
+    }
+
+    private func addAppStateObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(applicationDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(applicationWillEnterForeground),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
+    }
+
+    private func removeAppStateObservers() {
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
+    }
+
+    @objc private func applicationDidEnterBackground() {
+        sendConversationCloseNotificationIfNeeded()
+    }
+
+    @objc private func applicationWillEnterForeground() {
+        guard let channelId = viewModel.channelKey else { return }
+        sendConversationOpenNotificationIfNeeded(channelId: channelId)
     }
 
     func updateAssigniStatus() {
@@ -936,8 +994,7 @@ extension KMConversationViewController: NavigationBarCallbacks {
         if popVC == nil {
             dismiss(animated: true, completion: nil)
         }
-        guard let channelId = viewModel.channelKey else { return }
-        sendConversationCloseNotification(channelId: String(describing: channelId))
+        sendConversationCloseNotificationIfNeeded()
         guard configuration.enableTextToSpeechInConversation else {return}
         stopTextToSpeechIfSpeaking()
     }

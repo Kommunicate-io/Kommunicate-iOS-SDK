@@ -72,12 +72,9 @@
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jac-M1-sEl">
                             <rect key="frame" x="0.0" y="222" width="414" height="700"/>
                             <viewLayoutGuide key="safeArea" id="fYf-AL-IYT"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="700" id="14l-MJ-my9"/>
-                            </constraints>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="EaI-8y-8Pq">
-                            <rect key="frame" x="0.0" y="912" width="414" height="76"/>
+                            <rect key="frame" x="0.0" y="912" width="414" height="88"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XOf-5W-dsQ">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="40"/>
@@ -89,20 +86,20 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ipe-MW-4KX">
-                                    <rect key="frame" x="30.5" y="40" width="353" height="36"/>
+                                    <rect key="frame" x="24" y="40" width="366" height="48"/>
                                     <color key="backgroundColor" red="0.36078431370000003" green="0.35294117650000001" blue="0.65490196079999996" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" constant="36" id="MOq-bz-7dh"/>
-                                        <constraint firstAttribute="width" constant="353" id="SJj-WH-zba"/>
+                                        <constraint firstAttribute="height" constant="48" id="MOq-bz-7dh"/>
                                     </constraints>
-                                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
                                     <state key="normal" title="Start Conversation">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </state>
                                 </button>
                             </subviews>
                             <constraints>
-                                <constraint firstAttribute="height" constant="76" id="7iI-EU-brw"/>
+                                <constraint firstAttribute="height" constant="88" id="7iI-EU-brw"/>
+                                <constraint firstItem="Ipe-MW-4KX" firstAttribute="width" secondItem="EaI-8y-8Pq" secondAttribute="width" constant="-48" id="SJj-WH-zba"/>
                                 <constraint firstItem="XOf-5W-dsQ" firstAttribute="leading" secondItem="EaI-8y-8Pq" secondAttribute="leading" id="8WX-zL-UwO"/>
                                 <constraint firstAttribute="trailing" secondItem="XOf-5W-dsQ" secondAttribute="trailing" id="yVc-HU-ptb"/>
                             </constraints>
@@ -111,7 +108,7 @@
                     <constraints>
                         <constraint firstItem="jC4-TR-zCn" firstAttribute="width" secondItem="cTN-5x-34H" secondAttribute="width" id="26K-Cw-95z"/>
                         <constraint firstItem="jac-M1-sEl" firstAttribute="width" secondItem="cTN-5x-34H" secondAttribute="width" id="4CP-WR-tUF"/>
-                        <constraint firstItem="jac-M1-sEl" firstAttribute="bottom" secondItem="EaI-8y-8Pq" secondAttribute="top" constant="10" id="4M7-Z7-ydi"/>
+                        <constraint firstItem="EaI-8y-8Pq" firstAttribute="top" secondItem="jac-M1-sEl" secondAttribute="bottom" constant="16" id="4M7-Z7-ydi"/>
                         <constraint firstItem="nBN-0D-pTR" firstAttribute="top" secondItem="cTN-5x-34H" secondAttribute="top" constant="20" id="Hlh-B8-jLz"/>
                         <constraint firstAttribute="bottom" secondItem="EaI-8y-8Pq" secondAttribute="bottom" constant="20" id="J2d-iZ-MXP"/>
                         <constraint firstItem="jac-M1-sEl" firstAttribute="top" secondItem="jC4-TR-zCn" secondAttribute="bottom" constant="20" id="T71-Pf-pn8"/>
