@@ -16,7 +16,7 @@ let package = Package(
         .package(
                 name: "KommunicateChatUI-iOS-SDK",
                 url: "https://github.com/Kommunicate-io/KommunicateChatUI-iOS-SDK.git",
-                from: "1.5.6"
+                from: "1.5.7"
             ),
             .package(
                 name: "KommunicateCore-iOS-SDK",
