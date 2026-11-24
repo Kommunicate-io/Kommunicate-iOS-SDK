@@ -14,7 +14,7 @@ final class KMHomeFaqViewController: KMHomeBaseViewController {
         super.viewWillAppear(animated)
         // Created lazily, as `FaqViewController` publishes the FAQ click event when initialised.
         guard faqViewController == nil,
-              let url = URLBuilder.faqURL(for: KMCoreUserDefaultsHandler.getApplicationKey(), hideChat: true).url
+              let url = URLBuilder.faqURL(for: KMCoreUserDefaultsHandler.getApplicationKey(), hideChat: configuration.hideChatInHelpcenter).url
         else { return }
         let faqVC = FaqViewController(url: url, configuration: configuration)
         faqViewController = faqVC

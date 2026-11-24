@@ -9,12 +9,14 @@ import KommunicateChatUI_iOS_SDK
 import UIKit
 
 enum KMHomeText {
+    /// Looks in the app's strings file first, then in the SDK's strings, like `Localizable`.
     static func string(_ key: String, default defaultValue: String) -> String {
-        NSLocalizedString(
+        let sdkValue = NSLocalizedString(key, tableName: nil, bundle: .kommunicate, value: defaultValue, comment: "")
+        return NSLocalizedString(
             key,
             tableName: Kommunicate.defaultConfiguration.localizedStringFileName,
-            bundle: Bundle.kommunicate,
-            value: defaultValue,
+            bundle: .main,
+            value: sdkValue,
             comment: ""
         )
     }
