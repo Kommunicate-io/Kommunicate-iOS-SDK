@@ -159,4 +159,12 @@ final class KMHomeTabBarController: UITabBarController {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    /// Selects the Conversations tab at its root and returns the conversation list.
+    func showConversationsTab() -> KMConversationListViewController? {
+        selectedIndex = Self.conversationsTabIndex
+        let nav = selectedViewController as? UINavigationController
+        nav?.popToRootViewController(animated: false)
+        return nav?.viewControllers.first as? KMConversationListViewController
+    }
 }

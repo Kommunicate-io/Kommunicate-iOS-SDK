@@ -162,6 +162,13 @@ public class KMPushNotificationHelper {
     /// - Parameter notification: Contains details about arrived notification.
     public func handleNotificationTap(_ notification: NotificationData) {
         guard let topVC = ALPushAssist().topViewController else { return }
+        // Welcome, FAQ or News tab of the home screen: switch to Conversations and open the chat from there.
+        if !(topVC is KMConversationListViewController || topVC is KMConversationViewController),
+           let homeVC = topVC.tabBarController as? KMHomeTabBarController,
+           let listVC = homeVC.showConversationsTab() {
+            openConversationFromListVC(listVC, notification: notification)
+            return
+        }
         switch topVC {
         case let vc as KMConversationListViewController:
             print("KMConversationListViewController on top")

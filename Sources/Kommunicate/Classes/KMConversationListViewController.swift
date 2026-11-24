@@ -920,6 +920,7 @@ extension KMConversationListViewController: KMChatConversationListTableViewDeleg
         let viewController = conversationViewController ?? KMConversationViewController(configuration: configuration, conversationViewConfiguration: kmConversationViewConfiguration, individualLaunch: false)
         viewController.viewModel = convViewModel
         viewController.individualLaunch = false
+        viewController.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(viewController, animated: true)
     }
 
