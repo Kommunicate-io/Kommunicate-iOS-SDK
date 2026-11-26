@@ -601,7 +601,7 @@ open class Kommunicate: NSObject, Localizable {
             createConversation(conversation: currentConversation) { result in
                 switch result {
                 case .success(let conversationId):
-                    showConversationWith(groupId: conversationId, from: viewController) { success in
+                    showConversationWith(groupId: conversationId, from: viewController, showListOnBack: true) { success in
                         if success {
                             completion(.success(conversationId))
                         } else {
@@ -844,8 +844,7 @@ open class Kommunicate: NSObject, Localizable {
      - viewController: ViewController from which the chat list will be launched.
      */
     @objc open class func showConversations(from viewController: UIViewController) {
-        let conversationVC = conversationListViewController()
-        let navVC = KMBaseNavigationViewController(rootViewController: conversationVC)
+        let navVC = KMHomeTabBarController(conversationListViewController: conversationListViewController())
         navVC.modalPresentationStyle = .fullScreen
         viewController.present(navVC, animated: true, completion: nil)
     }
@@ -1321,7 +1320,7 @@ open class Kommunicate: NSObject, Localizable {
                                 switch result {
                                 case let .success(conversationId):
                                     DispatchQueue.main.async {
-                                        showConversationWith(groupId: conversationId, from: viewController, completionHandler: { success in
+                                        showConversationWith(groupId: conversationId, from: viewController, showListOnBack: true, completionHandler: { success in
                                             guard success else {
                                                 completion(KommunicateError.conversationNotPresent)
                                                 return
@@ -1349,7 +1348,7 @@ open class Kommunicate: NSObject, Localizable {
                                 switch result {
                                 case let .success(conversationId):
                                     DispatchQueue.main.async {
-                                        showConversationWith(groupId: conversationId, from: viewController, completionHandler: { success in
+                                        showConversationWith(groupId: conversationId, from: viewController, showListOnBack: true, completionHandler: { success in
                                             guard success else {
                                                 completion(KommunicateError.conversationNotPresent)
                                                 return
@@ -1510,7 +1509,7 @@ open class Kommunicate: NSObject, Localizable {
             if let messages = messageList, messages.count > 1, error == nil {
                 replacePreChat { removeCover in
                     // Same as showConversations(from:), with a completion to remove the cover once the list is on screen.
-                    let navVC = KMBaseNavigationViewController(rootViewController: conversationListViewController())
+                    let navVC = KMHomeTabBarController(conversationListViewController: conversationListViewController())
                     navVC.modalPresentationStyle = .fullScreen
                     presenter.present(navVC, animated: true, completion: removeCover)
                     completion(nil)
@@ -1530,7 +1529,7 @@ open class Kommunicate: NSObject, Localizable {
                             return
                         }
                         replacePreChat { removeCover in
-                            showConversationWith(groupId: conversationId, from: presenter, completionHandler: { success in
+                            showConversationWith(groupId: conversationId, from: presenter, showListOnBack: true, completionHandler: { success in
                                 removeCover()
                                 completion(success ? nil : KommunicateError.conversationNotPresent)
                             })
@@ -1572,7 +1571,7 @@ open class Kommunicate: NSObject, Localizable {
         if showListOnBack {
             let conversationListVC = conversationListViewController()
             conversationListVC.channelKey = groupId
-            let navVC = KMBaseNavigationViewController(rootViewController: conversationListVC)
+            let navVC = KMHomeTabBarController(conversationListViewController: conversationListVC)
             navVC.modalPresentationStyle = .fullScreen
             viewController.present(navVC, animated: true) {
                 completionHandler(true)
@@ -1672,7 +1671,7 @@ open class Kommunicate: NSObject, Localizable {
                             completion(nil)
                         })
                     } else {
-                        showConversationWith(groupId: conversationId, from: viewController, completionHandler: { success in
+                        showConversationWith(groupId: conversationId, from: viewController, showListOnBack: true, completionHandler: { success in
                             guard success else {
                                 completion(KommunicateError.conversationNotPresent)
                                 return

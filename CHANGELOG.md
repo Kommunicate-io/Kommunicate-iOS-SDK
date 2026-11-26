@@ -2,6 +2,12 @@
 
 The changelog for [Kommunicate-iOS-SDK](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK). Also see the [releases](https://github.com/Kommunicate-io/Kommunicate-iOS-SDK/releases) on Github.
 
+## [Unreleased]
+- Home screen with Welcome, Conversations, FAQ and News tabs, opened by `showConversations(from:)`
+- News tab cards can be set with `whatsNewList` in the settings json
+- Going back from a conversation now shows the home screen
+- Conversation list title changed to "Conversations"
+
 ## [7.3.8] 2026-11-13
 - Fixed card image layout
 

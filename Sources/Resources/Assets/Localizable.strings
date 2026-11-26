@@ -104,7 +104,7 @@ StartNewConversationButtonTitle = "Start New Conversation";
 PreChatLeadCollectionTitle = "Pre-Chat Lead Collection";
 PreChatSelectCountryTitle = "Select a country";
 /* Conversation List VC Title */
-ConversationListVCTitle = "My Chats";
+ConversationListVCTitle = "Conversations";
 
 /* 5 Star CSAT Rating */
 
@@ -134,3 +134,12 @@ NotificationReplyAction = "Reply";
 NotificationReplyPlaceholder = "Type a message";
 NotificationReplySend = "Send";
 NotificationMarkAsReadAction = "Mark as read";
+
+/* Home screen */
+HomeTabWelcome = "Welcome";
+HomeTabConversations = "Conversations";
+HomeTabNews = "News";
+HomeWelcomeHello = "Hello";
+HomeWelcomeHeadline = "How can we help you?";
+HomeViewConversations = "View conversations";
+HomeNewsEmpty = "No news available right now.";

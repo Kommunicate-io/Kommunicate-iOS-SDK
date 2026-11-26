@@ -24,6 +24,7 @@ public class KMConfigurationSetter {
             applyButtonSettings(from: settingDict)
             applySpeechToTextSettings(from: settingDict)
             applyGeneralSettings(from: settingDict)
+            KMHomeSettings.apply(from: settingDict)
 
         } catch {
             print("Failed to read setting json string: \(error.localizedDescription)")

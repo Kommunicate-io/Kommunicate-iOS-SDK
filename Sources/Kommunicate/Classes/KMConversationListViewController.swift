@@ -25,6 +25,9 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
 
     let faqIdentifier = 11_223_346
 
+    /// Set when the list is a tab of the home screen, where FAQ has a tab of its own.
+    var hidesFaqNavigationItem = false
+
     public var conversationViewController: KMConversationViewController?
     public var conversationViewModelType = KMChatConversationViewModel.self
     public var conversationListTableViewController: KMChatConversationListTableViewController
@@ -57,6 +60,7 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
             static let height: CGFloat = 48.0
             static let cornorRadius: CGFloat = height/2
             static let bottom: CGFloat = -50.0
+            static let bottomInHome: CGFloat = -30.0
             static let leading: CGFloat = -32
         }
     }
@@ -115,6 +119,8 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         stack.distribution = .fillEqually
         return stack
     }()
+
+    private var conversationStartButtonBottomConstraint: NSLayoutConstraint?
 
     lazy var conversationStartButtonContainer: UIView = {
         let view = UIView()
@@ -237,7 +243,15 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
 
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        edgesForExtendedLayout = []
+        // On iOS 26 the home tab bar floats, so the list runs behind it.
+        if #available(iOS 26.0, *), tabBarController != nil {
+            edgesForExtendedLayout = [.bottom]
+        } else {
+            edgesForExtendedLayout = []
+        }
+        conversationStartButtonBottomConstraint?.constant = tabBarController is KMHomeTabBarController
+            ? Padding.StartNewConversationButton.bottomInHome
+            : Padding.StartNewConversationButton.bottom
         viewModel.prepareController(dbService: dbService)
         updateConversationStartButtons()
         refreshVoiceModeAvailability()
@@ -254,6 +268,7 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         setupView()
         checkPlanAndShowSuspensionScreen()
         extendedLayoutIncludesOpaqueBars = true
+        view.backgroundColor = .kmHomeBackground
     }
 
     override open func viewDidAppear(_ animated: Bool) {
@@ -333,7 +348,8 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         conversationStartButtonContainer.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
         conversationStartButtonContainer.widthAnchor.constraint(equalToConstant: Padding.StartNewConversationButton.width).isActive = true
         conversationStartButtonContainer.heightAnchor.constraint(equalToConstant: Padding.StartNewConversationButton.height).isActive = true
-        conversationStartButtonContainer.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: Padding.StartNewConversationButton.bottom).isActive = true
+        conversationStartButtonBottomConstraint = conversationStartButtonContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: Padding.StartNewConversationButton.bottom)
+        conversationStartButtonBottomConstraint?.isActive = true
         backgroundView.bringSubviewToFront(conversationStartButtonContainer)
     
         conversationListTableViewController.view.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
@@ -495,7 +511,7 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
             rightBarButtonItems.append(rightBarButtonItem)
         }
 
-        for item in navigationItems {
+        for item in navigationItems where !(hidesFaqNavigationItem && item.identifier == faqIdentifier) {
             let uiBarButtonItem = item.barButton(target: self, action: #selector(customButtonEvent(_:)))
 
             if let barButtonItem = uiBarButtonItem {
@@ -608,6 +624,7 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         } else {
             // push conversation VC
             conversationVC.viewWillLoadFromTappingOnNotification()
+            conversationVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(conversationVC, animated: true)
         }
     }
@@ -910,6 +927,7 @@ extension KMConversationListViewController: KMChatConversationListTableViewDeleg
         let viewController = conversationViewController ?? KMConversationViewController(configuration: configuration, conversationViewConfiguration: kmConversationViewConfiguration, individualLaunch: false)
         viewController.viewModel = convViewModel
         viewController.individualLaunch = false
+        viewController.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(viewController, animated: true)
     }
 
