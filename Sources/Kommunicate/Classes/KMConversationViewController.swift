@@ -26,6 +26,7 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
     var currentMessage = KMCoreMessage()
     var delayInterval = 0
     private var isWaitingQueueFetching: Bool = false
+    private var awayMessageCache: (key: String, data: [String: Any]?)?
 
     enum LocalizationKey {
         static let online = "online"
@@ -518,36 +519,62 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
             })
         } else {
             guard let channelKey = viewModel.channelKey, let applicationKey =  KMCoreUserDefaultsHandler.getApplicationKey() else { return }
-            conversationService.awayMessageFor(applicationKey: applicationKey, groupId: channelKey, completion: {
-                result in
+            let cacheKey = awayMessageCacheKey(channelKey: channelKey)
+            if let cache = awayMessageCache, cache.key == cacheKey {
+                if let awayMessageData = cache.data {
+                    applyAwayMessage(awayMessageData)
+                }
+                return
+            }
+            awayMessageCache = (cacheKey, nil)
+            conversationService.awayMessageFor(applicationKey: applicationKey, groupId: channelKey, completion: { [weak self] result in
                 DispatchQueue.main.async {
+                    guard let self = self, self.awayMessageCache?.key == cacheKey else { return }
                     switch result {
                     case let .success(awayMessageData):
-                        guard
-                                let message = awayMessageData["message"] as? String, !message.isEmpty,
-                                let emailCollection = awayMessageData["collectEmailOnAwayMessage"] as? Bool
-                            else {
-                                self.isAwayMessageViewHidden = true
-                                return
-                            }
-                        self.isAwayMessageViewHidden = false
-                        if !self.viewModel.emailCollectionAwayModeEnabled {
-                            self.awayMessageView.switchToEmailUI(emailUIEnabled: false)
-                            self.awayMessageView.set(message: message)
-                            self.collectEmailOnAwayMode = emailCollection
-                        }
+                        self.awayMessageCache = (cacheKey, awayMessageData)
+                        guard self.applyAwayMessage(awayMessageData) else { return }
                         /// Fetch the bot type
                         self.conversationAssignedToDialogflowBot()
                     case let .failure(error):
                         print("Message status error: \(error)")
+                        self.awayMessageCache = error is DataLoader.LoadingError ? nil : (cacheKey, [:])
                         self.isAwayMessageViewHidden = true
                         /// Fetch the bot type
                         self.conversationAssignedToDialogflowBot()
-                        return
                     }
                 }
             })
         }
+    }
+
+    private func awayMessageCacheKey(channelKey: NSNumber) -> String {
+        let (assignee, channel) = conversationDetail.conversationAssignee(groupId: channelKey, userId: viewModel.contactId)
+        return [
+            channelKey.stringValue,
+            assignee?.userId ?? "",
+            String(assignee?.connected ?? false),
+            assignee?.status?.stringValue ?? "",
+            channel?.metadata?[AL_CHANNEL_CONVERSATION_STATUS] as? String ?? ""
+        ].joined(separator: "|")
+    }
+
+    @discardableResult
+    private func applyAwayMessage(_ awayMessageData: [String: Any]) -> Bool {
+        guard
+            let message = awayMessageData["message"] as? String, !message.isEmpty,
+            let emailCollection = awayMessageData["collectEmailOnAwayMessage"] as? Bool
+        else {
+            isAwayMessageViewHidden = true
+            return false
+        }
+        isAwayMessageViewHidden = false
+        if !viewModel.emailCollectionAwayModeEnabled {
+            awayMessageView.switchToEmailUI(emailUIEnabled: false)
+            awayMessageView.set(message: message)
+            collectEmailOnAwayMode = emailCollection
+        }
+        return true
     }
 
     func sendConversationOpenNotification(channelId: String) {
@@ -632,7 +659,7 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
     open override func updateAssigneeDetails() {
         super.updateAssigneeDetails()
         conversationDetail.updatedAssigneeDetails(groupId: viewModel.channelKey, userId: viewModel.contactId) { contact, channel in
-            self.messageStatusAndFetchBotType()
+            defer { self.messageStatusAndFetchBotType() }
             guard let alChannel = channel else {
                 print("Channel is nil in updatedAssigneeDetails")
                 return
@@ -720,6 +747,7 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
             self.isAwayMessageViewHidden = true
             self.awayMessageView.switchToEmailUI(emailUIEnabled: false)
         } else {
+            awayMessageCache = nil
             self.messageStatusAndFetchBotType()
         }
     }
@@ -790,8 +818,8 @@ open class KMConversationViewController: KMChatConversationViewController, KMUpd
         configureChatBar()
         hideAwayAndClosedView()
         // Fetch Assignee details every time view is launched.
+        awayMessageCache = nil
         updateAssigneeDetails()
-        messageStatusAndFetchBotType()
         prepareConversationInfoView()
         // Check for group left
         isChannelLeft()
