@@ -105,7 +105,28 @@ class KMHomeBaseViewController: UIViewController {
 final class KMHomeTabBarController: UITabBarController {
     private static let conversationsTabIndex = 1
 
+    private static var tabInfo: [(title: String, symbols: [String])] {
+        [
+            (KMHomeText.welcome, ["face.smiling", "house"]),
+            (KMHomeText.conversations, ["bubble.left"]),
+            (KMHomeText.faq, ["questionmark.circle"]),
+            (KMHomeText.news, ["sparkles", "star"])
+        ]
+    }
+
+    private let bottomBar: KMHomeBottomBar
+
     init(conversationListViewController: KMConversationListViewController) {
+        let tabInfo = Self.tabInfo
+        bottomBar = KMHomeBottomBar(
+            items: tabInfo.map { info in
+                KMHomeBottomBar.Item(
+                    title: info.title,
+                    image: info.symbols.lazy.compactMap { UIImage(systemName: $0) }.first
+                )
+            },
+            accentColor: KMChatAppSettingsUserDefaults().getAppBarTintColor()
+        )
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .fullScreen
         if !UIColor.isKMDarkModeEnabled {
@@ -122,36 +143,20 @@ final class KMHomeTabBarController: UITabBarController {
         let faqVC = KMHomeFaqViewController(configuration: configuration)
         let newsVC = KMHomeNewsViewController(configuration: configuration, items: KMHomeSettings.whatsNewList)
 
-        let tabs: [(root: UIViewController, title: String, symbols: [String])] = [
-            (welcomeVC, KMHomeText.welcome, ["face.smiling", "house"]),
-            (conversationListViewController, KMHomeText.conversations, ["bubble.left"]),
-            (faqVC, KMHomeText.faq, ["questionmark.circle"]),
-            (newsVC, KMHomeText.news, ["sparkles", "star"])
-        ]
+        let roots: [UIViewController] = [welcomeVC, conversationListViewController, faqVC, newsVC]
+        let tabs = zip(roots, tabInfo).map { pair in (root: pair.0, title: pair.1.title) }
+
         viewControllers = tabs.map { tab in
             let nav = KMBaseNavigationViewController(rootViewController: tab.root)
             nav.view.backgroundColor = .kmHomeBackground
-            nav.tabBarItem = UITabBarItem(
-                title: tab.title,
-                image: tab.symbols.lazy.compactMap { UIImage(systemName: $0) }.first,
-                selectedImage: nil
-            )
+            nav.tabBarItem = UITabBarItem(title: tab.title, image: nil, selectedImage: nil)
+            nav.delegate = self
             tab.root.title = tab.title
+            tab.root.additionalSafeAreaInsets.bottom = KMHomeBottomBar.contentHeight
             return nav
         }
 
         view.backgroundColor = .kmHomeBackground
-        tabBar.tintColor = KMChatAppSettingsUserDefaults().getAppBarTintColor()
-        // iOS 26 keeps the system's floating glass bar.
-        if #unavailable(iOS 26.0) {
-            let appearance = UITabBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .kmHomeBackground
-            tabBar.standardAppearance = appearance
-            if #available(iOS 15.0, *) {
-                tabBar.scrollEdgeAppearance = appearance
-            }
-        }
         selectedIndex = Self.conversationsTabIndex
     }
 
@@ -160,11 +165,109 @@ final class KMHomeTabBarController: UITabBarController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override var selectedIndex: Int {
+        didSet { selectionChanged() }
+    }
+
+    override var selectedViewController: UIViewController? {
+        didSet { selectionChanged() }
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        bottomBar.onSelect = { [weak self] index in
+            self?.bottomBarSelected(index)
+        }
+        bottomBar.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bottomBar)
+        NSLayoutConstraint.activate([
+            bottomBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomBar.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            bottomBar.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                constant: -KMHomeBottomBar.contentHeight
+            )
+        ])
+        hideSystemTabBar()
+        selectionChanged()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        hideSystemTabBar()
+        view.bringSubviewToFront(bottomBar)
+    }
+
     /// Selects the Conversations tab at its root and returns the conversation list.
     func showConversationsTab() -> KMConversationListViewController? {
         selectedIndex = Self.conversationsTabIndex
         let nav = selectedViewController as? UINavigationController
         nav?.popToRootViewController(animated: false)
         return nav?.viewControllers.first as? KMConversationListViewController
+    }
+
+    private func bottomBarSelected(_ index: Int) {
+        guard let controllers = viewControllers, controllers.indices.contains(index) else { return }
+        let target = controllers[index]
+        if target === selectedViewController {
+            (target as? UINavigationController)?.popToRootViewController(animated: true)
+            return
+        }
+        if delegate?.tabBarController?(self, shouldSelect: target) == false { return }
+        selectedIndex = index
+        delegate?.tabBarController?(self, didSelect: target)
+    }
+
+    private func selectionChanged() {
+        guard isViewLoaded, bottomBar.superview != nil else { return }
+        bottomBar.selectedIndex = selectedIndex
+        setBottomBarHidden(shouldHideBottomBar(in: selectedViewController as? UINavigationController))
+    }
+
+    private func hideSystemTabBar() {
+        if #available(iOS 18.0, *), !isTabBarHidden {
+            setTabBarHidden(true, animated: false)
+        }
+        if !tabBar.isHidden {
+            tabBar.isHidden = true
+        }
+    }
+
+    private func shouldHideBottomBar(in nav: UINavigationController?) -> Bool {
+        nav?.viewControllers.contains { $0.hidesBottomBarWhenPushed } ?? false
+    }
+
+    private func setBottomBarHidden(_ hidden: Bool) {
+        bottomBar.isHidden = hidden
+        bottomBar.alpha = 1
+        bottomBar.transform = .identity
+    }
+}
+
+extension KMHomeTabBarController: UINavigationControllerDelegate {
+    func navigationController(_ nav: UINavigationController, willShow _: UIViewController, animated: Bool) {
+        guard nav === selectedViewController else { return }
+        let hide = shouldHideBottomBar(in: nav)
+        guard hide != bottomBar.isHidden else { return }
+
+        guard animated, let coordinator = nav.transitionCoordinator else {
+            setBottomBarHidden(hide)
+            return
+        }
+        let offscreen = CGAffineTransform(translationX: 0, y: bottomBar.bounds.height)
+        bottomBar.isHidden = false
+        if !hide {
+            bottomBar.transform = offscreen
+        }
+        coordinator.animate(alongsideTransition: { _ in
+            self.bottomBar.transform = hide ? offscreen : .identity
+        }, completion: { _ in
+            self.setBottomBarHidden(self.shouldHideBottomBar(in: nav))
+        })
+    }
+
+    func navigationController(_: UINavigationController, didShow _: UIViewController, animated _: Bool) {
+        hideSystemTabBar()
     }
 }

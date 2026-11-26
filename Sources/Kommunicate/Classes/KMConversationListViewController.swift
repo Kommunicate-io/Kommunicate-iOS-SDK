@@ -60,6 +60,7 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
             static let height: CGFloat = 48.0
             static let cornorRadius: CGFloat = height/2
             static let bottom: CGFloat = -50.0
+            static let bottomInHome: CGFloat = -30.0
             static let leading: CGFloat = -32
         }
     }
@@ -118,6 +119,8 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         stack.distribution = .fillEqually
         return stack
     }()
+
+    private var conversationStartButtonBottomConstraint: NSLayoutConstraint?
 
     lazy var conversationStartButtonContainer: UIView = {
         let view = UIView()
@@ -246,6 +249,9 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         } else {
             edgesForExtendedLayout = []
         }
+        conversationStartButtonBottomConstraint?.constant = tabBarController is KMHomeTabBarController
+            ? Padding.StartNewConversationButton.bottomInHome
+            : Padding.StartNewConversationButton.bottom
         viewModel.prepareController(dbService: dbService)
         updateConversationStartButtons()
         refreshVoiceModeAvailability()
@@ -342,7 +348,8 @@ public class KMConversationListViewController: KMChatBaseViewController, Localiz
         conversationStartButtonContainer.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
         conversationStartButtonContainer.widthAnchor.constraint(equalToConstant: Padding.StartNewConversationButton.width).isActive = true
         conversationStartButtonContainer.heightAnchor.constraint(equalToConstant: Padding.StartNewConversationButton.height).isActive = true
-        conversationStartButtonContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: Padding.StartNewConversationButton.bottom).isActive = true
+        conversationStartButtonBottomConstraint = conversationStartButtonContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: Padding.StartNewConversationButton.bottom)
+        conversationStartButtonBottomConstraint?.isActive = true
         backgroundView.bringSubviewToFront(conversationStartButtonContainer)
     
         conversationListTableViewController.view.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
